@@ -1,0 +1,265 @@
+# Fundamentals of Bayesian inference {#fundamentals}
+
+Bayesian inference is built on a different way of thinking about probability that methods you have learnt so far. In the past 30 years or so, Bayesian inference has become much more popular. This is partly due to increased computational power becoming available. In this first chapter, we are going to set out:
+
+1. What are the fundamental principles of Bayesian inference? 
+
+2. What makes Bayesian inference different from other methods?
+
+## Statistical Inference
+ Three purpose of statistical inference is to "draw conclusions, from numerical data, about quantities that are not observed" (Bayesian Data Analysis, chapter 1). Generally speaking there are two kinds of inference: inference for quantities that are not possible to observe, and inference for quantities that unobserved or hasn't happened yet. We can apply our inference methods to a huge range of applications, from the effectiveness of drugs in a clinical trial, to estimating the number of victims of violence against women and girls. 
+ 
+In this module, we are going to look at a different way of carrying out statistical inference, one that doesn't depend on long running event. Instead, we're going to introduce the definition of probability that allows us to Interpret the subjective chance that an event occurs.
+
+## Frequentist Theory
+Frequentist theory is built on the theory on long run events. Probabilities must be interpretable as frequencies over multiple repetitions of the experiment that is being analysed, and are calculated from the sampling distributions of measured quantities. 
+
+::: {.definition} 
+The long run relative frequency of an event is the **probability** of that event. 
+:::
+
+::: {.example}
+For example, if a frequentist wanted to assign a probability to rolling a 6 on a particular dice, then they would roll the dice a large number of times and compute the relative frequency. 
+:::
+
+::: {.definition}
+The **sampling distribution** of a statistic is the distribution based on a long run of samples of a fixed size from the population.
+:::
+
+These two definitions form the basis of frequentist statistics and give rise to higher-level objects. However, due to the long run condition, these objects are often misunderstood. 
+
+::: {.definition} 
+Let $X$ be a random sample from a probability distribution $\theta$. A **95% confidence interval** for $\theta$ is an interval $(u(X), v(X))$ such that 
+$$
+P(u(x) < \theta < v(X)) = 0.95
+$$
+:::
+
+This means that if you had an infinite number of samples for $X$ and the corresponding infinite number of confidence intervals, then 95% of them would contain the true value of $\theta$. It does *not* mean that there is a 0.95 probability a particular interval contains the true value of $\theta$. 
+
+::: {.example}
+Suppose that a ornithologist believes that for the sex of an offspring of a certain species of bird is equally likely to be male or female and is independent of the sex of any siblings. They selects a random sample of 100 broods with 4 offspring and counts the number of male offspring in each. The results are summarised in the following table.
+
+```{r}
+offspring.df <- data.frame("males" = c(0, 1, 2, 3, 4), 
+                           "observed" = c(5, 20, 50, 20, 5))
+knitr::kable(
+  offspring.df, booktabs = TRUE,
+  caption = 'The number of males in each of the broods.'
+  )
+```
+If $X$ denotes the number of male offspring then the scientist’s null hypothesis H~0~, is that $X \sim Bin(4, 1/2)$. This can be tested by calculating the so called $\chi^2$ statistic - which measures how well the observations conform to the supposed distribution. This is computed by
+```{r}
+expected <- 100*dbinom(offspring.df$males, 4, 0.5)
+observed <- offspring.df$observed
+
+## Chi sq = sum of (expected - observed)^2/expected
+chi.sq <- sum((expected - observed)^2/expected)
+```
+Under H~0~, over repeated sampling the distribution of the $\chi^2$ statistic follows a $\chi^2$ distribution on 4 degrees of freedom. Therefore, the probability of seeing something as extreme as this (the p-value) is 
+```{r}
+1 - pchisq(chi.sq, 4)
+```
+
+Consider now a second scientist who is more open-minded than their col- league. They hypothesise only that $X \sim Bin(4, p)$ where $p$ is unknown. To test their H~0~ they first calculates the maximum likelihood estimator of $p$, $\hat{p}$ = 0.5, computes the values of $E[X]$ using this estimate and calculates $\chi^2$ to be 6.67 like their colleague.
+
+However, because they are estimating $p$ as part of the process of computing $\chi^2$ over repeated sampling the distribution of their $\chi^2$ is (approximately) a $\chi^2$ distribution on 3 degrees of freedom. Their p-value is therefore 
+```{r}
+1 - pchisq(chi.sq, 3)
+```
+
+We now have the somewhat confusing scenario whereby the second scientist finds that the evidence against their null hypothesis is stronger than that found by the first scientist against their null hypothesis, despite the second hypothesis being weaker (i.e. a logical consequence of the first). Thus, whatever a p-value represents, it must never be interpreted as the probability that the null hypothesis is true conditional on the observed data. In this example it simply tells us how extreme the observed values of $\chi^2$ are when compared to their distribution over many repetitions of the experiment.
+:::
+
+## Bayesian probability
+The Bayesian paradigm is built about a different definition of probability. We are simply building our view of statistics upon a different set of axioms. 
+
+::: {.definition}
+The subjective belief of an event is the **probability** of that event. 
+:::
+
+This definition means we can assign probabilities to events that frequentists do not recognise as valid. 
+
+::: {.example} 
+For example, 
+
+1. The probability that I vote for the labour party at the next election
+
+2. A photo taken from the James Watt telescope contains a new planet.
+
+3. The real identify of Banksy is Robin Gunningham. 
+
+These are not events that can be repeated in the long run. 
+:::
+
+## Conditional Probability and Exchangability
+Before we derive Bayes' theorem, we recap some important definitions in probability. 
+
+::: {.definition}
+Given two events $A$ and $B$, the **conditional probability** that event $A$ occurs given the event $B$ has already occurred is
+$$
+P(A \mid B) = \frac{P(A \cap B)}{P(B)}, 
+$$
+when $P(B) > 0$.
+:::
+
+::: {.definition}
+Two events $A$ and $B$ are **independent** given event $C$ if
+$$ P(A \cap B \mid C) = P(A \mid C)P(B \mid C).$$
+:::
+
+::: {.definition}
+Let $p(y_1, \ldots, y_N)$ be the joint density of $Y_1, \ldots, Y_N$. If $p(y_1, \ldots, y_N) = p(y_{\pi_1}, \ldots, y_{\pi_N})$ for a permutations $\pi$ of $\{1, \ldots, N\}$, then $Y_1, \ldots, Y_N$ are **exchangeable**. 
+:::
+
+Exchangability means that the labels of the random variables don't contain any information about the outcomes. This is an important idea in many areas of probability and statistics, and we often model exchangeable events as iid. 
+
+::: {.example}
+If $Y_i \sim Bin(n, p)$ are independent and identically distributed for $i = 1, 2, 3$, then $p(Y_1, Y_2, Y_3) = p(Y_3, Y_1, Y_2)$. 
+:::
+
+::: {.example}
+Let $(X, Y)$ follow a bivariate normal distribution with mean **0**, variances $\sigma_x = \sigma_y = 1$ and a correlation parameter $\rho \in [-1, 1]$. $(X, Y)$ are exchangable, but only independent if $\rho = 0$. 
+:::
+
+
+::: {.proposition}
+If $\theta \sim p(\theta)$ and $(Y_1, \ldots, Y_N)$ from a sample space $\mathcal{Y}$ are conditionally iid given some parameter $\theta$, then marginally $Y_1, \ldots, Y_N$ are exchangable. 
+:::
+
+::: {.proof}
+Suppose $(Y_1, \ldots, Y_N)$ are conditionally iid given some parameter $\theta$. Then for any permutation $\pi$ of $\{1, \ldots, N\}$ and observations $\{y_1, \ldots, y_N\}$
+\begin{equation}
+\begin{split}
+p(y_1, \ldots, y_N) &= \int p(y_1, \ldots, y_N \mid \theta) p(\theta)\, d\theta \qquad \textrm{(definition of marginal distribution)}\\
+ & = \int \left\{\prod_{i=1}^Np(y_i \mid \theta)\right\} p(\theta)\, d\theta \qquad \textrm{(definition of conditionally iid)}\\
+& = \int \left\{\prod_{i=1}^Np(y_{\pi_i} \mid \theta)\right\} p(\theta)\, d\theta \qquad \textrm{(product is commutative)} \\
+ & = p(y_{\pi_1}, \ldots, y_{\pi_N}) \qquad \textrm{(definition of marginal distribution)}
+\end{split}
+\end{equation}
+:::
+
+
+This tells us that if we have some conditionally iid random variables and a subjective prior belief about some parameter $\theta$, then we have exchangeability. This is nice to have, but the implication in the other direction is much more interesting and powerful.
+
+::: {.theorem name="de Finetti"}
+If a sequence of random variables $(Y_1, \ldots, Y_N)$ from a sample space $\mathcal{Y}$ is exchangeable, then its joint distribution can be written as
+$$
+p(y_1, \ldots, y_N) = \int \left\{\prod_{i=1}^Np(y_i \mid \theta)\right\} p(\theta)\, d\theta
+$$
+for some parameter $\theta$, some distribution on $\theta$, and some sampling model $p(y_i \mid \theta)$. 
+:::
+
+This is a kind of existence theorem for Bayesian inference. It says that if we have exchangeable random varibales, then a parameter $\theta$ must exist and a subjective probability distribution $p(\theta)$ must also exist. The argument against Bayesian inference is that it doesn't guarantee a *good* subjective probability distribution $p(\theta)$ exists. 
+
+
+## Bayes' Theorem
+Now we have an understanding of conditional probability and exchange ability, we can put these two together to understand Bayes' Theorem. Bayes' theorem is concerned with the distirbution of the parameter $\theta$ given some observed data $y$. It tries to answer the question: what does the data tell us about the model parameters?
+
+::: {.theorem name="Bayes"}
+The distribution of the model parameter $\theta$ given the data $y$ is
+$$
+p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}
+$$
+:::
+
+::: {.proof}
+\begin{align}
+p(\theta \mid y) &= \frac{p(\theta, y)}{p(y)}\\
+\implies p(\theta, y) &= p(\theta \mid y)p(y)
+\end{align}
+Analogously, using $p(y \mid \theta)$ we can derive
+$$
+p(\theta, y) = p(y \mid \theta)p(\theta)
+$$
+Putting these two terms equal to each other and dividing by $p(y)$ gives
+$$
+p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}
+$$
+:::
+
+There are four terms in Bayes' theorem:
+
+1. The **posterior distribution** $p(\theta \mid y)$. This tells us our beleif about the model parameter $\theta$ given the data we have observed $y$.
+2. The **likelihood function** $p(y \mid \theta)$. The likelihood function is common to both frequentist and Bayesian methods. By the likelihood principle, the likelihood function contains all the information the data can tell us about the model parameter $\theta$. 
+3. The **prior distribution** $p(\theta)$. This is the distribution that describes our prior beliefs about the value of $\theta$. The form of $\theta$ should be decided before we see the data. It may be a vague distribution (e.g. $\theta \sim N(0, 10^2)$) or a specific distirbution based on prior information from experts (e.g. $\theta \sim N(5.5, 1.3^2)$).  
+4. The **evidence of the data** $\pi(y)$. This is sometimes called the average probability of the data or the marginal likelihood. In practice, we do not need to derive this term as it can be back computed to ensure the posterior distribution sums/integrates to one. 
+
+A consequence of point four is that posterior distributions are usually derived proportionally, and (up to proportionality) Bayes' theorem 
+$$
+p(\theta \mid y) \propto p(y\mid\theta)p(\theta).
+$$
+
+> **Some history of Thomas Bayes**. Thomas Bayes was an English theologean born in 1702. His "Essay towards solving a problem in the doctrine of chances" was published posthumously. It intorduces theroems on conditional probability and the idea of prior probability. He discusses an experiment where the data can be modelled using the Binomial distirbution and he guesses (places a prior distirbution) on the probability of success. 
+
+> Richard Price sent Bayes' work to the Royal Society two years after Bayes had died. In his commentary on Bayes' work, he suggested that the Bayesian way of thinking proves the existance of God, stating: The purpose I mean is, to show what reason we have for believing that there are in the constitution of things fixt laws according to which things happen, and that, therefore, the frame of the world must be the effect of the wisdom and power of an intelligent cause; and thus to confirm the argument taken from final causes for the existence of the Deity. 
+
+> It's not clear how Bayesian Thomas Bayes actually was, as his work was mainly about specific forms of probability theory and not his intepretation of it. The Bayesian way of thinking was really popularised by Laplace, who wrote about deductive probability in the early 19th century. 
+
+
+::: {.example}
+We finish this chapter with a very simple example. The advantage of the example being so simple is that we can obtain plots in R that show what's going on. 
+
+Suppose we have a model $y \sim N(\theta, 1)$ and we want to estimate $\theta$. To do this we need to derive the posterior distribution. By Bayes' theorem, 
+$$
+p(\theta \mid y) \propto p(y \mid \theta) p(\theta).
+$$
+We know the form of $p(y \mid \theta) = \frac{1}{\sqrt{2\pi}}e^{\frac{1}{2}(y - \theta^2)}$. But how should we describe our prior beliefs about $\theta$? Here are three options:
+
+1. We can be very vague about $\theta$ -- we genuinely don't know about its value. We assign a uniform prior distribution to $\theta$ that takes values between -1,000 and +1,000, i.e. $\theta \sim u[-1000, 1000]$. Up to proportionality $p(\theta) \propto 1$ for $\theta \in [-1000, 1000]$.
+
+2. After thinking hard about the problem, or talking to an expert, we decide that the only thing we know about $\theta$ is that it can't be negative. We adjust our prior distribution from 1. to be $\theta \sim u[0, 1000]$. Up to proportionality $p(\theta) \propto 1$ for $\theta \in [0, 1000]$.
+
+3. We decide to talk to a series of experts about $\theta$ asking for their views on likely values of $\theta$. Averaging the experts opinions gives $\theta \sim N(3, 0.7^2)$. This is a method known as prior ellicitation. 
+
+We now go and observe some data. After a lot of time and effort, we collect one data point -- $y = 0$.
+
+Now we have all the ingredients to construct the posterior distribution. We multiply the likelihood function evaluated at $y = 0$ by each of the three prior distirbutions. This gives us the postertior distirbutions (up to proportionality).
+
+```{r}
+#The likelihood function is the normal PDF
+#To nillustrate this, we evaluate this from [-5, 5].
+x <- seq(-5, 5, 0.01)
+likelihood <- dnorm(x, mean = 0, sd = 1)
+
+#The first prior distribution we try is a 
+#uniform [-1000, 1000] distribution. This is a 
+#vague prior distirbution. 
+uniform.prior <- rep(1, length(x))
+posterior1 <- likelihood*uniform.prior
+
+
+#The second prior distribution we try is a uniform 
+#[0, 1000] distribution, i.e. theta is non-negative. 
+step.prior <- ifelse(x >= 0, 1, 0)
+posterior2 <- likelihood*step.prior
+
+
+#The third prior distribution we try is a
+#specific normal prior distribution. It
+#has mean 3 and variance 0.7.
+normal.prior <- dnorm(x, mean = 3, sd = 0.7)
+posterior3 <- likelihood*normal.prior
+
+#Now we plot the likelihoods, prior and posterior distirbutions. 
+#Each row corresponds to a different prior distribution. Each
+#column corresponds to a part in Bayes' theorem. 
+par(mfrow = c(3, 3))
+plot(x, likelihood, type = 'l', xlab = "", ylab = "", yaxt = "n", main = "Likelihood")
+plot(x, uniform.prior, type = 'l', yaxt = "n", xlab = "", ylab = "", main = "Prior")
+plot(x, posterior1, type = 'l', yaxt = "n", xlab = "", ylab = "", main = "Posterior")
+plot(x, likelihood, type = 'l', xlab = "", ylab = "", yaxt = "n")
+plot(x, step.prior, type = 'l', yaxt = "n", xlab = "", ylab = "")
+plot(x, posterior2, type = 'l', yaxt = "n", xlab = "", ylab = "")
+plot(x, likelihood, type = 'l', xlab = "", ylab = "", yaxt = "n")
+plot(x, normal.prior, type = 'l', yaxt = "n", xlab = "", ylab = "")
+plot(x, posterior3, type = 'l', yaxt = "n", xlab = "", ylab = "")
+```
+
+1. The posterior distribution is proportional to the likelihood function. The prior distribution closely matches frequentist inference. Both the MLE and posterior mean are 0. 
+
+2. We get a lopsided posterior distribution, that is proportional to the likelihood function for positive values of $\theta$, but is 0 for negative values of $\theta$. 
+
+3.We get some sort of average of the likelihood fucntion and the prior distribution. Had we collected more data, the posterior distirbution would have been weighted toward the information from the likelihood function more. 
+:::
+

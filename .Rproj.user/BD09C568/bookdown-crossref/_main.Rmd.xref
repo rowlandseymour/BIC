@@ -1,0 +1,31 @@
+h1:practicalities Practicalities
+h2:module-aims Module aims
+h2:module-structure Module structure
+h2:assessment Assessment
+h2:getting-help Getting help
+h2:recommended-books-and-videos Recommended books and videos
+h1:fundamentals Fundamentals of Bayesian inference
+h2:statistical-inference Statistical Inference
+h2:frequentist-theory Frequentist Theory
+h2:bayesian-probability Bayesian probability
+h2:conditional-probability-and-exchangability Conditional Probability and Exchangability
+h2:bayes-theorem Bayes’ Theorem
+h1:programming-in-r Programming in R
+h1:bayesian-inference Bayesian inference
+h2:the-binomial-distirbution The Binomial distirbution
+h2:reporting-conclsuions-from-bayesian-inference Reporting conclsuions from Bayesian inference
+h2:the-exponential-distribution The Exponential distribution
+h2:predicition Predicition
+h2:non-informative-prior-distibrutions Non-informative prior distibrutions
+h2:bernstein-von-mises-theorem Bernstein-von-Mises Theorem
+h1:sampling Sampling
+h2:uniform-random-numbers Uniform random numbers
+h2:inverse-transform-sampling Inverse transform sampling
+h2:rejection-sampling Rejection sampling
+h2:markov-chain-monte-carlo Markov Chain Monte Carlo
+h2:properties-of-markov-chains Properties of Markov Chains
+h2:gibbs-sampler Gibbs Sampler
+h2:metropolis-hastings Metropolis-Hastings
+h2:mcmc-diagnostics MCMC Diagnostics
+h1:advanced-computation Advanced computation
+
