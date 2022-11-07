@@ -1,1 +1,14 @@
 # Advanced computation
+Now we have the tools of Bayesian inference and methods to sample from complex posterior distributions, we can start to look at more advanced methods and models. This chapter is split into three distinct parts, each showing a different method in Bayesian inference. 
+
+## Heiracichal Models
+
+
+
+## Prior Ellicitation
+
+
+
+## Data Augmentation
+
+

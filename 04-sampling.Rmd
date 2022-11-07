@@ -25,13 +25,13 @@ Let $F :\mathbb{R} \rightarrow [0, 1]$, $U \sim U[0, 1]$ and $Y = F^{-1}(U)$. Th
 ::: {.proof}
 We have
 $$
-p(Y \leq a) = p(F^{-1}(U) \leq a) = p(\inf\{x \in\mathbb{R} : F(x) > u\} \leq a). 
+\pi(Y \leq a) = \pi(F^{-1}(U) \leq a) = \pi(\inf\{x \in\mathbb{R} : F(x) > u\} \leq a). 
 $$
 Since $\inf\{x \in\mathbb{R} : F(x) > u\} \leq a$ can only hold if $F(a) \geq U$, we have
 $$
-p(Y \leq a)  = p(F(a)\geq U)
+\pi(Y \leq a)  = \pi(F(a)\geq U)
 $$
-As $U \sim U[0, 1]$, we have $p(F(a)\geq U) = F(a)$. 
+As $U \sim U[0, 1]$, we have $\pi(F(a)\geq U) = F(a)$. 
 :::
 
 This theorem says that if we have a random variable $U \sim U[0, 1]$ and we want to get $Y \sim F$, then we can use $F^{-1}(U)$. Viewing this theorem graphically can provide a much more intuitive understanding. 
@@ -39,7 +39,7 @@ This theorem says that if we have a random variable $U \sim U[0, 1]$ and we want
 ::: {.example}
 We would like to sample from an exponential distribution with rate 0.5. The likelihood function is given by
 $$
-p(y \mid \lambda = 0.5) = 0.5e^{0.5y}.
+\pi(y \mid \lambda = 0.5) = 0.5e^{0.5y}.
 $$
 The distribution function can be derived by
 \begin{align*}
@@ -75,36 +75,36 @@ segments(x0 = f.inv, y0 = 0, x1 = f.inv, y1 = u, lty = 2)
 ## Rejection sampling
 We now have a way of sampling methods where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. 
 
-Suppose we want to sample from a density $p$, but can only generate samples from a density $q$. If there exists some constant $c > 0$, such that $\frac{p(y)}{q(y)} \leq c$ for all $y$, then we can generate samples from $p$ by
+Suppose we want to sample from a density $p$, but can only generate samples from a density $q$. If there exists some constant $c > 0$, such that $\frac{\pi(y)}{q(y)} \leq c$ for all $y$, then we can generate samples from $p$ by
 
 1. Sampling $Y \sim Q$
 
 2. Sampling $U \sim U[0, 1]$
 
-3. Computing $k = \frac{p(u)}{cq(y)}$
+3. Computing $k = \frac{\pi(u)}{cq(y)}$
 
 4. Accepting $y$ if $U < k$ and rejecting otherwise. 
 
 This says draw sample a point $y$ according to the density $q$. Draw a vertical line at $y$ from the x-axis to $cq(y)$. Sample uniformly on this line. If the uniformly random sample is below $q$, then accept it. Otherwise, reject it. The theory behind this is as follows. Suppose we sample some point y according to this algorithm and we want to work out its density $f$, then 
 $$
-f(y) \propto q(y)p(U < k) = q(y)\frac{p(u)}{cq(y)} = \frac{p(u)}{c}.
+f(y) \propto q(y)\pi(U < k) = q(y)\frac{\pi(u)}{cq(y)} = \frac{\pi(u)}{c}.
 $$
 Therefore, $f = p$. 
 
 ::: {.example}
 Suppose we want to sample from a distribution that has the density
 $$
-p(y) = \begin{cases}
+\pi(y) = \begin{cases}
 \frac{3}{4}y(2-y), \qquad y \in [0, 2] \\
 0, \qquad \textrm{otherwise}
 \end{cases}.
 $$
 This has a maximum at $\frac{3}{4}$. We choose $p \sim U[0, 1]$ and $c = \frac{3}{4}$. The R code below shows a pictorial version of how one sample is generated. 
 ```{r}
-set.seed(1234)   #to repoduce
+set.seed(1234)   #to reproduce
 M <- 3/4         #set M
 y <- runif(1)    #sample Y ~ Q
-p <- 3/4*y*(2-y) #compute p(y)
+p <- 3/4*y*(2-y) #compute pi(y)
 k <- p/(M*1)     #compute k
 u <- runif(1)    #sample U ~ U[0, 1]
 ifelse(u < k, 'accept', 'reject') #Accept if  u < k
@@ -311,7 +311,7 @@ In this example, we can use a Gibbs sampler to sample from the posterior distrib
 
 2. Set $i = 1$. 
 
-3. Sample $\mu^{(i)} \mid \boldsymbol{y}, \sigma^{2(i-1)} \sim N(\mu_1^{(i-1)}, \sigma^2_1^{(i-1)})$
+3. Sample $\mu^{(i)} \mid \boldsymbol{y}, \sigma^{2(i-1)} \sim N(\mu_1^{(i-1)}, {\sigma^2}_1^{(i-1)})$
 
 4. Sample $\sigma^{2(i)} \mid \boldsymbol{y}, \mu^{(i)} \sim \textrm{inv-Gamma}\left(\alpha + \frac{N}{2}, \,\beta + \frac{\sum_{i=1}^N (y_i - \mu^{(i)})^2}{2}\right)$
 
@@ -376,7 +376,7 @@ $$
 Hence, $\pi(\theta \mid \boldsymbol{y}) \pi(\theta'\mid\theta) = \pi(\theta' \mid \boldsymbol{y}) \pi(\theta\mid\theta')$ and the Markov chain satisfies detailed balance with respect to the posterior disquisition. 
 ::: 
 
-:::{.example}
+:::{.example #norm}
 Lets think again about the reaction time example in the previous chapter.The time until each lorry driver reacts (in milliseconds) is 
 ```{r}
 y <- c(0.34, 0.47, 0.58, 0.27, 0.74, 0.44, 0.46, 0.65, 0.36, 0.55, 0.58, 0.55, 0.53, 0.56, 0.54, 0.61, 0.43, 0.52, 0.45, 0.49, 0.32, 0.33, 0.47, 0.58, 0.34, 0.60, 0.59, 0.43, 0.57, 0.34)
@@ -460,7 +460,9 @@ It seems that the posterior distribution is very similar when using these two pr
 
 
 ## MCMC Diagnostics
-When runing and MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well. T
+When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well. 
+
+A key way of doing this is by looking at the trace plot. This is the plot out MCMC iterations over time. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn't look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.
 
 ::: {.definition}
 The **burn-in period** is the number of iterations the Markov chain takes to reach the stationary distribution. 
@@ -469,5 +471,90 @@ The **burn-in period** is the number of iterations the Markov chain takes to rea
 ::: {.definition}
 The **thinning parameter** is the period of iterations of the Markov chain that are stored. 
 :::
+
+::: {.example}
+In Example \@{exm:norm}, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge. 
+
+In a Metropolis-Hasting random walk algorithm, the proposal distribution often has a large impact on how well the Markov chain mixes. The variance, or step size, of the proposal distribution can be tuned to ensure the chain mixes well. 
+
+The following two examples show poorly mixing Markov chains. The first is where the step size is too big and the chain frequently gets stuck for several hundred iterations. 
+
+```{r}
+set.seed(123) #to reproduce
+n.iter   <- 10000
+mu.store <- numeric(n.iter)
+
+#Initial values
+mu <- 1 
+sigma <- 0.1 #known
+
+for(i in 1:n.iter){
+  
+  #Propose value for mu
+  mu.proposed <- runif(1, mu - 0.1, mu + 0.1) #Step size too big
+  
+  if(mu.proposed > 0){ #If mu < 0 we can reject straight away
+    
+    #Compute (log) acceptance probability
+    log.numerator   <- -0.01*mu.proposed - sum(y - mu.proposed)^2/(2*sigma^2)
+    log.denominator <- -0.01*mu - sum(y - mu)^2/(2*sigma^2)
+    
+    log.p.acc <- log.numerator - log.denominator
+    u <- runif(1)
+    
+    #Accept/Reject step
+    if(log(u) < log.p.acc){
+      mu <- mu.proposed
+    }
+  }
+  
+  #Store mu at each iteration
+  mu.store[i] <- mu
+}
+plot(mu.store[-c(1:3000)], type = 'l', xlab = "iteration", ylab = expression(mu))
+```
+
+The next is where the step size is too small. It takes a long time for the chain to converge (~50% of the run time). When the chain does converge, it is inefficient at exploring the space. 
+```{r}
+set.seed(123) #to reproduce
+n.iter   <- 10000
+mu.store <- numeric(n.iter)
+
+#Initial values
+mu <- 1 
+sigma <- 0.1 #known
+
+for(i in 1:n.iter){
+  
+  #Propose value for mu
+  mu.proposed <- runif(1, mu - 0.0005, mu + 0.0005) #Step size too big
+  
+  if(mu.proposed > 0){ #If mu < 0 we can reject straight away
+    
+    #Compute (log) acceptance probability
+    log.numerator   <- -0.01*mu.proposed - sum(y - mu.proposed)^2/(2*sigma^2)
+    log.denominator <- -0.01*mu - sum(y - mu)^2/(2*sigma^2)
+    
+    log.p.acc <- log.numerator - log.denominator
+    u <- runif(1)
+    
+    #Accept/Reject step
+    if(log(u) < log.p.acc){
+      mu <- mu.proposed
+    }
+  }
+  
+  #Store mu at each iteration
+  mu.store[i] <- mu
+}
+par(mfrow = c(1, 2))
+plot(mu.store, type = 'l', xlab = "iteration", ylab = expression(mu))
+plot(mu.store[-c(1:5000)], type = 'l', xlab = "iteration", ylab = expression(mu))
+```
+:::
+
+
+
+
 
 

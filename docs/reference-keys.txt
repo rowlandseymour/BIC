@@ -75,3 +75,14 @@ gibbs-sampler
 metropolis-hastings
 mcmc-diagnostics
 advanced-computation
+thm:unlabeled-div-2
+exm:unlabeled-div-4
+def:unlabeled-div-7
+prp:unlabeled-div-9
+def:unlabeled-div-12
+thm:unlabeled-div-13
+exm:unlabeled-div-15
+prp:unlabeled-div-16
+def:unlabeled-div-20
+exm:norm
+def:unlabeled-div-18

@@ -9,25 +9,25 @@ The first example we're going to go through is with the binomial distribution.
 ::: {.example #binom}
 A technician in a crisp factory wants to test the reliability of a production line. She collects a random sample of 200 crisp packets from line 1. She finds three packets weigh either too much or too little and must be rejected. She uses a Bayesian method to estimate the probability a crisp packet is the incorrect weight. She begins by denoting the weight of the 200 crisp packets $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability a crisp packet is the incorrect weight by $\theta$. By Bayes' theorem
 $$
-p(\theta \mid \boldsymbol{y}) \propto p(\boldsymbol{y}\mid \theta) p(\theta)
+\pi(\theta \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y}\mid \theta) \pi(\theta)
 $$
 
-**Likelihood function** $p(\boldsymbol{y}\mid \theta)$. We observe a 200 trials each with a probability of success or failure. The binomial distribution seems the most suitable way of modelling this. Therefore
+**Likelihood function** $\pi(\boldsymbol{y}\mid \theta)$. We observe a 200 trials each with a probability of success or failure. The binomial distribution seems the most suitable way of modelling this. Therefore
 $$
-p(\boldsymbol{y}\mid \theta) = \begin{pmatrix} 200 \\ 3 \end{pmatrix} \theta^3(1-\theta)^{197}
+\pi(\boldsymbol{y}\mid \theta) = \begin{pmatrix} 200 \\ 3 \end{pmatrix} \theta^3(1-\theta)^{197}
 $$
 We are going to ignore one questionable assumption here that the observations are independent. That is a crisp packet being the wrong weight, doesn't affect the weight of the next crisp packet to be produced.
 
-**Prior distribution** $p(\theta)$. We now need to describe our prior beliefs about $\theta$. We have no reason to suggest $\theta$ takes any specific value, so we use a uniform prior distribution $\theta \sim U[0, 1]$, where $p(\theta) = 1$ for $\theta \in [0, 1]$. 
+**Prior distribution** $\pi(\theta)$. We now need to describe our prior beliefs about $\theta$. We have no reason to suggest $\theta$ takes any specific value, so we use a uniform prior distribution $\theta \sim U[0, 1]$, where $\pi(\theta) = 1$ for $\theta \in [0, 1]$. 
 
 
-**Posterior distribution** $p(\theta \mid \boldsymbol{y})$. We can now derive the posterior distribution up to proportionality
+**Posterior distribution** $\pi(\theta \mid \boldsymbol{y})$. We can now derive the posterior distribution up to proportionality
 $$
-p(\theta \mid \boldsymbol{y}) \propto \theta^3(1-\theta)^{197}. 
+\pi(\theta \mid \boldsymbol{y}) \propto \theta^3(1-\theta)^{197}. 
 $$
-This functional dependence on p identifies the $p(\theta \mid \boldsymbol{y})$ as a Beta distribution. The PDF for the beta distribution with shape parameters $\alpha$ and $\beta$ is
+This functional dependence on p identifies the $\pi(\theta \mid \boldsymbol{y})$ as a Beta distribution. The PDF for the beta distribution with shape parameters $\alpha$ and $\beta$ is
 $$
-p(x \mid \alpha, \beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}x^{\alpha - 1}(1-x)^{\beta - 1}. 
+\pi(x \mid \alpha, \beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}x^{\alpha - 1}(1-x)^{\beta - 1}. 
 $$
 The posterior distribution is therefore $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$.
 :::
@@ -56,26 +56,26 @@ This says that we believe there is a 95% chance that the probability of a crisp 
 ::: {.example}
 An insurance company want to estimate the time until a claim is made on a specific policy. They describe the rate at which claims come in by $\lambda$. The company provides a sample of 10 months at which a claim was made $\boldsymbol{y} = \{14, 10,  6,  7, 13,  9, 12,  7,  9,  8\}$. By Bayes' theorem, the posterior distribution for $\lambda$ is
 $$
-p(\lambda \mid \boldsymbol{y}) \propto p(\lambda \mid \boldsymbol{y}) p(\lambda)
+\pi(\lambda \mid \boldsymbol{y}) \propto \pi(\lambda \mid \boldsymbol{y}) \pi(\lambda)
 $$
 
-**Likelihood function** $p(\lambda \mid \boldsymbol{y})$. The exponential distribution is a good way of modelling lifetimes or the length of time until an event happens. Assuming all the claims are independent, the likelihood function is given by
+**Likelihood function** $\pi(\lambda \mid \boldsymbol{y})$. The exponential distribution is a good way of modelling lifetimes or the length of time until an event happens. Assuming all the claims are independent, the likelihood function is given by
 \begin{align*}
-p(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^{10} \lambda e^{-\lambda y_i} \\
+\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^{10} \lambda e^{-\lambda y_i} \\
 & = \lambda^{10}e^{-\lambda \sum_{i=1}^{10} y_i} \\
 & = \lambda^{10} e^{-95\lambda}
 \end{align*}
 
-**Prior distribution** $p(\lambda)$. As we are modelling a rate parameter, we know it must be positive and continuous. We decide to use an exponential prior distribution for $\lambda$, but leave the choice of the rate parameter up to the insurance professionals at the insurance company. The prior distribution is given by $p(\lambda) \sim \textrm{Exp}(\chi).$
+**Prior distribution** $\pi(\lambda)$. As we are modelling a rate parameter, we know it must be positive and continuous. We decide to use an exponential prior distribution for $\lambda$, but leave the choice of the rate parameter up to the insurance professionals at the insurance company. The prior distribution is given by $\pi(\lambda) \sim \textrm{Exp}(\chi).$
 
-**Posterior distribution** $p(\lambda \mid \boldsymbol{y})$. We now have all the ingredients to derive the posterior distribution. It is given by
+**Posterior distribution** $\pi(\lambda \mid \boldsymbol{y})$. We now have all the ingredients to derive the posterior distribution. It is given by
 \begin{align*}
-p(\lambda \mid \boldsymbol{y}) &\propto \lambda^{10} e^{-95\lambda} \times \lambda e^{-\chi\lambda} \\
+\pi(\lambda \mid \boldsymbol{y}) &\propto \lambda^{10} e^{-95\lambda} \times \lambda e^{-\chi\lambda} \\
 & \propto \lambda^{11}e^{-(95 + \chi)\lambda}
 \end{align*}
 The functional form tells us that the posterior distribution is a Gamma distribution. The PDF of a gamma random variable with shape $\alpha$ and rate $\beta$ is 
 $$
-p(x \mid \alpha, \beta) = \frac{\alpha^\beta}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}.
+\pi(x \mid \alpha, \beta) = \frac{\alpha^\beta}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}.
 $$
 The distribution of the rate of the claims given the observed data is $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \chi)$. 
 
@@ -88,7 +88,7 @@ plot.distributions <- function(chi){
   theta <- seq(0.001, 0.3, 0.001) 
   
   #evaluate prior desnity
-  prior <- dexp(theta, rate = chi)
+  prior <- dex\pi(theta, rate = chi)
   
   #evaluate posterior density
   posterior <- dgamma(theta, shape = 10, rate = 95 + chi)
@@ -212,9 +212,9 @@ If the prior distribution $\pi(\theta)$ has the same distributional family as th
 In many cases, although we are interested in estimating the model parameters, what we're really interested in is predicting new values, whose distribution is determined by the model parameters. 
 
 ::: {.definition}
-Suppose we observe some data $\boldsymbol{y}$ and derive the posterior distribution $\pi(\theta \mid \boldsymbol{y})$. The quantity we are interested in is some future observation $z$, we would like to the distribution of $z$ given the observed data $\boldsymbol{y}$, $p(z \mid \boldsymbol{y})$. This distribution, known as the **posterior predictive distribution** of $z$, must be exhibited as a mixture distribution over the possible values of $\theta$. We must write
+Suppose we observe some data $\boldsymbol{y}$ and derive the posterior distribution $\pi(\theta \mid \boldsymbol{y})$. The quantity we are interested in is some future observation $z$, we would like to the distribution of $z$ given the observed data $\boldsymbol{y}$, $\pi(z \mid \boldsymbol{y})$. This distribution, known as the **posterior predictive distribution** of $z$, must be exhibited as a mixture distribution over the possible values of $\theta$. We must write
 $$
-p(z \mid \boldsymbol{y}) = \int \pi(z \mid \theta) \pi(\theta \mid \boldsymbol{y})\, d\theta.
+\pi(z \mid \boldsymbol{y}) = \int \pi(z \mid \theta) \pi(\theta \mid \boldsymbol{y})\, d\theta.
 $$
 :::
 
@@ -226,14 +226,14 @@ We can model the number of students handing in late $X$, using a Binomial distri
 Now we can derive the posterior predictive distribution of $Z$, the number of students who hand in late. We model $Z$ using a Binomial distribution, $Z \sim \textrm{Bin}(30, \theta)$. The distribution of $Z$ given the observed data is 
 
 \begin{align*}
-p(z \mid \boldsymbol{y}) &= \int_0^1 \pi(z \mid \theta) \pi(\theta \mid \boldsymbol{y})\, d\theta \\
+\pi(z \mid \boldsymbol{y}) &= \int_0^1 \pi(z \mid \theta) \pi(\theta \mid \boldsymbol{y})\, d\theta \\
 & = \int_0^1 \begin{pmatrix} 30 \\ z \end{pmatrix} \theta^z (1-\theta)^{30 - z} \frac{\Gamma(32)}{\Gamma(4)\Gamma(28)}\theta^{3}(1-\theta)^{27}\, d\theta \\
  & = \begin{pmatrix} 30 \\ z \end{pmatrix}\frac{\Gamma(32)}{\Gamma(4)\Gamma(28)}\int_0^1 \theta^{z + 3}(1-\theta)^{57 - z}\, d\theta \\
 \end{align*}
 This integral is difficult to evaluate immediately. But by multiplying (and dividing outside the integral) by a constant, we can turn it into the density function of a Beta$(5 + z, 58 - z)$ random variable. This integrates to 1. 
 
 \begin{align*}
-p(z \mid \boldsymbol{y})  & = \begin{pmatrix} 30 \\ z \end{pmatrix}\frac{\Gamma(32)}{\Gamma(4)\Gamma(28)}\frac{\Gamma(z+4)\Gamma(58-z)}{\Gamma(62)}\int_0^1 \frac{\Gamma(62)}{\Gamma(z+4)\Gamma(58-z)}\theta^{z + 3}(1-\theta)^{57 - z}\, d\theta \\ 
+\pi(z \mid \boldsymbol{y})  & = \begin{pmatrix} 30 \\ z \end{pmatrix}\frac{\Gamma(32)}{\Gamma(4)\Gamma(28)}\frac{\Gamma(z+4)\Gamma(58-z)}{\Gamma(62)}\int_0^1 \frac{\Gamma(62)}{\Gamma(z+4)\Gamma(58-z)}\theta^{z + 3}(1-\theta)^{57 - z}\, d\theta \\ 
 & = \begin{pmatrix} 30 \\ z \end{pmatrix}\frac{\Gamma(32)\Gamma(z+4)\Gamma(58-z)}{\Gamma(4)\Gamma(28)\Gamma(62)} \quad \textrm{for } 0 \leq z \leq 30.
 \end{align*}
 
@@ -256,7 +256,7 @@ We can check it's correct, by seeing if it sums to one
 z <- 0:30
 ppd <- beta.binom.posterior.predictive.distribution(z)
 sum(ppd)
-plot(z, ppd, xlab = "z", ylab = expression(p(z | theta)))
+plot(z, ppd, xlab = "z", ylab = expression(\pi(z | theta)))
 ```
 The expected number of students who hand in late is 3.75 and there's a 95% chance that up to 8 hand in late. 
 ```{r}
@@ -282,7 +282,7 @@ In Example \@ref(exm:binom), we assigned a uniform prior distribution to the par
 ::: {.theorem name="Jeffrey"}
 Given some observed data $\boldsymbol{y} = \{y_1, \ldots, y_N\}$, an invariant prior distribution is
 $$
-p(\theta) \propto \sqrt{I_\theta(\boldsymbol{y})},
+\pi(\theta) \propto \sqrt{I_\theta(\boldsymbol{y})},
 $$
 where $I_\theta(\boldsymbol{y})$ is the Fisher information for $\theta$ contained in $\boldsymbol{y}$.
 :::
@@ -292,13 +292,13 @@ Jeffrey argues that if there are two ways of parameterising a model, e.g. via $\
 ::: {.proof}
 Recall that the distribution of $\psi = h(\theta)$, for some one-to-one function $h$, is invariant to the distribution of $\theta$ if
 $$
-p(\psi) = p(\theta) \left|\frac{d\theta}{d\psi}\right|.
+\pi(\psi) = \pi(\theta) \left|\frac{d\theta}{d\psi}\right|.
 $$
 
 Transforming the Fisher information for $\psi$ shows
 \begin{align*}
-I_\psi(\boldsymbol{y}) &= - \mathbb{E}\left(\frac{d^2\log p(\boldsymbol{y} \mid \psi)}{d\psi^2}\right) \\
-& = \mathbb{E}\left(\frac{d^2 \log p(\boldsymbol{y} \mid \theta = h^{-1}(\psi))}{d\theta^2}\right) \left(\frac{d\theta}{d\psi}\right)^2 \\
+I_\psi(\boldsymbol{y}) &= - \mathbb{E}\left(\frac{d^2\log \pi(\boldsymbol{y} \mid \psi)}{d\psi^2}\right) \\
+& = \mathbb{E}\left(\frac{d^2 \log \pi(\boldsymbol{y} \mid \theta = h^{-1}(\psi))}{d\theta^2}\right) \left(\frac{d\theta}{d\psi}\right)^2 \\
 & = I_\theta(\boldsymbol{y})\left(\frac{d\theta}{d\psi}\right)^2 .
 \end{align*}
 Thus $\sqrt{I_\psi(\boldsymbol{y})} = \sqrt{I_\theta(\boldsymbol{y})} \left|\frac{d\theta}{d\psi}\right|$ and $\sqrt{I_\psi(\boldsymbol{y})}$ and $\sqrt{I_\theta(\boldsymbol{y})}$ are invariant prior distributions. 
@@ -308,31 +308,31 @@ Thus $\sqrt{I_\psi(\boldsymbol{y})} = \sqrt{I_\theta(\boldsymbol{y})} \left|\fra
 ::: {.example}
 In example \@ref(exm:binom), we modelled the number of crisps that were the incorrect weight by $\theta \sim \textrm{Bin}(n, \theta)$. To construct Jeffrey's prior distribution for $\theta$, we must first derive the Fisher's information matrix.  
 \begin{align*}
-&p(y \mid \theta) = \begin{pmatrix} n \\ y \end{pmatrix} \theta^y (1-\theta)^{n-y}\\ 
-\implies &\log p(y \mid \theta) = \log \begin{pmatrix} n \\ y \end{pmatrix} + y \log\theta + (n-y)\log(1-\theta) \\
-\implies &\frac{\partial \log p(y \mid \theta)}{\partial \theta} = \frac{y}{\theta} - \frac{n-y}{1-\theta} \\
-\implies &\frac{\partial^2 \log p(y \mid \theta)}{\partial \theta^2} = -\frac{y}{\theta^2} + \frac{n-y}{(1-\theta)^2} \\
-\implies &\mathbb{E}\left(\frac{\partial \log p(y \mid \theta)}{\partial \theta}\right) = -\frac{\mathbb{E}(y)}{\theta^2} + \frac{n-\mathbb{E}(y)}{(1-\theta)^2}\\ 
-\implies &\mathbb{E}\left(\frac{\partial \log p(y \mid \theta)}{\partial \theta}\right) = -\frac{n\theta}{\theta^2} + \frac{n-n\theta}{(1-\theta)^2}\\ 
-\implies &\mathbb{E}\left(\frac{\partial \log p(y \mid \theta)}{\partial \theta}\right) = -\frac{n}{\theta} + \frac{n}{1-\theta}\\
-\implies &\mathbb{E}\left(\frac{\partial \log p(y \mid \theta)}{\partial \theta}\right) = -\frac{n}{\theta(1-\theta)} \\
+&\pi(y \mid \theta) = \begin{pmatrix} n \\ y \end{pmatrix} \theta^y (1-\theta)^{n-y}\\ 
+\implies &\log \pi(y \mid \theta) = \log \begin{pmatrix} n \\ y \end{pmatrix} + y \log\theta + (n-y)\log(1-\theta) \\
+\implies &\frac{\partial \log \pi(y \mid \theta)}{\partial \theta} = \frac{y}{\theta} - \frac{n-y}{1-\theta} \\
+\implies &\frac{\partial^2 \log \pi(y \mid \theta)}{\partial \theta^2} = -\frac{y}{\theta^2} + \frac{n-y}{(1-\theta)^2} \\
+\implies &\mathbb{E}\left(\frac{\partial \log \pi(y \mid \theta)}{\partial \theta}\right) = -\frac{\mathbb{E}(y)}{\theta^2} + \frac{n-\mathbb{E}(y)}{(1-\theta)^2}\\ 
+\implies &\mathbb{E}\left(\frac{\partial \log \pi(y \mid \theta)}{\partial \theta}\right) = -\frac{n\theta}{\theta^2} + \frac{n-n\theta}{(1-\theta)^2}\\ 
+\implies &\mathbb{E}\left(\frac{\partial \log \pi(y \mid \theta)}{\partial \theta}\right) = -\frac{n}{\theta} + \frac{n}{1-\theta}\\
+\implies &\mathbb{E}\left(\frac{\partial \log \pi(y \mid \theta)}{\partial \theta}\right) = -\frac{n}{\theta(1-\theta)} \\
 \implies &I_\theta(y) \propto \frac{1}{\theta(1-\theta)}.
 \end{align*}
 $
-Hence Jeffrey's prior is $p(\theta) \propto \theta^{-\frac{1}{2}}(1-\theta)^{-\frac{1}{2}}$. This functional dependency on $\theta$ shows that $\theta \sim \textrm{Beta}(\frac{1}{2}, \frac{1}{2})$. 
+Hence Jeffrey's prior is $\pi(\theta) \propto \theta^{-\frac{1}{2}}(1-\theta)^{-\frac{1}{2}}$. This functional dependency on $\theta$ shows that $\theta \sim \textrm{Beta}(\frac{1}{2}, \frac{1}{2})$. 
 :::
 
 ## Bernstein-von-Mises Theorem
 So far, we have considered Bayesian methods in contrast to frequentist ones. The Bernstein-von-Mises theorem is a key theorem linking the two inference methods.
 
 ::: {.theorem name="Bernstein-von-Mises"}
-For a well-specified model $p(\boldsymbol{y} \mid \theta)$ with a fixed number of parameters, and for a smooth prior distribution $p(\theta)$ that is non-zero around the MLE $\hat{\theta}$, then
+For a well-specified model $\pi(\boldsymbol{y} \mid \theta)$ with a fixed number of parameters, and for a smooth prior distribution $\pi(\theta)$ that is non-zero around the MLE $\hat{\theta}$, then
 $$
-\left|\left| p(\theta \mid \boldsymbol{y}) - N\left(\hat{\theta}, \frac{I(\hat{\theta})^{-1}}{n}\right) \right|\right|_{TV} \rightarrow 0,
+\left|\left| \pi(\theta \mid \boldsymbol{y}) - N\left(\hat{\theta}, \frac{I(\hat{\theta})^{-1}}{n}\right) \right|\right|_{TV} \rightarrow 0,
 $$
 where $||p - q||_{TV}$ is the total variation distance between distributions $p$ and $q$:
 $$
-||p - q||_{TV} = \frac{1}{2}\int|p(x) - q(x)|\,dx.
+||p - q||_{TV} = \frac{1}{2}\int|\pi(x) - q(x)|\,dx.
 $$
 :::
 
