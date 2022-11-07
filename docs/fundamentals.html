@@ -150,6 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.3" data-path="fundamentals.html"><a href="fundamentals.html#bayesian-probability"><i class="fa fa-check"></i><b>1.3</b> Bayesian probability</a></li>
 <li class="chapter" data-level="1.4" data-path="fundamentals.html"><a href="fundamentals.html#conditional-probability-and-exchangability"><i class="fa fa-check"></i><b>1.4</b> Conditional Probability and Exchangability</a></li>
 <li class="chapter" data-level="1.5" data-path="fundamentals.html"><a href="fundamentals.html#bayes-theorem"><i class="fa fa-check"></i><b>1.5</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="1.6" data-path="fundamentals.html"><a href="fundamentals.html#problems"><i class="fa fa-check"></i><b>1.6</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="programming-in-r.html"><a href="programming-in-r.html"><i class="fa fa-check"></i><b>2</b> Programming in R</a></li>
 <li class="chapter" data-level="3" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>3</b> Bayesian inference</a>
@@ -173,7 +174,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.7" data-path="sampling.html"><a href="sampling.html#metropolis-hastings"><i class="fa fa-check"></i><b>4.7</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="4.8" data-path="sampling.html"><a href="sampling.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>4.8</b> MCMC Diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>5</b> Advanced computation</a></li>
+<li class="chapter" data-level="5" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>5</b> Advanced computation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="advanced-computation.html"><a href="advanced-computation.html#heiracichal-models"><i class="fa fa-check"></i><b>5.1</b> Heiracichal Models</a></li>
+<li class="chapter" data-level="5.2" data-path="advanced-computation.html"><a href="advanced-computation.html#prior-ellicitation"><i class="fa fa-check"></i><b>5.2</b> Prior Ellicitation</a></li>
+<li class="chapter" data-level="5.3" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>5.3</b> Data Augmentation</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -222,7 +228,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="definition">
 <p><span id="def:unlabeled-div-4" class="definition"><strong>Definition 1.3  </strong></span>Let <span class="math inline">\(X\)</span> be a random sample from a probability distribution <span class="math inline">\(\theta\)</span>. A <strong>95% confidence interval</strong> for <span class="math inline">\(\theta\)</span> is an interval <span class="math inline">\((u(X), v(X))\)</span> such that
 <span class="math display">\[
-P(u(x) &lt; \theta &lt; v(X)) = 0.95
+\pi(u(x) &lt; \theta &lt; v(X)) = 0.95
 \]</span></p>
 </div>
 <p>This means that if you had an infinite number of samples for <span class="math inline">\(X\)</span> and the corresponding infinite number of confidence intervals, then 95% of them would contain the true value of <span class="math inline">\(\theta\)</span>. It does <em>not</em> mean that there is a 0.95 probability a particular interval contains the true value of <span class="math inline">\(\theta\)</span>.</p>
@@ -235,7 +241,7 @@ P(u(x) &lt; \theta &lt; v(X)) = 0.95
 <span id="cb1-5"><a href="fundamentals.html#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&#39;The number of males in each of the broods.&#39;</span></span>
 <span id="cb1-6"><a href="fundamentals.html#cb1-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-2">Table 1.1: </span>The number of males in each of the broods.</caption>
+<caption><span id="tab:unnamed-chunk-1">Table 1.1: </span>The number of males in each of the broods.</caption>
 <thead>
 <tr class="header">
 <th align="right">males</th>
@@ -304,35 +310,35 @@ P(u(x) &lt; \theta &lt; v(X)) = 0.95
 <div class="definition">
 <p><span id="def:unlabeled-div-8" class="definition"><strong>Definition 1.5  </strong></span>Given two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, the <strong>conditional probability</strong> that event <span class="math inline">\(A\)</span> occurs given the event <span class="math inline">\(B\)</span> has already occurred is
 <span class="math display">\[
-P(A \mid B) = \frac{P(A \cap B)}{P(B)},
+\pi(A \mid B) = \frac{\pi(A \cap B)}{\pi(B)},
 \]</span>
-when <span class="math inline">\(P(B) &gt; 0\)</span>.</p>
+when <span class="math inline">\(\pi(B) &gt; 0\)</span>.</p>
 </div>
 <div class="definition">
 <p><span id="def:unlabeled-div-9" class="definition"><strong>Definition 1.6  </strong></span>Two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <strong>independent</strong> given event <span class="math inline">\(C\)</span> if
-<span class="math display">\[ P(A \cap B \mid C) = P(A \mid C)P(B \mid C).\]</span></p>
+<span class="math display">\[ \pi(A \cap B \mid C) = \pi(A \mid C)\pi(B \mid C).\]</span></p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-10" class="definition"><strong>Definition 1.7  </strong></span>Let <span class="math inline">\(p(y_1, \ldots, y_N)\)</span> be the joint density of <span class="math inline">\(Y_1, \ldots, Y_N\)</span>. If <span class="math inline">\(p(y_1, \ldots, y_N) = p(y_{\pi_1}, \ldots, y_{\pi_N})\)</span> for a permutations <span class="math inline">\(\pi\)</span> of <span class="math inline">\(\{1, \ldots, N\}\)</span>, then <span class="math inline">\(Y_1, \ldots, Y_N\)</span> are <strong>exchangeable</strong>.</p>
+<p><span id="def:unlabeled-div-10" class="definition"><strong>Definition 1.7  </strong></span>Let <span class="math inline">\(\pi(y_1, \ldots, y_N)\)</span> be the joint density of <span class="math inline">\(Y_1, \ldots, Y_N\)</span>. If <span class="math inline">\(\pi(y_1, \ldots, y_N) = \pi(y_{\pi_1}, \ldots, y_{\pi_N})\)</span> for a permutations <span class="math inline">\(\pi\)</span> of <span class="math inline">\(\{1, \ldots, N\}\)</span>, then <span class="math inline">\(Y_1, \ldots, Y_N\)</span> are <strong>exchangeable</strong>.</p>
 </div>
 <p>Exchangability means that the labels of the random variables don’t contain any information about the outcomes. This is an important idea in many areas of probability and statistics, and we often model exchangeable events as iid.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-11" class="example"><strong>Example 1.4  </strong></span>If <span class="math inline">\(Y_i \sim Bin(n, p)\)</span> are independent and identically distributed for <span class="math inline">\(i = 1, 2, 3\)</span>, then <span class="math inline">\(p(Y_1, Y_2, Y_3) = p(Y_3, Y_1, Y_2)\)</span>.</p>
+<p><span id="exm:unlabeled-div-11" class="example"><strong>Example 1.4  </strong></span>If <span class="math inline">\(Y_i \sim Bin(n, p)\)</span> are independent and identically distributed for <span class="math inline">\(i = 1, 2, 3\)</span>, then <span class="math inline">\(\pi(Y_1, Y_2, Y_3) = \pi(Y_3, Y_1, Y_2)\)</span>.</p>
 </div>
 <div class="example">
 <p><span id="exm:unlabeled-div-12" class="example"><strong>Example 1.5  </strong></span>Let <span class="math inline">\((X, Y)\)</span> follow a bivariate normal distribution with mean <strong>0</strong>, variances <span class="math inline">\(\sigma_x = \sigma_y = 1\)</span> and a correlation parameter <span class="math inline">\(\rho \in [-1, 1]\)</span>. <span class="math inline">\((X, Y)\)</span> are exchangable, but only independent if <span class="math inline">\(\rho = 0\)</span>.</p>
 </div>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-13" class="proposition"><strong>Proposition 1.1  </strong></span>If <span class="math inline">\(\theta \sim p(\theta)\)</span> and <span class="math inline">\((Y_1, \ldots, Y_N)\)</span> from a sample space <span class="math inline">\(\mathcal{Y}\)</span> are conditionally iid given some parameter <span class="math inline">\(\theta\)</span>, then marginally <span class="math inline">\(Y_1, \ldots, Y_N\)</span> are exchangable.</p>
+<p><span id="prp:unlabeled-div-13" class="proposition"><strong>Proposition 1.1  </strong></span>If <span class="math inline">\(\theta \sim \pi(\theta)\)</span> and <span class="math inline">\((Y_1, \ldots, Y_N)\)</span> from a sample space <span class="math inline">\(\mathcal{Y}\)</span> are conditionally iid given some parameter <span class="math inline">\(\theta\)</span>, then marginally <span class="math inline">\(Y_1, \ldots, Y_N\)</span> are exchangable.</p>
 </div>
 <div class="proof">
 <p><span id="unlabeled-div-14" class="proof"><em>Proof</em>. </span>Suppose <span class="math inline">\((Y_1, \ldots, Y_N)\)</span> are conditionally iid given some parameter <span class="math inline">\(\theta\)</span>. Then for any permutation <span class="math inline">\(\pi\)</span> of <span class="math inline">\(\{1, \ldots, N\}\)</span> and observations <span class="math inline">\(\{y_1, \ldots, y_N\}\)</span>
 <span class="math display">\[\begin{equation}
 \begin{split}
-p(y_1, \ldots, y_N) &amp;= \int p(y_1, \ldots, y_N \mid \theta) p(\theta)\, d\theta \qquad \textrm{(definition of marginal distribution)}\\
-&amp; = \int \left\{\prod_{i=1}^Np(y_i \mid \theta)\right\} p(\theta)\, d\theta \qquad \textrm{(definition of conditionally iid)}\\
-&amp; = \int \left\{\prod_{i=1}^Np(y_{\pi_i} \mid \theta)\right\} p(\theta)\, d\theta \qquad \textrm{(product is commutative)} \\
-&amp; = p(y_{\pi_1}, \ldots, y_{\pi_N}) \qquad \textrm{(definition of marginal distribution)}
+\pi(y_1, \ldots, y_N) &amp;= \int \pi(y_1, \ldots, y_N \mid \theta) \pi(\theta)\, d\theta \qquad \textrm{(definition of marginal distribution)}\\
+&amp; = \int \left\{\prod_{i=1}^N\pi(y_i \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(definition of conditionally iid)}\\
+&amp; = \int \left\{\prod_{i=1}^N\pi(y_{\pi_i} \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(product is commutative)} \\
+&amp; = \pi(y_{\pi_1}, \ldots, y_{\pi_N}) \qquad \textrm{(definition of marginal distribution)}
 \end{split}
 \end{equation}\]</span></p>
 </div>
@@ -340,46 +346,46 @@ p(y_1, \ldots, y_N) &amp;= \int p(y_1, \ldots, y_N \mid \theta) p(\theta)\, d\th
 <div class="theorem">
 <p><span id="thm:unlabeled-div-15" class="theorem"><strong>Theorem 1.1  (de Finetti) </strong></span>If a sequence of random variables <span class="math inline">\((Y_1, \ldots, Y_N)\)</span> from a sample space <span class="math inline">\(\mathcal{Y}\)</span> is exchangeable, then its joint distribution can be written as
 <span class="math display">\[
-p(y_1, \ldots, y_N) = \int \left\{\prod_{i=1}^Np(y_i \mid \theta)\right\} p(\theta)\, d\theta
+\pi(y_1, \ldots, y_N) = \int \left\{\prod_{i=1}^N\pi(y_i \mid \theta)\right\} \pi(\theta)\, d\theta
 \]</span>
-for some parameter <span class="math inline">\(\theta\)</span>, some distribution on <span class="math inline">\(\theta\)</span>, and some sampling model <span class="math inline">\(p(y_i \mid \theta)\)</span>.</p>
+for some parameter <span class="math inline">\(\theta\)</span>, some distribution on <span class="math inline">\(\theta\)</span>, and some sampling model <span class="math inline">\(\pi(y_i \mid \theta)\)</span>.</p>
 </div>
-<p>This is a kind of existence theorem for Bayesian inference. It says that if we have exchangeable random varibales, then a parameter <span class="math inline">\(\theta\)</span> must exist and a subjective probability distribution <span class="math inline">\(p(\theta)\)</span> must also exist. The argument against Bayesian inference is that it doesn’t guarantee a <em>good</em> subjective probability distribution <span class="math inline">\(p(\theta)\)</span> exists.</p>
+<p>This is a kind of existence theorem for Bayesian inference. It says that if we have exchangeable random varibales, then a parameter <span class="math inline">\(\theta\)</span> must exist and a subjective probability distribution <span class="math inline">\(\pi(\theta)\)</span> must also exist. The argument against Bayesian inference is that it doesn’t guarantee a <em>good</em> subjective probability distribution <span class="math inline">\(\pi(\theta)\)</span> exists.</p>
 </div>
 <div id="bayes-theorem" class="section level2 hasAnchor" number="1.5">
 <h2><span class="header-section-number">1.5</span> Bayes’ Theorem<a href="fundamentals.html#bayes-theorem" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Now we have an understanding of conditional probability and exchange ability, we can put these two together to understand Bayes’ Theorem. Bayes’ theorem is concerned with the distirbution of the parameter <span class="math inline">\(\theta\)</span> given some observed data <span class="math inline">\(y\)</span>. It tries to answer the question: what does the data tell us about the model parameters?</p>
+<p>Now we have an understanding of conditional probability and exchange ability, we can put these two together to understand Bayes’ Theorem. Bayes’ theorem is concerned with the distribution of the parameter <span class="math inline">\(\theta\)</span> given some observed data <span class="math inline">\(y\)</span>. It tries to answer the question: what does the data tell us about the model parameters?</p>
 <div class="theorem">
 <p><span id="thm:unlabeled-div-16" class="theorem"><strong>Theorem 1.2  (Bayes) </strong></span>The distribution of the model parameter <span class="math inline">\(\theta\)</span> given the data <span class="math inline">\(y\)</span> is
 <span class="math display">\[
-p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}
+\pi(\theta \mid y) = \frac{\pi(y \mid \theta)\pi(\theta)}{\pi(y)}
 \]</span></p>
 </div>
 <div class="proof">
 <p><span id="unlabeled-div-17" class="proof"><em>Proof</em>. </span><span class="math display">\[\begin{align}
-p(\theta \mid y) &amp;= \frac{p(\theta, y)}{p(y)}\\
-\implies p(\theta, y) &amp;= p(\theta \mid y)p(y)
+\pi(\theta \mid y) &amp;= \frac{\pi(\theta, y)}{\pi(y)}\\
+\implies \pi(\theta, y) &amp;= \pi(\theta \mid y)\pi(y)
 \end{align}\]</span>
-Analogously, using <span class="math inline">\(p(y \mid \theta)\)</span> we can derive
+Analogously, using <span class="math inline">\(\pi(y \mid \theta)\)</span> we can derive
 <span class="math display">\[
-p(\theta, y) = p(y \mid \theta)p(\theta)
+\pi(\theta, y) = \pi(y \mid \theta)\pi(\theta)
 \]</span>
-Putting these two terms equal to each other and dividing by <span class="math inline">\(p(y)\)</span> gives
+Putting these two terms equal to each other and dividing by <span class="math inline">\(\pi(y)\)</span> gives
 <span class="math display">\[
-p(\theta \mid y) = \frac{p(y \mid \theta)p(\theta)}{p(y)}
+\pi(\theta \mid y) = \frac{\pi(y \mid \theta)\pi(\theta)}{\pi(y)}
 \]</span></p>
 </div>
 <p>There are four terms in Bayes’ theorem:</p>
 <ol style="list-style-type: decimal">
-<li>The <strong>posterior distribution</strong> <span class="math inline">\(p(\theta \mid y)\)</span>. This tells us our beleif about the model parameter <span class="math inline">\(\theta\)</span> given the data we have observed <span class="math inline">\(y\)</span>.</li>
-<li>The <strong>likelihood function</strong> <span class="math inline">\(p(y \mid \theta)\)</span>. The likelihood function is common to both frequentist and Bayesian methods. By the likelihood principle, the likelihood function contains all the information the data can tell us about the model parameter <span class="math inline">\(\theta\)</span>.</li>
-<li>The <strong>prior distribution</strong> <span class="math inline">\(p(\theta)\)</span>. This is the distribution that describes our prior beliefs about the value of <span class="math inline">\(\theta\)</span>. The form of <span class="math inline">\(\theta\)</span> should be decided before we see the data. It may be a vague distribution (e.g. <span class="math inline">\(\theta \sim N(0, 10^2)\)</span>) or a specific distirbution based on prior information from experts (e.g. <span class="math inline">\(\theta \sim N(5.5, 1.3^2)\)</span>).<br />
+<li>The <strong>posterior distribution</strong> <span class="math inline">\(\pi(\theta \mid y)\)</span>. This tells us our belief about the model parameter <span class="math inline">\(\theta\)</span> given the data we have observed <span class="math inline">\(y\)</span>.</li>
+<li>The <strong>likelihood function</strong> <span class="math inline">\(\pi(y \mid \theta)\)</span>. The likelihood function is common to both frequentist and Bayesian methods. By the likelihood principle, the likelihood function contains all the information the data can tell us about the model parameter <span class="math inline">\(\theta\)</span>.</li>
+<li>The <strong>prior distribution</strong> <span class="math inline">\(\pi(\theta)\)</span>. This is the distribution that describes our prior beliefs about the value of <span class="math inline">\(\theta\)</span>. The form of <span class="math inline">\(\theta\)</span> should be decided before we see the data. It may be a vague distribution (e.g. <span class="math inline">\(\theta \sim N(0, 10^2)\)</span>) or a specific distribution based on prior information from experts (e.g. <span class="math inline">\(\theta \sim N(5.5, 1.3^2)\)</span>).<br />
 </li>
 <li>The <strong>evidence of the data</strong> <span class="math inline">\(\pi(y)\)</span>. This is sometimes called the average probability of the data or the marginal likelihood. In practice, we do not need to derive this term as it can be back computed to ensure the posterior distribution sums/integrates to one.</li>
 </ol>
 <p>A consequence of point four is that posterior distributions are usually derived proportionally, and (up to proportionality) Bayes’ theorem
 <span class="math display">\[
-p(\theta \mid y) \propto p(y\mid\theta)p(\theta).
+\pi(\theta \mid y) \propto \pi(y\mid\theta)\pi(\theta).
 \]</span></p>
 <blockquote>
 <p><strong>Some history of Thomas Bayes</strong>. Thomas Bayes was an English theologean born in 1702. His “Essay towards solving a problem in the doctrine of chances” was published posthumously. It intorduces theroems on conditional probability and the idea of prior probability. He discusses an experiment where the data can be modelled using the Binomial distirbution and he guesses (places a prior distirbution) on the probability of success.</p>
@@ -394,24 +400,24 @@ p(\theta \mid y) \propto p(y\mid\theta)p(\theta).
 <p><span id="exm:unlabeled-div-18" class="example"><strong>Example 1.6  </strong></span>We finish this chapter with a very simple example. The advantage of the example being so simple is that we can obtain plots in R that show what’s going on.</p>
 <p>Suppose we have a model <span class="math inline">\(y \sim N(\theta, 1)\)</span> and we want to estimate <span class="math inline">\(\theta\)</span>. To do this we need to derive the posterior distribution. By Bayes’ theorem,
 <span class="math display">\[
-p(\theta \mid y) \propto p(y \mid \theta) p(\theta).
+\pi(\theta \mid y) \propto \pi(y \mid \theta) \pi(\theta).
 \]</span>
-We know the form of <span class="math inline">\(p(y \mid \theta) = \frac{1}{\sqrt{2\pi}}e^{\frac{1}{2}(y - \theta^2)}\)</span>. But how should we describe our prior beliefs about <span class="math inline">\(\theta\)</span>? Here are three options:</p>
+We know the form of <span class="math inline">\(\pi(y \mid \theta) = \frac{1}{\sqrt{2\pi}}e^{\frac{1}{2}(y - \theta^2)}\)</span>. But how should we describe our prior beliefs about <span class="math inline">\(\theta\)</span>? Here are three options:</p>
 <ol style="list-style-type: decimal">
-<li><p>We can be very vague about <span class="math inline">\(\theta\)</span> – we genuinely don’t know about its value. We assign a uniform prior distribution to <span class="math inline">\(\theta\)</span> that takes values between -1,000 and +1,000, i.e. <span class="math inline">\(\theta \sim u[-1000, 1000]\)</span>. Up to proportionality <span class="math inline">\(p(\theta) \propto 1\)</span> for <span class="math inline">\(\theta \in [-1000, 1000]\)</span>.</p></li>
-<li><p>After thinking hard about the problem, or talking to an expert, we decide that the only thing we know about <span class="math inline">\(\theta\)</span> is that it can’t be negative. We adjust our prior distribution from 1. to be <span class="math inline">\(\theta \sim u[0, 1000]\)</span>. Up to proportionality <span class="math inline">\(p(\theta) \propto 1\)</span> for <span class="math inline">\(\theta \in [0, 1000]\)</span>.</p></li>
-<li><p>We decide to talk to a series of experts about <span class="math inline">\(\theta\)</span> asking for their views on likely values of <span class="math inline">\(\theta\)</span>. Averaging the experts opinions gives <span class="math inline">\(\theta \sim N(3, 0.7^2)\)</span>. This is a method known as prior ellicitation.</p></li>
+<li><p>We can be very vague about <span class="math inline">\(\theta\)</span> – we genuinely don’t know about its value. We assign a uniform prior distribution to <span class="math inline">\(\theta\)</span> that takes values between -1,000 and +1,000, i.e. <span class="math inline">\(\theta \sim u[-1000, 1000]\)</span>. Up to proportionality <span class="math inline">\(\pi(\theta) \propto 1\)</span> for <span class="math inline">\(\theta \in [-1000, 1000]\)</span>.</p></li>
+<li><p>After thinking hard about the problem, or talking to an expert, we decide that the only thing we know about <span class="math inline">\(\theta\)</span> is that it can’t be negative. We adjust our prior distribution from 1. to be <span class="math inline">\(\theta \sim u[0, 1000]\)</span>. Up to proportionality <span class="math inline">\(\pi(\theta) \propto 1\)</span> for <span class="math inline">\(\theta \in [0, 1000]\)</span>.</p></li>
+<li><p>We decide to talk to a series of experts about <span class="math inline">\(\theta\)</span> asking for their views on likely values of <span class="math inline">\(\theta\)</span>. Averaging the experts opinions gives <span class="math inline">\(\theta \sim N(3, 0.7^2)\)</span>. This is a method known as prior elicitation.</p></li>
 </ol>
 <p>We now go and observe some data. After a lot of time and effort, we collect one data point – <span class="math inline">\(y = 0\)</span>.</p>
-<p>Now we have all the ingredients to construct the posterior distribution. We multiply the likelihood function evaluated at <span class="math inline">\(y = 0\)</span> by each of the three prior distirbutions. This gives us the postertior distirbutions (up to proportionality).</p>
+<p>Now we have all the ingredients to construct the posterior distribution. We multiply the likelihood function evaluated at <span class="math inline">\(y = 0\)</span> by each of the three prior distributions. This gives us the posterior distributions (up to proportionality).</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="fundamentals.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The likelihood function is the normal PDF</span></span>
-<span id="cb7-2"><a href="fundamentals.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#To nillustrate this, we evaluate this from [-5, 5].</span></span>
+<span id="cb7-2"><a href="fundamentals.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#To illustrate this, we evaluate this from [-5, 5].</span></span>
 <span id="cb7-3"><a href="fundamentals.html#cb7-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="fl">0.01</span>)</span>
 <span id="cb7-4"><a href="fundamentals.html#cb7-4" aria-hidden="true" tabindex="-1"></a>likelihood <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
 <span id="cb7-5"><a href="fundamentals.html#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-6"><a href="fundamentals.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#The first prior distribution we try is a </span></span>
 <span id="cb7-7"><a href="fundamentals.html#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#uniform [-1000, 1000] distribution. This is a </span></span>
-<span id="cb7-8"><a href="fundamentals.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#vague prior distirbution. </span></span>
+<span id="cb7-8"><a href="fundamentals.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#vague prior distribution. </span></span>
 <span id="cb7-9"><a href="fundamentals.html#cb7-9" aria-hidden="true" tabindex="-1"></a>uniform.prior <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(x))</span>
 <span id="cb7-10"><a href="fundamentals.html#cb7-10" aria-hidden="true" tabindex="-1"></a>posterior1 <span class="ot">&lt;-</span> likelihood<span class="sc">*</span>uniform.prior</span>
 <span id="cb7-11"><a href="fundamentals.html#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
@@ -428,7 +434,7 @@ We know the form of <span class="math inline">\(p(y \mid \theta) = \frac{1}{\sqr
 <span id="cb7-22"><a href="fundamentals.html#cb7-22" aria-hidden="true" tabindex="-1"></a>normal.prior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">3</span>, <span class="at">sd =</span> <span class="fl">0.7</span>)</span>
 <span id="cb7-23"><a href="fundamentals.html#cb7-23" aria-hidden="true" tabindex="-1"></a>posterior3 <span class="ot">&lt;-</span> likelihood<span class="sc">*</span>normal.prior</span>
 <span id="cb7-24"><a href="fundamentals.html#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-25"><a href="fundamentals.html#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#Now we plot the likelihoods, prior and posterior distirbutions. </span></span>
+<span id="cb7-25"><a href="fundamentals.html#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#Now we plot the likelihoods, prior and posterior distributions. </span></span>
 <span id="cb7-26"><a href="fundamentals.html#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#Each row corresponds to a different prior distribution. Each</span></span>
 <span id="cb7-27"><a href="fundamentals.html#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#column corresponds to a part in Bayes&#39; theorem. </span></span>
 <span id="cb7-28"><a href="fundamentals.html#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
@@ -441,13 +447,56 @@ We know the form of <span class="math inline">\(p(y \mid \theta) = \frac{1}{\sqr
 <span id="cb7-35"><a href="fundamentals.html#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, likelihood, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
 <span id="cb7-36"><a href="fundamentals.html#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, normal.prior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
 <span id="cb7-37"><a href="fundamentals.html#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, posterior3, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <ol style="list-style-type: decimal">
 <li><p>The posterior distribution is proportional to the likelihood function. The prior distribution closely matches frequentist inference. Both the MLE and posterior mean are 0.</p></li>
 <li><p>We get a lopsided posterior distribution, that is proportional to the likelihood function for positive values of <span class="math inline">\(\theta\)</span>, but is 0 for negative values of <span class="math inline">\(\theta\)</span>.</p></li>
 </ol>
-<p>3.We get some sort of average of the likelihood fucntion and the prior distribution. Had we collected more data, the posterior distirbution would have been weighted toward the information from the likelihood function more.</p>
+<p>3.We get some sort of average of the likelihood function and the prior distribution. Had we collected more data, the posterior distribution would have been weighted toward the information from the likelihood function more.</p>
 </div>
+</div>
+<div id="problems" class="section level2 hasAnchor" number="1.6">
+<h2><span class="header-section-number">1.6</span> Problems<a href="fundamentals.html#problems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Consider a standard pack of 52 playing cards. You pick a card at random, what is the probability you pick:
+<ol style="list-style-type: decimal">
+<li>A Queen, given you have picked a picture card (King, Queen, Jack)?</li>
+<li>The five of clubs, given you have picked a black card?</li>
+<li>A black card, given you have not picked the five of clubs?</li>
+</ol></li>
+<li>Decide if each of the following events can be assigned probabilities by frequentists:
+<ol style="list-style-type: decimal">
+<li>The Bermuda triangle exists.</li>
+<li>A plan will go missing if it flies into the Bermuda triangle.</li>
+<li>Someone will test positive for Covid-19 after contracting the disease.</li>
+<li>The sun will rise tomorrow.</li>
+</ol></li>
+<li>An urn contains three coins. Two of the coins are fair, but one of the coins has heads on both sides.
+<ol style="list-style-type: decimal">
+<li>You pick a coin out of the urn without look and flip it. What’s the probability you get heads?</li>
+<li>You pick a coin out of the urn without look and flip it and get heads. What’s the probability it’s the two-headed coin?</li>
+</ol></li>
+<li>You get an email with the word <em>bitcoin</em> in. You want to work out the probability the email is spam.
+<ol style="list-style-type: decimal">
+<li>Using the law of total probability, show the probability the email is spam, given it contain the word probability is
+<span class="math display">\[
+  \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam})}{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam}) + \pi(\textrm{bitcoin} \mid \textrm{not spam})\pi(\textrm{not spam})}
+  \]</span></li>
+<li>Most spam filters take a naive approach and set
+<span class="math display">\[
+  \pi(\textrm{spam} =\pi(\textrm{not spam}) = \frac{1}{2}.
+  \]</span>
+If an email is known to be spam, there’s an 80% chance it contains the word bitcoin. If an email is not spam, then there’s a 1% chance it contains the word bitcoin. Calculate the probability the email is spam given it contains bitcoin.</li>
+<li>Suppose you take a much more pessimistic view, and assume that 80% of all emails are spam. Recalculate the probability the email is spam given it contains bitcoin.</li>
+</ol></li>
+<li>You are working on a project investigating pollution related illnesses in the West Midlands. I have sampled the proportion of people with pollution related illnesses in five areas of the West Midlands, <span class="math inline">\(y_1, \ldots, y_5\)</span>, with nothing to distinguish the data.
+<ol style="list-style-type: decimal">
+<li>Should you model these data points exchangeably?</li>
+<li>I now tell you four of these rates (0.72, 1.00, 0.85, 0.78 per 100,000). Should you continue to model these data points exchangeably?</li>
+<li>Now, suppose instead of telling you these four rates, I had told you the five areas I have information about are Birmingham City Centre, Smethwick, Edgbaston, Dorridge, and Sutton Coldfield. Should you continue to model these data points exchangeably?</li>
+<li>Now suppose I give you the data in part 2 and say that the missing data point is Birmingham City Centre. Should you continue to model these data points exchangeably?</li>
+</ol></li>
+</ol>
 
 </div>
 </div>
@@ -488,8 +537,8 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-intro.Rmd",
-"text": "Edit"
+"link": null,
+"text": null
 },
 "history": {
 "link": null,

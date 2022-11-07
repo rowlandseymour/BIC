@@ -86,3 +86,8 @@ prp:unlabeled-div-16
 def:unlabeled-div-20
 exm:norm
 def:unlabeled-div-18
+tab:unnamed-chunk-1
+problems
+heiracichal-models
+prior-ellicitation
+data-augmentation
