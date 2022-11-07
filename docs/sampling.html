@@ -150,6 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.3" data-path="fundamentals.html"><a href="fundamentals.html#bayesian-probability"><i class="fa fa-check"></i><b>1.3</b> Bayesian probability</a></li>
 <li class="chapter" data-level="1.4" data-path="fundamentals.html"><a href="fundamentals.html#conditional-probability-and-exchangability"><i class="fa fa-check"></i><b>1.4</b> Conditional Probability and Exchangability</a></li>
 <li class="chapter" data-level="1.5" data-path="fundamentals.html"><a href="fundamentals.html#bayes-theorem"><i class="fa fa-check"></i><b>1.5</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="1.6" data-path="fundamentals.html"><a href="fundamentals.html#problems"><i class="fa fa-check"></i><b>1.6</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="programming-in-r.html"><a href="programming-in-r.html"><i class="fa fa-check"></i><b>2</b> Programming in R</a></li>
 <li class="chapter" data-level="3" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>3</b> Bayesian inference</a>
@@ -173,7 +174,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.7" data-path="sampling.html"><a href="sampling.html#metropolis-hastings"><i class="fa fa-check"></i><b>4.7</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="4.8" data-path="sampling.html"><a href="sampling.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>4.8</b> MCMC Diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>5</b> Advanced computation</a></li>
+<li class="chapter" data-level="5" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>5</b> Advanced computation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="advanced-computation.html"><a href="advanced-computation.html#heiracichal-models"><i class="fa fa-check"></i><b>5.1</b> Heiracichal Models</a></li>
+<li class="chapter" data-level="5.2" data-path="advanced-computation.html"><a href="advanced-computation.html#prior-ellicitation"><i class="fa fa-check"></i><b>5.2</b> Prior Ellicitation</a></li>
+<li class="chapter" data-level="5.3" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>5.3</b> Data Augmentation</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -200,23 +206,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.1</span> Uniform random numbers<a href="sampling.html#uniform-random-numbers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>What we won’t be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is because computers aren’t good at being random, they require algorithmic instructions. True random number generation often uses physical methods, such as the radioactive decay of atoms, or atmospheric noise.</p>
 <p>Throughout this module, we will be using R’s built in random number generation. This is a pseudo random number generator, that has excellent random properties, but will eventually repeat. A basic random number generation method is sampling from a uniform distribution on the unit interval</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="sampling.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.722065</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="sampling.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] 0.5560342</code></pre>
 </div>
 <div id="inverse-transform-sampling" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Inverse transform sampling<a href="sampling.html#inverse-transform-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Suppose we want to sample from a non-uniform one-dimensional distribution. The inverse transform theorem allows us to do this using the distribution’s inverse function.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-1" class="definition"><strong>Definition 4.1  </strong></span>The <strong>inverse function</strong> of a distribution <span class="math inline">\(F\)</span>, denoted <span class="math inline">\(F^{-1}\)</span>, is defined for all <span class="math inline">\(u \in (0, 1)\)</span> by
+<p><span id="def:unlabeled-div-31" class="definition"><strong>Definition 4.1  </strong></span>The <strong>inverse function</strong> of a distribution <span class="math inline">\(F\)</span>, denoted <span class="math inline">\(F^{-1}\)</span>, is defined for all <span class="math inline">\(u \in (0, 1)\)</span> by
 <span class="math display">\[
 F^{-1}(u) = \inf\{x \in\mathbb{R} : F(x) &gt; u\}.
 \]</span></p>
 </div>
 <div class="theorem">
-<p><span id="thm:unlabeled-div-2" class="theorem"><strong>Theorem 4.1  </strong></span>Let <span class="math inline">\(F :\mathbb{R} \rightarrow [0, 1]\)</span>, <span class="math inline">\(U \sim U[0, 1]\)</span> and <span class="math inline">\(Y = F^{-1}(U)\)</span>. Then <span class="math inline">\(Y\)</span> has distribution <span class="math inline">\(F\)</span>.</p>
+<p><span id="thm:unlabeled-div-32" class="theorem"><strong>Theorem 4.1  </strong></span>Let <span class="math inline">\(F :\mathbb{R} \rightarrow [0, 1]\)</span>, <span class="math inline">\(U \sim U[0, 1]\)</span> and <span class="math inline">\(Y = F^{-1}(U)\)</span>. Then <span class="math inline">\(Y\)</span> has distribution <span class="math inline">\(F\)</span>.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-3" class="proof"><em>Proof</em>. </span>We have
+<p><span id="unlabeled-div-33" class="proof"><em>Proof</em>. </span>We have
 <span class="math display">\[
 \pi(Y \leq a) = \pi(F^{-1}(U) \leq a) = \pi(\inf\{x \in\mathbb{R} : F(x) &gt; u\} \leq a).
 \]</span>
@@ -228,7 +234,7 @@ As <span class="math inline">\(U \sim U[0, 1]\)</span>, we have <span class="mat
 </div>
 <p>This theorem says that if we have a random variable <span class="math inline">\(U \sim U[0, 1]\)</span> and we want to get <span class="math inline">\(Y \sim F\)</span>, then we can use <span class="math inline">\(F^{-1}(U)\)</span>. Viewing this theorem graphically can provide a much more intuitive understanding.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-4" class="example"><strong>Example 4.1  </strong></span>We would like to sample from an exponential distribution with rate 0.5. The likelihood function is given by
+<p><span id="exm:unlabeled-div-34" class="example"><strong>Example 4.1  </strong></span>We would like to sample from an exponential distribution with rate 0.5. The likelihood function is given by
 <span class="math display">\[
 \pi(y \mid \lambda = 0.5) = 0.5e^{0.5y}.
 \]</span>
@@ -243,21 +249,21 @@ F^{-1}(y \mid \lambda = 0.5) = -2\log(1-y).
 \]</span>
 Therefore, if <span class="math inline">\(U \sim U[0, 1]\)</span>, <span class="math inline">\(-2\log(1-U) \sim \hbox{Exp}(0.5)\)</span>.</p>
 <p>The R code below generates a plot to show this. We can plot the CDF for most one parameter distributions straightforwardly. We can think of this theorem as allowing us to sample a point on the y-axis and then computing the quantile this corresponds to.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="sampling.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>) <span class="co"># to reproduce</span></span>
-<span id="cb3-2"><a href="sampling.html#cb3-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="fl">0.01</span>) <span class="co">#Show on the interval [0, 5]</span></span>
-<span id="cb3-3"><a href="sampling.html#cb3-3" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span><span class="sc">*</span>y)    <span class="co">#Construct the cumulative density function (CDF)</span></span>
-<span id="cb3-4"><a href="sampling.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y, f, <span class="at">type =</span><span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">ylab=</span> <span class="st">&quot;CDF&quot;</span>)</span>
-<span id="cb3-5"><a href="sampling.html#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="sampling.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Sample u</span></span>
-<span id="cb3-7"><a href="sampling.html#cb3-7" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb3-8"><a href="sampling.html#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="sampling.html#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Get the corresponding y value</span></span>
-<span id="cb3-10"><a href="sampling.html#cb3-10" aria-hidden="true" tabindex="-1"></a>f.inv <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u)</span>
-<span id="cb3-11"><a href="sampling.html#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="sampling.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#plot </span></span>
-<span id="cb3-13"><a href="sampling.html#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> u, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb3-14"><a href="sampling.html#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> f.inv, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="sampling.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>) <span class="co"># to reproduce</span></span>
+<span id="cb32-2"><a href="sampling.html#cb32-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="fl">0.01</span>) <span class="co">#Show on the interval [0, 5]</span></span>
+<span id="cb32-3"><a href="sampling.html#cb32-3" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span><span class="sc">*</span>y)    <span class="co">#Construct the cumulative density function (CDF)</span></span>
+<span id="cb32-4"><a href="sampling.html#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y, f, <span class="at">type =</span><span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">ylab=</span> <span class="st">&quot;CDF&quot;</span>)</span>
+<span id="cb32-5"><a href="sampling.html#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="sampling.html#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Sample u</span></span>
+<span id="cb32-7"><a href="sampling.html#cb32-7" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb32-8"><a href="sampling.html#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="sampling.html#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Get the corresponding y value</span></span>
+<span id="cb32-10"><a href="sampling.html#cb32-10" aria-hidden="true" tabindex="-1"></a>f.inv <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u)</span>
+<span id="cb32-11"><a href="sampling.html#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-12"><a href="sampling.html#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="co">#plot </span></span>
+<span id="cb32-13"><a href="sampling.html#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> u, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb32-14"><a href="sampling.html#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> f.inv, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 </div>
 <div id="rejection-sampling" class="section level2 hasAnchor" number="4.3">
@@ -276,7 +282,7 @@ f(y) \propto q(y)\pi(U &lt; k) = q(y)\frac{\pi(u)}{cq(y)} = \frac{\pi(u)}{c}.
 \]</span>
 Therefore, <span class="math inline">\(f = p\)</span>.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-5" class="example"><strong>Example 4.2  </strong></span>Suppose we want to sample from a distribution that has the density
+<p><span id="exm:unlabeled-div-35" class="example"><strong>Example 4.2  </strong></span>Suppose we want to sample from a distribution that has the density
 <span class="math display">\[
 \pi(y) = \begin{cases}
 \frac{3}{4}y(2-y), \qquad y \in [0, 2] \\
@@ -284,24 +290,24 @@ Therefore, <span class="math inline">\(f = p\)</span>.</p>
 \end{cases}.
 \]</span>
 This has a maximum at <span class="math inline">\(\frac{3}{4}\)</span>. We choose <span class="math inline">\(p \sim U[0, 1]\)</span> and <span class="math inline">\(c = \frac{3}{4}\)</span>. The R code below shows a pictorial version of how one sample is generated.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="sampling.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)   <span class="co">#to reproduce</span></span>
-<span id="cb4-2"><a href="sampling.html#cb4-2" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>         <span class="co">#set M</span></span>
-<span id="cb4-3"><a href="sampling.html#cb4-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)    <span class="co">#sample Y ~ Q</span></span>
-<span id="cb4-4"><a href="sampling.html#cb4-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) <span class="co">#compute pi(y)</span></span>
-<span id="cb4-5"><a href="sampling.html#cb4-5" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> p<span class="sc">/</span>(M<span class="sc">*</span><span class="dv">1</span>)     <span class="co">#compute k</span></span>
-<span id="cb4-6"><a href="sampling.html#cb4-6" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)    <span class="co">#sample U ~ U[0, 1]</span></span>
-<span id="cb4-7"><a href="sampling.html#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(u <span class="sc">&lt;</span> k, <span class="st">&#39;accept&#39;</span>, <span class="st">&#39;reject&#39;</span>) <span class="co">#Accept if  u &lt; k</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="sampling.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)   <span class="co">#to reproduce</span></span>
+<span id="cb33-2"><a href="sampling.html#cb33-2" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>         <span class="co">#set M</span></span>
+<span id="cb33-3"><a href="sampling.html#cb33-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)    <span class="co">#sample Y ~ Q</span></span>
+<span id="cb33-4"><a href="sampling.html#cb33-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) <span class="co">#compute pi(y)</span></span>
+<span id="cb33-5"><a href="sampling.html#cb33-5" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> p<span class="sc">/</span>(M<span class="sc">*</span><span class="dv">1</span>)     <span class="co">#compute k</span></span>
+<span id="cb33-6"><a href="sampling.html#cb33-6" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)    <span class="co">#sample U ~ U[0, 1]</span></span>
+<span id="cb33-7"><a href="sampling.html#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(u <span class="sc">&lt;</span> k, <span class="st">&#39;accept&#39;</span>, <span class="st">&#39;reject&#39;</span>) <span class="co">#Accept if  u &lt; k</span></span></code></pre></div>
 <pre><code>## [1] &quot;reject&quot;</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="sampling.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create nice plot</span></span>
-<span id="cb6-2"><a href="sampling.html#cb6-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>)</span>
-<span id="cb6-3"><a href="sampling.html#cb6-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>a<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>a)</span>
-<span id="cb6-4"><a href="sampling.html#cb6-4" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> M<span class="sc">*</span><span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(a))</span>
-<span id="cb6-5"><a href="sampling.html#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(a, b, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, M), <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
-<span id="cb6-6"><a href="sampling.html#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(a, c)</span>
-<span id="cb6-7"><a href="sampling.html#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> y,  <span class="at">y1 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) , <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb6-8"><a href="sampling.html#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y,  <span class="at">y0 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y), <span class="at">x1 =</span> y, <span class="at">y1 =</span> M, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb6-9"><a href="sampling.html#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="at">x =</span> y, <span class="at">y =</span> u, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="sampling.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create nice plot</span></span>
+<span id="cb35-2"><a href="sampling.html#cb35-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>)</span>
+<span id="cb35-3"><a href="sampling.html#cb35-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>a<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>a)</span>
+<span id="cb35-4"><a href="sampling.html#cb35-4" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> M<span class="sc">*</span><span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(a))</span>
+<span id="cb35-5"><a href="sampling.html#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(a, b, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, M), <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
+<span id="cb35-6"><a href="sampling.html#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(a, c)</span>
+<span id="cb35-7"><a href="sampling.html#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> y,  <span class="at">y1 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) , <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb35-8"><a href="sampling.html#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y,  <span class="at">y0 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y), <span class="at">x1 =</span> y, <span class="at">y1 =</span> M, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb35-9"><a href="sampling.html#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="at">x =</span> y, <span class="at">y =</span> u, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 The plot also shows how the choices of <span class="math inline">\(M\)</span> and <span class="math inline">\(q\)</span> can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better <span class="math inline">\(q\)</span> to minimise this space.</p>
 </div>
 </div>
@@ -318,37 +324,37 @@ The plot also shows how the choices of <span class="math inline">\(M\)</span> an
 <li><p>If the number of seashells is greater than the number of stones, he moves to the proposed island. If the number of seashells is less than the number of stones, he takes a different strategy. He discards the number of stones equal to the number of seashells. So if there are six stone and five seashells, he ends up with 6-5=1 stone. He then places the stones and seashells into a bag a chooses one at random. If he picks a seashell, he moves to the proposed island, if he picks a shell, he stays put.</p></li>
 </ol>
 <p>This is a complex way of moving around, but it produces the required result; the time he spends on each island is proportionate to the size of the island. The code below shows an example of this over 10,000 weeks.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="sampling.html#cb7-1" aria-hidden="true" tabindex="-1"></a>weeks <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb7-2"><a href="sampling.html#cb7-2" aria-hidden="true" tabindex="-1"></a>island <span class="ot">&lt;-</span> <span class="fu">numeric</span>(weeks)</span>
-<span id="cb7-3"><a href="sampling.html#cb7-3" aria-hidden="true" tabindex="-1"></a>current <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb7-4"><a href="sampling.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>weeks){</span>
-<span id="cb7-5"><a href="sampling.html#cb7-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-6"><a href="sampling.html#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="do">## record current position</span></span>
-<span id="cb7-7"><a href="sampling.html#cb7-7" aria-hidden="true" tabindex="-1"></a>  island[i] <span class="ot">&lt;-</span> current</span>
-<span id="cb7-8"><a href="sampling.html#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-9"><a href="sampling.html#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Flip a coin to move to a propose a new island</span></span>
-<span id="cb7-10"><a href="sampling.html#cb7-10" aria-hidden="true" tabindex="-1"></a>  proposed <span class="ot">&lt;-</span> current <span class="sc">+</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>), <span class="at">size =</span> <span class="dv">1</span>)</span>
-<span id="cb7-11"><a href="sampling.html#cb7-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-12"><a href="sampling.html#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ensure he loops round the island</span></span>
-<span id="cb7-13"><a href="sampling.html#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(proposed <span class="sc">&lt;</span> <span class="dv">1</span>) </span>
-<span id="cb7-14"><a href="sampling.html#cb7-14" aria-hidden="true" tabindex="-1"></a>    proposed <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb7-15"><a href="sampling.html#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(proposed <span class="sc">&gt;</span> <span class="dv">10</span>)</span>
-<span id="cb7-16"><a href="sampling.html#cb7-16" aria-hidden="true" tabindex="-1"></a>    proposed <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb7-17"><a href="sampling.html#cb7-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-18"><a href="sampling.html#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Decide to move</span></span>
-<span id="cb7-19"><a href="sampling.html#cb7-19" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> proposed<span class="sc">/</span>current</span>
-<span id="cb7-20"><a href="sampling.html#cb7-20" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb7-21"><a href="sampling.html#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(u <span class="sc">&lt;</span> p)</span>
-<span id="cb7-22"><a href="sampling.html#cb7-22" aria-hidden="true" tabindex="-1"></a>    current <span class="ot">&lt;-</span> proposed</span>
-<span id="cb7-23"><a href="sampling.html#cb7-23" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-24"><a href="sampling.html#cb7-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-25"><a href="sampling.html#cb7-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-26"><a href="sampling.html#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="sampling.html#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot results</span></span>
-<span id="cb7-28"><a href="sampling.html#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb7-29"><a href="sampling.html#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(island, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;week&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;island&quot;</span>)</span>
-<span id="cb7-30"><a href="sampling.html#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(island)<span class="sc">/</span>weeks, <span class="at">xlab =</span> <span class="st">&quot;island&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Proportion of time&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="sampling.html#cb36-1" aria-hidden="true" tabindex="-1"></a>weeks <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb36-2"><a href="sampling.html#cb36-2" aria-hidden="true" tabindex="-1"></a>island <span class="ot">&lt;-</span> <span class="fu">numeric</span>(weeks)</span>
+<span id="cb36-3"><a href="sampling.html#cb36-3" aria-hidden="true" tabindex="-1"></a>current <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb36-4"><a href="sampling.html#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>weeks){</span>
+<span id="cb36-5"><a href="sampling.html#cb36-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-6"><a href="sampling.html#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="do">## record current position</span></span>
+<span id="cb36-7"><a href="sampling.html#cb36-7" aria-hidden="true" tabindex="-1"></a>  island[i] <span class="ot">&lt;-</span> current</span>
+<span id="cb36-8"><a href="sampling.html#cb36-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-9"><a href="sampling.html#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Flip a coin to move to a propose a new island</span></span>
+<span id="cb36-10"><a href="sampling.html#cb36-10" aria-hidden="true" tabindex="-1"></a>  proposed <span class="ot">&lt;-</span> current <span class="sc">+</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>), <span class="at">size =</span> <span class="dv">1</span>)</span>
+<span id="cb36-11"><a href="sampling.html#cb36-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-12"><a href="sampling.html#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ensure he loops round the island</span></span>
+<span id="cb36-13"><a href="sampling.html#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(proposed <span class="sc">&lt;</span> <span class="dv">1</span>) </span>
+<span id="cb36-14"><a href="sampling.html#cb36-14" aria-hidden="true" tabindex="-1"></a>    proposed <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb36-15"><a href="sampling.html#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(proposed <span class="sc">&gt;</span> <span class="dv">10</span>)</span>
+<span id="cb36-16"><a href="sampling.html#cb36-16" aria-hidden="true" tabindex="-1"></a>    proposed <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb36-17"><a href="sampling.html#cb36-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-18"><a href="sampling.html#cb36-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Decide to move</span></span>
+<span id="cb36-19"><a href="sampling.html#cb36-19" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> proposed<span class="sc">/</span>current</span>
+<span id="cb36-20"><a href="sampling.html#cb36-20" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb36-21"><a href="sampling.html#cb36-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(u <span class="sc">&lt;</span> p)</span>
+<span id="cb36-22"><a href="sampling.html#cb36-22" aria-hidden="true" tabindex="-1"></a>    current <span class="ot">&lt;-</span> proposed</span>
+<span id="cb36-23"><a href="sampling.html#cb36-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-24"><a href="sampling.html#cb36-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-25"><a href="sampling.html#cb36-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-26"><a href="sampling.html#cb36-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-27"><a href="sampling.html#cb36-27" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot results</span></span>
+<span id="cb36-28"><a href="sampling.html#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb36-29"><a href="sampling.html#cb36-29" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(island, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;week&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;island&quot;</span>)</span>
+<span id="cb36-30"><a href="sampling.html#cb36-30" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(island)<span class="sc">/</span>weeks, <span class="at">xlab =</span> <span class="st">&quot;island&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Proportion of time&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 <p>We can recognise several different statistical principles in this example. The King decides to move islands dependent on where he is currently, not based on where he has been previously (Markov principle). He proposes an island to move to and accepts or rejects this decision based on some distribution (rejection principle). We are now going to describe some of the properties of Markov chains, including the Markov principle.</p>
 <p>You can watch Richard McElreath of Statistical Rethinking explain the original example in this video <img src="https://youtu.be/Qqz5AJjyugM?t=370" /></p>
@@ -359,14 +365,14 @@ The plot also shows how the choices of <span class="math inline">\(M\)</span> an
 <p><span id="def:Markov" class="definition"><strong>Definition 4.2  </strong></span>A sequence of random variables <span class="math inline">\(\{Y_1, Y_2, \ldots\}\)</span> is a <strong>Markov chain</strong> if <span class="math inline">\(p(Y_{n+1} \mid Y_{n}, \ldots, Y_1) = p(Y_{n+1} \mid Y_{n})\)</span>. That is that distribution of the next state <span class="math inline">\(Y_{n+1}\)</span> only depends on the current state <span class="math inline">\(Y_n\)</span> and not any previous states.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-6" class="definition"><strong>Definition 4.3  </strong></span>The probability of transitioning from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span> in a Markov chain is given by <span class="math inline">\(p_{ij}\)</span>. The <strong>transition matrix</strong> for a Markov chain with <span class="math inline">\(N\)</span> states is the <span class="math inline">\(N \times N\)</span> matrix <span class="math inline">\(P = p_{ij}\)</span>, where the <span class="math inline">\(\{i, j\}^{th}\)</span> entry is probability is moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span>.</p>
+<p><span id="def:unlabeled-div-36" class="definition"><strong>Definition 4.3  </strong></span>The probability of transitioning from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span> in a Markov chain is given by <span class="math inline">\(p_{ij}\)</span>. The <strong>transition matrix</strong> for a Markov chain with <span class="math inline">\(N\)</span> states is the <span class="math inline">\(N \times N\)</span> matrix <span class="math inline">\(P = p_{ij}\)</span>, where the <span class="math inline">\(\{i, j\}^{th}\)</span> entry is probability is moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span>.</p>
 </div>
 <p>These two properties make Markov chains nice to work with, especially the Markov property (Definition <a href="sampling.html#def:Markov">4.2</a>). Two other important definitions are</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-7" class="definition"><strong>Definition 4.4  </strong></span>The <strong>period </strong>of a state <span class="math inline">\(i\)</span> is given by <span class="math inline">\(d_i = \textrm{gcd}\{n &gt; 0; p_{ii} &gt; 0 \}\)</span>. A state is <strong>aperiodic</strong> if <span class="math inline">\(d_i = 1\)</span>. An <strong>aperiodic chain</strong> is a chain where all states are a periodic.</p>
+<p><span id="def:unlabeled-div-37" class="definition"><strong>Definition 4.4  </strong></span>The <strong>period </strong>of a state <span class="math inline">\(i\)</span> is given by <span class="math inline">\(d_i = \textrm{gcd}\{n &gt; 0; p_{ii} &gt; 0 \}\)</span>. A state is <strong>aperiodic</strong> if <span class="math inline">\(d_i = 1\)</span>. An <strong>aperiodic chain</strong> is a chain where all states are a periodic.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-8" class="definition"><strong>Definition 4.5  </strong></span>A Markov chain is <strong>irreducible</strong> if there exists an <span class="math inline">\(n \in \mathbb{N}\)</span> such that <span class="math inline">\(p(Y_n = i \mid Y_0 = j)\)</span> for all pairs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. In other words, it is possible to move from any state to any other state in a finite number of steps.</p>
+<p><span id="def:unlabeled-div-38" class="definition"><strong>Definition 4.5  </strong></span>A Markov chain is <strong>irreducible</strong> if there exists an <span class="math inline">\(n \in \mathbb{N}\)</span> such that <span class="math inline">\(p(Y_n = i \mid Y_0 = j)\)</span> for all pairs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. In other words, it is possible to move from any state to any other state in a finite number of steps.</p>
 </div>
 <p>We can use these definitions to start working with distributions. Suppose, the state we start at is drawn from some distribution <span class="math inline">\(Y_1 \sim \boldsymbol{q}\)</span>. Then the distributions of the second state <span class="math inline">\(Y_2\)</span> depends on the distribution of <span class="math inline">\(Y_1\)</span> and the transition probabilities
 <span class="math display">\[
@@ -374,10 +380,10 @@ p(Y_2 = j) = \sum_i q_ip_{ij}.
 \]</span>
 If we denote the distribution of <span class="math inline">\(Y_2 \sim \boldsymbol{q}^{(2)}\)</span>, then we can write it in terms of the transition matrix <span class="math inline">\(\boldsymbol{q}^\prime = \boldsymbol{q}P\)</span>. Now suppose we would like the distribution of <span class="math inline">\(Y_3 \sim \boldsymbol{q}^{(3)}\)</span>, thanks to the Markov property, this is the distribution for <span class="math inline">\(Y_2\)</span> multiplied by the transition matrix, so <span class="math inline">\(Y_3 \sim qP^2\)</span>. Inductively, <span class="math inline">\(P_k \sim qP^{k-1}\)</span>. To use Markov chains to sample from distributions, we need to identify the Eigenvalues of the transition matrix.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-9" class="proposition"><strong>Proposition 4.1  </strong></span>A transition matrix <span class="math inline">\(P\)</span> always has at least one eigenvalue equal to one.</p>
+<p><span id="prp:unlabeled-div-39" class="proposition"><strong>Proposition 4.1  </strong></span>A transition matrix <span class="math inline">\(P\)</span> always has at least one eigenvalue equal to one.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-10" class="proof"><em>Proof</em>. </span>The columns of <span class="math inline">\(P\)</span> sum to 1 as they are probability distributions. Therefore, <span class="math inline">\(1\)</span> is an eigenvector.</p>
+<p><span id="unlabeled-div-40" class="proof"><em>Proof</em>. </span>The columns of <span class="math inline">\(P\)</span> sum to 1 as they are probability distributions. Therefore, <span class="math inline">\(1\)</span> is an eigenvector.</p>
 </div>
 <p>::: {.definition} If a transition matrix <span class="math inline">\(P\)</span> has a unique Eigenvalue that takes the value 1, there is a unique distribution <span class="math inline">\(\pi\)</span> such that
 <span class="math display">\[
@@ -393,20 +399,20 @@ This distribution <span class="math inline">\(\pi\)</span>, is known as the <str
 <li><p>that there exists a unique distribution <span class="math inline">\(\pi\)</span> such that <span class="math inline">\(\pi P = \pi\)</span>.</p></li>
 </ol>
 <div class="example">
-<p><span id="exm:unlabeled-div-11" class="example"><strong>Example 4.4  </strong></span>In Example <a href="sampling.html#exm:King">4.3</a>, the King wanted to visit the islands according to how large they are. We can think of the islands as the states and the stationary distribution as <span class="math inline">\(p(Y = i) \propto i\)</span>. The eccentric method the King used allowed him to construct a transition matrix for an aperiodic Markov chain. He also never visited islands regularly using this method.</p>
+<p><span id="exm:unlabeled-div-41" class="example"><strong>Example 4.4  </strong></span>In Example <a href="sampling.html#exm:King">4.3</a>, the King wanted to visit the islands according to how large they are. We can think of the islands as the states and the stationary distribution as <span class="math inline">\(p(Y = i) \propto i\)</span>. The eccentric method the King used allowed him to construct a transition matrix for an aperiodic Markov chain. He also never visited islands regularly using this method.</p>
 </div>
 <p>When designing a Markov chain, it is usually straightforward to design one that meets conditions one and two. Condition three is more difficult to prove, but for some chains it is possible to show they satisfy detailed balance.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-12" class="definition"><strong>Definition 4.6  </strong></span>The Markov chain <span class="math inline">\(P\)</span> satisfies <strong>detailed balance</strong> with respect to the distribution <span class="math inline">\(\pi\)</span> if
+<p><span id="def:unlabeled-div-42" class="definition"><strong>Definition 4.6  </strong></span>The Markov chain <span class="math inline">\(P\)</span> satisfies <strong>detailed balance</strong> with respect to the distribution <span class="math inline">\(\pi\)</span> if
 <span class="math display">\[
 \pi_i p_{ij} = \pi_j p_{ji}.
 \]</span></p>
 </div>
 <div class="theorem">
-<p><span id="thm:unlabeled-div-13" class="theorem"><strong>Theorem 4.2  (Detailed Balance) </strong></span>Let <span class="math inline">\(P\)</span> be a transition matrix that satisfies detailed balance with respect to the distribution <span class="math inline">\(\pi\)</span>. Then <span class="math inline">\(\pi P = \pi\)</span>.</p>
+<p><span id="thm:unlabeled-div-43" class="theorem"><strong>Theorem 4.2  (Detailed Balance) </strong></span>Let <span class="math inline">\(P\)</span> be a transition matrix that satisfies detailed balance with respect to the distribution <span class="math inline">\(\pi\)</span>. Then <span class="math inline">\(\pi P = \pi\)</span>.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-14" class="proof"><em>Proof</em>. </span>The <span class="math inline">\(j^{th}\)</span> row of <span class="math inline">\(\pi P\)</span> is
+<p><span id="unlabeled-div-44" class="proof"><em>Proof</em>. </span>The <span class="math inline">\(j^{th}\)</span> row of <span class="math inline">\(\pi P\)</span> is
 <span class="math display">\[\begin{align*}
 \sum_{i} \pi_i p_{ij} &amp; = \sum_{i} \pi_j p_{ji} \quad \textrm{(detailed balance)} \\
 &amp; = \pi_j \sum_{i} p_{ji} \\
@@ -442,7 +448,7 @@ for(j in 1:M){
 }</code></pre>
 <p>The sequence <span class="math inline">\(\{\theta_0^{(0)},\ldots, \theta_N^{(0)}\}, \{\theta_0^{(1)},\ldots, \theta_N^{(1)}\}, \ldots, \{\theta_0^{(M)},\ldots, \theta_N^{(M)}\}\)</span> form a Markov chain. They also form a series of samples from the posterior distribution. However, they are not iid.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-15" class="example"><strong>Example 4.5  </strong></span>Recall the lab in the previous chapter, where we derived the posterior distributions for the normal distribution with unknown mean and variance. The posterior distributions are given by
+<p><span id="exm:unlabeled-div-45" class="example"><strong>Example 4.5  </strong></span>Recall the lab in the previous chapter, where we derived the posterior distributions for the normal distribution with unknown mean and variance. The posterior distributions are given by
 <span class="math display">\[
 \mu \mid \boldsymbol{y}, \sigma^2 \sim N(\mu_1, \sigma^2_1)
 \]</span>
@@ -485,10 +491,10 @@ As the the denominator doesn’t depend on <span class="math inline">\(\theta\)<
 \]</span>
 This is the likelihood ratio multiplied by the prior ratio.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-16" class="proposition"><strong>Proposition 4.2  </strong></span>The Markov chain generated by the Metropolis-Hastings algorithm satisfies detailed balance with respect to the posterior distribution.</p>
+<p><span id="prp:unlabeled-div-46" class="proposition"><strong>Proposition 4.2  </strong></span>The Markov chain generated by the Metropolis-Hastings algorithm satisfies detailed balance with respect to the posterior distribution.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-17" class="proof"><em>Proof</em>. </span>Denote the current state <span class="math inline">\(\theta\)</span> and the proposed state <span class="math inline">\(\theta&#39;\)</span>. We would like to show
+<p><span id="unlabeled-div-47" class="proof"><em>Proof</em>. </span>Denote the current state <span class="math inline">\(\theta\)</span> and the proposed state <span class="math inline">\(\theta&#39;\)</span>. We would like to show
 <span class="math display">\[
 \pi(\theta \mid \boldsymbol{y}) \pi(\theta&#39;\mid\theta) = \pi(\theta&#39; \mid \boldsymbol{y}) \pi(\theta\mid\theta&#39;).
 \]</span>
@@ -510,9 +516,9 @@ Hence, <span class="math inline">\(\pi(\theta \mid \boldsymbol{y}) \pi(\theta&#3
 </div>
 <div class="example">
 <p><span id="exm:norm" class="example"><strong>Example 4.6  </strong></span>Lets think again about the reaction time example in the previous chapter.The time until each lorry driver reacts (in milliseconds) is</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="sampling.html#cb9-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.34</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, <span class="fl">0.27</span>, <span class="fl">0.74</span>, <span class="fl">0.44</span>, <span class="fl">0.46</span>, <span class="fl">0.65</span>, <span class="fl">0.36</span>, <span class="fl">0.55</span>, <span class="fl">0.58</span>, <span class="fl">0.55</span>, <span class="fl">0.53</span>, <span class="fl">0.56</span>, <span class="fl">0.54</span>, <span class="fl">0.61</span>, <span class="fl">0.43</span>, <span class="fl">0.52</span>, <span class="fl">0.45</span>, <span class="fl">0.49</span>, <span class="fl">0.32</span>, <span class="fl">0.33</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, <span class="fl">0.34</span>, <span class="fl">0.60</span>, <span class="fl">0.59</span>, <span class="fl">0.43</span>, <span class="fl">0.57</span>, <span class="fl">0.34</span>)</span>
-<span id="cb9-2"><a href="sampling.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Reaction time (ms)&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="sampling.html#cb38-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.34</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, <span class="fl">0.27</span>, <span class="fl">0.74</span>, <span class="fl">0.44</span>, <span class="fl">0.46</span>, <span class="fl">0.65</span>, <span class="fl">0.36</span>, <span class="fl">0.55</span>, <span class="fl">0.58</span>, <span class="fl">0.55</span>, <span class="fl">0.53</span>, <span class="fl">0.56</span>, <span class="fl">0.54</span>, <span class="fl">0.61</span>, <span class="fl">0.43</span>, <span class="fl">0.52</span>, <span class="fl">0.45</span>, <span class="fl">0.49</span>, <span class="fl">0.32</span>, <span class="fl">0.33</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, <span class="fl">0.34</span>, <span class="fl">0.60</span>, <span class="fl">0.59</span>, <span class="fl">0.43</span>, <span class="fl">0.57</span>, <span class="fl">0.34</span>)</span>
+<span id="cb38-2"><a href="sampling.html#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Reaction time (ms)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 Assuming <span class="math inline">\(y_i \sim N(\mu, \sigma^2)\)</span>, by Bayes’ theorem, the posterior distribution is
 <span class="math display">\[
 \pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \pi(\boldsymbol{y} \mid \mu, \sigma^2) \pi(\mu).
@@ -531,47 +537,47 @@ q(\mu&#39; \mid \mu) = \frac{1}{2\varepsilon}.
 p_\textrm{acc} = \min\left\{\frac{\exp\left\{-0.01\mu&#39; -\sum_{i=1}^{30}\frac{(y_i - \mu&#39;)^2}{\sigma^2}\right\} }{\exp\left\{-0.01\mu -\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}\right\} }, 1\right\}
 \]</span></p>
 <p>We can implement a sampler in R as follows:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="sampling.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set up elements for MCMC</span></span>
-<span id="cb10-2"><a href="sampling.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
-<span id="cb10-3"><a href="sampling.html#cb10-3" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb10-4"><a href="sampling.html#cb10-4" aria-hidden="true" tabindex="-1"></a>mu.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
-<span id="cb10-5"><a href="sampling.html#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="sampling.html#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial values</span></span>
-<span id="cb10-7"><a href="sampling.html#cb10-7" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
-<span id="cb10-8"><a href="sampling.html#cb10-8" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co">#known</span></span>
-<span id="cb10-9"><a href="sampling.html#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="sampling.html#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
-<span id="cb10-11"><a href="sampling.html#cb10-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-12"><a href="sampling.html#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Propose value for mu</span></span>
-<span id="cb10-13"><a href="sampling.html#cb10-13" aria-hidden="true" tabindex="-1"></a>  mu.proposed <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, mu <span class="sc">-</span> <span class="fl">0.01</span>, mu <span class="sc">+</span> <span class="fl">0.01</span>)</span>
-<span id="cb10-14"><a href="sampling.html#cb10-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-15"><a href="sampling.html#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(mu.proposed <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="co">#If mu &lt; 0 we can reject straight away</span></span>
-<span id="cb10-16"><a href="sampling.html#cb10-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-17"><a href="sampling.html#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Compute (log) acceptance probability</span></span>
-<span id="cb10-18"><a href="sampling.html#cb10-18" aria-hidden="true" tabindex="-1"></a>    log.numerator   <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu.proposed <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu.proposed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb10-19"><a href="sampling.html#cb10-19" aria-hidden="true" tabindex="-1"></a>    log.denominator <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb10-20"><a href="sampling.html#cb10-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-21"><a href="sampling.html#cb10-21" aria-hidden="true" tabindex="-1"></a>    log.p.acc <span class="ot">&lt;-</span> log.numerator <span class="sc">-</span> log.denominator</span>
-<span id="cb10-22"><a href="sampling.html#cb10-22" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb10-23"><a href="sampling.html#cb10-23" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-24"><a href="sampling.html#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Accept/Reject step</span></span>
-<span id="cb10-25"><a href="sampling.html#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">log</span>(u) <span class="sc">&lt;</span> log.p.acc){</span>
-<span id="cb10-26"><a href="sampling.html#cb10-26" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> mu.proposed</span>
-<span id="cb10-27"><a href="sampling.html#cb10-27" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb10-28"><a href="sampling.html#cb10-28" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb10-29"><a href="sampling.html#cb10-29" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-30"><a href="sampling.html#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Store mu at each iteration</span></span>
-<span id="cb10-31"><a href="sampling.html#cb10-31" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
-<span id="cb10-32"><a href="sampling.html#cb10-32" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb10-33"><a href="sampling.html#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="sampling.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set up elements for MCMC</span></span>
+<span id="cb39-2"><a href="sampling.html#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
+<span id="cb39-3"><a href="sampling.html#cb39-3" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb39-4"><a href="sampling.html#cb39-4" aria-hidden="true" tabindex="-1"></a>mu.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb39-5"><a href="sampling.html#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="sampling.html#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial values</span></span>
+<span id="cb39-7"><a href="sampling.html#cb39-7" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb39-8"><a href="sampling.html#cb39-8" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co">#known</span></span>
+<span id="cb39-9"><a href="sampling.html#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="sampling.html#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb39-11"><a href="sampling.html#cb39-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb39-12"><a href="sampling.html#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Propose value for mu</span></span>
+<span id="cb39-13"><a href="sampling.html#cb39-13" aria-hidden="true" tabindex="-1"></a>  mu.proposed <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, mu <span class="sc">-</span> <span class="fl">0.01</span>, mu <span class="sc">+</span> <span class="fl">0.01</span>)</span>
+<span id="cb39-14"><a href="sampling.html#cb39-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb39-15"><a href="sampling.html#cb39-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(mu.proposed <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="co">#If mu &lt; 0 we can reject straight away</span></span>
+<span id="cb39-16"><a href="sampling.html#cb39-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb39-17"><a href="sampling.html#cb39-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Compute (log) acceptance probability</span></span>
+<span id="cb39-18"><a href="sampling.html#cb39-18" aria-hidden="true" tabindex="-1"></a>    log.numerator   <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu.proposed <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu.proposed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb39-19"><a href="sampling.html#cb39-19" aria-hidden="true" tabindex="-1"></a>    log.denominator <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb39-20"><a href="sampling.html#cb39-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb39-21"><a href="sampling.html#cb39-21" aria-hidden="true" tabindex="-1"></a>    log.p.acc <span class="ot">&lt;-</span> log.numerator <span class="sc">-</span> log.denominator</span>
+<span id="cb39-22"><a href="sampling.html#cb39-22" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb39-23"><a href="sampling.html#cb39-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb39-24"><a href="sampling.html#cb39-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Accept/Reject step</span></span>
+<span id="cb39-25"><a href="sampling.html#cb39-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">log</span>(u) <span class="sc">&lt;</span> log.p.acc){</span>
+<span id="cb39-26"><a href="sampling.html#cb39-26" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> mu.proposed</span>
+<span id="cb39-27"><a href="sampling.html#cb39-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb39-28"><a href="sampling.html#cb39-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb39-29"><a href="sampling.html#cb39-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb39-30"><a href="sampling.html#cb39-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Store mu at each iteration</span></span>
+<span id="cb39-31"><a href="sampling.html#cb39-31" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
+<span id="cb39-32"><a href="sampling.html#cb39-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb39-33"><a href="sampling.html#cb39-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 <p>We can see that after about 300 iterations, the Markov chain has converged to its stationary distribution, the posterior distribution. We can see this more clearly by removing the first 300 iterations.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="sampling.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="sampling.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="at">xlab =</span> <span class="fu">expression</span>(mu), <span class="at">main =</span> <span class="st">&quot;Posterior distribution&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="sampling.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="sampling.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="at">xlab =</span> <span class="fu">expression</span>(mu), <span class="at">main =</span> <span class="st">&quot;Posterior distribution&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
 <p>The 95% credible interval for <span class="math inline">\(\mu\)</span> using this prior distribution is</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="sampling.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="sampling.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
 <pre><code>##      2.5%     97.5% 
 ## 0.4832146 0.4961484</code></pre>
 <p>Recall that using the normal prior distribution, it was</p>
@@ -584,84 +590,84 @@ p_\textrm{acc} = \min\left\{\frac{\exp\left\{-0.01\mu&#39; -\sum_{i=1}^{30}\frac
 <p>When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well.</p>
 <p>A key way of doing this is by looking at the trace plot. This is the plot out MCMC iterations over time. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn’t look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-18" class="definition"><strong>Definition 4.7  </strong></span>The <strong>burn-in period</strong> is the number of iterations the Markov chain takes to reach the stationary distribution.</p>
+<p><span id="def:unlabeled-div-48" class="definition"><strong>Definition 4.7  </strong></span>The <strong>burn-in period</strong> is the number of iterations the Markov chain takes to reach the stationary distribution.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-19" class="definition"><strong>Definition 4.8  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
+<p><span id="def:unlabeled-div-49" class="definition"><strong>Definition 4.8  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-20" class="example"><strong>Example 4.7  </strong></span>In Example @{exm:norm}, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge.</p>
+<p><span id="exm:unlabeled-div-50" class="example"><strong>Example 4.7  </strong></span>In Example @{exm:norm}, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge.</p>
 <p>In a Metropolis-Hasting random walk algorithm, the proposal distribution often has a large impact on how well the Markov chain mixes. The variance, or step size, of the proposal distribution can be tuned to ensure the chain mixes well.</p>
 <p>The following two examples show poorly mixing Markov chains. The first is where the step size is too big and the chain frequently gets stuck for several hundred iterations.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="sampling.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
-<span id="cb16-2"><a href="sampling.html#cb16-2" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb16-3"><a href="sampling.html#cb16-3" aria-hidden="true" tabindex="-1"></a>mu.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
-<span id="cb16-4"><a href="sampling.html#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="sampling.html#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial values</span></span>
-<span id="cb16-6"><a href="sampling.html#cb16-6" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
-<span id="cb16-7"><a href="sampling.html#cb16-7" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co">#known</span></span>
-<span id="cb16-8"><a href="sampling.html#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="sampling.html#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
-<span id="cb16-10"><a href="sampling.html#cb16-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-11"><a href="sampling.html#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Propose value for mu</span></span>
-<span id="cb16-12"><a href="sampling.html#cb16-12" aria-hidden="true" tabindex="-1"></a>  mu.proposed <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, mu <span class="sc">-</span> <span class="fl">0.1</span>, mu <span class="sc">+</span> <span class="fl">0.1</span>) <span class="co">#Step size too big</span></span>
-<span id="cb16-13"><a href="sampling.html#cb16-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-14"><a href="sampling.html#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(mu.proposed <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="co">#If mu &lt; 0 we can reject straight away</span></span>
-<span id="cb16-15"><a href="sampling.html#cb16-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb16-16"><a href="sampling.html#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Compute (log) acceptance probability</span></span>
-<span id="cb16-17"><a href="sampling.html#cb16-17" aria-hidden="true" tabindex="-1"></a>    log.numerator   <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu.proposed <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu.proposed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb16-18"><a href="sampling.html#cb16-18" aria-hidden="true" tabindex="-1"></a>    log.denominator <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb16-19"><a href="sampling.html#cb16-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb16-20"><a href="sampling.html#cb16-20" aria-hidden="true" tabindex="-1"></a>    log.p.acc <span class="ot">&lt;-</span> log.numerator <span class="sc">-</span> log.denominator</span>
-<span id="cb16-21"><a href="sampling.html#cb16-21" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb16-22"><a href="sampling.html#cb16-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb16-23"><a href="sampling.html#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Accept/Reject step</span></span>
-<span id="cb16-24"><a href="sampling.html#cb16-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">log</span>(u) <span class="sc">&lt;</span> log.p.acc){</span>
-<span id="cb16-25"><a href="sampling.html#cb16-25" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> mu.proposed</span>
-<span id="cb16-26"><a href="sampling.html#cb16-26" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb16-27"><a href="sampling.html#cb16-27" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb16-28"><a href="sampling.html#cb16-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-29"><a href="sampling.html#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Store mu at each iteration</span></span>
-<span id="cb16-30"><a href="sampling.html#cb16-30" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
-<span id="cb16-31"><a href="sampling.html#cb16-31" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb16-32"><a href="sampling.html#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3000</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="sampling.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
+<span id="cb45-2"><a href="sampling.html#cb45-2" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb45-3"><a href="sampling.html#cb45-3" aria-hidden="true" tabindex="-1"></a>mu.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb45-4"><a href="sampling.html#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="sampling.html#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial values</span></span>
+<span id="cb45-6"><a href="sampling.html#cb45-6" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb45-7"><a href="sampling.html#cb45-7" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co">#known</span></span>
+<span id="cb45-8"><a href="sampling.html#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="sampling.html#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb45-10"><a href="sampling.html#cb45-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-11"><a href="sampling.html#cb45-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Propose value for mu</span></span>
+<span id="cb45-12"><a href="sampling.html#cb45-12" aria-hidden="true" tabindex="-1"></a>  mu.proposed <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, mu <span class="sc">-</span> <span class="fl">0.1</span>, mu <span class="sc">+</span> <span class="fl">0.1</span>) <span class="co">#Step size too big</span></span>
+<span id="cb45-13"><a href="sampling.html#cb45-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-14"><a href="sampling.html#cb45-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(mu.proposed <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="co">#If mu &lt; 0 we can reject straight away</span></span>
+<span id="cb45-15"><a href="sampling.html#cb45-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb45-16"><a href="sampling.html#cb45-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Compute (log) acceptance probability</span></span>
+<span id="cb45-17"><a href="sampling.html#cb45-17" aria-hidden="true" tabindex="-1"></a>    log.numerator   <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu.proposed <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu.proposed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb45-18"><a href="sampling.html#cb45-18" aria-hidden="true" tabindex="-1"></a>    log.denominator <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb45-19"><a href="sampling.html#cb45-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb45-20"><a href="sampling.html#cb45-20" aria-hidden="true" tabindex="-1"></a>    log.p.acc <span class="ot">&lt;-</span> log.numerator <span class="sc">-</span> log.denominator</span>
+<span id="cb45-21"><a href="sampling.html#cb45-21" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb45-22"><a href="sampling.html#cb45-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb45-23"><a href="sampling.html#cb45-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Accept/Reject step</span></span>
+<span id="cb45-24"><a href="sampling.html#cb45-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">log</span>(u) <span class="sc">&lt;</span> log.p.acc){</span>
+<span id="cb45-25"><a href="sampling.html#cb45-25" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> mu.proposed</span>
+<span id="cb45-26"><a href="sampling.html#cb45-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb45-27"><a href="sampling.html#cb45-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb45-28"><a href="sampling.html#cb45-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-29"><a href="sampling.html#cb45-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Store mu at each iteration</span></span>
+<span id="cb45-30"><a href="sampling.html#cb45-30" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
+<span id="cb45-31"><a href="sampling.html#cb45-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb45-32"><a href="sampling.html#cb45-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3000</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>The next is where the step size is too small. It takes a long time for the chain to converge (~50% of the run time). When the chain does converge, it is inefficient at exploring the space.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="sampling.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
-<span id="cb17-2"><a href="sampling.html#cb17-2" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb17-3"><a href="sampling.html#cb17-3" aria-hidden="true" tabindex="-1"></a>mu.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
-<span id="cb17-4"><a href="sampling.html#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="sampling.html#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial values</span></span>
-<span id="cb17-6"><a href="sampling.html#cb17-6" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
-<span id="cb17-7"><a href="sampling.html#cb17-7" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co">#known</span></span>
-<span id="cb17-8"><a href="sampling.html#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-9"><a href="sampling.html#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
-<span id="cb17-10"><a href="sampling.html#cb17-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-11"><a href="sampling.html#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Propose value for mu</span></span>
-<span id="cb17-12"><a href="sampling.html#cb17-12" aria-hidden="true" tabindex="-1"></a>  mu.proposed <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, mu <span class="sc">-</span> <span class="fl">0.0005</span>, mu <span class="sc">+</span> <span class="fl">0.0005</span>) <span class="co">#Step size too big</span></span>
-<span id="cb17-13"><a href="sampling.html#cb17-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-14"><a href="sampling.html#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(mu.proposed <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="co">#If mu &lt; 0 we can reject straight away</span></span>
-<span id="cb17-15"><a href="sampling.html#cb17-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-16"><a href="sampling.html#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Compute (log) acceptance probability</span></span>
-<span id="cb17-17"><a href="sampling.html#cb17-17" aria-hidden="true" tabindex="-1"></a>    log.numerator   <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu.proposed <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu.proposed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb17-18"><a href="sampling.html#cb17-18" aria-hidden="true" tabindex="-1"></a>    log.denominator <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb17-19"><a href="sampling.html#cb17-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-20"><a href="sampling.html#cb17-20" aria-hidden="true" tabindex="-1"></a>    log.p.acc <span class="ot">&lt;-</span> log.numerator <span class="sc">-</span> log.denominator</span>
-<span id="cb17-21"><a href="sampling.html#cb17-21" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb17-22"><a href="sampling.html#cb17-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-23"><a href="sampling.html#cb17-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Accept/Reject step</span></span>
-<span id="cb17-24"><a href="sampling.html#cb17-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">log</span>(u) <span class="sc">&lt;</span> log.p.acc){</span>
-<span id="cb17-25"><a href="sampling.html#cb17-25" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> mu.proposed</span>
-<span id="cb17-26"><a href="sampling.html#cb17-26" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb17-27"><a href="sampling.html#cb17-27" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb17-28"><a href="sampling.html#cb17-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-29"><a href="sampling.html#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Store mu at each iteration</span></span>
-<span id="cb17-30"><a href="sampling.html#cb17-30" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
-<span id="cb17-31"><a href="sampling.html#cb17-31" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-32"><a href="sampling.html#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb17-33"><a href="sampling.html#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span>
-<span id="cb17-34"><a href="sampling.html#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="sampling.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
+<span id="cb46-2"><a href="sampling.html#cb46-2" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb46-3"><a href="sampling.html#cb46-3" aria-hidden="true" tabindex="-1"></a>mu.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb46-4"><a href="sampling.html#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="sampling.html#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial values</span></span>
+<span id="cb46-6"><a href="sampling.html#cb46-6" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb46-7"><a href="sampling.html#cb46-7" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co">#known</span></span>
+<span id="cb46-8"><a href="sampling.html#cb46-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-9"><a href="sampling.html#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb46-10"><a href="sampling.html#cb46-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-11"><a href="sampling.html#cb46-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Propose value for mu</span></span>
+<span id="cb46-12"><a href="sampling.html#cb46-12" aria-hidden="true" tabindex="-1"></a>  mu.proposed <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, mu <span class="sc">-</span> <span class="fl">0.0005</span>, mu <span class="sc">+</span> <span class="fl">0.0005</span>) <span class="co">#Step size too big</span></span>
+<span id="cb46-13"><a href="sampling.html#cb46-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-14"><a href="sampling.html#cb46-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(mu.proposed <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="co">#If mu &lt; 0 we can reject straight away</span></span>
+<span id="cb46-15"><a href="sampling.html#cb46-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb46-16"><a href="sampling.html#cb46-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Compute (log) acceptance probability</span></span>
+<span id="cb46-17"><a href="sampling.html#cb46-17" aria-hidden="true" tabindex="-1"></a>    log.numerator   <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu.proposed <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu.proposed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb46-18"><a href="sampling.html#cb46-18" aria-hidden="true" tabindex="-1"></a>    log.denominator <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb46-19"><a href="sampling.html#cb46-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb46-20"><a href="sampling.html#cb46-20" aria-hidden="true" tabindex="-1"></a>    log.p.acc <span class="ot">&lt;-</span> log.numerator <span class="sc">-</span> log.denominator</span>
+<span id="cb46-21"><a href="sampling.html#cb46-21" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb46-22"><a href="sampling.html#cb46-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb46-23"><a href="sampling.html#cb46-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Accept/Reject step</span></span>
+<span id="cb46-24"><a href="sampling.html#cb46-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">log</span>(u) <span class="sc">&lt;</span> log.p.acc){</span>
+<span id="cb46-25"><a href="sampling.html#cb46-25" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> mu.proposed</span>
+<span id="cb46-26"><a href="sampling.html#cb46-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb46-27"><a href="sampling.html#cb46-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb46-28"><a href="sampling.html#cb46-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-29"><a href="sampling.html#cb46-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Store mu at each iteration</span></span>
+<span id="cb46-30"><a href="sampling.html#cb46-30" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
+<span id="cb46-31"><a href="sampling.html#cb46-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-32"><a href="sampling.html#cb46-32" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb46-33"><a href="sampling.html#cb46-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span>
+<span id="cb46-34"><a href="sampling.html#cb46-34" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 </div>
 
 </div>
@@ -703,8 +709,8 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/04-sampling.Rmd",
-"text": "Edit"
+"link": null,
+"text": null
 },
 "history": {
 "link": null,
