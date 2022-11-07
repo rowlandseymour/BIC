@@ -88,7 +88,7 @@ plot.distributions <- function(chi){
   theta <- seq(0.001, 0.3, 0.001) 
   
   #evaluate prior desnity
-  prior <- dex\pi(theta, rate = chi)
+  prior <- dexp(theta, rate = chi)
   
   #evaluate posterior density
   posterior <- dgamma(theta, shape = 10, rate = 95 + chi)
@@ -256,7 +256,7 @@ We can check it's correct, by seeing if it sums to one
 z <- 0:30
 ppd <- beta.binom.posterior.predictive.distribution(z)
 sum(ppd)
-plot(z, ppd, xlab = "z", ylab = expression(\pi(z | theta)))
+plot(z, ppd, xlab = "z", ylab = expression(pi(z | theta)))
 ```
 The expected number of students who hand in late is 3.75 and there's a 95% chance that up to 8 hand in late. 
 ```{r}

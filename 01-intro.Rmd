@@ -287,7 +287,7 @@ plot(x, posterior3, type = 'l', yaxt = "n", xlab = "", ylab = "")
   $$
     2. Most spam filters take a naive approach and set 
   $$
-  \pi(\textrm{spam} =\pi(\textrm{not spam}) = \frac{1}{2}. 
+  \pi(\textrm{spam}) =\pi(\textrm{not spam}) = \frac{1}{2}. 
   $$
   If an email is known to be spam, there's an 80% chance it contains the word bitcoin. If an email is not spam, then there's a 1% chance it contains the word bitcoin. Calculate the probability the email is spam given it contains bitcoin. 
     3. Suppose you take a much more pessimistic view, and assume that 80% of all emails are spam. Recalculate the probability the email is spam given it contains bitcoin. 
