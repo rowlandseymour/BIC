@@ -3,7 +3,7 @@ title: "Bayesian Inference and Computation"
 author: "Dr Rowland Seymour"
 date: "Semester 2, 2023"
 site: bookdown::bookdown_site
-output: bookdown::gitbook
+output: gitbook
 documentclass: book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
@@ -11,6 +11,9 @@ link-citations: yes
 description: "This book contains the lecture notes for the module Bayesian Inference and Computation."
 cover-image: uob_logo.png
 ---
+
+
+
 # Practicalities {-}
 ```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
 knitr::include_graphics('uob_logo.png', dpi = NA)
