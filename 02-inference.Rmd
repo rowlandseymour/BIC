@@ -1,9 +1,9 @@
-# Bayesian inference
+# Bayesian Inference
 
 Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definitions, Chapter 2 is much more practical. We're going to be deriving posterior distributions and proving when it does and doesn't work. 
 
 
-## The Binomial distirbution
+## The Binomial Distirbution
 The first example we're going to go through is with the binomial distribution. 
 
 ::: {.example #binom}
@@ -32,7 +32,7 @@ $$
 The posterior distribution is therefore $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$.
 :::
 
-## Reporting conclsuions from Bayesian inference
+## Reporting Conclsuions from Bayesian Inference
 
 In the previous example, we derived the posterior distribution $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is $\frac{4}{198} = \frac{2}{99}$. That is to say given the data, we expect that for every 99 packets of crisps produced, two will be the incorrect weight. The posterior mode for $\theta$ is $\frac{3}{200}$ or 1.5%. 
 
@@ -51,9 +51,9 @@ round(cred.int.95, 3)
 This says that we believe there is a 95% chance that the probability of a crisp packet being the incorrect weight lies between 0.005 and 0.043. This is a much more intuitive definition to the confidence interval, which says if we ran the experiment an infinite number of times and computed an infinite number of confidence intervals, 95% of them would contain the true value of $\theta$.
 :::
 
-## The Exponential distribution
+## The Exponential Distribution
 
-::: {.example}
+::: {.example #exponential}
 An insurance company want to estimate the time until a claim is made on a specific policy. They describe the rate at which claims come in by $\lambda$. The company provides a sample of 10 months at which a claim was made $\boldsymbol{y} = \{14, 10,  6,  7, 13,  9, 12,  7,  9,  8\}$. By Bayes' theorem, the posterior distribution for $\lambda$ is
 $$
 \pi(\lambda \mid \boldsymbol{y}) \propto \pi(\lambda \mid \boldsymbol{y}) \pi(\lambda)
@@ -82,12 +82,11 @@ The distribution of the rate of the claims given the observed data is $\lambda \
 The posterior mean months until a claim is $\frac{10}{95 + \chi}$. We can see the effect of the choice of rate parameter in this mean. Small values of $\chi$ yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of $\chi$ result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for $\chi = 0.01$ and $\chi = 50$. 
 
 ```{r}
-
 plot.distributions <- function(chi){
   #evaluate at selected values of theta
   theta <- seq(0.001, 0.3, 0.001) 
   
-  #evaluate prior desnity
+  #evaluate prior density
   prior <- dexp(theta, rate = chi)
   
   #evaluate posterior density
@@ -115,7 +114,7 @@ round(qgamma(c(0.025, 0.975), 10, 95.01), 3)
 ## The Normal Distribtuion
 The Normal distribution is incredibly useful for modelling a wide range of natural phenomena and in its own right. We're now going to derive posterior distributions for the normal distribution. As we're going to see, the concepts behind deriving posterior distributions are the same as in the previous two examples. However, the algebraic accounting is a lot more taxing. 
 
-::: {.example}
+::: {.example #normal}
 **Known variance**. Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is 
 ```{r}
 y <- c(0.34, 0.47, 0.58, 0.27, 0.74, 0.44, 0.46, 0.65, 0.36, 0.55, 0.58, 0.55, 0.53, 0.56, 0.54, 0.61, 0.43, 0.52, 0.45, 0.49, 0.32, 0.33, 0.47, 0.58, 0.34, 0.60, 0.59, 0.43, 0.57, 0.34)
@@ -131,7 +130,7 @@ $$
 $$
 y_i \sim N(\mu, \sigma^2)
 $$
-The likelihood function is therefore given by the product of the 30 normal desnity functions as follows
+The likelihood function is therefore given by the product of the 30 normal density functions as follows
 \begin{align*}
 \pi(\boldsymbol{y} \mid \mu, \theta^2) &= \prod_{i=1}^{30} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{(y_i - \mu)^2}{\sigma^2}\right\} \\
 &= (2\pi\sigma^2)^{-\frac{n}{2}}\exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}\right\} 
@@ -265,8 +264,7 @@ cbind(z, cumsum(ppd)) #CDF
 ```
 :::
 
-
-## Non-informative prior distibrutions
+## Non-informative Prior Distibrutions
 We have seen in a few examples how the choice of prior distribution can affect that posterior distributions and the resulting conclusions. As the choice of prior distribution is subjective, it is the main criticism of Bayesian inference. A possible way around this is to use a prior distribution that reflects a lack of information about $\theta$. 
 
 ::: {.definition}
@@ -294,7 +292,6 @@ Recall that the distribution of $\psi = h(\theta)$, for some one-to-one function
 $$
 \pi(\psi) = \pi(\theta) \left|\frac{d\theta}{d\psi}\right|.
 $$
-
 Transforming the Fisher information for $\psi$ shows
 \begin{align*}
 I_\psi(\boldsymbol{y}) &= - \mathbb{E}\left(\frac{d^2\log \pi(\boldsymbol{y} \mid \psi)}{d\psi^2}\right) \\
@@ -337,3 +334,79 @@ $$
 :::
 
 The Berstein-von-Mises theorem says that as the number of data points approaches infinity, the posterior distribution tends to a Normal distribution centered around the MLE and variance dependent on the Fisher information.
+
+
+## Exercises
+
+::: {.exercise}
+Suppose $y_1, \ldots, y_N \sim \hbox{Geom}(p)$. 
+    1. Derive the likelihood function and then the maximum likelihood estimator for $p$.
+    2. By letting $p \sim \hbox{Beta}(\alpha, \beta)$, derive the posterior distribution for $p$ given the data. 
+    3. Compare the maximum likelihood estimate with with expectation of the posterior distribution. What values of $\alpha$ and $\beta$ result in a posterior expectation that is equal to the maximum likelihood estimate? Why is this inadvisable?
+:::
+
+::: {.exercise}
+When someone is infected with a disease, it's common to model the time they are infectious for $t$ with a Gamma distribution. Suppose you observe 100 measles infections and $\sum_{i=1}^{100}t_i$ = 870 days. Based on advice from clinicians, you suppose $t \sim \hbox{Gamma}(5, \theta)$. Using an $\theta \sim \hbox{Exp}(0.01)$ prior distribution, derive the posterior distribution. What is the 95\% credible interval for $\theta$?
+:::
+
+
+::: {.exercise}
+The density function for the Pareto distribution with scale $\alpha$ and shape $\beta$ is
+$$
+\pi(x \mid 1,\, b) = \frac{b}{x^{b+1}}
+$$
+Suppose the data is given by $\boldsymbol{y} = \{y_1, \ldots, y_N\}$. Place a Gamma prior distribution on $b$ such that $b \sim \hbox{Gamma}(\alpha, \beta)$. Derive the posterior distribution for $b$ given the data. 
+:::
+
+::: {.exercise}
+Suppose that $y_i \sim \hbox{Binom}(n, p)$ are iid for $i \in \{1, \ldots, N\}$. 
+
+1. By placing a Beta prior distribution on $p$ such that $p \sim \hbox{Beta}(\alpha, \beta)$ derive the posterior distribution. 
+2. Suppose that $y_{N+1}$ is then observed and is also independently drawn from the same distribution. Derive the posterior distribution by updating the previous distribution (i.e. your posterior distribution for the previous part becomes your prior distribution). 
+3. Show that you obtain the same distribution if you observe all $N+1$ data points at the start of the process. 
+:::
+
+::: {.exercise}
+Let $y_1, \ldots, y_N \sim \hbox{Pois}(\lambda)$. 
+
+1. Use Bayes' theorem to derive the posterior distribution of $\lambda$ given the observed data. 
+2. Place a Gamma prior distribution on $\lambda \sim \hbox{Gamma}(\alpha, \beta)$ and derive the form the posterior distribution takes. 
+3. Discuss the effects of $\alpha$ and $\beta$ on the posterior distribution. 
+4. Derive the posterior predictive distribution for a new observation $\tilde{y}$. _Hint: The mass function for the negative binomial distribution with failures $r$ and probability of success $p$ is _
+    $$
+   \pi(x = k \mid r, p) = \begin{pmatrix} k + r - 1 \\ k \end{pmatrix} (1-p)^k p^r.
+    $$
+:::
+    
+::: {.exercise}
+Consider the data from \@{exm:normal}. Suppose the police pull over a lorry driver after they failed to stop at a red light. During a test at the side of the road, the lorry driver's reaction time is tested and comes out as 77ms. 
+
+1. By constructing a credible interval from the posterior predictive distribution, determine if the driver's reaction time is suspicious. 
+2. Why is this not a good comparison to make?
+:::
+
+::: {.exercise}
+A distribution is said to belong to the exponential family of distributions if its density function has the form
+$$
+\pi(y_i \mid \theta) = f(y_i)g(\theta)\exp\{\nu(\theta)T(x)\}. 
+$$
+
+1. Derive the likelihood function with the data $\{y_1, \ldots, y_N\}$. 
+2. Show that the following prior distribution induces conjugacy:
+    $$
+    \pi(\theta) \propto g(\theta)^\alpha\exp\{\beta\nu(\theta)\}.
+    $$
+_Note: In general, distributions that belong to the exponential family have conjugate prior distributions. This is because conjugacy involve manipulation of sufficient statistics._
+:::
+
+::: {.exercise}
+Let $y_1, \ldots, y_N \sim N(\mu, \sigma^2)$, where $\sigma^2$ is known. Derive an invariant prior distribution (Jeffrey's prior distribution) for $\mu$.
+:::
+
+::: {.exercise}
+Consider Example \@(exm:exponential) featuring the exponential distribution. 
+    
+1. Construct an invariant prior distribution for this distribution.
+2. Derive the posterior distribution using the invariant prior distribution. 
+3. Using integration, discuss the validity of the prior distribution. 
+:::
