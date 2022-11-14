@@ -7,16 +7,16 @@ Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definiti
 The first example we're going to go through is with the binomial distribution. 
 
 ::: {.example #binom}
-A technician in a crisp factory wants to test the reliability of a production line. She collects a random sample of 200 crisp packets from line 1. She finds three packets weigh either too much or too little and must be rejected. She uses a Bayesian method to estimate the probability a crisp packet is the incorrect weight. She begins by denoting the weight of the 200 crisp packets $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability a crisp packet is the incorrect weight by $\theta$. By Bayes' theorem
+A social media company wants to determining how many of its users are bots. A software engineering collects a random sampler of 200 accounts and finds that eight are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability an account is a bot is $\theta$. By Bayes' theorem
 $$
-\pi(\theta \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y}\mid \theta) \pi(\theta)
+\pi(\theta \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y}\mid \theta) \pi(\theta).
 $$
 
 **Likelihood function** $\pi(\boldsymbol{y}\mid \theta)$. We observe a 200 trials each with a probability of success or failure. The binomial distribution seems the most suitable way of modelling this. Therefore
 $$
 \pi(\boldsymbol{y}\mid \theta) = \begin{pmatrix} 200 \\ 3 \end{pmatrix} \theta^3(1-\theta)^{197}
 $$
-We are going to ignore one questionable assumption here that the observations are independent. That is a crisp packet being the wrong weight, doesn't affect the weight of the next crisp packet to be produced.
+We are going to assume the accounts are independent.
 
 **Prior distribution** $\pi(\theta)$. We now need to describe our prior beliefs about $\theta$. We have no reason to suggest $\theta$ takes any specific value, so we use a uniform prior distribution $\theta \sim U[0, 1]$, where $\pi(\theta) = 1$ for $\theta \in [0, 1]$. 
 
@@ -34,7 +34,7 @@ The posterior distribution is therefore $\theta \mid \boldsymbol{y} \sim \textrm
 
 ## Reporting Conclsuions from Bayesian Inference
 
-In the previous example, we derived the posterior distribution $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is $\frac{4}{198} = \frac{2}{99}$. That is to say given the data, we expect that for every 99 packets of crisps produced, two will be the incorrect weight. The posterior mode for $\theta$ is $\frac{3}{200}$ or 1.5%. 
+In the previous example, we derived the posterior distribution $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is $\frac{4}{198} = \frac{2}{99}$. That is to say given the data, we expect that for every 99 accounts , two to be bots. The posterior mode for $\theta$ is $\frac{3}{200}$ or 1.5%. 
 
 It is important to share the uncertainty about out beliefs. In a frequentist framework, this would be via a confidence interval. The Bayesian analogues is a credible interval. 
 
@@ -48,7 +48,7 @@ The 95% credible interval for the Binomial example is given by
 cred.int.95 <- qbeta(c(0.025, 0.975), 4, 198)
 round(cred.int.95, 3)
 ```
-This says that we believe there is a 95% chance that the probability of a crisp packet being the incorrect weight lies between 0.005 and 0.043. This is a much more intuitive definition to the confidence interval, which says if we ran the experiment an infinite number of times and computed an infinite number of confidence intervals, 95% of them would contain the true value of $\theta$.
+This says that we believe there is a 95% chance that the probability of an account being a bot lies between 0.005 and 0.043. This is a much more intuitive definition to the confidence interval, which says if we ran the experiment an infinite number of times and computed an infinite number of confidence intervals, 95% of them would contain the true value of $\theta$.
 :::
 
 ## The Exponential Distribution

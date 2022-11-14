@@ -216,7 +216,8 @@ A transition matrix $P$ always has at least one eigenvalue equal to one.
 The columns of $P$ sum to 1 as they are probability distributions. Therefore, $1$ is an eigenvector. 
 :::
 
-::: {.definition} If a transition matrix $P$ has a unique Eigenvalue that takes the value 1, there is a unique distribution $\pi$ such that 
+::: {.definition} 
+If a transition matrix $P$ has a unique Eigenvalue that takes the value 1, there is a unique distribution $\pi$ such that 
 $$
 \pi P = \pi. 
 $$
@@ -554,7 +555,7 @@ plot(mu.store[-c(1:5000)], type = 'l', xlab = "iteration", ylab = expression(mu)
 :::
 
 
-## Problems
+## Exercises
 
 ::: {.exercise} 
 Let $Y$ have the density function 
@@ -714,3 +715,84 @@ E(A) & = E(E(A\mid y)) \\
 \end{align*}
 2. The number of events until a success is modelled by the geometric distribution. The number of samples proposed before one is accepted is distributed geometrically with mean $\frac{1}{M}$. The smaller the value of $M$, the more efficient the sampler. 
 :::
+
+::: {.exercise}
+Alice wants to construct a Markov Chain to sample numbers from one to six. She chooses an initial number at random. She flips a coin and decides to stay with that number if it's a head, and move to a different number if it's a tails. If she chooses to move number she flips the coin again. If it's heads, she moves to a number one larger than she is now, if it's tails she moves to a number one smaller than she is now. Once she reaches one or six, she stops. 
+
+1. Draw a state space diagram for this chain. 
+2. Is Alice's Markov chain aperiodic and irreducible?
+
+Bob comes up with a similar Markov chain. Like Alice, he chooses an initial number at random and flips a coin to decide if he should keep that number of move to a different one. However, his next step differs from Alice's. If he chooses to move number he flips the coin again. If it's heads, he moves to a number two larger than he is now, if it's tails he moves to a number two smaller than he is now. He also treats the numbers like a circle, where if he is on six, he can move to four or two. Likewise, if he is on one, he can move to five or three.
+
+1. Draw a state space diagram for this chain. 
+2. Is Bob's Markov chain aperiodic and irreducible?
+:::
+
+::: {.solution}
+The state space diagram for Alice and Bob's Markov chains are:
+```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
+knitr::include_graphics("State_Space_Diagram.pdf", dpi = NA)
+```
+Neither Alice nor Bob have constructed Markov chains that are aperiodic and irreducible. In Alice's chain, states one and six are absorbing states -- if Alice ends up with one of these numbers, she is never going to choose another number. This means states one and six have period one. As Alice's chain has absorbing states, it isn't irreducible either. For example, it isn't possible to get from state six to two in a finite (or any) number of steps.  As Bob has introduce a mechanism to loop round the numbers, his chain is aperiodic. However, it isn't irreducible. Moving up and down two numbers means that he is restricted to the even or odd numbers. If he starts on an even number, he is never going to reach an odd number. 
+:::
+
+::: {.exercise}
+You observe $N$ data points $\{y_1, \ldots, y_N\} \sim N(\mu, sigma^2)$. Place a normal prior distribution on the mean parameter $\mu$ and inverse-gamma prior distribution $\sigma^2$ to derive the posterior distributions  $\pi(\mu, \sigma^2 \mid \boldsymbol{y})$. 
+:::
+
+::: {.solution}
+Using the prior distributions
+$$
+\mu \sim N(\mu_0, \sigma_0^2), \qquad $\sigma^2 \sim \hbox{inv}-\Gamma(\alpha, \beta)$
+$$
+gives the posterior distribution ....
+
+The full conditional distributions are 
+$$
+\mu \mid \sigma^2, \boldsymbol{y} \sim N(\mu_1, \sigma_1^2), \qquad \sigma^2 \mid \mu,\boldsymbol{y} \sim \hbox{inv}-\Gamma(\alpha_1, \beta_1).
+$$
+A good MCMC algorithm could look like this: 
+
+1. Set $\mu^{(1)} = 0$,  $\sigma^{2(0)} = 1$ and $i = 1$. 
+2. Sample $\mu^{(i)} \mid  \sigma^{2(i-1)}, \boldsymbol{y} \sim N(\mu_1, \sigma_1^2)$.
+3. Sample $\sigma^{2(i)} \mid \mu^{(i)}, \boldsymbol{y} \sim \hbox{inv}-\Gamma(\alpha_1, \beta_1)$.
+4. Repeat steps 2 and 3 for a given number of iterations. 
+5. Check the trace plots to ensure the Markov chain has converged and mixed well.
+:::
+
+
+::: {.exercise}
+In the lectures, we looked at Metropolis-Hastings Random Walk algorithms. Another algorithm is a Metropolis-Hastings Independence Sampler. In an independence sampler, the proposal distribution does not depend on the current values, that is
+$$
+q(y'\mid y) = q(y').
+$$
+
+1. Let $y_1, \ldots, y_N \sim N(\mu, \sigma^2)$, where $\sigma^2$ is know. Show the posterior distribution has no closed form when the prior distribution $\mu \sim \Gamma(\alpha, \beta)$ is used. 
+2. Suppose you are constructing an MCMC algorithm to sample from this distribution. Denote the current value of the Markov chain $\mu$. Given a proposal $\mu' \sim N(0, 5^2)$ proposal distribution, derive the acceptance probability. 
+:::
+
+::: {.solution}
+This question is about independence samplers. They are typically very good or very bad at sampling from the posterior distribution. 
+
+1. The likelihood function is given by
+$$
+\pi(\boldsymbol{y} \mid \mu, \sigma^2) \propto \exp\left\{-\frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - \mu)^2 \right\}.
+$$
+The prior distribution is $\pi(\mu) \propto \mu^{\alpha-1}\exp\{-beta\mu\}$. The posterior distribution is the product of these and given by
+$$
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \mu^{\alpha-1} \exp\left\{-\frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - \mu)^2  -
+ \beta\mu\right\}.
+$$
+
+2. The acceptance probability is
+$$
+p_{acc} = \frac{\pi(\mu'\mid \boldsymbol{y}, \sigma^2)}{\pi(\mu'\mid \boldsymbol{y}, \sigma^2)} \frac{\pi(\mu)}{\pi(\mu')}.
+$$
+Substituting the proportional densities in yields
+$$
+p_{acc} = \exp\left\{-\frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - \mu')^2 + \frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - \mu)^2 -\frac{1}{50}\mu^2 + \frac{1}{50}{\mu'}^2 \right\}.
+$$
+:::
+
+
+

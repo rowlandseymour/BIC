@@ -151,7 +151,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4" data-path="fundamentals.html"><a href="fundamentals.html#conditional-probability-and-exchangability"><i class="fa fa-check"></i><b>1.4</b> Conditional Probability and Exchangability</a></li>
 <li class="chapter" data-level="1.5" data-path="fundamentals.html"><a href="fundamentals.html#bayes-theorem"><i class="fa fa-check"></i><b>1.5</b> Bayes’ Theorem</a></li>
 <li class="chapter" data-level="1.6" data-path="fundamentals.html"><a href="fundamentals.html#exercises"><i class="fa fa-check"></i><b>1.6</b> Exercises</a></li>
-<li class="chapter" data-level="3.6" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>3.6</b> Gibbs Sampler</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>2</b> Bayesian Inference</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#the-binomial-distirbution"><i class="fa fa-check"></i><b>2.1</b> The Binomial Distirbution</a></li>
+<li class="chapter" data-level="2.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#reporting-conclsuions-from-bayesian-inference"><i class="fa fa-check"></i><b>2.2</b> Reporting Conclsuions from Bayesian Inference</a></li>
+<li class="chapter" data-level="2.3" data-path="bayesian-inference.html"><a href="bayesian-inference.html#the-exponential-distribution"><i class="fa fa-check"></i><b>2.3</b> The Exponential Distribution</a></li>
+<li class="chapter" data-level="2.4" data-path="bayesian-inference.html"><a href="bayesian-inference.html#the-normal-distribtuion"><i class="fa fa-check"></i><b>2.4</b> The Normal Distribtuion</a></li>
+<li class="chapter" data-level="2.5" data-path="bayesian-inference.html"><a href="bayesian-inference.html#predicition"><i class="fa fa-check"></i><b>2.5</b> Predicition</a></li>
+<li class="chapter" data-level="2.6" data-path="bayesian-inference.html"><a href="bayesian-inference.html#non-informative-prior-distibrutions"><i class="fa fa-check"></i><b>2.6</b> Non-informative Prior Distibrutions</a></li>
+<li class="chapter" data-level="2.7" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bernstein-von-mises-theorem"><i class="fa fa-check"></i><b>2.7</b> Bernstein-von-Mises Theorem</a></li>
+<li class="chapter" data-level="2.8" data-path="bayesian-inference.html"><a href="bayesian-inference.html#exercises-1"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>3</b> Sampling</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="sampling.html"><a href="sampling.html#uniform-random-numbers"><i class="fa fa-check"></i><b>3.1</b> Uniform random numbers</a></li>
+<li class="chapter" data-level="3.2" data-path="sampling.html"><a href="sampling.html#inverse-transform-sampling"><i class="fa fa-check"></i><b>3.2</b> Inverse transform sampling</a></li>
+<li class="chapter" data-level="3.3" data-path="sampling.html"><a href="sampling.html#rejection-sampling"><i class="fa fa-check"></i><b>3.3</b> Rejection sampling</a></li>
+<li class="chapter" data-level="3.4" data-path="sampling.html"><a href="sampling.html#markov-chain-monte-carlo"><i class="fa fa-check"></i><b>3.4</b> Markov Chain Monte Carlo</a></li>
+<li class="chapter" data-level="3.5" data-path="sampling.html"><a href="sampling.html#properties-of-markov-chains"><i class="fa fa-check"></i><b>3.5</b> Properties of Markov Chains</a></li>
+<li class="chapter" data-level="3.6" data-path="sampling.html"><a href="sampling.html#gibbs-sampler"><i class="fa fa-check"></i><b>3.6</b> Gibbs Sampler</a></li>
 <li class="chapter" data-level="3.7" data-path="sampling.html"><a href="sampling.html#metropolis-hastings"><i class="fa fa-check"></i><b>3.7</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="3.8" data-path="sampling.html"><a href="sampling.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>3.8</b> MCMC Diagnostics</a></li>
 <li class="chapter" data-level="3.9" data-path="sampling.html"><a href="sampling.html#exercises-2"><i class="fa fa-check"></i><b>3.9</b> Exercises</a></li>
@@ -445,8 +464,8 @@ We know the form of <span class="math inline">\(\pi(y \mid \theta) = \frac{1}{\s
 2. The five of clubs, given you have picked a black card?
 3. A black card, given you have not picked the five of clubs?</p>
 </div>
-<div class="solution">
-<p><span id="unlabeled-div-57" class="solution"><em>Solution</em>. </span>A pack of playing cards is equally divided into four suits: Hearts (red), Diamonds (red), Clubs (black), and Spades (black). Each suit has 13 cards numbered 2 - 10, Jack, Queen, King (all three picture cards), and Ace.</p>
+<p>::: {.solution}
+A pack of playing cards is equally divided into four suits: Hearts (red), Diamonds (red), Clubs (black), and Spades (black). Each suit has 13 cards numbered 2 - 10, Jack, Queen, King (all three picture cards), and Ace.</p>
 <ol style="list-style-type: decimal">
 <li><span class="math display">\[\begin{align*}
 P(\hbox{Queen} \mid \hbox{Picture}) &amp;= \frac{P(\hbox{Queen and Picture})}{P(\hbox{Picture)}} \\
@@ -561,6 +580,8 @@ Thus,
 </ol>
 </div>
 
+</div>
+</div>
             </section>
 
           </div>
