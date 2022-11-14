@@ -264,7 +264,7 @@ plot(x, posterior3, type = 'l', yaxt = "n", xlab = "", ylab = "")
 3.We get some sort of average of the likelihood function and the prior distribution. Had we collected more data, the posterior distribution would have been weighted toward the information from the likelihood function more. 
 :::
 
-## Problems
+## Exercises
 
 ::: {.exercise}
 Consider a standard pack of 52 playing cards. You pick a card at random, what is the probability you pick:
@@ -337,22 +337,21 @@ P(\hbox{Coin 1}\mid \hbox{Heads}) &= \frac{P(\hbox{Heads} \mid \hbox{Coin 1})P(\
 :::
 
 ::: {.exercise}  
-You get an email with the word _bitcoin_ in. You want to work out the probability the email is spam.  
+You see a sponsored post online with the word _bitcoin_ in. You want to work out the probability the post is spam.   
 
-    1. Using the law of total probability, show the probability the email is spam, given it contain the word probability is
+1. Using the law of total probability, show the probability the spac is spam, given it contains the word probability is
   $$
   \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam})}{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam}) + \pi(\textrm{bitcoin} \mid \textrm{not spam})\pi(\textrm{not spam})}
   $$
-    2. Most spam filters take a naive approach and set 
+2. Most spam filters take a naive approach and set 
   $$
   \pi(\textrm{spam}) =\pi(\textrm{not spam}) = \frac{1}{2}. 
   $$
-  If an email is known to be spam, there's an 80% chance it contains the word bitcoin. If an email is not spam, then there's a 1% chance it contains the word bitcoin. Calculate the probability the email is spam given it contains bitcoin. 
-    3. Suppose you take a much more pessimistic view, and assume that 80% of all emails are spam. Recalculate the probability the email is spam given it contains bitcoin. 
+  If an post is known to be spam, there's an 80% chance it contains the word bitcoin. If an post is not spam, then there's a 1% chance it contains the word bitcoin. Calculate the probability the post is spam given it contains bitcoin. 
+3. Suppose you take a much more pessimistic view, and assume that 80% of all sponsered posts are spam. Recalculate the probability the post is spam given it contains bitcoin. 
 :::
 
 ::: {.solution}
-
 By Bayes' theorem, we have
 $$
  \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam})}{\pi(\textrm{bitcoin})}.
@@ -368,25 +367,26 @@ $$
 
 2. From the question, we have $\pi(\textrm{spam}) =\pi(\textrm{not spam}) = \frac{1}{2}$, $\pi(\textrm{bitcoin} \mid \textrm{spam}) = 0.8$ and $\pi(\textrm{bitcoin} \mid \textrm{not spam}) = 0.01$. Plugging these into the probability gives
 $$
-  \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{80}{81}
+  \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{80}{81} \approx 98.7\%.
 $$
 3. This time $\pi(\textrm{spam}) = 0.8$ and $\pi(\textrm{not spam}) = 0.2$, which yields
 $$
-  \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{320}{321}.
+  \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{320}{321} \approx 99.7\%.
 $$
 :::
 
 ::: {.exercise}
 You are working on a project investigating pollution related illnesses in the West Midlands. I have sampled the proportion of people with pollution related illnesses in five areas of the West Midlands, $y_1, \ldots, y_5$, with nothing to distinguish the data. This exercise is about the last data point $y_5$. 
 
-    1. Should you model these data points exchangeably?
-    2. I now tell you the first four of these rates (0.72, 1.00, 0.85, 0.78 per 100,000). Should you continue to model these data points exchangeably?
-    3. Now, suppose instead of telling you these four rates, I had told you the five areas I have information about are Birmingham City Centre, Smethwick, Edgbaston, Dorridge, and Sutton Coldfield. Should you continue to model these data points exchangeably?
-    4. Now suppose I give you the data in part 2 and say that the missing data point $y_5$ is Birmingham City Centre. Should you continue to model these data points exchangeably?
+1. Should you model these data points exchangeably?
+2. I now tell you the first four of these rates (0.72, 1.00, 0.85, 0.78 per 100,000). Should you continue to model these data points exchangeably?
+3. Now, suppose instead of telling you these four rates, I had told you the five areas I have information about are Birmingham City Centre, Smethwick, Edgbaston, Dorridge, and Sutton Coldfield. Should you continue to model these data points exchangeably?
+4. Now suppose I give you the data in part 2 and say that the missing data point $y_5$ is Birmingham City Centre. Should you continue to model these data points exchangeably?
 :::
 
 ::: {.solution}
 This is based on Gelman et. al (2013, p. 105). 
+
 1. Yes, you have no information to distinguish the data points so exchangability seems a reasonable assumption. 
 2. Yes, you still have no information to distinguish between any of the data points. 
 3. Yes, the joint distribution of these variables doesn't depend on the labels. However, you may start to formulate prior beliefs. Birmingham City Centre and Smethwick are likely to have higher rates of air pollution than leafy Dorridge.

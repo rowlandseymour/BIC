@@ -151,7 +151,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.4" data-path="fundamentals.html"><a href="fundamentals.html#conditional-probability-and-exchangability"><i class="fa fa-check"></i><b>1.4</b> Conditional Probability and Exchangability</a></li>
 <li class="chapter" data-level="1.5" data-path="fundamentals.html"><a href="fundamentals.html#bayes-theorem"><i class="fa fa-check"></i><b>1.5</b> Bayes’ Theorem</a></li>
 <li class="chapter" data-level="1.6" data-path="fundamentals.html"><a href="fundamentals.html#exercises"><i class="fa fa-check"></i><b>1.6</b> Exercises</a></li>
-<li class="chapter" data-level="3.6" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>3.6</b> Gibbs Sampler</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>2</b> Bayesian Inference</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#the-binomial-distirbution"><i class="fa fa-check"></i><b>2.1</b> The Binomial Distirbution</a></li>
+<li class="chapter" data-level="2.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#reporting-conclsuions-from-bayesian-inference"><i class="fa fa-check"></i><b>2.2</b> Reporting Conclsuions from Bayesian Inference</a></li>
+<li class="chapter" data-level="2.3" data-path="bayesian-inference.html"><a href="bayesian-inference.html#the-exponential-distribution"><i class="fa fa-check"></i><b>2.3</b> The Exponential Distribution</a></li>
+<li class="chapter" data-level="2.4" data-path="bayesian-inference.html"><a href="bayesian-inference.html#the-normal-distribtuion"><i class="fa fa-check"></i><b>2.4</b> The Normal Distribtuion</a></li>
+<li class="chapter" data-level="2.5" data-path="bayesian-inference.html"><a href="bayesian-inference.html#predicition"><i class="fa fa-check"></i><b>2.5</b> Predicition</a></li>
+<li class="chapter" data-level="2.6" data-path="bayesian-inference.html"><a href="bayesian-inference.html#non-informative-prior-distibrutions"><i class="fa fa-check"></i><b>2.6</b> Non-informative Prior Distibrutions</a></li>
+<li class="chapter" data-level="2.7" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bernstein-von-mises-theorem"><i class="fa fa-check"></i><b>2.7</b> Bernstein-von-Mises Theorem</a></li>
+<li class="chapter" data-level="2.8" data-path="bayesian-inference.html"><a href="bayesian-inference.html#exercises-1"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>3</b> Sampling</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="sampling.html"><a href="sampling.html#uniform-random-numbers"><i class="fa fa-check"></i><b>3.1</b> Uniform random numbers</a></li>
+<li class="chapter" data-level="3.2" data-path="sampling.html"><a href="sampling.html#inverse-transform-sampling"><i class="fa fa-check"></i><b>3.2</b> Inverse transform sampling</a></li>
+<li class="chapter" data-level="3.3" data-path="sampling.html"><a href="sampling.html#rejection-sampling"><i class="fa fa-check"></i><b>3.3</b> Rejection sampling</a></li>
+<li class="chapter" data-level="3.4" data-path="sampling.html"><a href="sampling.html#markov-chain-monte-carlo"><i class="fa fa-check"></i><b>3.4</b> Markov Chain Monte Carlo</a></li>
+<li class="chapter" data-level="3.5" data-path="sampling.html"><a href="sampling.html#properties-of-markov-chains"><i class="fa fa-check"></i><b>3.5</b> Properties of Markov Chains</a></li>
+<li class="chapter" data-level="3.6" data-path="sampling.html"><a href="sampling.html#gibbs-sampler"><i class="fa fa-check"></i><b>3.6</b> Gibbs Sampler</a></li>
 <li class="chapter" data-level="3.7" data-path="sampling.html"><a href="sampling.html#metropolis-hastings"><i class="fa fa-check"></i><b>3.7</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="3.8" data-path="sampling.html"><a href="sampling.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>3.8</b> MCMC Diagnostics</a></li>
 <li class="chapter" data-level="3.9" data-path="sampling.html"><a href="sampling.html#exercises-2"><i class="fa fa-check"></i><b>3.9</b> Exercises</a></li>
@@ -367,13 +386,12 @@ If we denote the distribution of <span class="math inline">\(Y_2 \sim \boldsymbo
 <div class="proof">
 <p><span id="unlabeled-div-56" class="proof"><em>Proof</em>. </span>The columns of <span class="math inline">\(P\)</span> sum to 1 as they are probability distributions. Therefore, <span class="math inline">\(1\)</span> is an eigenvector.</p>
 </div>
-<p>::: {.definition} If a transition matrix <span class="math inline">\(P\)</span> has a unique Eigenvalue that takes the value 1, there is a unique distribution <span class="math inline">\(\pi\)</span> such that
+<div class="definition">
+<p><span id="def:unlabeled-div-57" class="definition"><strong>Definition 3.6  </strong></span>If a transition matrix <span class="math inline">\(P\)</span> has a unique Eigenvalue that takes the value 1, there is a unique distribution <span class="math inline">\(\pi\)</span> such that
 <span class="math display">\[
 \pi P = \pi.
 \]</span>
 This distribution <span class="math inline">\(\pi\)</span>, is known as the <strong>stationary distribution</strong>.</p>
-</div>
-</div>
 </div>
 <p>This important concept underpins MCMC methods. It says that no matter where we start our chain, we’ll eventually end up sampling states according to the distribution <span class="math inline">\(\pi\)</span>. It make take a long time to reach the stationary distribution, but it will eventually get there.</p>
 <p>In order to check whether our Markov chain will converge to a stationary distributions, we need to check:</p>
@@ -387,7 +405,7 @@ This distribution <span class="math inline">\(\pi\)</span>, is known as the <str
 </div>
 <p>When designing a Markov chain, it is usually straightforward to design one that meets conditions one and two. Condition three is more difficult to prove, but for some chains it is possible to show they satisfy detailed balance.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-59" class="definition"><strong>Definition 3.6  </strong></span>The Markov chain <span class="math inline">\(P\)</span> satisfies <strong>detailed balance</strong> with respect to the distribution <span class="math inline">\(\pi\)</span> if
+<p><span id="def:unlabeled-div-59" class="definition"><strong>Definition 3.7  </strong></span>The Markov chain <span class="math inline">\(P\)</span> satisfies <strong>detailed balance</strong> with respect to the distribution <span class="math inline">\(\pi\)</span> if
 <span class="math display">\[
 \pi_i p_{ij} = \pi_j p_{ji}.
 \]</span></p>
@@ -574,10 +592,10 @@ p_\textrm{acc} = \min\left\{\frac{\exp\left\{-0.01\mu&#39; -\sum_{i=1}^{30}\frac
 <p>When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well.</p>
 <p>A key way of doing this is by looking at the trace plot. This is the plot out MCMC iterations over time. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn’t look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-65" class="definition"><strong>Definition 3.7  </strong></span>The <strong>burn-in period</strong> is the number of iterations the Markov chain takes to reach the stationary distribution.</p>
+<p><span id="def:unlabeled-div-65" class="definition"><strong>Definition 3.8  </strong></span>The <strong>burn-in period</strong> is the number of iterations the Markov chain takes to reach the stationary distribution.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-66" class="definition"><strong>Definition 3.8  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
+<p><span id="def:unlabeled-div-66" class="definition"><strong>Definition 3.9  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
 </div>
 <div class="example">
 <p><span id="exm:unlabeled-div-67" class="example"><strong>Example 3.7  </strong></span>In Example @{exm:norm}, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge.</p>
