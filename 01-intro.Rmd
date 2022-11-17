@@ -264,6 +264,7 @@ plot(x, posterior3, type = 'l', yaxt = "n", xlab = "", ylab = "")
 3.We get some sort of average of the likelihood function and the prior distribution. Had we collected more data, the posterior distribution would have been weighted toward the information from the likelihood function more. 
 :::
 
+
 ## Exercises
 
 ::: {.exercise}
@@ -305,10 +306,11 @@ Decide if each of the following events can be assigned probabilities by frequent
 :::
 
 ::: {.solution}
+
 1. No, this can't be assigned a probability. 
 2. Yes, you can repeatedly roll of dice. 
 3. Yes, this can be assigned a probability. You can repeatedly test someone for the disease, hence there is a long-run frequency of the test returning a positive result. 
-4. It depends what you mean by tomorrow. Suppose today is 1st January 2023, if tomorrow means 2nd January 2023, then no. 2nd January 2023 will on occur once and there is no long-run frequency. If, however, you define tomorrow by the day after today, then yes. There have been many (The Earth has been going round the Sun for ~4.5 billion years, so approxiomamtely 4.5*365 tomorrows), so it can be assigned a probability. 
+4. It depends what you mean by tomorrow. Suppose today is 1st January 2023, if tomorrow means 2nd January 2023, then no. 2nd January 2023 will on occur once and there is no long-run frequency. If, however, you define tomorrow by the day after today, then yes. There have been many (The Earth has been going round the Sun for ~4.5 billion years, so approximately 4.5*365 tomorrows), so it can be assigned a probability. 
 :::
     
 ::: {.exercise}

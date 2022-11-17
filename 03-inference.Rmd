@@ -66,20 +66,20 @@ $$
 & = \lambda^{10} e^{-95\lambda}
 \end{align*}
 
-**Prior distribution** $\pi(\lambda)$. As we are modelling a rate parameter, we know it must be positive and continuous. We decide to use an exponential prior distribution for $\lambda$, but leave the choice of the rate parameter up to the insurance professionals at the insurance company. The prior distribution is given by $\pi(\lambda) \sim \textrm{Exp}(\chi).$
+**Prior distribution** $\pi(\lambda)$. As we are modelling a rate parameter, we know it must be positive and continuous. We decide to use an exponential prior distribution for $\lambda$, but leave the choice of the rate parameter up to the insurance professionals at the insurance company. The prior distribution is given by $\pi(\lambda) \sim \textrm{Exp}(\gamma).$
 
 **Posterior distribution** $\pi(\lambda \mid \boldsymbol{y})$. We now have all the ingredients to derive the posterior distribution. It is given by
 \begin{align*}
-\pi(\lambda \mid \boldsymbol{y}) &\propto \lambda^{10} e^{-95\lambda} \times \lambda e^{-\chi\lambda} \\
-& \propto \lambda^{11}e^{-(95 + \chi)\lambda}
+\pi(\lambda \mid \boldsymbol{y}) &\propto \lambda^{10} e^{-95\lambda} \times \lambda e^{-\gamma\lambda} \\
+& \propto \lambda^{11}e^{-(95 + \gamma)\lambda}
 \end{align*}
 The functional form tells us that the posterior distribution is a Gamma distribution. The PDF of a gamma random variable with shape $\alpha$ and rate $\beta$ is 
 $$
 \pi(x \mid \alpha, \beta) = \frac{\alpha^\beta}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}.
 $$
-The distribution of the rate of the claims given the observed data is $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \chi)$. 
+The distribution of the rate of the claims given the observed data is $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)$. 
 
-The posterior mean months until a claim is $\frac{10}{95 + \chi}$. We can see the effect of the choice of rate parameter in this mean. Small values of $\chi$ yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of $\chi$ result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for $\chi = 0.01$ and $\chi = 50$. 
+The posterior mean months until a claim is $\frac{10}{95 + \gamma}$. We can see the effect of the choice of rate parameter in this mean. Small values of $\gamma$ yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of $\gamma$ result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for $\gamma = 0.01$ and $\gamma = 50$. 
 
 ```{r}
 plot.distributions <- function(chi){
@@ -105,7 +105,7 @@ plot.distributions(0.01)
 plot.distributions(50)
 ```
 
-The insurance managers recommend that because this is a new premium, a vague prior distribution be used and $\chi = 0.01$. The posterior mean is $\frac{10}{95.01} \approx 0.105$ and the 95% credible interval is
+The insurance managers recommend that because this is a new premium, a vague prior distribution be used and $\gamma = 0.01$. The posterior mean is $\frac{10}{95.01} \approx 0.105$ and the 95% credible interval is
 ```{r}
 round(qgamma(c(0.025, 0.975), 10, 95.01), 3)
 ```
@@ -346,17 +346,35 @@ Suppose $y_1, \ldots, y_N \sim \hbox{Geom}(p)$.
 :::
 
 ::: {.exercise}
-When someone is infected with a disease, it's common to model the time they are infectious for $t$ with a Gamma distribution. Suppose you observe 100 measles infections and $\sum_{i=1}^{100}t_i$ = 870 days. Based on advice from clinicians, you suppose $t \sim \hbox{Gamma}(5, \theta)$. Using an $\theta \sim \hbox{Exp}(0.01)$ prior distribution, derive the posterior distribution. What is the 95\% credible interval for $\theta$?
+When someone is infected with a disease, it's common to model the time they are infectious for $t$ with a Gamma distribution. Suppose you observe 100 measles infections and $\sum_{i=1}^{100}t_i$ = 870 days. Based on advice from clinicians, you suppose $t \sim \Gamma(5, \theta)$. Using an $\theta \sim \hbox{Exp}(0.01)$ prior distribution, derive the posterior distribution. What is the 95\% credible interval for $\theta$?
 :::
-
 
 ::: {.exercise}
 The density function for the Pareto distribution with scale $\alpha$ and shape $\beta$ is
 $$
 \pi(x \mid 1,\, b) = \frac{b}{x^{b+1}}
 $$
-Suppose the data is given by $\boldsymbol{y} = \{y_1, \ldots, y_N\}$. Place a Gamma prior distribution on $b$ such that $b \sim \hbox{Gamma}(\alpha, \beta)$. Derive the posterior distribution for $b$ given the data. 
+Suppose the data is given by $\boldsymbol{y} = \{y_1, \ldots, y_N\}$. Place a Gamma prior distribution on $b$ such that $b \sim \Gamma(\alpha, \beta)$. Derive the posterior distribution for $b$ given the data. 
 :::
+
+::: {.exercise}
+You are given the data $y_1, \ldots, y_N \sim \hbox{Exp}(\lambda)$. Your prior belief is that $\lambda \in (0, 1)$. Show that the posterior distribution $\pi(\lambda \mid \boldsymbol{y})$ has no closed form when the prior distribution for $\lambda \sim \hbox{Beta}(\alpha, \beta)$. 
+:::
+
+::: {.solution}
+The likelihood function is the product of $N$ exponential density functions
+\begin{align*}
+\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^N \lambda \exp\left\{-\lambda y_i\right\}\\
+& = \lambda^N  \exp\left\{-\lambda \sum_{i=1}^N y_i\right\}
+\end{align*}
+
+The prior distribution is $\pi(\lambda) = \frac{1}{B(\alpha, \beta)}\lambda^{\alpha - 1}(1-\lambda)^{\beta - 1}$. The posterior distribution is therefore proportional to 
+$$
+\pi(\lambda \mid \boldsymbol{y}) \propto \lambda^{\alpha +N - 1}(1-\lambda)^{\beta - 1}\exp\left\{-\lambda y_i\right\}.
+$$
+Hence, the posterior distribution has no closed form. 
+:::
+
 
 ::: {.exercise}
 Suppose that $y_i \sim \hbox{Binom}(n, p)$ are iid for $i \in \{1, \ldots, N\}$. 
@@ -370,7 +388,7 @@ Suppose that $y_i \sim \hbox{Binom}(n, p)$ are iid for $i \in \{1, \ldots, N\}$.
 Let $y_1, \ldots, y_N \sim \hbox{Pois}(\lambda)$. 
 
 1. Use Bayes' theorem to derive the posterior distribution of $\lambda$ given the observed data. 
-2. Place a Gamma prior distribution on $\lambda \sim \hbox{Gamma}(\alpha, \beta)$ and derive the form the posterior distribution takes. 
+2. Place a Gamma prior distribution on $\lambda \sim \Gamma(\alpha, \beta)$ and derive the form the posterior distribution takes. 
 3. Discuss the effects of $\alpha$ and $\beta$ on the posterior distribution. 
 4. Derive the posterior predictive distribution for a new observation $\tilde{y}$. _Hint: The mass function for the negative binomial distribution with failures $r$ and probability of success $p$ is _
     $$

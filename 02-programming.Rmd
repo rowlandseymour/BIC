@@ -1,0 +1,217 @@
+# Programming in R
+
+
+## Computer Lab I 
+This first computer lab is about getting used to R. The first step is to download R and Rstudio.
+
+* [Download R](https://www.r-project.org)
+* [Download RStudio IDE](https://posit.co/downloads/)
+
+The easiest way to learn R is by using it to solve problems. The lab contains four exercises and three ways of approaching the exercise (easy, medium and hard). If you're new to R, use the easy approach and copy and paste the code straight into R -- you'll need to fill in a few blanks though. If you've used R before, or a similar programming language, stick to the medium and hard approaches. This is also an exercise in using Google. Googling around a problem of for specific commands can allow you to quickly find examples (most likely on Stack Overflow) with code you can use.  
+
+There are three aims of this lab:
+
+1. Getting used to programming in R.
+2. Generating random numbers in R.
+3. [Creating for loops in R](https://www.w3schools.com/r/r_for_loop.asp). 
+
+::: {.exercise}
+The changes in the Birmingham stock exchange each day can be modelled using a normal distribution. The price on day $i$, $X_i$ is given by
+$$
+X_i = \alpha X_{i-1}, \qquad \alpha \sim N(1.001, 0.005^2).
+$$
+The index begins at $X_0 = 100$. Investigate the distribution of the value of the stock market on days 50 and 100. 
+
+**Hard**. Use a simulation method to generate the relevant distributions. 
+
+**Medium**. Simulate the value for $\alpha$ for each of the 100 days and use the `cumprod` command to plot a trajectory. Use a for loop to repeat this 100 times and investigate the distribution of the value of the stock market on days 50 and 100. 
+
+**Easy**. Fill in the blanks in the following code. 
+```
+# Plot one ----------------------------------------------------------------
+x <- rnorm(n = , mean = , sd = ) #Simulate daily change for 100 days
+plot(, type = 'l') #multiply each day by the previous days
+
+# Plot 100 realisations ---------------------------------------------------
+market.index <- matrix(NA, 100, 100) #Initialise a matrix to store trajectories
+for(i in 1:100){
+  x <- rnorm(n = , mean = , sd = )
+  market.index [, i] <- 
+}
+
+#Plot all trajectories
+matplot(prices, type = 'l')
+
+#Get distribution of days 50 and 100
+hist()
+hist()
+quantile(, )
+quantile(, )
+```
+:::
+
+
+::: {.exercise}
+You are an avid lottery player and play the lottery twice a week, every week for 50 years (a total of 5,200 times). The lottery has 50 balls labeled 1, ..., 50 and you play the same 6 numbers each time. Six out of the 50 balls are chosen uniformly at random and the prize money is shown in the table below. 
+
+| Numbers Matched | Prize Amount |
+|-----------------|--------------|
+| 0-2             | £0           |
+| 3               | £30          |
+| 4               | £140         |
+| 5               | £1,750       |
+| 6               | £1,000,000   |
+
+It costs you £2 to play each time. Simulate one set of 5,200 draws. How much do you win? What is your total profit/loss? 
+
+**Hard**. Use a for loop and sequence of if else statements to generate your prize winnings. 
+
+**Medium**. Use a for loop to generate the lottery numbers and prize winnings for each draw. Use the `sample` function to generate a set of lottery numbers and check they match against your numbers using the `%in%` function. Finally, use if else statements to check how much you have won each time. 
+
+**Easy**. Fill in the blanks in the following code. 
+
+```
+my.numbers <- 
+
+#For loop to generate lottery numbers and prize winnings
+prize <- numeric(5200)
+for(i in 1:5200){
+  
+  #Generate lottery numbers
+  draw <- sample(, )
+  
+  #Check how many match my numbers
+  numbers.matched <- #use %in% function
+  
+  #Compute prize winings
+  if(numbers.matched < 3)
+    prize[i] <- 0
+  else if()
+    prize[i] <-  30
+  else if()
+    prize[i] <-  140
+  else if()
+    prize[i] <-  1750
+  else
+    prize[i] <- 1000000
+}
+
+#Summarise prize winnings
+table(prize)
+hist(prize)
+sum(prize) - 2*5200
+```
+:::
+
+
+::: {.exercise}
+Estimate $\pi$.
+
+**Hard**. Use a rejection sampling algorithm.
+
+**Medium**. Generate lots of points $(x, y)$ on the unit square $[0, 1]^2$. Check each point to see if it lies within the unit circle. Use the proportion of points that lie within the unit circle to estimate $\pi$.
+
+**Easy**. Fill in the blanks in the following code. 
+
+```
+#Sample on unit square
+N <- 10000      #number of points
+x <-            #sample N points uniformly at random on [0, 1]
+y <-            #sample N points uniformly at random on [0, 1]
+
+#Estimate pi
+r.sq                 <- x^2 + y^2                #check how far from origin
+number.inside.circle <-           #count how many points inside unit cirlce
+pi.estimate          <- 
+
+#Plot points
+par(pty = "s")         #make sure plot is square
+plot(x, y, cex = 0.1)  #plot points
+theta <- seq(0, pi/2, 0.01) #plot unit circle
+lines(x = cos(theta), y = sin(theta), col = "red")
+```
+
+**Extra**. Use a for loop to repeat this for $N = \{1, \ldots, 10000\}$. Record the estimate for $\pi$ for each value and the relative error.  
+:::
+
+::: {.exercise}
+A linear congruential generator (LCG) is a simple algorithm for generating random integers. Given a starting value $X_0$, it generates a sequence of integers according to
+$$
+X_{i+1} = a X_i + c \mod m.
+$$
+Software that generates numbers using an LCG Setting $a = 3$, $c = 2$, $m = 7$ and $X_0 = 0$, generate 20 samples from this generator. 
+
+1. Investigate the 'randomness' of this generator by creating the delay plot, where $X_{i-1}$ is plotted against $X_{i}$
+
+2. One way to improve the quality of these generators is to shuffle the sequence generated. Generate rate two sequences $X$ and $Y$ from two different LCGs, and report the shuffled sequence $Z_j = X_{Y_j}$. For the sequence $Y$ use the values  $a = 5$, $c = 1$, $m = 8$ and $Y_0 = 2$.
+
+3. As the past two exercises show, LCGs are notoriously poor. in the 1960s and 70s, RANDU was a widely used LCG developed by IBM. According to Wikipedia
+> IBM's RANDU is widely considered to be one of the most ill-conceived random number generators ever designed, and was described as "truly horrible" by Donald Knuth.
+
+The RANDU LCG uses $a = 2^{16} + 3$, $c = 0$, $m = 2^{31}$ and $Y_0 = 1$. Generate a sequence of 10,000 pseudorandom variables from the RANDU LCG and create the delay plot. 
+
+The delay plot seems to show little relationship between $X_{i}$ and $X_{i+1}$. The third order delay plot is a 3d-plot with coordinate $(X_i, X_{i+1}, X_{i+2})$ and this plot shows a different picture. Create this plot using the code
+```
+#install.packages("scatterplot3d") #you may need to install this package
+scatterplot3d::scatterplot3d(X[1:9998], X[2:9999], X[3:10000], angle=154, 
+                             xlab = expression(X[i]), ylab = expression(X[i+1]), zlab = expression(X[i+2]))
+```
+This is what makes the RANDU LCG so poor. Write down $X_{i+1}$ and $X_{i+2}$ in terms of $X_i$. Show that $X_{i+2} = \alpha X_{i+1} + \beta X_{i}$. 
+
+**Hard**. Use a for loop to construct sequences from the LCGs $X$ and $Y$. 
+
+**Medium**. Create a for loop to generate the value for the sequence $X_i$ for $i = 1, \ldots, 20$. Modular arithmetic can be performed using the $%%$ function. Create a new for loop to construct the sequence $Y$. To shuffle the sequence $X$ using $Y$, you will need to subset $X$ by $Y$ in R. 
+
+**Easy**. Fill in the blanks in the code below
+```
+# 1. Shuffling ---------------------------------------------------------------
+X <- numeric(21) #initialise vector to store X
+
+#Set values for LCG
+a <- 
+c <- 
+m <- 
+X[1]<- 
+
+
+#Run Generator
+for(i in 2:21){
+  X[i] <-
+}
+X
+
+#Delay plot
+plot( , , xlab = expression(X[i-1]), ylab = expression(X[i]), type = 'l')
+
+
+
+# 2. Shuffling ---------------------------------------------------------------
+
+Y <- numeric(21) #initialise vector to store Y
+
+#Set values for LCG
+a <- 
+c <- 
+m <- 
+Y[1]<- 
+
+
+#Run Generator
+for(i in 2:50){
+  Y[i] <- 
+}
+
+#report sequence
+Y
+X[Y]
+
+#Plot delay plot
+plot(, , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = 'l')
+
+```
+:::
+
+## Computer Lab II
+
+## Computer Lab III
+
