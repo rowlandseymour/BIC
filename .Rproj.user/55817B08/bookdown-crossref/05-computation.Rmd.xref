@@ -1,5 +1,6 @@
 h1:advanced-computation Advanced computation
-h2:heiracichal-models Heiracichal Models
-h2:prior-ellicitation Prior Ellicitation
 h2:data-augmentation Data Augmentation
+h3:imputing-censored-observations Imputing censored observations
+h3:imputing-latent-variables Imputing latent variables
+h2:gaussian-processes Gaussian Processes
 
