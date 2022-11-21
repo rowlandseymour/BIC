@@ -1,7 +1,7 @@
 # Programming in R
 
 
-## Computer Lab I 
+## Random Numbers, For Loops and R
 This first computer lab is about getting used to R. The first step is to download R and Rstudio.
 
 * [Download R](https://www.r-project.org)
@@ -160,7 +160,7 @@ This is what makes the RANDU LCG so poor. Write down $X_{i+1}$ and $X_{i+2}$ in 
 
 **Hard**. Use a for loop to construct sequences from the LCGs $X$ and $Y$. 
 
-**Medium**. Create a for loop to generate the value for the sequence $X_i$ for $i = 1, \ldots, 20$. Modular arithmetic can be performed using the $%%$ function. Create a new for loop to construct the sequence $Y$. To shuffle the sequence $X$ using $Y$, you will need to subset $X$ by $Y$ in R. 
+**Medium**. Create a for loop to generate the value for the sequence $X_i$ for $i = 1, \ldots, 20$. Modular arithmetic can be performed using the `%%` function. Create a new for loop to construct the sequence $Y$. To shuffle the sequence $X$ using $Y$, you will need to subset $X$ by $Y$ in R. 
 
 **Easy**. Fill in the blanks in the code below
 ```
@@ -206,12 +206,140 @@ Y
 X[Y]
 
 #Plot delay plot
-plot(, , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = 'l')
+plot(x = ,y = , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = 'l')
 
 ```
 :::
 
-## Computer Lab II
+## Functions in R
+The purpose of this lab is to learn how to write functions is R. Functions are wrappers that allow you to easily repeat commands, as well as customise specific pieces of code. 
 
-## Computer Lab III
+
+### Built in commands
+R has many build in commands and you used these in Computer Lab I. An example is the `runif` command from the second exercise. This function generates random numbers from an interval. The code chunk below shows it in action:
+```{r}
+u <- runif(n = 10, min = -1, max = 1)
+u
+```
+The functions has three **arguments**: _n_ the number of samples to be generated, _min_ the lower limit of the interval, _max_ the upper limit of the interval. In the code chunk 10 random numbers were generate from the interval [-1, 1]. In R, you don't need to label the arguments, so this will sample the same number of samples from the same interval 
+```
+u <- runif(10, -1, 1)
+```
+Although it helps to label the arguments in many cases. 
+
+### User defined functions
+In many cases, we will need to repeat the same piece of code over and over again, or we will need to run it again with different values. In this case, we can write our own function. In R, there are two ways to type your own function. The first is to write a full function definition. The basic template is 
+
+```
+name.of.function <- function(arguments){
+
+  #do something
+  #produce result
+  
+  return(result)
+
+}
+```
+
+The second way is an in-line function, which is sometimes useful for short functions. The template is 
+```
+name.of.function <- function(arguments) #do something
+```
+In this module, we're going to use the full function way of writing functions. 
+
+::: {.example}
+In this example, we're going to write a function to evaluate the normal density function. The density function is given by
+$$
+\pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\}}.
+$$
+
+We will need our function to take three arguments, the value at which the density function needs to be evaluated, and the mean and standard deviation of the distribution. 
+
+```{r}
+normal.density <- function(x, mu, sigma){
+  
+  fraction.term <- 1/sqrt(2*pi*sigma^2)
+  exponent.term <- -1/(2*sigma^2)*(x-mu)^2
+  
+  result <- fraction.term*exp(exponent.term)
+  return(result)
+  
+}
+```
+We have split up the density into two parts to make it easier to code up and read. R has its own inbuilt normal density function `dnorm` and we can compare our function against R's. Although R's is faster and more reliable, we should get the same results. 
+
+```{r}
+
+normal.density(x = 0.5, mu = 1, sigma = 0.5)
+dnorm(x = 0.5, mean = 1, sd = 0.5)
+```
+Why might R's function be faster and more reliable than ours?
+:::
+
+::: {.exercise}
+Consider the stock exchange problem in Exercise 2.1. Write a function that simulates 100 days of the stock exchange. Use the `replicate` function to call this function 10,000 times. 
+:::
+
+::: {.exercise}
+In a game, players can buy loot boxes. Each box contains one item chosen at random from fifty loot items in the game. By simulating lots of players buying loots boxes, what is the expected number of boxes a player needs to buy in order to collect all fifty items. 
+
+1. Write a function that buys a new box and, it the player doesn't own it already, adds it to the set of items the player doesn't own already. 
+
+2. Write another function using a while loop that simulates a player buying boxes until they own all the items. 
+
+3. Use a for loop to simulate 10,000 players buying boxes until they own all the items. 
+
+4. It turns out there are three types of items in the loot boxes. 25 items are common, 20 are rare, and 5 are epic. Players are twice as likely to get at common item than a rare item, and four times as likely to get a rare item than an epic item. Modify the function from part 1 to account for this and repeat the simulation.
+:::
+
+
+## Good Coding Practices
+In the past two labs, we've written code to solve different problems. In this lab, we're going to take a step back and think about what good R code does and doesn't look like. 
+
+### Code Style
+Code should be both efficient and easy to read. In most cases it's better to write code that's easy to read and less efficient, than highly efficient code that's difficult to read. Some basic principles to make code easy to read are:
+
+1. Write short functions names, e.g. `buy.loot.box` is better than `player.buys.one.loot.boox` or `blb`.
+2. Document and comment code. In R comments start with `#`. 
+3. Multiple short functions are better than long functions that do multiple things. 
+4. Be consistent. 
+
+::: {.example}
+Review the [tidyverse Style Guide](https://style.tidyverse.org/index.html). 
+:::
+
+::: {.example}
+Review [Google's R Style Guide](https://google.github.io/styleguide/Rguide.html). 
+:::
+
+One way to ensure code style is consistent and bug free is to carry out code reviews. These are common both in academia and industry. A code review is where someone else goes through your code line-by-line ensuring it conforms to the company style and doesn't have any bugs. 
+
+
+::: {.exercise}
+The following code is for Exercises 2.1 about the stock exchange. Restyle the code so it is easy to read. 
+
+```
+# Plot one ----------------------------------------------------------------
+rnorm(100,1.001,0.5) -> x 
+plot(100*cumprod(x),type ='l') 
+# Plot 100 realisations ---------------------------------------------------
+X <- matrix(NA, 100, 100) 
+for(i in 1:100){
+  x <- rnorm(100, 1.001, 0.005)
+  X[,i] <- 100*cumprod(x)
+}
+matplot(prices,type ='l')
+hist(prices[50,]);hist(prices[100,]);quantile(prices[50,], c(0.25, 0.5, 0.75));quantile(prices[100,], c(0.25, 0.5, 0.75))
+```
+:::
+
+::: {.exercise}
+In pairs or groups, carry out a code review for one of your solutions to an exercise from a previous lab. Remember to 
+
+1. Make sure the coding style is consistent.
+2. Identify any bugs.
+3. Be respectful and constructive in your feedback. 
+
+:::
+
 

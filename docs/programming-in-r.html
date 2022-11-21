@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Programming in R | Bayesian Inference and Computation</title>
   <meta name="description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
-  <meta name="generator" content="bookdown 0.28.1 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Programming in R | Bayesian Inference and Computation" />
   <meta property="og:type" content="book" />
@@ -154,9 +154,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2" data-path="programming-in-r.html"><a href="programming-in-r.html"><i class="fa fa-check"></i><b>2</b> Programming in R</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="programming-in-r.html"><a href="programming-in-r.html#computer-lab-i"><i class="fa fa-check"></i><b>2.1</b> Computer Lab I</a></li>
-<li class="chapter" data-level="2.2" data-path="programming-in-r.html"><a href="programming-in-r.html#computer-lab-ii"><i class="fa fa-check"></i><b>2.2</b> Computer Lab II</a></li>
-<li class="chapter" data-level="2.3" data-path="programming-in-r.html"><a href="programming-in-r.html#computer-lab-iii"><i class="fa fa-check"></i><b>2.3</b> Computer Lab III</a></li>
+<li class="chapter" data-level="2.1" data-path="programming-in-r.html"><a href="programming-in-r.html#random-numbers-for-loops-and-r"><i class="fa fa-check"></i><b>2.1</b> Random Numbers, For Loops and R</a></li>
+<li class="chapter" data-level="2.2" data-path="programming-in-r.html"><a href="programming-in-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="programming-in-r.html"><a href="programming-in-r.html#built-in-commands"><i class="fa fa-check"></i><b>2.2.1</b> Built in commands</a></li>
+<li class="chapter" data-level="2.2.2" data-path="programming-in-r.html"><a href="programming-in-r.html#user-defined-functions"><i class="fa fa-check"></i><b>2.2.2</b> User defined functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="programming-in-r.html"><a href="programming-in-r.html#good-coding-practices"><i class="fa fa-check"></i><b>2.3</b> Good Coding Practices</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="programming-in-r.html"><a href="programming-in-r.html#code-style"><i class="fa fa-check"></i><b>2.3.1</b> Code Style</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>3</b> Bayesian Inference</a>
 <ul>
@@ -183,9 +190,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>5</b> Advanced computation</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="advanced-computation.html"><a href="advanced-computation.html#heiracichal-models"><i class="fa fa-check"></i><b>5.1</b> Heiracichal Models</a></li>
-<li class="chapter" data-level="5.2" data-path="advanced-computation.html"><a href="advanced-computation.html#prior-ellicitation"><i class="fa fa-check"></i><b>5.2</b> Prior Ellicitation</a></li>
-<li class="chapter" data-level="5.3" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>5.3</b> Data Augmentation</a></li>
+<li class="chapter" data-level="5.1" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>5.1</b> Data Augmentation</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>5.1.1</b> Imputing censored observations</a></li>
+<li class="chapter" data-level="5.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>5.1.2</b> Imputing latent variables</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>5.2</b> Gaussian Processes</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -209,8 +219,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="programming-in-r" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Programming in R<a href="programming-in-r.html#programming-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="computer-lab-i" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> Computer Lab I<a href="programming-in-r.html#computer-lab-i" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="random-numbers-for-loops-and-r" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Random Numbers, For Loops and R<a href="programming-in-r.html#random-numbers-for-loops-and-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This first computer lab is about getting used to R. The first step is to download R and Rstudio.</p>
 <ul>
 <li><a href="https://www.r-project.org">Download R</a></li>
@@ -359,7 +369,7 @@ scatterplot3d::scatterplot3d(X[1:9998], X[2:9999], X[3:10000], angle=154,
                              xlab = expression(X[i]), ylab = expression(X[i+1]), zlab = expression(X[i+2]))</code></pre>
 <p>This is what makes the RANDU LCG so poor. Write down <span class="math inline">\(X_{i+1}\)</span> and <span class="math inline">\(X_{i+2}\)</span> in terms of <span class="math inline">\(X_i\)</span>. Show that <span class="math inline">\(X_{i+2} = \alpha X_{i+1} + \beta X_{i}\)</span>.</p>
 <p><strong>Hard</strong>. Use a for loop to construct sequences from the LCGs <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
-<p><strong>Medium</strong>. Create a for loop to generate the value for the sequence <span class="math inline">\(X_i\)</span> for <span class="math inline">\(i = 1, \ldots, 20\)</span>. Modular arithmetic can be performed using the <span class="math inline">\(%%\)</span> function. Create a new for loop to construct the sequence <span class="math inline">\(Y\)</span>. To shuffle the sequence <span class="math inline">\(X\)</span> using <span class="math inline">\(Y\)</span>, you will need to subset <span class="math inline">\(X\)</span> by <span class="math inline">\(Y\)</span> in R.</p>
+<p><strong>Medium</strong>. Create a for loop to generate the value for the sequence <span class="math inline">\(X_i\)</span> for <span class="math inline">\(i = 1, \ldots, 20\)</span>. Modular arithmetic can be performed using the <code>%%</code> function. Create a new for loop to construct the sequence <span class="math inline">\(Y\)</span>. To shuffle the sequence <span class="math inline">\(X\)</span> using <span class="math inline">\(Y\)</span>, you will need to subset <span class="math inline">\(X\)</span> by <span class="math inline">\(Y\)</span> in R.</p>
 <p><strong>Easy</strong>. Fill in the blanks in the code below</p>
 <pre><code># 1. Shuffling ---------------------------------------------------------------
 X &lt;- numeric(21) #initialise vector to store X
@@ -403,16 +413,117 @@ Y
 X[Y]
 
 #Plot delay plot
-plot(, , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = &#39;l&#39;)
+plot(x = ,y = , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = &#39;l&#39;)
 </code></pre>
 </div>
 </div>
-<div id="computer-lab-ii" class="section level2 hasAnchor" number="2.2">
-<h2><span class="header-section-number">2.2</span> Computer Lab II<a href="programming-in-r.html#computer-lab-ii" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="functions-in-r" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Functions in R<a href="programming-in-r.html#functions-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The purpose of this lab is to learn how to write functions is R. Functions are wrappers that allow you to easily repeat commands, as well as customise specific pieces of code.</p>
+<div id="built-in-commands" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Built in commands<a href="programming-in-r.html#built-in-commands" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>R has many build in commands and you used these in Computer Lab I. An example is the <code>runif</code> command from the second exercise. This function generates random numbers from an interval. The code chunk below shows it in action:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="programming-in-r.html#cb13-1" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">min =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
+<span id="cb13-2"><a href="programming-in-r.html#cb13-2" aria-hidden="true" tabindex="-1"></a>u</span></code></pre></div>
+<pre><code>##  [1] -0.17148643 -0.48201749  0.55478285 -0.01394499 -0.77275673  0.89750333
+##  [7]  0.15131642  0.22009522 -0.91387992 -0.03637301</code></pre>
+<p>The functions has three <strong>arguments</strong>: <em>n</em> the number of samples to be generated, <em>min</em> the lower limit of the interval, <em>max</em> the upper limit of the interval. In the code chunk 10 random numbers were generate from the interval [-1, 1]. In R, you don’t need to label the arguments, so this will sample the same number of samples from the same interval</p>
+<pre><code>u &lt;- runif(10, -1, 1)</code></pre>
+<p>Although it helps to label the arguments in many cases.</p>
 </div>
-<div id="computer-lab-iii" class="section level2 hasAnchor" number="2.3">
-<h2><span class="header-section-number">2.3</span> Computer Lab III<a href="programming-in-r.html#computer-lab-iii" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="user-defined-functions" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> User defined functions<a href="programming-in-r.html#user-defined-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In many cases, we will need to repeat the same piece of code over and over again, or we will need to run it again with different values. In this case, we can write our own function. In R, there are two ways to type your own function. The first is to write a full function definition. The basic template is</p>
+<pre><code>name.of.function &lt;- function(arguments){
 
+  #do something
+  #produce result
+  
+  return(result)
+
+}</code></pre>
+<p>The second way is an in-line function, which is sometimes useful for short functions. The template is</p>
+<pre><code>name.of.function &lt;- function(arguments) #do something</code></pre>
+<p>In this module, we’re going to use the full function way of writing functions.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-32" class="example"><strong>Example 2.1  </strong></span>In this example, we’re going to write a function to evaluate the normal density function. The density function is given by
+<span class="math display">\[
+\pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\}}.
+\]</span></p>
+<p>We will need our function to take three arguments, the value at which the density function needs to be evaluated, and the mean and standard deviation of the distribution.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="programming-in-r.html#cb18-1" aria-hidden="true" tabindex="-1"></a>normal.density <span class="ot">&lt;-</span> <span class="cf">function</span>(x, mu, sigma){</span>
+<span id="cb18-2"><a href="programming-in-r.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-3"><a href="programming-in-r.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  fraction.term <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb18-4"><a href="programming-in-r.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  exponent.term <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>(x<span class="sc">-</span>mu)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb18-5"><a href="programming-in-r.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-6"><a href="programming-in-r.html#cb18-6" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> fraction.term<span class="sc">*</span><span class="fu">exp</span>(exponent.term)</span>
+<span id="cb18-7"><a href="programming-in-r.html#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb18-8"><a href="programming-in-r.html#cb18-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-9"><a href="programming-in-r.html#cb18-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>We have split up the density into two parts to make it easier to code up and read. R has its own inbuilt normal density function <code>dnorm</code> and we can compare our function against R’s. Although R’s is faster and more reliable, we should get the same results.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="programming-in-r.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">normal.density</span>(<span class="at">x =</span> <span class="fl">0.5</span>, <span class="at">mu =</span> <span class="dv">1</span>, <span class="at">sigma =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<pre><code>## [1] 0.4839414</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="programming-in-r.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x =</span> <span class="fl">0.5</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<pre><code>## [1] 0.4839414</code></pre>
+<p>Why might R’s function be faster and more reliable than ours?</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-33" class="exercise"><strong>Exercise 2.5  </strong></span>Consider the stock exchange problem in Exercise 2.1. Write a function that simulates 100 days of the stock exchange. Use the <code>replicate</code> function to call this function 10,000 times.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-34" class="exercise"><strong>Exercise 2.6  </strong></span>In a game, players can buy loot boxes. Each box contains one item chosen at random from fifty loot items in the game. By simulating lots of players buying loots boxes, what is the expected number of boxes a player needs to buy in order to collect all fifty items.</p>
+<ol style="list-style-type: decimal">
+<li><p>Write a function that buys a new box and, it the player doesn’t own it already, adds it to the set of items the player doesn’t own already.</p></li>
+<li><p>Write another function using a while loop that simulates a player buying boxes until they own all the items.</p></li>
+<li><p>Use a for loop to simulate 10,000 players buying boxes until they own all the items.</p></li>
+<li><p>It turns out there are three types of items in the loot boxes. 25 items are common, 20 are rare, and 5 are epic. Players are twice as likely to get at common item than a rare item, and four times as likely to get a rare item than an epic item. Modify the function from part 1 to account for this and repeat the simulation.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="good-coding-practices" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Good Coding Practices<a href="programming-in-r.html#good-coding-practices" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the past two labs, we’ve written code to solve different problems. In this lab, we’re going to take a step back and think about what good R code does and doesn’t look like.</p>
+<div id="code-style" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Code Style<a href="programming-in-r.html#code-style" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Code should be both efficient and easy to read. In most cases it’s better to write code that’s easy to read and less efficient, than highly efficient code that’s difficult to read. Some basic principles to make code easy to read are:</p>
+<ol style="list-style-type: decimal">
+<li>Write short functions names, e.g. <code>buy.loot.box</code> is better than <code>player.buys.one.loot.boox</code> or <code>blb</code>.</li>
+<li>Document and comment code. In R comments start with <code>#</code>.</li>
+<li>Multiple short functions are better than long functions that do multiple things.</li>
+<li>Be consistent.</li>
+</ol>
+<div class="example">
+<p><span id="exm:unlabeled-div-35" class="example"><strong>Example 2.2  </strong></span>Review the <a href="https://style.tidyverse.org/index.html">tidyverse Style Guide</a>.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-36" class="example"><strong>Example 2.3  </strong></span>Review <a href="https://google.github.io/styleguide/Rguide.html">Google’s R Style Guide</a>.</p>
+</div>
+<p>One way to ensure code style is consistent and bug free is to carry out code reviews. These are common both in academia and industry. A code review is where someone else goes through your code line-by-line ensuring it conforms to the company style and doesn’t have any bugs.</p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-37" class="exercise"><strong>Exercise 2.7  </strong></span>The following code is for Exercises 2.1 about the stock exchange. Restyle the code so it is easy to read.</p>
+<pre><code># Plot one ----------------------------------------------------------------
+rnorm(100,1.001,0.5) -&gt; x 
+plot(100*cumprod(x),type =&#39;l&#39;) 
+# Plot 100 realisations ---------------------------------------------------
+X &lt;- matrix(NA, 100, 100) 
+for(i in 1:100){
+  x &lt;- rnorm(100, 1.001, 0.005)
+  X[,i] &lt;- 100*cumprod(x)
+}
+matplot(prices,type =&#39;l&#39;)
+hist(prices[50,]);hist(prices[100,]);quantile(prices[50,], c(0.25, 0.5, 0.75));quantile(prices[100,], c(0.25, 0.5, 0.75))</code></pre>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-38" class="exercise"><strong>Exercise 2.8  </strong></span>In pairs or groups, carry out a code review for one of your solutions to an exercise from a previous lab. Remember to</p>
+<ol style="list-style-type: decimal">
+<li>Make sure the coding style is consistent.</li>
+<li>Identify any bugs.</li>
+<li>Be respectful and constructive in your feedback.</li>
+</ol>
+</div>
+
+</div>
 </div>
 </div>
             </section>

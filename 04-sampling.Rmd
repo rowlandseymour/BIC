@@ -179,7 +179,7 @@ barplot(table(island)/weeks, xlab = "island", ylab = "Proportion of time")
 
 We can recognise several different statistical principles in this example. The King decides to move islands dependent on where he is currently, not based on where he has been previously (Markov principle). He proposes an island to move to and accepts or rejects this decision based on some distribution (rejection principle). We are now going to describe some of the properties of Markov chains, including the Markov principle. 
 
-You can watch Richard McElreath of Statistical Rethinking explain the original example in this video ![](https://youtu.be/Qqz5AJjyugM?t=370)
+
 
 ## Properties of Markov Chains
 
@@ -611,12 +611,12 @@ $$
 $$
 
 The easiest substitution to use is $u = \sqrt{x}$. This gives us $dx = 2du\sqrt{x}$. Substituting these into the integral gives
-\begin{align*}
-\int_0^y \frac{1}{2\sqrt{x}}e^{-\sqrt{x}}\,dx & = \int_0^\sqrt{y} e^{-u}\,dx \\
-&= \left[-e^{-u}\right]_0^\sqrt{y} \\
-&= 1 - e^{-\sqrt{y}}.
-\end{align*}
-_[A quicker, but less obvious way to compute the integral is to note that_ $\frac{d}{dx}e^{f(x)} = f'(x)e^{f(x)}$ _.]_
+<!-- \begin{align*} -->
+<!-- \int_0^y \frac{1}{2\sqrt{x}}e^{-\sqrt{x}}\,dx & = \int_0^\sqrt{y} e^{-u}\,dx \\ -->
+<!-- &= [-e^{-u}]_0^\sqrt{y} \\ -->
+<!-- &= 1 - e^{-\sqrt{y}}. -->
+<!-- \end{align*} -->
+A quicker, but less obvious way to compute the integral is to note that $\frac{d}{dx}e^{f(x)} = f'(x)e^{f(x)}$.
 The distribution function is therefore
 $$
 F(y) = \begin{cases}
@@ -743,7 +743,7 @@ You observe $N$ data points $\{y_1, \ldots, y_N\} \sim N(\mu, sigma^2)$. Place a
 ::: {.solution}
 Using the prior distributions
 $$
-\mu \sim N(\mu_0, \sigma_0^2), \qquad $\sigma^2 \sim \hbox{inv}-\Gamma(\alpha, \beta)$
+\mu \sim N(\mu_0, \sigma_0^2), \qquad \sigma^2 \sim \hbox{inv}-\Gamma(\alpha, \beta)
 $$
 gives the posterior distribution ....
 
