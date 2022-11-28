@@ -55,7 +55,7 @@ The full conditional distribution of $y_5$ given $p$, the other data points an $
 $$
   \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 < 1, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=1}^{1000}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{j}}, \qquad y < 6
 $$
-We can use a Gibbs sampler alternating between sampling $p$ and $y_5$. The form of $y_5$ is a truncated binomial distribution, which is not obvious how to sample from. There are two ways: i) use one of R's inbuilt samplers, or ii) use the inverse transform method, but restrict the domain of the uniform distribution. 
+We can use a Gibbs sampler alternating between sampling $p$ and $y_5$. 
 :::
 
 ### Imputing latent variables
