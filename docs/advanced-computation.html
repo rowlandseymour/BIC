@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Advanced computation | Bayesian Inference and Computation</title>
   <meta name="description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.28.1 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Advanced computation | Bayesian Inference and Computation" />
   <meta property="og:type" content="book" />
@@ -230,10 +230,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data. It allows us to treat the missing data points as random variables and infer the data points alongside the model parameters. This provides us with a method to quantify the uncertainty around our estimates of the missing data points.</p>
 <p>In data augmentation, we distinguish between two likelihood functions.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-95" class="definition"><strong>Definition 5.1  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
+<p><span id="def:unlabeled-div-1" class="definition"><strong>Definition 5.1  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-96" class="definition"><strong>Definition 5.2  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
+<p><span id="def:unlabeled-div-2" class="definition"><strong>Definition 5.2  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
 </div>
 <p>The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn’t fully observe, we can’t compute it. Instead we can only evaluate the observed data likelihood function.</p>
 <p>In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function.</p>
@@ -241,7 +241,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">5.1.1</span> Imputing censored observations<a href="advanced-computation.html#imputing-censored-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first example we will look at is when data is censored. Instead of throwing away these observations, we will instead treat them as random variables and infer their values.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-97" class="example"><strong>Example 5.1  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
+<p><span id="exm:unlabeled-div-3" class="example"><strong>Example 5.1  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
 <p>The bank checks five batches and observes <span class="math inline">\(y_1, \ldots, y_4\)</span> suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6.</p>
 <p>The observed data likelihood functions is
 <span class="math display">\[
@@ -263,7 +263,7 @@ p \mid y_1, \ldots, y_5 \sim \hbox{Beta}\left(\sum_{i=1}^5 y_i + 1, 1001 - \sum_
 <span class="math display">\[
   \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 &lt; 1, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=1}^{1000}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{j}}, \qquad y &lt; 6
 \]</span>
-We can use a Gibbs sampler alternating between sampling <span class="math inline">\(p\)</span> and <span class="math inline">\(y_5\)</span>. The form of <span class="math inline">\(y_5\)</span> is a truncated binomial distribution, which is not obvious how to sample from. There are two ways: i) use one of R’s inbuilt samplers, or ii) use the inverse transform method, but restrict the domain of the uniform distribution.</p>
+We can use a Gibbs sampler alternating between sampling <span class="math inline">\(p\)</span> and <span class="math inline">\(y_5\)</span>.</p>
 </div>
 </div>
 <div id="imputing-latent-variables" class="section level3 hasAnchor" number="5.1.2">
@@ -274,16 +274,16 @@ We can use a Gibbs sampler alternating between sampling <span class="math inline
 </div>
 <p>A mixture model is an example of latent variables being useful.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-98" class="example"><strong>Example 5.2  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
+<p><span id="exm:unlabeled-div-4" class="example"><strong>Example 5.2  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
 <p>Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.</p>
 <p><img src="postcode.jpeg" /><!-- --></p>
 <p>We introduce a latent variable <span class="math inline">\(z_i \sim \hbox{Bernoulli}(p)\)</span> that describes if the characters on the <span class="math inline">\(i^{th}\)</span> image are B1 or B2. The observation <span class="math inline">\(y_i\)</span> is the proportion of the <span class="math inline">\(i^{th}\)</span> image that is taken up by the characters. We observe <span class="math inline">\(y_i\)</span>, but want to estimate <span class="math inline">\(z_i\)</span>. The difficultly is there lack of one-to-one correspondence between the values <span class="math inline">\(y_i\)</span> can take and the value <span class="math inline">\(z_i\)</span>. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 (<span class="math inline">\(Z = 1\)</span>), then <span class="math inline">\(Y_i \sim N(0.7, 0.05^2)\)</span> and if it is going to B2 (<span class="math inline">\(Z = 2\)</span>), then <span class="math inline">\(Y_i \sim N(0.8, 0.02^2)\)</span>. The plot below shows the two densities and the overlap between them.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="advanced-computation.html#cb64-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.001</span>)</span>
-<span id="cb64-2"><a href="advanced-computation.html#cb64-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.7</span>, <span class="fl">0.05</span>)</span>
-<span id="cb64-3"><a href="advanced-computation.html#cb64-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.8</span>, <span class="fl">0.02</span>)</span>
-<span id="cb64-4"><a href="advanced-computation.html#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(a, x, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">xlab =</span> <span class="fu">expression</span>(y), <span class="at">ylab =</span> <span class="st">&quot;density&quot;</span>)</span>
-<span id="cb64-5"><a href="advanced-computation.html#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(a, y, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="advanced-computation.html#cb1-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.001</span>)</span>
+<span id="cb1-2"><a href="advanced-computation.html#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.7</span>, <span class="fl">0.05</span>)</span>
+<span id="cb1-3"><a href="advanced-computation.html#cb1-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.8</span>, <span class="fl">0.02</span>)</span>
+<span id="cb1-4"><a href="advanced-computation.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(a, x, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">xlab =</span> <span class="fu">expression</span>(y), <span class="at">ylab =</span> <span class="st">&quot;density&quot;</span>)</span>
+<span id="cb1-5"><a href="advanced-computation.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(a, y, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>As the variables <span class="math inline">\(\boldsymbol{z}\)</span> are latent, the observed data likelihood function is
 <span class="math display">\[
 \pi(\boldsymbol{y} \mid  p) =\prod_{i=1}^N \left[ p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)\right].

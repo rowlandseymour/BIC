@@ -15,6 +15,37 @@ There are three aims of this lab:
 2. Generating random numbers in R.
 3. [Creating for loops in R](https://www.w3schools.com/r/r_for_loop.asp). 
 
+::: {.example}
+Computationally verify that the Poisson distribution with rate $\lambda = 100$ can be approximated by a normal distribution with mean and variance 100.
+
+
+To do this, we can generate lots of samples from a Poisson(100) distribution and plot them on top of the density function of the normal distribution with mean and variance 100.
+
+The function `rpois` allows us to generate samples from a Poisson distribution. We store 10,000 samples in a vector `y` by calling
+```{r}
+y <- rpois(n = 10000, lambda = 100)
+```
+
+We can generate a histogram of `y` using the `hist` command. Setting `freq = FALSE`, makes R plot a density histogram instead of a frequency histogram. Typing `?hist` will give you more information about this
+```{r}
+hist(y, freq = FALSE, xlab = "y", main = "")
+```
+
+The last thing to do is to plot the normal density on top. There are a couple of ways of doing this. The way below generates a uniform grid of points and then evaluates the density at each point. Finally, it adds a line graph of these densities on top. 
+
+```{r}
+x <- seq(from = 50, to = 150, by = 1)           #create uniform grid on [50, 150]
+density <- dnorm(x, mean = 100, sd = sqrt(100)) #compute density
+
+#plot together
+hist(y, freq = FALSE, xlab = "y", main = "")
+lines(x, density)
+```
+The two match up well, showing the normal distribution is a suitable approximation here. 
+:::
+
+Over the next two sessions, you will need to solve the following four problems in R. You can type `?` before any function in R (e.g. `?rnorm`) to bring up R's helpage on the function. Googling can also bring up lots of information, possible solutions and support. 
+
 ::: {.exercise}
 The changes in the Birmingham stock exchange each day can be modelled using a normal distribution. The price on day $i$, $X_i$ is given by
 $$
