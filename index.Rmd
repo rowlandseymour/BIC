@@ -52,3 +52,37 @@ No books are required for this course and the whole material is contained in the
 2.  [Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin](http://www.stat.columbia.edu/~gelman/book/). This is a thorough book explaining everything you'd need to know to carry out Bayesian data analysis. It's a fairly look and in-depth book, but the authors are authoritative and give good advice throughout. Example code on the website is in R, Python and Stan.
 
 3.  [Statistical Rethinking - Richard McElrath](https://xcelab.net/rm/statistical-rethinking/). This book provides a friendly intuitive understanding of Bayesian inference and computation. Aimed at social and natural scientists, it has less theory that the other two books but is perhaps more approachable. A set of video lectures for this book can be found [on YouTube](https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN).
+
+
+## Common Distributions
+For many Bayesian inference problems, it is useful to be able to identify probability density functions up to proportionality. Some common density functions are given below.
+
+**Normal distribution**.
+$$
+\pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\} \qquad x, \mu, \sigma \in\mathbb{R}
+$$
+
+**Beta distribution**.
+$$
+\pi(x\mid \alpha, \beta) = \frac{1}{\hbox{Beta}(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad \alpha, \beta > 0, \,x \in [0, 1],
+$$
+**Gamma distribution**.
+$$
+\pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x}
+$$
+
+**Exponential distribution**.
+$$
+f(x \mid \lambda) = \lambda e^{-\lambda x} \qquad \lambda, x > 0
+$$
+
+**Poisson distribution**.
+$$
+\pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{1, 2, \ldots\}, \, \lambda > 0
+$$
+**Binomial distribution**.
+$$
+\pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}, p \in [0, 1]
+$$
+
+

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Bayesian Inference and Computation</title>
   <meta name="description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.28.1 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Bayesian Inference and Computation" />
   <meta property="og:type" content="book" />
@@ -53,70 +53,6 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
 
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -142,6 +78,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#assessment"><i class="fa fa-check"></i><b>0.3</b> Assessment</a></li>
 <li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#getting-help"><i class="fa fa-check"></i><b>0.4</b> Getting help</a></li>
 <li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#recommended-books-and-videos"><i class="fa fa-check"></i><b>0.5</b> Recommended books and videos</a></li>
+<li class="chapter" data-level="0.6" data-path="index.html"><a href="index.html#common-distributions"><i class="fa fa-check"></i><b>0.6</b> Common Distributions</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="fundamentals.html"><a href="fundamentals.html"><i class="fa fa-check"></i><b>1</b> Fundamentals of Bayesian inference</a>
 <ul>
@@ -195,7 +132,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>5.1.1</b> Imputing censored observations</a></li>
 <li class="chapter" data-level="5.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>5.1.2</b> Imputing latent variables</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>5.2</b> Gaussian Processes</a></li>
+<li class="chapter" data-level="5.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>5.2</b> Gaussian Processes</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>5.2.1</b> Covariance Functions</a></li>
+<li class="chapter" data-level="5.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>5.2.2</b> Gaussian Process Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-data-augmenatation"><i class="fa fa-check"></i><b>5.3</b> Lab: Data Augmenatation</a></li>
+<li class="chapter" data-level="5.4" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-gaussian-processes"><i class="fa fa-check"></i><b>5.4</b> Lab: Gaussian Processes</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -255,6 +198,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p><a href="http://www.stat.columbia.edu/~gelman/book/">Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</a>. This is a thorough book explaining everything you’d need to know to carry out Bayesian data analysis. It’s a fairly look and in-depth book, but the authors are authoritative and give good advice throughout. Example code on the website is in R, Python and Stan.</p></li>
 <li><p><a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking - Richard McElrath</a>. This book provides a friendly intuitive understanding of Bayesian inference and computation. Aimed at social and natural scientists, it has less theory that the other two books but is perhaps more approachable. A set of video lectures for this book can be found <a href="https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN">on YouTube</a>.</p></li>
 </ol>
+</div>
+<div id="common-distributions" class="section level2 hasAnchor" number="0.6">
+<h2><span class="header-section-number">0.6</span> Common Distributions<a href="index.html#common-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For many Bayesian inference problems, it is useful to be able to identify probability density functions up to proportionality. Some common density functions are given below.</p>
+<p><strong>Normal distribution</strong>.
+<span class="math display">\[
+\pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\} \qquad x, \mu, \sigma \in\mathbb{R}
+\]</span></p>
+<p><strong>Beta distribution</strong>.
+<span class="math display">\[
+\pi(x\mid \alpha, \beta) = \frac{1}{\hbox{Beta}(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad \alpha, \beta &gt; 0, \,x \in [0, 1],
+\]</span>
+<strong>Gamma distribution</strong>.
+<span class="math display">\[
+\pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x}
+\]</span></p>
+<p><strong>Exponential distribution</strong>.
+<span class="math display">\[
+f(x \mid \lambda) = \lambda e^{-\lambda x} \qquad \lambda, x &gt; 0
+\]</span></p>
+<p><strong>Poisson distribution</strong>.
+<span class="math display">\[
+\pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{1, 2, \ldots\}, \, \lambda &gt; 0
+\]</span>
+<strong>Binomial distribution</strong>.
+<span class="math display">\[
+\pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}, p \in [0, 1]
+\]</span></p>
 
 </div>
 </div>

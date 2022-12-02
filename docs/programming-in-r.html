@@ -195,7 +195,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>5.1.1</b> Imputing censored observations</a></li>
 <li class="chapter" data-level="5.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>5.1.2</b> Imputing latent variables</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>5.2</b> Gaussian Processes</a></li>
+<li class="chapter" data-level="5.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>5.2</b> Gaussian Processes</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>5.2.1</b> Covariance Functions</a></li>
+<li class="chapter" data-level="5.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>5.2.2</b> Gaussian Process Regression</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -234,26 +238,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="https://www.w3schools.com/r/r_for_loop.asp">Creating for loops in R</a>.</li>
 </ol>
 <div class="example">
-<p><span id="exm:unlabeled-div-1" class="example"><strong>Example 2.1  </strong></span>Computationally verify that the Poisson distribution with rate <span class="math inline">\(\lambda = 100\)</span> can be approximated by a normal distribution with mean and variance 100.</p>
+<p><span id="exm:unlabeled-div-28" class="example"><strong>Example 2.1  </strong></span>Computationally verify that the Poisson distribution with rate <span class="math inline">\(\lambda = 100\)</span> can be approximated by a normal distribution with mean and variance 100.</p>
 <p>To do this, we can generate lots of samples from a Poisson(100) distribution and plot them on top of the density function of the normal distribution with mean and variance 100.</p>
 <p>The function <code>rpois</code> allows us to generate samples from a Poisson distribution. We store 10,000 samples in a vector <code>y</code> by calling</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="programming-in-r.html#cb1-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> <span class="dv">10000</span>, <span class="at">lambda =</span> <span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="programming-in-r.html#cb8-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> <span class="dv">10000</span>, <span class="at">lambda =</span> <span class="dv">100</span>)</span></code></pre></div>
 <p>We can generate a histogram of <code>y</code> using the <code>hist</code> command. Setting <code>freq = FALSE</code>, makes R plot a density histogram instead of a frequency histogram. Typing <code>?hist</code> will give you more information about this</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="programming-in-r.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="programming-in-r.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>The last thing to do is to plot the normal density on top. There are a couple of ways of doing this. The way below generates a uniform grid of points and then evaluates the density at each point. Finally, it adds a line graph of these densities on top.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="programming-in-r.html#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">50</span>, <span class="at">to =</span> <span class="dv">150</span>, <span class="at">by =</span> <span class="dv">1</span>)           <span class="co">#create uniform grid on [50, 150]</span></span>
-<span id="cb3-2"><a href="programming-in-r.html#cb3-2" aria-hidden="true" tabindex="-1"></a>density <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">100</span>)) <span class="co">#compute density</span></span>
-<span id="cb3-3"><a href="programming-in-r.html#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="programming-in-r.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#plot together</span></span>
-<span id="cb3-5"><a href="programming-in-r.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb3-6"><a href="programming-in-r.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, density)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="programming-in-r.html#cb10-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">50</span>, <span class="at">to =</span> <span class="dv">150</span>, <span class="at">by =</span> <span class="dv">1</span>)           <span class="co">#create uniform grid on [50, 150]</span></span>
+<span id="cb10-2"><a href="programming-in-r.html#cb10-2" aria-hidden="true" tabindex="-1"></a>density <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">100</span>)) <span class="co">#compute density</span></span>
+<span id="cb10-3"><a href="programming-in-r.html#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="programming-in-r.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#plot together</span></span>
+<span id="cb10-5"><a href="programming-in-r.html#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb10-6"><a href="programming-in-r.html#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, density)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 The two match up well, showing the normal distribution is a suitable approximation here.</p>
 </div>
 <p>Over the next two sessions, you will need to solve the following four problems in R. You can type <code>?</code> before any function in R (e.g. <code>?rnorm</code>) to bring up R’s helpage on the function. Googling can also bring up lots of information, possible solutions and support.</p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-2" class="exercise"><strong>Exercise 2.1  </strong></span>The changes in the Birmingham stock exchange each day can be modelled using a normal distribution. The price on day <span class="math inline">\(i\)</span>, <span class="math inline">\(X_i\)</span> is given by
+<p><span id="exr:unlabeled-div-29" class="exercise"><strong>Exercise 2.1  </strong></span>The changes in the Birmingham stock exchange each day can be modelled using a normal distribution. The price on day <span class="math inline">\(i\)</span>, <span class="math inline">\(X_i\)</span> is given by
 <span class="math display">\[
 X_i = \alpha X_{i-1}, \qquad \alpha \sim N(1.001, 0.005^2).
 \]</span>
@@ -282,7 +286,7 @@ quantile(, )
 quantile(, )</code></pre>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-3" class="exercise"><strong>Exercise 2.2  </strong></span>You are an avid lottery player and play the lottery twice a week, every week for 50 years (a total of 5,200 times). The lottery has 50 balls labeled 1, …, 50 and you play the same 6 numbers each time. Six out of the 50 balls are chosen uniformly at random and the prize money is shown in the table below.</p>
+<p><span id="exr:unlabeled-div-30" class="exercise"><strong>Exercise 2.2  </strong></span>You are an avid lottery player and play the lottery twice a week, every week for 50 years (a total of 5,200 times). The lottery has 50 balls labeled 1, …, 50 and you play the same 6 numbers each time. Six out of the 50 balls are chosen uniformly at random and the prize money is shown in the table below.</p>
 <table>
 <thead>
 <tr class="header">
@@ -348,7 +352,7 @@ hist(prize)
 sum(prize) - 2*5200</code></pre>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-4" class="exercise"><strong>Exercise 2.3  </strong></span>Estimate <span class="math inline">\(\pi\)</span>.</p>
+<p><span id="exr:unlabeled-div-31" class="exercise"><strong>Exercise 2.3  </strong></span>Estimate <span class="math inline">\(\pi\)</span>.</p>
 <p><strong>Hard</strong>. Use a rejection sampling algorithm.</p>
 <p><strong>Medium</strong>. Generate lots of points <span class="math inline">\((x, y)\)</span> on the unit square <span class="math inline">\([0, 1]^2\)</span>. Check each point to see if it lies within the unit circle. Use the proportion of points that lie within the unit circle to estimate <span class="math inline">\(\pi\)</span>.</p>
 <p><strong>Easy</strong>. Fill in the blanks in the following code.</p>
@@ -370,7 +374,7 @@ lines(x = cos(theta), y = sin(theta), col = &quot;red&quot;)</code></pre>
 <p><strong>Extra</strong>. Use a for loop to repeat this for <span class="math inline">\(N = \{1, \ldots, 10000\}\)</span>. Record the estimate for <span class="math inline">\(\pi\)</span> for each value and the relative error.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-5" class="exercise"><strong>Exercise 2.4  </strong></span>A linear congruential generator (LCG) is a simple algorithm for generating random integers. Given a starting value <span class="math inline">\(X_0\)</span>, it generates a sequence of integers according to
+<p><span id="exr:unlabeled-div-32" class="exercise"><strong>Exercise 2.4  </strong></span>A linear congruential generator (LCG) is a simple algorithm for generating random integers. Given a starting value <span class="math inline">\(X_0\)</span>, it generates a sequence of integers according to
 <span class="math display">\[
 X_{i+1} = a X_i + c \mod m.
 \]</span>
@@ -442,10 +446,10 @@ plot(x = ,y = , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = &#39;
 <div id="built-in-commands" class="section level3 hasAnchor" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> Built in commands<a href="programming-in-r.html#built-in-commands" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>R has many build in commands and you used these in Computer Lab I. An example is the <code>runif</code> command from the second exercise. This function generates random numbers from an interval. The code chunk below shows it in action:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="programming-in-r.html#cb9-1" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">min =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
-<span id="cb9-2"><a href="programming-in-r.html#cb9-2" aria-hidden="true" tabindex="-1"></a>u</span></code></pre></div>
-<pre><code>##  [1]  0.36829117  0.28761483 -0.74138297 -0.14370930 -0.07039898 -0.97600568
-##  [7]  0.05414346 -0.85800040  0.83419644 -0.04487404</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="programming-in-r.html#cb16-1" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">min =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
+<span id="cb16-2"><a href="programming-in-r.html#cb16-2" aria-hidden="true" tabindex="-1"></a>u</span></code></pre></div>
+<pre><code>##  [1] -0.51367587 -0.02273321  0.41652884 -0.52107671 -0.55582255 -0.64419136
+##  [7]  0.95740434 -0.44607761 -0.65836181  0.28311383</code></pre>
 <p>The functions has three <strong>arguments</strong>: <em>n</em> the number of samples to be generated, <em>min</em> the lower limit of the interval, <em>max</em> the upper limit of the interval. In the code chunk 10 random numbers were generate from the interval [-1, 1]. In R, you don’t need to label the arguments, so this will sample the same number of samples from the same interval</p>
 <pre><code>u &lt;- runif(10, -1, 1)</code></pre>
 <p>Although it helps to label the arguments in many cases.</p>
@@ -465,32 +469,32 @@ plot(x = ,y = , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = &#39;
 <pre><code>name.of.function &lt;- function(arguments) #do something</code></pre>
 <p>In this module, we’re going to use the full function way of writing functions.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-6" class="example"><strong>Example 2.2  </strong></span>In this example, we’re going to write a function to evaluate the normal density function. The density function is given by
+<p><span id="exm:unlabeled-div-33" class="example"><strong>Example 2.2  </strong></span>In this example, we’re going to write a function to evaluate the normal density function. The density function is given by
 <span class="math display">\[
 \pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\}}.
 \]</span></p>
 <p>We will need our function to take three arguments, the value at which the density function needs to be evaluated, and the mean and standard deviation of the distribution.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="programming-in-r.html#cb14-1" aria-hidden="true" tabindex="-1"></a>normal.density <span class="ot">&lt;-</span> <span class="cf">function</span>(x, mu, sigma){</span>
-<span id="cb14-2"><a href="programming-in-r.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-3"><a href="programming-in-r.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  fraction.term <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb14-4"><a href="programming-in-r.html#cb14-4" aria-hidden="true" tabindex="-1"></a>  exponent.term <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>(x<span class="sc">-</span>mu)<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb14-5"><a href="programming-in-r.html#cb14-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-6"><a href="programming-in-r.html#cb14-6" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> fraction.term<span class="sc">*</span><span class="fu">exp</span>(exponent.term)</span>
-<span id="cb14-7"><a href="programming-in-r.html#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
-<span id="cb14-8"><a href="programming-in-r.html#cb14-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-9"><a href="programming-in-r.html#cb14-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="programming-in-r.html#cb21-1" aria-hidden="true" tabindex="-1"></a>normal.density <span class="ot">&lt;-</span> <span class="cf">function</span>(x, mu, sigma){</span>
+<span id="cb21-2"><a href="programming-in-r.html#cb21-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-3"><a href="programming-in-r.html#cb21-3" aria-hidden="true" tabindex="-1"></a>  fraction.term <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb21-4"><a href="programming-in-r.html#cb21-4" aria-hidden="true" tabindex="-1"></a>  exponent.term <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>(x<span class="sc">-</span>mu)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb21-5"><a href="programming-in-r.html#cb21-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-6"><a href="programming-in-r.html#cb21-6" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> fraction.term<span class="sc">*</span><span class="fu">exp</span>(exponent.term)</span>
+<span id="cb21-7"><a href="programming-in-r.html#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb21-8"><a href="programming-in-r.html#cb21-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-9"><a href="programming-in-r.html#cb21-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>We have split up the density into two parts to make it easier to code up and read. R has its own inbuilt normal density function <code>dnorm</code> and we can compare our function against R’s. Although R’s is faster and more reliable, we should get the same results.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="programming-in-r.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">normal.density</span>(<span class="at">x =</span> <span class="fl">0.5</span>, <span class="at">mu =</span> <span class="dv">1</span>, <span class="at">sigma =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="programming-in-r.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">normal.density</span>(<span class="at">x =</span> <span class="fl">0.5</span>, <span class="at">mu =</span> <span class="dv">1</span>, <span class="at">sigma =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <pre><code>## [1] 0.4839414</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="programming-in-r.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x =</span> <span class="fl">0.5</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="programming-in-r.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x =</span> <span class="fl">0.5</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <pre><code>## [1] 0.4839414</code></pre>
 <p>Why might R’s function be faster and more reliable than ours?</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-7" class="exercise"><strong>Exercise 2.5  </strong></span>Consider the stock exchange problem in Exercise 2.1. Write a function that simulates 100 days of the stock exchange. Use the <code>replicate</code> function to call this function 10,000 times.</p>
+<p><span id="exr:unlabeled-div-34" class="exercise"><strong>Exercise 2.5  </strong></span>Consider the stock exchange problem in Exercise 2.1. Write a function that simulates 100 days of the stock exchange. Use the <code>replicate</code> function to call this function 10,000 times.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-8" class="exercise"><strong>Exercise 2.6  </strong></span>In a game, players can buy loot boxes. Each box contains one item chosen at random from fifty loot items in the game. By simulating lots of players buying loots boxes, what is the expected number of boxes a player needs to buy in order to collect all fifty items.</p>
+<p><span id="exr:unlabeled-div-35" class="exercise"><strong>Exercise 2.6  </strong></span>In a game, players can buy loot boxes. Each box contains one item chosen at random from fifty loot items in the game. By simulating lots of players buying loots boxes, what is the expected number of boxes a player needs to buy in order to collect all fifty items.</p>
 <ol style="list-style-type: decimal">
 <li><p>Write a function that buys a new box and, it the player doesn’t own it already, adds it to the set of items the player doesn’t own already.</p></li>
 <li><p>Write another function using a while loop that simulates a player buying boxes until they own all the items.</p></li>
@@ -513,14 +517,14 @@ plot(x = ,y = , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = &#39;
 <li>Be consistent.</li>
 </ol>
 <div class="example">
-<p><span id="exm:unlabeled-div-9" class="example"><strong>Example 2.3  </strong></span>Review the <a href="https://style.tidyverse.org/index.html">tidyverse Style Guide</a>.</p>
+<p><span id="exm:unlabeled-div-36" class="example"><strong>Example 2.3  </strong></span>Review the <a href="https://style.tidyverse.org/index.html">tidyverse Style Guide</a>.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-10" class="example"><strong>Example 2.4  </strong></span>Review <a href="https://google.github.io/styleguide/Rguide.html">Google’s R Style Guide</a>.</p>
+<p><span id="exm:unlabeled-div-37" class="example"><strong>Example 2.4  </strong></span>Review <a href="https://google.github.io/styleguide/Rguide.html">Google’s R Style Guide</a>.</p>
 </div>
 <p>One way to ensure code style is consistent and bug free is to carry out code reviews. These are common both in academia and industry. A code review is where someone else goes through your code line-by-line ensuring it conforms to the company style and doesn’t have any bugs.</p>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-11" class="exercise"><strong>Exercise 2.7  </strong></span>The following code is for Exercises 2.1 about the stock exchange. Restyle the code so it is easy to read.</p>
+<p><span id="exr:unlabeled-div-38" class="exercise"><strong>Exercise 2.7  </strong></span>The following code is for Exercises 2.1 about the stock exchange. Restyle the code so it is easy to read.</p>
 <pre><code># Plot one ----------------------------------------------------------------
 rnorm(100,1.001,0.5) -&gt; x 
 plot(100*cumprod(x),type =&#39;l&#39;) 
@@ -534,7 +538,7 @@ matplot(prices,type =&#39;l&#39;)
 hist(prices[50,]);hist(prices[100,]);quantile(prices[50,], c(0.25, 0.5, 0.75));quantile(prices[100,], c(0.25, 0.5, 0.75))</code></pre>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-12" class="exercise"><strong>Exercise 2.8  </strong></span>In pairs or groups, carry out a code review for one of your solutions to an exercise from a previous lab. Remember to</p>
+<p><span id="exr:unlabeled-div-39" class="exercise"><strong>Exercise 2.8  </strong></span>In pairs or groups, carry out a code review for one of your solutions to an exercise from a previous lab. Remember to</p>
 <ol style="list-style-type: decimal">
 <li>Make sure the coding style is consistent.</li>
 <li>Identify any bugs.</li>
