@@ -5,7 +5,7 @@ multivariate.normal.density <- function(x, mu, sigma){
   sigma.inv <- solve(sigma)
   sigma.det <- det(sigma)
 
-  #Evalue pdf
+  #Evaluate pdf
   sq.root.terms <- (2*pi)^(-k/2)*sigma.det^(-k/2)
   exponent.term <- -0.5*t(x-mu)%*%solve(sigma)%*%(x-mu)
 
