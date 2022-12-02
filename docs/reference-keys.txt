@@ -97,6 +97,7 @@ module-structure
 assessment
 getting-help
 recommended-books-and-videos
+common-distributions
 fundamentals
 statistical-inference
 frequentist-theory
@@ -137,11 +138,5 @@ imputing-latent-variables
 gaussian-processes
 covariance-functions
 gaussian-process-regression
-def:unlabeled-div-2
-exm:unlabeled-div-3
-exm:unlabeled-div-4
-def:unlabeled-div-5
-thm:unlabeled-div-7
 lab-data-augmenatation
 lab-gaussian-processes
-common-distributions
