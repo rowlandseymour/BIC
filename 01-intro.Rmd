@@ -1,26 +1,26 @@
 
-# Fundamentals of Bayesian inference {#fundamentals}
+# Fundamentals of Bayesian Inference {#fundamentals}
 
-Bayesian inference is built on a different way of thinking about probability that methods you have learnt so far. In the past 30 years or so, Bayesian inference has become much more popular. This is partly due to increased computational power becoming available. In this first chapter, we are going to set out:
+Bayesian inference is built on a different way of thinking about parameters of probability distributions using methods you have learnt so far. In the past 30 years or so, Bayesian inference has become much more popular. This is partly due to increased computational power becoming available. In this first chapter, we are going to set out to answer:
 
 1. What are the fundamental principles of Bayesian inference? 
 
 2. What makes Bayesian inference different from other methods?
 
 ## Statistical Inference
- Three purpose of statistical inference is to "draw conclusions, from numerical data, about quantities that are not observed" (Bayesian Data Analysis, chapter 1). Generally speaking there are two kinds of inference: inference for quantities that are not possible to observe, and inference for quantities that unobserved or hasn't happened yet. We can apply our inference methods to a huge range of applications, from the effectiveness of drugs in a clinical trial, to estimating the number of victims of violence against women and girls. 
+The purpose of statistical inference is to "draw conclusions, from numerical data, about quantities that are not observed" (Bayesian Data Analysis, chapter 1). Generally speaking, there are two kinds of inference: inference for quantities that are not possible to observe and inference for quantities that are unobserved or hasn't happened yet. We can apply our inference methods to a huge range of applications, from the effectiveness of drugs in a clinical trial, to estimating the number of victims of violence against women and girls. 
  
-In this module, we are going to look at a different way of carrying out statistical inference, one that doesn't depend on long running event. Instead, we're going to introduce the definition of probability that allows us to Interpret the subjective chance that an event occurs.
+In this module, we are going to look at a different way of carrying out statistical inference, one that doesn't depend on long run events. Instead, we're going to introduce the definition of probability that allows us to interpret the subjective chance that an event occurs.
 
 ## Frequentist Theory
-Frequentist theory is built on the theory on long run events. Probabilities must be interpretable as frequencies over multiple repetitions of the experiment that is being analysed, and are calculated from the sampling distributions of measured quantities. 
+Frequentist probability is built upon the theory on long run events. Probabilities must be interpretable as frequencies over multiple repetitions of the experiment that is being analysed, and are calculated from the sampling distributions of measured quantities. 
 
 ::: {.definition} 
 The long run relative frequency of an event is the **probability** of that event. 
 :::
 
 ::: {.example}
-For example, if a frequentist wanted to assign a probability to rolling a 6 on a particular dice, then they would roll the dice a large number of times and compute the relative frequency. 
+If a frequentist wanted to assign a probability to rolling a 6 on a particular dice, then they would roll the dice a large number of times and compute the relative frequency. 
 :::
 
 ::: {.definition}
@@ -32,14 +32,14 @@ These two definitions form the basis of frequentist statistics and give rise to 
 ::: {.definition} 
 Let $X$ be a random sample from a probability distribution $\theta$. A **95% confidence interval** for $\theta$ is an interval $(u(X), v(X))$ such that 
 $$
-\pi(u(X) < \theta < v(X)) = 0.95
+\mathbb{P}(u(X) < \theta < v(X)) = 0.95
 $$
 :::
 
 This means that if you had an infinite number of samples for $X$ and the corresponding infinite number of confidence intervals, then 95% of them would contain the true value of $\theta$. It does *not* mean that there is a 0.95 probability a particular interval contains the true value of $\theta$. 
 
 ::: {.example}
-Suppose that a ornithologist believes that for the sex of an offspring of a certain species of bird is equally likely to be male or female and is independent of the sex of any siblings. They selects a random sample of 100 broods with 4 offspring and counts the number of male offspring in each. The results are summarised in the following table.
+Suppose that a ornithologist believes that the sex of an offspring of a certain species of bird is equally likely to be male or female and is independent of the sex of any siblings. They selects a random sample of 100 broods with 4 offspring and counts the number of male offspring in each. The results are summarised in the following table.
 
 ```{r}
 offspring.df <- data.frame("males" = c(0, 1, 2, 3, 4), 
@@ -57,12 +57,13 @@ observed <- offspring.df$observed
 ## Chi sq = sum of (expected - observed)^2/expected
 chi.sq <- sum((expected - observed)^2/expected)
 ```
-Under H~0~, over repeated sampling the distribution of the $\chi^2$ statistic follows a $\chi^2$ distribution on 4 degrees of freedom. Therefore, the probability of seeing something as extreme as this (the p-value) is 
+Under H~0~, over repeated sampling the distribution of the $\chi^2$ statistic follows a $\chi^2$ distribution with 4 degrees of freedom. Therefore, the probability of seeing something as extreme as this (the p-value) is 
 ```{r}
 1 - pchisq(chi.sq, 4)
 ```
+In other words, there is no significant evidence in the data to reject H~0~ at the 10\% level.
 
-Consider now a second scientist who is more open-minded than their col- league. They hypothesise only that $X \sim Bin(4, p)$ where $p$ is unknown. To test their H~0~ they first calculates the maximum likelihood estimator of $p$, $\hat{p}$ = 0.5, computes the values of $E[X]$ using this estimate and calculates $\chi^2$ to be 6.67 like their colleague.
+Consider now a second scientist who is more open-minded than their colleague. They hypothesise only that $X \sim Bin(4, p)$ where $p$ is unknown. To test their H~0~ they first calculates the maximum likelihood estimator of $p$, $\hat{p}$ = 0.5, computes the values of $E[X]$ using this estimate and calculates $\chi^2$ to be 6.67 like their colleague.
 
 However, because they are estimating $p$ as part of the process of computing $\chi^2$ over repeated sampling the distribution of their $\chi^2$ is (approximately) a $\chi^2$ distribution on 3 degrees of freedom. Their p-value is therefore 
 ```{r}
@@ -72,8 +73,8 @@ However, because they are estimating $p$ as part of the process of computing $\c
 We now have the somewhat confusing scenario whereby the second scientist finds that the evidence against their null hypothesis is stronger than that found by the first scientist against their null hypothesis, despite the second hypothesis being weaker (i.e. a logical consequence of the first). Thus, whatever a p-value represents, it must never be interpreted as the probability that the null hypothesis is true conditional on the observed data. In this example it simply tells us how extreme the observed values of $\chi^2$ are when compared to their distribution over many repetitions of the experiment.
 :::
 
-## Bayesian probability
-The Bayesian paradigm is built about a different definition of probability. We are simply building our view of statistics upon a different set of axioms. 
+## Bayesian Probability
+The Bayesian paradigm is built around a different definition of probability. We are simply building our view of statistics upon a different set of axioms. 
 
 ::: {.definition}
 The subjective belief of an event is the **probability** of that event. 
@@ -82,7 +83,7 @@ The subjective belief of an event is the **probability** of that event.
 This definition means we can assign probabilities to events that frequentists do not recognise as valid. 
 
 ::: {.example} 
-For example, 
+Consider the following:
 
 1. The probability that I vote for the labour party at the next election
 
@@ -105,7 +106,7 @@ when $\pi(B) > 0$.
 :::
 
 ::: {.definition}
-Two events $A$ and $B$ are **independent** given event $C$ if
+Two events $A$ and $B$ are **independent** given event $C$ if and only if
 $$ \pi(A \cap B \mid C) = \pi(A \mid C)\pi(B \mid C).$$
 :::
 
@@ -139,9 +140,8 @@ Suppose $(Y_1, \ldots, Y_N)$ are conditionally iid given some parameter $\theta$
 \end{split}
 \end{equation}
 :::
-
-
 This tells us that if we have some conditionally iid random variables and a subjective prior belief about some parameter $\theta$, then we have exchangeability. This is nice to have, but the implication in the other direction is much more interesting and powerful.
+
 
 ::: {.theorem name="de Finetti"}
 If a sequence of random variables $(Y_1, \ldots, Y_N)$ from a sample space $\mathcal{Y}$ is exchangeable, then its joint distribution can be written as
@@ -155,7 +155,7 @@ This is a kind of existence theorem for Bayesian inference. It says that if we h
 
 
 ## Bayes' Theorem
-Now we have an understanding of conditional probability and exchange ability, we can put these two together to understand Bayes' Theorem. Bayes' theorem is concerned with the distribution of the parameter $\theta$ given some observed data $y$. It tries to answer the question: what does the data tell us about the model parameters?
+Now we have an understanding of conditional probability and exchangeability, we can put these two together to understand Bayes' Theorem. Bayes' theorem is concerned with the distribution of the parameter $\theta$ given some observed data $y$. It tries to answer the question: what does the data tell us about the model parameters?
 
 ::: {.theorem name="Bayes"}
 The distribution of the model parameter $\theta$ given the data $y$ is
@@ -191,7 +191,7 @@ $$
 \pi(\theta \mid y) \propto \pi(y\mid\theta)\pi(\theta).
 $$
 
-> **Some history of Thomas Bayes**. Thomas Bayes was an English theologean born in 1702. His "Essay towards solving a problem in the doctrine of chances" was published posthumously. It intorduces theroems on conditional probability and the idea of prior probability. He discusses an experiment where the data can be modelled using the Binomial distirbution and he guesses (places a prior distirbution) on the probability of success. 
+> **Some history of Thomas Bayes**. Thomas Bayes was an English theologean born in 1702. His "Essay towards solving a problem in the doctrine of chances" was published posthumously. It introduces theroems on conditional probability and the idea of prior probability. He discusses an experiment where the data can be modelled using the Binomial distribution and he guesses (places a prior distribution) on the probability of success. 
 
 > Richard Price sent Bayes' work to the Royal Society two years after Bayes had died. In his commentary on Bayes' work, he suggested that the Bayesian way of thinking proves the existance of God, stating: The purpose I mean is, to show what reason we have for believing that there are in the constitution of things fixt laws according to which things happen, and that, therefore, the frame of the world must be the effect of the wisdom and power of an intelligent cause; and thus to confirm the argument taken from final causes for the existence of the Deity. 
 
@@ -205,7 +205,7 @@ Suppose we have a model $y \sim N(\theta, 1)$ and we want to estimate $\theta$. 
 $$
 \pi(\theta \mid y) \propto \pi(y \mid \theta) \pi(\theta).
 $$
-We know the form of $\pi(y \mid \theta) = \frac{1}{\sqrt{2\pi}}e^{\frac{1}{2}(y - \theta^2)}$. But how should we describe our prior beliefs about $\theta$? Here are three options:
+We know the form of $\pi(y \mid \theta) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}(y - \theta)^2}$, but how should we describe our prior beliefs about $\theta$? Here are three options:
 
 1. We can be very vague about $\theta$ -- we genuinely don't know about its value. We assign a uniform prior distribution to $\theta$ that takes values between -1,000 and +1,000, i.e. $\theta \sim u[-1000, 1000]$. Up to proportionality $\pi(\theta) \propto 1$ for $\theta \in [-1000, 1000]$.
 
@@ -261,7 +261,7 @@ plot(x, posterior3, type = 'l', yaxt = "n", xlab = "", ylab = "")
 
 2. We get a lopsided posterior distribution, that is proportional to the likelihood function for positive values of $\theta$, but is 0 for negative values of $\theta$. 
 
-3.We get some sort of average of the likelihood function and the prior distribution. Had we collected more data, the posterior distribution would have been weighted toward the information from the likelihood function more. 
+3. We get some sort of average of the likelihood function and the prior distribution. Had we collected more data, the posterior distribution would have been weighted toward the information from the likelihood function more. 
 :::
 
 
@@ -269,9 +269,10 @@ plot(x, posterior3, type = 'l', yaxt = "n", xlab = "", ylab = "")
 
 ::: {.exercise}
 Consider a standard pack of 52 playing cards. You pick a card at random, what is the probability you pick:
-    1. A Queen, given you have picked a picture card (King, Queen, Jack)?
-    2. The five of clubs, given you have picked a black card? 
-    3. A black card, given you have not picked the five of clubs?
+
+1. A Queen, given you have picked a picture card (King, Queen, Jack)?
+2. The five of clubs, given you have picked a black card? 
+3. A black card, given you have not picked the five of clubs?
 :::
 
 ::: {.solution}
@@ -296,13 +297,15 @@ P(\hbox{Black} \mid \hbox{Not 5 Clubs}) & = \frac{P(\hbox{Black} \mid \hbox{Not 
 &= \frac{25}{51}.
 \end{align*}
 
+:::
 
 ::: {.exercise}
 Decide if each of the following events can be assigned probabilities by frequentists: 
-    1. The Bermuda triangle exists.
-    2. Getting a 6 when rolling a dice. 
-    3. Someone will test positive for Covid-19 after contracting the disease. 
-    4. The sun will rise tomorrow. 
+
+1. The Bermuda triangle exists.
+2. Getting a 6 when rolling a dice. 
+3. Someone will test positive for Covid-19 after contracting the disease. 
+4. The sun will rise tomorrow. 
 :::
 
 ::: {.solution}
@@ -315,8 +318,9 @@ Decide if each of the following events can be assigned probabilities by frequent
     
 ::: {.exercise}
 An urn contains three coins. Two of the coins are fair, but one of the coins has heads on both sides. 
-    1. You pick a coin out of the urn without looking and flip it. What's the probability you get heads?
-    2. You pick a coin out of the urn without looking and flip it and get heads. What's the probability it's the two-headed coin?
+
+1. You pick a coin out of the urn without looking and flip it. What's the probability you get heads?
+2. You pick a coin out of the urn without looking and flip it and get heads. What's the probability it's the two-headed coin?
 :::
 
 ::: {.solution}
@@ -341,7 +345,7 @@ P(\hbox{Coin 1}\mid \hbox{Heads}) &= \frac{P(\hbox{Heads} \mid \hbox{Coin 1})P(\
 ::: {.exercise}  
 You see a sponsored post online with the word _bitcoin_ in. You want to work out the probability the post is spam.   
 
-1. Using the law of total probability, show the probability the spac is spam, given it contains the word probability is
+1. Using the law of total probability, show the probability the post is spam, given it contains the word probability is
   $$
   \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam})}{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam}) + \pi(\textrm{bitcoin} \mid \textrm{not spam})\pi(\textrm{not spam})}
   $$
