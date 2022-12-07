@@ -19,19 +19,19 @@ cover-image: uob_logo.png
 knitr::include_graphics('uob_logo.png', dpi = NA)
 ```
 
-## Module aims
+## Module Aims
 
 The module aims to give you an overview of the Bayesian paradigm. By the end of the course, you should
 
-1.  Be able to conceptualise a Bayesian approach for statistics
+1.  Be able to conceptualise the Bayesian approach for statistics
 
-2.  Be able to derive posterior and posterior predictive distributions for uni- and multivariate models
+2.  Be able to derive posterior and posterior predictive distributions for univariate and multivariate models
 
 3.  Identify suitable prior distributions and understand how the choice of prior distribution may affect the final result
 
-4.  Understand the principles of Markov Chain Monte Carlo and be able to construct an MCMC algorithm
+4.  Understand the principles of Markov chain Monte Carlo and be able to construct MCMC algorithms
 
-## Module structure
+## Module Structure
 
 The module is split between theory and programming. Each week (excluding week 6) will have two lectures and two computer labs.
 
@@ -39,11 +39,11 @@ The module is split between theory and programming. Each week (excluding week 6)
 
 The module is 55% coursework and 45% exam. The exam will last 1h 30m and take place during the summer exam period. More details about the coursework will be announced during the semester.
 
-## Getting help
+## Getting Help
 
 There are lots of ways of getting help throughout the module. You can visit my office hour (Watson 317) on ..... or email me at [r.g.seymour\@bham.ac.uk](mailto:r.g.seymour@bham.ac.uk){.email}. Each week, there will also be a problem class.
 
-## Recommended books and videos
+## Recommended Books and Videos
 
 No books are required for this course and the whole material is contained in these notes. However, you may find it useful to use other resources in your studies. I recommend the following:
 
@@ -51,38 +51,46 @@ No books are required for this course and the whole material is contained in the
 
 2.  [Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin](http://www.stat.columbia.edu/~gelman/book/). This is a thorough book explaining everything you'd need to know to carry out Bayesian data analysis. It's a fairly look and in-depth book, but the authors are authoritative and give good advice throughout. Example code on the website is in R, Python and Stan.
 
-3.  [Statistical Rethinking - Richard McElrath](https://xcelab.net/rm/statistical-rethinking/). This book provides a friendly intuitive understanding of Bayesian inference and computation. Aimed at social and natural scientists, it has less theory that the other two books but is perhaps more approachable. A set of video lectures for this book can be found [on YouTube](https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN).
+3.  [Statistical Rethinking - Richard McElrath](https://xcelab.net/rm/statistical-rethinking/). This book provides a friendly intuitive understanding of Bayesian inference and computation. Aimed at social and natural scientists, it has less theory that the other two books but is perhaps more approachable. A set of video lectures for this book can be found on [YouTube](https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN).
 
 
 ## Common Distributions
-For many Bayesian inference problems, it is useful to be able to identify probability density functions up to proportionality. Some common density functions are given below.
+For many Bayesian inference problems, it is useful to be able to identify probability density functions (for continuous random variables) and probability mass functions (for discrete random variables) up to proportionality. Some common density/mass functions are given below.
 
-**Normal distribution**.
+**Normal distribution**
 $$
-\pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\} \qquad x, \mu, \sigma \in\mathbb{R}
+\pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\} \qquad x \in\mathbb{R},
 $$
+where $\mu \in \mathbb{R}$ and $\sigma > 0$.
 
-**Beta distribution**.
+**Beta distribution**
 $$
-\pi(x\mid \alpha, \beta) = \frac{1}{\hbox{Beta}(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad \alpha, \beta > 0, \,x \in [0, 1],
+\pi(x\mid \alpha, \beta) = \frac{1}{B(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad  x \in [0, 1],
 $$
-**Gamma distribution**.
-$$
-\pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x}
-$$
+where $\alpha, \beta > 0$ and $B(\alpha, \beta)$ is the [beta function](https://en.wikipedia.org/wiki/Beta_function).
 
-**Exponential distribution**.
+**Gamma distribution**
 $$
-f(x \mid \lambda) = \lambda e^{-\lambda x} \qquad \lambda, x > 0
+\pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x} \qquad  x > 0,
 $$
+where $\alpha, \beta > 0$ and $\Gamma(\alpha)$ is the [gamma function](https://en.wikipedia.org/wiki/Gamma_function).
 
-**Poisson distribution**.
+**Exponential distribution**
 $$
-\pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{1, 2, \ldots\}, \, \lambda > 0
+f(x \mid \lambda) = \lambda e^{-\lambda x} \qquad x > 0,
 $$
-**Binomial distribution**.
+where $\lambda > 0$.
+
+**Poisson distribution**
 $$
-\pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}, p \in [0, 1]
+\pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{1, 2, \ldots\},
 $$
+where $\lambda > 0$.
+
+**Binomial distribution**
+$$
+\pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}
+$$
+where $p \in [0, 1]$.
 
 
