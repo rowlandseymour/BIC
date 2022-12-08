@@ -115,7 +115,7 @@ round(qgamma(c(0.025, 0.975), 10, 95.01), 3)
 The Normal distribution is incredibly useful for modelling a wide range of natural phenomena and in its own right. We're now going to derive posterior distributions for the normal distribution. As we're going to see, the concepts behind deriving posterior distributions are the same as in the previous two examples. However, the algebraic accounting is a lot more taxing. 
 
 ::: {.example #normal}
-**Known variance**. Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is 
+Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is 
 ```{r}
 y <- c(0.34, 0.47, 0.58, 0.27, 0.74, 0.44, 0.46, 0.65, 0.36, 0.55, 0.58, 0.55, 0.53, 0.56, 0.54, 0.61, 0.43, 0.52, 0.45, 0.49, 0.32, 0.33, 0.47, 0.58, 0.34, 0.60, 0.59, 0.43, 0.57, 0.34)
 hist(y, main = "", xlab = "Reaction time (ms)")
@@ -206,6 +206,42 @@ One issue in this example is the choice of the prior distribution for $\mu$. Why
 If the prior distribution $\pi(\theta)$ has the same distributional family as the posterior distribution $\pi(\theta \mid \boldsymbol{y})$, then the prior distribution is a **conjugate prior distribution**. 
 :::
 
+## Heirachical Models
+In many modelling problems, there will be multiple parameters each related to one another. These parameters may be directly related to the model, or they may be parameters we introduce through prior distributions. We can form a hierarchy of these parameters, from closest to further from the data, to construct our model.
+
+::: {.example}
+Let's consider \@{exm:exponential} again. We had data $\boldsymbol{y}$ from an Exponential distribution with rate $\lambda$. We placed an Exponential prior distribution with rate $\gamma$ on $\lambda$ and the posterior distribution was $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)$. 
+
+In that example, we discussed how the choice of $\gamma$ can affect the posterior distribution and conclusions presented to the company. One option is to place a prior distribution on $\gamma$ -- a hyperprior distribution. The heirachy formed is
+\begin{align*}
+\boldsymbol{y} \mid \lambda &\sim \hbox{Exp}(\lambda) & \textrm{(likelihood)} \\
+\lambda \mid \gamma &\sim \hbox{Exp}(\gamma) & \textrm{(prior distribution)} \\
+\gamma \mid \nu &\sim \hbox{Exp}(\nu) & \textrm{(hyperprior distribution)}  \\
+\end{align*}.
+
+By Bayes' theorem, we can write the posterior distribution as
+\begin{align*}
+\pi(\lambda, \gamma \mid \boldsymbol{y}) &\propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda \mid \gamma)\pi(\gamma)
+&\propto \lambda^{11}e^{-\lambda(95 + \gamma)}\nu e^{-\nu\gamma}.
+\end{align*}
+
+To derive the full conditional distributions, we only consider the terms that depends on the parameters we are interested in. The full conditional distribution for $\lambda$ is
+$$
+\pi(\lambda \mid \boldsymbol{y}, \,\gamma) \propto \lambda^{11}e^{-\lambda(95 + \gamma)}.
+$$
+This is unchanged and shows that $\lambda \mid \boldsymbol{y}, \gamma \sim \textrm{Gamma}(10, 95 + \gamma)$. The full conditional distribution for $\gamma$ is
+$$
+\pi(\gamma \mid \boldsymbol{y}, \,\lambda) \propto e^{-\nu\gamma}.
+$$
+Therefore the full conditional distribution of $\gamma$ is $\gamma \mid \boldsymbol{y}, \,\lambda \sim \hbox{Exp}(\lambda + \nu)$.
+In the next chapter, we will look at how to sample from these distributions. 
+:::
+
+Another example is when dealing with a distribution with multiple parameters. In the previous section, we derived the posterior distribution for the mean of a normal distribution when the variance is known. We'll now repeat this exercise, but deriving the posterior distribution for both the mean and variance. 
+
+:::{.example}
+Consider the reaction time data $\boldsymbol{y}$ from Example \@{exm:normal}. Again, we assume the $y_i \sim N(\mu, \sigma^2)$, excpet that this time, we will place a prior distribution on both $\mu$ and $\sigma^2$.
+:::
 
 ## Predicition
 In many cases, although we are interested in estimating the model parameters, what we're really interested in is predicting new values, whose distribution is determined by the model parameters. 
