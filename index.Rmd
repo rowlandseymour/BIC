@@ -49,7 +49,7 @@ No books are required for this course and the whole material is contained in the
 
 1.  [A First Course in Bayesian Statistical Methods - Peter D. Hoff](https://link.springer.com/book/10.1007/978-0-387-92407-6). This is a short book that covers the basics of Bayesian inference and computation. To the point and well written, it's a useful place to look topics up.
 
-2.  [Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin](http://www.stat.columbia.edu/~gelman/book/). This is a thorough book explaining everything you'd need to know to carry out Bayesian data analysis. It's a fairly look and in-depth book, but the authors are authoritative and give good advice throughout. Example code on the website is in R, Python and Stan.
+2.  [Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin](http://www.stat.columbia.edu/~gelman/book/). This is a thorough book explaining everything you'd need to know to carry out Bayesian data analysis. It's a fairly long and in-depth book, but the authors are authoritative and give good advice throughout. Example code on the website is in R, Python and Stan.
 
 3.  [Statistical Rethinking - Richard McElrath](https://xcelab.net/rm/statistical-rethinking/). This book provides a friendly intuitive understanding of Bayesian inference and computation. Aimed at social and natural scientists, it has less theory that the other two books but is perhaps more approachable. A set of video lectures for this book can be found on [YouTube](https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN).
 

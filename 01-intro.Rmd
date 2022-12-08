@@ -8,8 +8,11 @@ Bayesian inference is built on a different way of thinking about parameters of p
 2. What makes Bayesian inference different from other methods?
 
 ## Statistical Inference
-The purpose of statistical inference is to "draw conclusions, from numerical data, about quantities that are not observed" (Bayesian Data Analysis, chapter 1). Generally speaking, there are two kinds of inference: inference for quantities that are not possible to observe and inference for quantities that are unobserved or hasn't happened yet. We can apply our inference methods to a huge range of applications, from the effectiveness of drugs in a clinical trial, to estimating the number of victims of violence against women and girls. 
- 
+The purpose of statistical inference is to "draw conclusions, from numerical data, about quantities that are not observed" (Bayesian Data Analysis, chapter 1). Generally speaking, there are two kinds of inference: 
+
+1. Inference for quantities that are unobserved or hasn't happened yet. Examples of this might be the size of a payout an insurance company has to make, or a patients outcome in a clinical trial had they been received a certain treatment. 
+2.  Inference for quantities that are not possible to observe. This is usual because they are part of modelling process, like parameters in a linear model. 
+
 In this module, we are going to look at a different way of carrying out statistical inference, one that doesn't depend on long run events. Instead, we're going to introduce the definition of probability that allows us to interpret the subjective chance that an event occurs.
 
 ## Frequentist Theory
@@ -30,13 +33,13 @@ The **sampling distribution** of a statistic is the distribution based on a long
 These two definitions form the basis of frequentist statistics and give rise to higher-level objects. However, due to the long run condition, these objects are often misunderstood. 
 
 ::: {.definition} 
-Let $X$ be a random sample from a probability distribution $\theta$. A **95% confidence interval** for $\theta$ is an interval $(u(X), v(X))$ such that 
+Let $X$ be a random sample from a probability distribution $\theta$. A **100(1-\alpha)% confidence interval** for $\theta$ is an interval $(u(X), v(X))$ such that 
 $$
-\mathbb{P}(u(X) < \theta < v(X)) = 0.95
+\mathbb{P}(u(X) < \theta < v(X)) = 1-\alpha
 $$
 :::
 
-This means that if you had an infinite number of samples for $X$ and the corresponding infinite number of confidence intervals, then 95% of them would contain the true value of $\theta$. It does *not* mean that there is a 0.95 probability a particular interval contains the true value of $\theta$. 
+This means that if you had an infinite number of samples for $X$ and the corresponding infinite number of confidence intervals, then $100(1-\alpha)$% of them would contain the true value of $\theta$. It does *not* mean that there is a $100(1-\alpha)$ probability a particular interval contains the true value of $\theta$. 
 
 ::: {.example}
 Suppose that a ornithologist believes that the sex of an offspring of a certain species of bird is equally likely to be male or female and is independent of the sex of any siblings. They selects a random sample of 100 broods with 4 offspring and counts the number of male offspring in each. The results are summarised in the following table.
