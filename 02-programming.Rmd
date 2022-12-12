@@ -41,6 +41,7 @@ density <- dnorm(x, mean = 100, sd = sqrt(100)) #compute density
 hist(y, freq = FALSE, xlab = "y", main = "")
 lines(x, density)
 ```
+
 The two match up well, showing the normal distribution is a suitable approximation here. 
 :::
 
@@ -71,7 +72,7 @@ for(i in 1:100){
 }
 
 #Plot all trajectories
-matplot(prices, type = 'l')
+matplot(market.index, type = 'l')
 
 #Get distribution of days 50 and 100
 hist()
@@ -252,11 +253,11 @@ R has many build in commands and you used these in Computer Lab I. An example is
 u <- runif(n = 10, min = -1, max = 1)
 u
 ```
-The functions has three **arguments**: _n_ the number of samples to be generated, _min_ the lower limit of the interval, _max_ the upper limit of the interval. In the code chunk 10 random numbers were generate from the interval [-1, 1]. In R, you don't need to label the arguments, so this will sample the same number of samples from the same interval 
+The functions has three **arguments**: _n_ the number of samples to be generated, _min_ the lower limit of the interval, _max_ the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval [-1, 1]. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
 ```
 u <- runif(10, -1, 1)
 ```
-Although it helps to label the arguments in many cases. 
+Although in most cases it helps to label the arguments for readability and avoiding undefined behaviour. Note that if you decide to omit the argument names in the function call, the arguments must appear exactly in the order defined by the function prototype (check the documentation ?function for specific cases).
 
 ### User defined functions
 In many cases, we will need to repeat the same piece of code over and over again, or we will need to run it again with different values. In this case, we can write our own function. In R, there are two ways to type your own function. The first is to write a full function definition. The basic template is 
@@ -359,8 +360,8 @@ for(i in 1:100){
   x <- rnorm(100, 1.001, 0.005)
   X[,i] <- 100*cumprod(x)
 }
-matplot(prices,type ='l')
-hist(prices[50,]);hist(prices[100,]);quantile(prices[50,], c(0.25, 0.5, 0.75));quantile(prices[100,], c(0.25, 0.5, 0.75))
+matplot(X,type ='l')
+hist(X[50,]);hist(X[100,]);quantile(X[50,], c(0.25, 0.5, 0.75));quantile(X[100,], c(0.25, 0.5, 0.75))
 ```
 :::
 
