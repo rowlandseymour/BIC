@@ -1,22 +1,22 @@
 # Bayesian Inference
 
-Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definitions, Chapter 2 is much more practical. We're going to be deriving posterior distributions and proving when it does and doesn't work. 
+Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definitions, Chapter 3 is much more practical. We're going to be deriving posterior distributions and proving when it does and doesn't work. 
 
 
-## The Binomial Distirbution
-The first example we're going to go through is with the binomial distribution. 
+## The Binomial Distribution
+The first example we're going to go through is with the Binomial distribution. 
 
 ::: {.example #binom}
-A social media company wants to determining how many of its users are bots. A software engineering collects a random sampler of 200 accounts and finds that eight are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability an account is a bot is $\theta$. By Bayes' theorem
+A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that eight are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability an account is a bot is $\theta$. By Bayes' theorem, we obtain the following,
 $$
 \pi(\theta \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y}\mid \theta) \pi(\theta).
 $$
 
-**Likelihood function** $\pi(\boldsymbol{y}\mid \theta)$. We observe a 200 trials each with a probability of success or failure. The binomial distribution seems the most suitable way of modelling this. Therefore
+**Likelihood function** $\pi(\boldsymbol{y}\mid \theta)$. We observe 200 trials each with the same probability of success (denoted by $\theta$) and probability of  failure (given by $1-\theta$). The Binomial distribution seems the most suitable way of modelling this. Therefore, the likelihood function is given by,
 $$
-\pi(\boldsymbol{y}\mid \theta) = \begin{pmatrix} 200 \\ 3 \end{pmatrix} \theta^3(1-\theta)^{197}
+\pi(\boldsymbol{y}\mid \theta) = \begin{pmatrix} 200 \\ 3 \end{pmatrix} \theta^3(1-\theta)^{197},
 $$
-We are going to assume the accounts are independent.
+assuming that any two accounts being a bot are independent of one another.
 
 **Prior distribution** $\pi(\theta)$. We now need to describe our prior beliefs about $\theta$. We have no reason to suggest $\theta$ takes any specific value, so we use a uniform prior distribution $\theta \sim U[0, 1]$, where $\pi(\theta) = 1$ for $\theta \in [0, 1]$. 
 
@@ -25,7 +25,7 @@ We are going to assume the accounts are independent.
 $$
 \pi(\theta \mid \boldsymbol{y}) \propto \theta^3(1-\theta)^{197}. 
 $$
-This functional dependence on p identifies the $\pi(\theta \mid \boldsymbol{y})$ as a Beta distribution. The PDF for the beta distribution with shape parameters $\alpha$ and $\beta$ is
+This functional dependence on $\theta$ identifies the $\pi(\theta \mid \boldsymbol{y})$ is a Beta distribution. The PDF for the beta distribution with shape parameters $\alpha$ and $\beta$ is
 $$
 \pi(x \mid \alpha, \beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}x^{\alpha - 1}(1-x)^{\beta - 1}. 
 $$
@@ -34,7 +34,7 @@ The posterior distribution is therefore $\theta \mid \boldsymbol{y} \sim \textrm
 
 ## Reporting Conclsuions from Bayesian Inference
 
-In the previous example, we derived the posterior distribution $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is $\frac{4}{198} = \frac{2}{99}$. That is to say given the data, we expect that for every 99 accounts , two to be bots. The posterior mode for $\theta$ is $\frac{3}{200}$ or 1.5%. 
+In the previous example, we derived the posterior distribution $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is $\frac{4}{198} = \frac{2}{99}$. That is to say given the data, we expect that for every 99 accounts, two to be bots. The posterior mode for $\theta$ is $\frac{3}{200}$ or 1.5%. 
 
 It is important to share the uncertainty about out beliefs. In a frequentist framework, this would be via a confidence interval. The Bayesian analogues is a credible interval. 
 
@@ -56,17 +56,17 @@ This says that we believe there is a 95% chance that the probability of an accou
 ::: {.example #exponential}
 An insurance company want to estimate the time until a claim is made on a specific policy. They describe the rate at which claims come in by $\lambda$. The company provides a sample of 10 months at which a claim was made $\boldsymbol{y} = \{14, 10,  6,  7, 13,  9, 12,  7,  9,  8\}$. By Bayes' theorem, the posterior distribution for $\lambda$ is
 $$
-\pi(\lambda \mid \boldsymbol{y}) \propto \pi(\lambda \mid \boldsymbol{y}) \pi(\lambda)
+\pi(\lambda \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid \lambda) \pi(\lambda).
 $$
 
-**Likelihood function** $\pi(\lambda \mid \boldsymbol{y})$. The exponential distribution is a good way of modelling lifetimes or the length of time until an event happens. Assuming all the claims are independent, the likelihood function is given by
+**Likelihood function** $\pi(\boldsymbol{y} \mid \lambda)$. The exponential distribution is a good way of modelling lifetimes or the length of time until an event happens. Assuming all the claims are independent of one another, the likelihood function is given by
 \begin{align*}
 \pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^{10} \lambda e^{-\lambda y_i} \\
 & = \lambda^{10}e^{-\lambda \sum_{i=1}^{10} y_i} \\
-& = \lambda^{10} e^{-95\lambda}
+& = \lambda^{10} e^{-95\lambda}.
 \end{align*}
 
-**Prior distribution** $\pi(\lambda)$. As we are modelling a rate parameter, we know it must be positive and continuous. We decide to use an exponential prior distribution for $\lambda$, but leave the choice of the rate parameter up to the insurance professionals at the insurance company. The prior distribution is given by $\pi(\lambda) \sim \textrm{Exp}(\gamma).$
+**Prior distribution** $\pi(\lambda)$. As we are modelling a rate parameter, we know it must be positive and continuous. We decide to use an exponential prior distribution for $\lambda$, but leave the choice of the rate parameter up to the insurance professionals at the insurance company. The prior distribution is given by $\lambda \sim \textrm{Exp}(\gamma).$
 
 **Posterior distribution** $\pi(\lambda \mid \boldsymbol{y})$. We now have all the ingredients to derive the posterior distribution. It is given by
 \begin{align*}
@@ -130,10 +130,10 @@ $$
 $$
 y_i \sim N(\mu, \sigma^2)
 $$
-The likelihood function is therefore given by the product of the 30 normal density functions as follows
+The likelihood function is therefore given by the product of the 30 normal density functions as follows,
 \begin{align*}
-\pi(\boldsymbol{y} \mid \mu, \theta^2) &= \prod_{i=1}^{30} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{(y_i - \mu)^2}{\sigma^2}\right\} \\
-&= (2\pi\sigma^2)^{-\frac{n}{2}}\exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}\right\} 
+\pi(\boldsymbol{y} \mid \mu, \theta^2) &= \prod_{i=1}^{30} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{(y_i - \mu)^2}{2\sigma^2}\right\} \\
+&= (2\pi\sigma^2)^{-\frac{30}{2}}\exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}.
 \end{align*}
 
 **Prior distribution** We suppose we have no prior beliefs about the values that $\mu$ can take. We assign a normal prior distribution to $\mu \sim N(\mu_0, \sigma_0^2)$ despite it being a time. We will set $\mu = 0$ and $\sigma_0^2 = 1000$ to signify our vague prior beliefs, but, for ease, we will use the symbolic values during the derivation of the posterior distribution. We have 
@@ -144,8 +144,8 @@ $$
 
 **Posterior distribution**. To derive the posterior distribution, up to proportionality, we multiply the prior distribution by the likelihood function. As the fractions out the front of both terms do not depend on $\mu$, we can ignore these. 
 \begin{align*}
-\pi(\mu \mid \boldsymbol{y}, \sigma^2) &\propto\exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}\right\}  \exp\left\{\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
-& = \exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}-\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) &\propto\exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}  \exp\left\{\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
+& = \exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{2\sigma^2}-\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
 & = \exp\left\{-\frac{\sum_{i=1}^{30}y_i^2}{2\sigma^2} + \frac{\mu\sum_{i=1}^{30}y_i}{\sigma^2} - \frac{30\mu^2}{2\sigma^2} - \frac{\mu^2}{2\sigma_0^2} + \frac{\mu\mu_0}{\sigma_0^2} - \frac{\mu_0^2}{2\sigma_0^2}\right\}.
 \end{align*}
 
@@ -194,6 +194,7 @@ posterior <- dnorm(mu, mean = mu1, sd = sqrt(sigma1.sq))
 plot(mu, posterior, type ='l')
 
 ```
+
 The 95% credible interval for the population's mean reaction time is
 ```{r}
 qnorm(c(0.025, 0.975), mu1, sqrt(sigma1.sq))
@@ -210,7 +211,7 @@ If the prior distribution $\pi(\theta)$ has the same distributional family as th
 In many modelling problems, there will be multiple parameters each related to one another. These parameters may be directly related to the model, or they may be parameters we introduce through prior distributions. We can form a hierarchy of these parameters, from closest to further from the data, to construct our model.
 
 ::: {.example}
-Let's consider \@{exm:exponential} again. We had data $\boldsymbol{y}$ from an Exponential distribution with rate $\lambda$. We placed an Exponential prior distribution with rate $\gamma$ on $\lambda$ and the posterior distribution was $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)$. 
+Let's consider \@{example #exponential} again. We had data $\boldsymbol{y}$ from an Exponential distribution with rate $\lambda$. We placed an Exponential prior distribution with rate $\gamma$ on $\lambda$ and the posterior distribution was $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)$. 
 
 In that example, we discussed how the choice of $\gamma$ can affect the posterior distribution and conclusions presented to the company. One option is to place a prior distribution on $\gamma$ -- a hyperprior distribution. The heirachy formed is
 \begin{align*}
