@@ -61,6 +61,6 @@ for(i in 2:1000){
 plot(X[1:9999] , X[2:10000], xlab = expression(X[i-1]), ylab = expression(X[i]), type = 'l')
 
 
-scatterplot3d::scatterplot3d(Y[1:9998], Y[2:9999], Y[3:10000], angle=154,
+scatterplot3d::scatterplot3d(X[1:9998], X[2:9999], X[3:10000], angle=154,
                              xlab = expression(X[i]), ylab = expression(X[i+1]), zlab = expression(X[i+2]))
 
