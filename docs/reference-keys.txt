@@ -143,4 +143,3 @@ covariance-functions
 gaussian-process-regression
 lab-data-augmenatation
 lab-gaussian-processes
-tab:unnamed-chunk-1
