@@ -2,8 +2,7 @@ def:unlabeled-div-1
 exm:unlabeled-div-2
 def:unlabeled-div-3
 def:unlabeled-div-4
-exm:unlabeled-div-5
-tab:unnamed-chunk-2
+def:unlabeled-div-5
 def:unlabeled-div-6
 exm:unlabeled-div-7
 def:unlabeled-div-8
