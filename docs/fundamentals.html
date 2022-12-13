@@ -236,7 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">1.1</span> Statistical Inference<a href="fundamentals.html#statistical-inference" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The purpose of statistical inference is to “draw conclusions, from numerical data, about quantities that are not observed” (Bayesian Data Analysis, chapter 1). Generally speaking, there are two kinds of inference:</p>
 <ol style="list-style-type: decimal">
-<li>Inference for quantities that are unobserved or hasn’t happened yet. Examples of this might be the size of a payout an insurance company has to make, or a patients outcome in a clinical trial had they been received a certain treatment.</li>
+<li>Inference for quantities that are unobserved or haven’t happened yet. Examples of this might be the size of a payout an insurance company has to make, or a patients outcome in a clinical trial had they been received a certain treatment.</li>
 <li>Inference for quantities that are not possible to observe. This is usual because they are part of modelling process, like parameters in a linear model.</li>
 </ol>
 <p>In this module, we are going to look at a different way of carrying out statistical inference, one that doesn’t depend on long run events. Instead, we’re going to introduce the definition of probability that allows us to interpret the subjective chance that an event occurs.</p>
@@ -253,79 +253,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="definition">
 <p><span id="def:unlabeled-div-3" class="definition"><strong>Definition 1.2  </strong></span>The <strong>sampling distribution</strong> of a statistic is the distribution based on a long run of samples of a fixed size from the population.</p>
 </div>
-<p>These two definitions form the basis of frequentist statistics and give rise to higher-level objects. However, due to the long run condition, these objects are often misunderstood.</p>
+<p>The sampling distribution is an important concept in frequentist theory as it describes the randomness in the process. From a frequentist standpoint, we have a model containing some parameter <span class="math inline">\(\theta\)</span> and some data <span class="math inline">\(\boldsymbol{y}\)</span>. All the evidence in the data <span class="math inline">\(\boldsymbol{y}\)</span> about <span class="math inline">\(\theta\)</span> is contained in the likelihood function <span class="math inline">\(\pi(\boldsymbol{y} \mid \theta)\)</span>. The parameter <span class="math inline">\(\theta\)</span> is fixed and the likelihood function describes the probability of observing the data <span class="math inline">\(\boldsymbol{y}\)</span> given the parameter <span class="math inline">\(\theta\)</span>.</p>
+<p>The most common way to estimate the value of <span class="math inline">\(\theta\)</span> is using maximum likelihood estimation. Although other methods do exist (e.g. method of moments, or generalised maximum likelihood estimation).</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-4" class="definition"><strong>Definition 1.3  </strong></span>Let <span class="math inline">\(X\)</span> be a random sample from a probability distribution <span class="math inline">\(\theta\)</span>. A <strong>100(1-)% confidence interval</strong> for <span class="math inline">\(\theta\)</span> is an interval <span class="math inline">\((u(X), v(X))\)</span> such that
+<p><span id="def:unlabeled-div-4" class="definition"><strong>Definition 1.3  </strong></span>The maximum likelihood estimate of <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\hat{\theta}\)</span>, is the value such that <span class="math inline">\(\hat{\theta} = \max_{\theta} \pi(\theta \mid \boldsymbol{y})\)</span>.</p>
+</div>
+<p>Uncertainty around the maximum likelihood estimate is based on the theory of long running events that underpin frequentist theory.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-5" class="definition"><strong>Definition 1.4  </strong></span>Let <span class="math inline">\(X\)</span> be a random sample from a probability distribution <span class="math inline">\(\theta\)</span>. A <strong>100(1-)% confidence interval</strong> for <span class="math inline">\(\theta\)</span> is an interval <span class="math inline">\((u(Y), v(Y))\)</span> such that
 <span class="math display">\[
-\mathbb{P}(u(X) &lt; \theta &lt; v(X)) = 1-\alpha
+\mathbb{P}(u(Y) &lt; \theta &lt; v(Y)) = 1-\alpha
 \]</span></p>
 </div>
-<p>This means that if you had an infinite number of samples for <span class="math inline">\(X\)</span> and the corresponding infinite number of confidence intervals, then <span class="math inline">\(100(1-\alpha)\)</span>% of them would contain the true value of <span class="math inline">\(\theta\)</span>. It does <em>not</em> mean that there is a <span class="math inline">\(100(1-\alpha)\)</span> probability a particular interval contains the true value of <span class="math inline">\(\theta\)</span>.</p>
-<div class="example">
-<p><span id="exm:unlabeled-div-5" class="example"><strong>Example 1.2  </strong></span>Suppose that a ornithologist believes that the sex of an offspring of a certain species of bird is equally likely to be male or female and is independent of the sex of any siblings. They selects a random sample of 100 broods with 4 offspring and counts the number of male offspring in each. The results are summarised in the following table.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="fundamentals.html#cb1-1" aria-hidden="true" tabindex="-1"></a>offspring.df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;males&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), </span>
-<span id="cb1-2"><a href="fundamentals.html#cb1-2" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;observed&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">20</span>, <span class="dv">5</span>))</span>
-<span id="cb1-3"><a href="fundamentals.html#cb1-3" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb1-4"><a href="fundamentals.html#cb1-4" aria-hidden="true" tabindex="-1"></a>  offspring.df, <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1-5"><a href="fundamentals.html#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&#39;The number of males in each of the broods.&#39;</span></span>
-<span id="cb1-6"><a href="fundamentals.html#cb1-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<table>
-<caption><span id="tab:unnamed-chunk-2">Table 1.1: </span>The number of males in each of the broods.</caption>
-<thead>
-<tr class="header">
-<th align="right">males</th>
-<th align="right">observed</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">20</td>
-</tr>
-<tr class="odd">
-<td align="right">2</td>
-<td align="right">50</td>
-</tr>
-<tr class="even">
-<td align="right">3</td>
-<td align="right">20</td>
-</tr>
-<tr class="odd">
-<td align="right">4</td>
-<td align="right">5</td>
-</tr>
-</tbody>
-</table>
-<p>If <span class="math inline">\(X\)</span> denotes the number of male offspring then the scientist’s null hypothesis H<sub>0</sub>, is that <span class="math inline">\(X \sim Bin(4, 1/2)\)</span>. This can be tested by calculating the so called <span class="math inline">\(\chi^2\)</span> statistic - which measures how well the observations conform to the supposed distribution. This is computed by</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="fundamentals.html#cb2-1" aria-hidden="true" tabindex="-1"></a>expected <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">dbinom</span>(offspring.df<span class="sc">$</span>males, <span class="dv">4</span>, <span class="fl">0.5</span>)</span>
-<span id="cb2-2"><a href="fundamentals.html#cb2-2" aria-hidden="true" tabindex="-1"></a>observed <span class="ot">&lt;-</span> offspring.df<span class="sc">$</span>observed</span>
-<span id="cb2-3"><a href="fundamentals.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="fundamentals.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Chi sq = sum of (expected - observed)^2/expected</span></span>
-<span id="cb2-5"><a href="fundamentals.html#cb2-5" aria-hidden="true" tabindex="-1"></a>chi.sq <span class="ot">&lt;-</span> <span class="fu">sum</span>((expected <span class="sc">-</span> observed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>expected)</span></code></pre></div>
-<p>Under H<sub>0</sub>, over repeated sampling the distribution of the <span class="math inline">\(\chi^2\)</span> statistic follows a <span class="math inline">\(\chi^2\)</span> distribution with 4 degrees of freedom. Therefore, the probability of seeing something as extreme as this (the p-value) is</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="fundamentals.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(chi.sq, <span class="dv">4</span>)</span></code></pre></div>
-<pre><code>## [1] 0.1545873</code></pre>
-<p>In other words, there is no significant evidence in the data to reject H<sub>0</sub> at the 10% level.</p>
-<p>Consider now a second scientist who is more open-minded than their colleague. They hypothesise only that <span class="math inline">\(X \sim Bin(4, p)\)</span> where <span class="math inline">\(p\)</span> is unknown. To test their H<sub>0</sub> they first calculates the maximum likelihood estimator of <span class="math inline">\(p\)</span>, <span class="math inline">\(\hat{p}\)</span> = 0.5, computes the values of <span class="math inline">\(E[X]\)</span> using this estimate and calculates <span class="math inline">\(\chi^2\)</span> to be 6.67 like their colleague.</p>
-<p>However, because they are estimating <span class="math inline">\(p\)</span> as part of the process of computing <span class="math inline">\(\chi^2\)</span> over repeated sampling the distribution of their <span class="math inline">\(\chi^2\)</span> is (approximately) a <span class="math inline">\(\chi^2\)</span> distribution on 3 degrees of freedom. Their p-value is therefore</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="fundamentals.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(chi.sq, <span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 0.08331631</code></pre>
-<p>We now have the somewhat confusing scenario whereby the second scientist finds that the evidence against their null hypothesis is stronger than that found by the first scientist against their null hypothesis, despite the second hypothesis being weaker (i.e. a logical consequence of the first). Thus, whatever a p-value represents, it must never be interpreted as the probability that the null hypothesis is true conditional on the observed data. In this example it simply tells us how extreme the observed values of <span class="math inline">\(\chi^2\)</span> are when compared to their distribution over many repetitions of the experiment.</p>
-</div>
+<p>This means that if you had an infinite number of samples for <span class="math inline">\(Y\)</span> and the corresponding infinite number of confidence intervals, then <span class="math inline">\(100(1-\alpha)\)</span>% of them would contain the true value of <span class="math inline">\(\theta\)</span>. It does <em>not</em> mean that there is a <span class="math inline">\(100(1-\alpha)\)</span> probability a particular interval contains the true value of <span class="math inline">\(\theta\)</span>.</p>
+<p>Given that we want to understand the properties of <span class="math inline">\(\theta\)</span> given the data we have observed <span class="math inline">\(\boldsymbol{y}\)</span>, then you might think it makes sense to investigate the distribution <span class="math inline">\(\pi(\theta \mid \boldymbold{y})\)</span>. This distribution says what are the likely values of <span class="math inline">\(\theta\)</span> given the information we have observed from the data <span class="math inline">\(\boldsmybol{y}\)</span>. We will talk about Bayes’ theorem in more detail later on in this chapter, but, for now, we will use it to write down this distribution
+<span class="math display">\[
+\pi(\theta \mid \boldsymbol{y}) = \frac{\pi(\boldsymbol{y} \mid \theta)\pi(\theta)}{\pi(\boldsymbol{y})}.
+\]</span>
+This is where frequentist theory cannot help us, particularly the term <span class="math inline">\(\pi(\theta)\)</span>. Randomness can only come from the data, so how can we assign a probability distribution to a constant <span class="math inline">\(\theta\)</span>? The term <span class="math inline">\(\pi(\theta)\)</span> is meaningless under this philosophy. Instead, we turn to a different philosophy where we can assign a probability distribution to <span class="math inline">\(\theta\)</span>.</p>
 </div>
 <div id="bayesian-probability" class="section level2 hasAnchor" number="1.3">
 <h2><span class="header-section-number">1.3</span> Bayesian Probability<a href="fundamentals.html#bayesian-probability" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The Bayesian paradigm is built around a different definition of probability. We are simply building our view of statistics upon a different set of axioms.</p>
+<p>The Bayesian paradigm is built around a different definition of probability. This allows us to generate probability distirbutuions for parameters values.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-6" class="definition"><strong>Definition 1.4  </strong></span>The subjective belief of an event is the <strong>probability</strong> of that event.</p>
+<p><span id="def:unlabeled-div-6" class="definition"><strong>Definition 1.5  </strong></span>The subjective belief of an event is the <strong>probability</strong> of that event.</p>
 </div>
 <p>This definition means we can assign probabilities to events that frequentists do not recognise as valid.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-7" class="example"><strong>Example 1.3  </strong></span>Consider the following:</p>
+<p><span id="exm:unlabeled-div-7" class="example"><strong>Example 1.2  </strong></span>Consider the following:</p>
 <ol style="list-style-type: decimal">
 <li><p>The probability that I vote for the labour party at the next election</p></li>
 <li><p>A photo taken from the James Watt telescope contains a new planet.</p></li>
@@ -338,25 +293,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">1.4</span> Conditional Probability and Exchangability<a href="fundamentals.html#conditional-probability-and-exchangability" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Before we derive Bayes’ theorem, we recap some important definitions in probability.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-8" class="definition"><strong>Definition 1.5  </strong></span>Given two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, the <strong>conditional probability</strong> that event <span class="math inline">\(A\)</span> occurs given the event <span class="math inline">\(B\)</span> has already occurred is
+<p><span id="def:unlabeled-div-8" class="definition"><strong>Definition 1.6  </strong></span>Given two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, the <strong>conditional probability</strong> that event <span class="math inline">\(A\)</span> occurs given the event <span class="math inline">\(B\)</span> has already occurred is
 <span class="math display">\[
 \pi(A \mid B) = \frac{\pi(A \cap B)}{\pi(B)},
 \]</span>
 when <span class="math inline">\(\pi(B) &gt; 0\)</span>.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-9" class="definition"><strong>Definition 1.6  </strong></span>Two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <strong>independent</strong> given event <span class="math inline">\(C\)</span> if and only if
+<p><span id="def:unlabeled-div-9" class="definition"><strong>Definition 1.7  </strong></span>Two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <strong>independent</strong> given event <span class="math inline">\(C\)</span> if and only if
 <span class="math display">\[ \pi(A \cap B \mid C) = \pi(A \mid C)\pi(B \mid C).\]</span></p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-10" class="definition"><strong>Definition 1.7  </strong></span>Let <span class="math inline">\(\pi(y_1, \ldots, y_N)\)</span> be the joint density of <span class="math inline">\(Y_1, \ldots, Y_N\)</span>. If <span class="math inline">\(\pi(y_1, \ldots, y_N) = \pi(y_{\pi_1}, \ldots, y_{\pi_N})\)</span> for a permutations <span class="math inline">\(\pi\)</span> of <span class="math inline">\(\{1, \ldots, N\}\)</span>, then <span class="math inline">\(Y_1, \ldots, Y_N\)</span> are <strong>exchangeable</strong>.</p>
+<p><span id="def:unlabeled-div-10" class="definition"><strong>Definition 1.8  </strong></span>Let <span class="math inline">\(\pi(y_1, \ldots, y_N)\)</span> be the joint density of <span class="math inline">\(Y_1, \ldots, Y_N\)</span>. If <span class="math inline">\(\pi(y_1, \ldots, y_N) = \pi(y_{\pi_1}, \ldots, y_{\pi_N})\)</span> for a permutations <span class="math inline">\(\pi\)</span> of <span class="math inline">\(\{1, \ldots, N\}\)</span>, then <span class="math inline">\(Y_1, \ldots, Y_N\)</span> are <strong>exchangeable</strong>.</p>
 </div>
 <p>Exchangability means that the labels of the random variables don’t contain any information about the outcomes. This is an important idea in many areas of probability and statistics, and we often model exchangeable events as iid.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-11" class="example"><strong>Example 1.4  </strong></span>If <span class="math inline">\(Y_i \sim Bin(n, p)\)</span> are independent and identically distributed for <span class="math inline">\(i = 1, 2, 3\)</span>, then <span class="math inline">\(\pi(Y_1, Y_2, Y_3) = \pi(Y_3, Y_1, Y_2)\)</span>.</p>
+<p><span id="exm:unlabeled-div-11" class="example"><strong>Example 1.3  </strong></span>If <span class="math inline">\(Y_i \sim Bin(n, p)\)</span> are independent and identically distributed for <span class="math inline">\(i = 1, 2, 3\)</span>, then <span class="math inline">\(\pi(Y_1, Y_2, Y_3) = \pi(Y_3, Y_1, Y_2)\)</span>.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-12" class="example"><strong>Example 1.5  </strong></span>Let <span class="math inline">\((X, Y)\)</span> follow a bivariate normal distribution with mean <strong>0</strong>, variances <span class="math inline">\(\sigma_x = \sigma_y = 1\)</span> and a correlation parameter <span class="math inline">\(\rho \in [-1, 1]\)</span>. <span class="math inline">\((X, Y)\)</span> are exchangable, but only independent if <span class="math inline">\(\rho = 0\)</span>.</p>
+<p><span id="exm:unlabeled-div-12" class="example"><strong>Example 1.4  </strong></span>Let <span class="math inline">\((X, Y)\)</span> follow a bivariate normal distribution with mean <strong>0</strong>, variances <span class="math inline">\(\sigma_x = \sigma_y = 1\)</span> and a correlation parameter <span class="math inline">\(\rho \in [-1, 1]\)</span>. <span class="math inline">\((X, Y)\)</span> are exchangable, but only independent if <span class="math inline">\(\rho = 0\)</span>.</p>
 </div>
 <div class="proposition">
 <p><span id="prp:unlabeled-div-13" class="proposition"><strong>Proposition 1.1  </strong></span>If <span class="math inline">\(\theta \sim \pi(\theta)\)</span> and <span class="math inline">\((Y_1, \ldots, Y_N)\)</span> from a sample space <span class="math inline">\(\mathcal{Y}\)</span> are conditionally iid given some parameter <span class="math inline">\(\theta\)</span>, then marginally <span class="math inline">\(Y_1, \ldots, Y_N\)</span> are exchangable.</p>
@@ -427,7 +382,7 @@ Putting these two terms equal to each other and dividing by <span class="math in
 <p>It’s not clear how Bayesian Thomas Bayes actually was, as his work was mainly about specific forms of probability theory and not his intepretation of it. The Bayesian way of thinking was really popularised by Laplace, who wrote about deductive probability in the early 19th century.</p>
 </blockquote>
 <div class="example">
-<p><span id="exm:unlabeled-div-18" class="example"><strong>Example 1.6  </strong></span>We finish this chapter with a very simple example. The advantage of the example being so simple is that we can obtain plots in R that show what’s going on.</p>
+<p><span id="exm:unlabeled-div-18" class="example"><strong>Example 1.5  </strong></span>We finish this chapter with a very simple example. The advantage of the example being so simple is that we can obtain plots in R that show what’s going on.</p>
 <p>Suppose we have a model <span class="math inline">\(y \sim N(\theta, 1)\)</span> and we want to estimate <span class="math inline">\(\theta\)</span>. To do this we need to derive the posterior distribution. By Bayes’ theorem,
 <span class="math display">\[
 \pi(\theta \mid y) \propto \pi(y \mid \theta) \pi(\theta).
@@ -440,44 +395,44 @@ We know the form of <span class="math inline">\(\pi(y \mid \theta) = \frac{1}{\s
 </ol>
 <p>We now go and observe some data. After a lot of time and effort, we collect one data point – <span class="math inline">\(y = 0\)</span>.</p>
 <p>Now we have all the ingredients to construct the posterior distribution. We multiply the likelihood function evaluated at <span class="math inline">\(y = 0\)</span> by each of the three prior distributions. This gives us the posterior distributions (up to proportionality).</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="fundamentals.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The likelihood function is the normal PDF</span></span>
-<span id="cb7-2"><a href="fundamentals.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#To illustrate this, we evaluate this from [-5, 5].</span></span>
-<span id="cb7-3"><a href="fundamentals.html#cb7-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="fl">0.01</span>)</span>
-<span id="cb7-4"><a href="fundamentals.html#cb7-4" aria-hidden="true" tabindex="-1"></a>likelihood <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
-<span id="cb7-5"><a href="fundamentals.html#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="fundamentals.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#The first prior distribution we try is a </span></span>
-<span id="cb7-7"><a href="fundamentals.html#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#uniform [-1000, 1000] distribution. This is a </span></span>
-<span id="cb7-8"><a href="fundamentals.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#vague prior distribution. </span></span>
-<span id="cb7-9"><a href="fundamentals.html#cb7-9" aria-hidden="true" tabindex="-1"></a>uniform.prior <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(x))</span>
-<span id="cb7-10"><a href="fundamentals.html#cb7-10" aria-hidden="true" tabindex="-1"></a>posterior1 <span class="ot">&lt;-</span> likelihood<span class="sc">*</span>uniform.prior</span>
-<span id="cb7-11"><a href="fundamentals.html#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="fundamentals.html#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="fundamentals.html#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#The second prior distribution we try is a uniform </span></span>
-<span id="cb7-14"><a href="fundamentals.html#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#[0, 1000] distribution, i.e. theta is non-negative. </span></span>
-<span id="cb7-15"><a href="fundamentals.html#cb7-15" aria-hidden="true" tabindex="-1"></a>step.prior <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(x <span class="sc">&gt;=</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb7-16"><a href="fundamentals.html#cb7-16" aria-hidden="true" tabindex="-1"></a>posterior2 <span class="ot">&lt;-</span> likelihood<span class="sc">*</span>step.prior</span>
-<span id="cb7-17"><a href="fundamentals.html#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-18"><a href="fundamentals.html#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="fundamentals.html#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#The third prior distribution we try is a</span></span>
-<span id="cb7-20"><a href="fundamentals.html#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#specific normal prior distribution. It</span></span>
-<span id="cb7-21"><a href="fundamentals.html#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#has mean 3 and variance 0.7.</span></span>
-<span id="cb7-22"><a href="fundamentals.html#cb7-22" aria-hidden="true" tabindex="-1"></a>normal.prior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">3</span>, <span class="at">sd =</span> <span class="fl">0.7</span>)</span>
-<span id="cb7-23"><a href="fundamentals.html#cb7-23" aria-hidden="true" tabindex="-1"></a>posterior3 <span class="ot">&lt;-</span> likelihood<span class="sc">*</span>normal.prior</span>
-<span id="cb7-24"><a href="fundamentals.html#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-25"><a href="fundamentals.html#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#Now we plot the likelihoods, prior and posterior distributions. </span></span>
-<span id="cb7-26"><a href="fundamentals.html#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#Each row corresponds to a different prior distribution. Each</span></span>
-<span id="cb7-27"><a href="fundamentals.html#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#column corresponds to a part in Bayes&#39; theorem. </span></span>
-<span id="cb7-28"><a href="fundamentals.html#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
-<span id="cb7-29"><a href="fundamentals.html#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, likelihood, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Likelihood&quot;</span>)</span>
-<span id="cb7-30"><a href="fundamentals.html#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, uniform.prior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Prior&quot;</span>)</span>
-<span id="cb7-31"><a href="fundamentals.html#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, posterior1, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Posterior&quot;</span>)</span>
-<span id="cb7-32"><a href="fundamentals.html#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, likelihood, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
-<span id="cb7-33"><a href="fundamentals.html#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, step.prior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb7-34"><a href="fundamentals.html#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, posterior2, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb7-35"><a href="fundamentals.html#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, likelihood, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
-<span id="cb7-36"><a href="fundamentals.html#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, normal.prior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb7-37"><a href="fundamentals.html#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, posterior3, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="fundamentals.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The likelihood function is the normal PDF</span></span>
+<span id="cb1-2"><a href="fundamentals.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#To illustrate this, we evaluate this from [-5, 5].</span></span>
+<span id="cb1-3"><a href="fundamentals.html#cb1-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="fl">0.01</span>)</span>
+<span id="cb1-4"><a href="fundamentals.html#cb1-4" aria-hidden="true" tabindex="-1"></a>likelihood <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb1-5"><a href="fundamentals.html#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="fundamentals.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#The first prior distribution we try is a </span></span>
+<span id="cb1-7"><a href="fundamentals.html#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#uniform [-1000, 1000] distribution. This is a </span></span>
+<span id="cb1-8"><a href="fundamentals.html#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#vague prior distribution. </span></span>
+<span id="cb1-9"><a href="fundamentals.html#cb1-9" aria-hidden="true" tabindex="-1"></a>uniform.prior <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(x))</span>
+<span id="cb1-10"><a href="fundamentals.html#cb1-10" aria-hidden="true" tabindex="-1"></a>posterior1 <span class="ot">&lt;-</span> likelihood<span class="sc">*</span>uniform.prior</span>
+<span id="cb1-11"><a href="fundamentals.html#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="fundamentals.html#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="fundamentals.html#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#The second prior distribution we try is a uniform </span></span>
+<span id="cb1-14"><a href="fundamentals.html#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#[0, 1000] distribution, i.e. theta is non-negative. </span></span>
+<span id="cb1-15"><a href="fundamentals.html#cb1-15" aria-hidden="true" tabindex="-1"></a>step.prior <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(x <span class="sc">&gt;=</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb1-16"><a href="fundamentals.html#cb1-16" aria-hidden="true" tabindex="-1"></a>posterior2 <span class="ot">&lt;-</span> likelihood<span class="sc">*</span>step.prior</span>
+<span id="cb1-17"><a href="fundamentals.html#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="fundamentals.html#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="fundamentals.html#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#The third prior distribution we try is a</span></span>
+<span id="cb1-20"><a href="fundamentals.html#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#specific normal prior distribution. It</span></span>
+<span id="cb1-21"><a href="fundamentals.html#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#has mean 3 and variance 0.7.</span></span>
+<span id="cb1-22"><a href="fundamentals.html#cb1-22" aria-hidden="true" tabindex="-1"></a>normal.prior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">3</span>, <span class="at">sd =</span> <span class="fl">0.7</span>)</span>
+<span id="cb1-23"><a href="fundamentals.html#cb1-23" aria-hidden="true" tabindex="-1"></a>posterior3 <span class="ot">&lt;-</span> likelihood<span class="sc">*</span>normal.prior</span>
+<span id="cb1-24"><a href="fundamentals.html#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="fundamentals.html#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">#Now we plot the likelihoods, prior and posterior distributions. </span></span>
+<span id="cb1-26"><a href="fundamentals.html#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#Each row corresponds to a different prior distribution. Each</span></span>
+<span id="cb1-27"><a href="fundamentals.html#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">#column corresponds to a part in Bayes&#39; theorem. </span></span>
+<span id="cb1-28"><a href="fundamentals.html#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb1-29"><a href="fundamentals.html#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, likelihood, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Likelihood&quot;</span>)</span>
+<span id="cb1-30"><a href="fundamentals.html#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, uniform.prior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Prior&quot;</span>)</span>
+<span id="cb1-31"><a href="fundamentals.html#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, posterior1, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Posterior&quot;</span>)</span>
+<span id="cb1-32"><a href="fundamentals.html#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, likelihood, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb1-33"><a href="fundamentals.html#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, step.prior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb1-34"><a href="fundamentals.html#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, posterior2, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb1-35"><a href="fundamentals.html#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, likelihood, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb1-36"><a href="fundamentals.html#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, normal.prior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb1-37"><a href="fundamentals.html#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, posterior3, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <ol style="list-style-type: decimal">
 <li><p>The posterior distribution is proportional to the likelihood function. The prior distribution closely matches frequentist inference. Both the MLE and posterior mean are 0.</p></li>
 <li><p>We get a lopsided posterior distribution, that is proportional to the likelihood function for positive values of <span class="math inline">\(\theta\)</span>, but is 0 for negative values of <span class="math inline">\(\theta\)</span>.</p></li>

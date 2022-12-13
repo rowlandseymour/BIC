@@ -10,7 +10,7 @@ Bayesian inference is built on a different way of thinking about parameters of p
 ## Statistical Inference
 The purpose of statistical inference is to "draw conclusions, from numerical data, about quantities that are not observed" (Bayesian Data Analysis, chapter 1). Generally speaking, there are two kinds of inference: 
 
-1. Inference for quantities that are unobserved or hasn't happened yet. Examples of this might be the size of a payout an insurance company has to make, or a patients outcome in a clinical trial had they been received a certain treatment. 
+1. Inference for quantities that are unobserved or haven't happened yet. Examples of this might be the size of a payout an insurance company has to make, or a patients outcome in a clinical trial had they been received a certain treatment. 
 2.  Inference for quantities that are not possible to observe. This is usual because they are part of modelling process, like parameters in a linear model. 
 
 In this module, we are going to look at a different way of carrying out statistical inference, one that doesn't depend on long run events. Instead, we're going to introduce the definition of probability that allows us to interpret the subjective chance that an event occurs.
@@ -30,54 +30,34 @@ If a frequentist wanted to assign a probability to rolling a 6 on a particular d
 The **sampling distribution** of a statistic is the distribution based on a long run of samples of a fixed size from the population.
 :::
 
-These two definitions form the basis of frequentist statistics and give rise to higher-level objects. However, due to the long run condition, these objects are often misunderstood. 
+The sampling distribution is an important concept in frequentist theory as it describes the randomness in the process. From a frequentist standpoint, we have a model containing some parameter $\theta$ and some data $\boldsymbol{y}$. All the evidence in the data $\boldsymbol{y}$ about $\theta$ is contained in the likelihood function $\pi(\boldsymbol{y} \mid \theta)$. The parameter $\theta$ is fixed and the likelihood function describes the probability of observing the data $\boldsymbol{y}$ given the parameter $\theta$. 
+
+The most common way to estimate the value of $\theta$ is using maximum likelihood estimation. Although other methods do exist (e.g. method of moments, or generalised maximum likelihood estimation). 
+
+:::{.definition}
+The maximum likelihood estimate of $\theta$, $\hat{\theta}$, is the value such that $\hat{\theta} = \max_{\theta} \pi(\theta \mid \boldsymbol{y})$.
+:::
+
+Uncertainty around the maximum likelihood estimate is based on the theory of long running events that underpin frequentist theory.
 
 ::: {.definition} 
-Let $X$ be a random sample from a probability distribution $\theta$. A **100(1-\alpha)% confidence interval** for $\theta$ is an interval $(u(X), v(X))$ such that 
+Let $X$ be a random sample from a probability distribution $\theta$. A **100(1-\alpha)% confidence interval** for $\theta$ is an interval $(u(Y), v(Y))$ such that 
 $$
-\mathbb{P}(u(X) < \theta < v(X)) = 1-\alpha
+\mathbb{P}(u(Y) < \theta < v(Y)) = 1-\alpha
 $$
 :::
 
-This means that if you had an infinite number of samples for $X$ and the corresponding infinite number of confidence intervals, then $100(1-\alpha)$% of them would contain the true value of $\theta$. It does *not* mean that there is a $100(1-\alpha)$ probability a particular interval contains the true value of $\theta$. 
+This means that if you had an infinite number of samples for $Y$ and the corresponding infinite number of confidence intervals, then $100(1-\alpha)$% of them would contain the true value of $\theta$. It does *not* mean that there is a $100(1-\alpha)$ probability a particular interval contains the true value of $\theta$. 
 
-::: {.example}
-Suppose that a ornithologist believes that the sex of an offspring of a certain species of bird is equally likely to be male or female and is independent of the sex of any siblings. They selects a random sample of 100 broods with 4 offspring and counts the number of male offspring in each. The results are summarised in the following table.
 
-```{r}
-offspring.df <- data.frame("males" = c(0, 1, 2, 3, 4), 
-                           "observed" = c(5, 20, 50, 20, 5))
-knitr::kable(
-  offspring.df, booktabs = TRUE,
-  caption = 'The number of males in each of the broods.'
-  )
-```
-If $X$ denotes the number of male offspring then the scientist’s null hypothesis H~0~, is that $X \sim Bin(4, 1/2)$. This can be tested by calculating the so called $\chi^2$ statistic - which measures how well the observations conform to the supposed distribution. This is computed by
-```{r}
-expected <- 100*dbinom(offspring.df$males, 4, 0.5)
-observed <- offspring.df$observed
-
-## Chi sq = sum of (expected - observed)^2/expected
-chi.sq <- sum((expected - observed)^2/expected)
-```
-Under H~0~, over repeated sampling the distribution of the $\chi^2$ statistic follows a $\chi^2$ distribution with 4 degrees of freedom. Therefore, the probability of seeing something as extreme as this (the p-value) is 
-```{r}
-1 - pchisq(chi.sq, 4)
-```
-In other words, there is no significant evidence in the data to reject H~0~ at the 10\% level.
-
-Consider now a second scientist who is more open-minded than their colleague. They hypothesise only that $X \sim Bin(4, p)$ where $p$ is unknown. To test their H~0~ they first calculates the maximum likelihood estimator of $p$, $\hat{p}$ = 0.5, computes the values of $E[X]$ using this estimate and calculates $\chi^2$ to be 6.67 like their colleague.
-
-However, because they are estimating $p$ as part of the process of computing $\chi^2$ over repeated sampling the distribution of their $\chi^2$ is (approximately) a $\chi^2$ distribution on 3 degrees of freedom. Their p-value is therefore 
-```{r}
-1 - pchisq(chi.sq, 3)
-```
-
-We now have the somewhat confusing scenario whereby the second scientist finds that the evidence against their null hypothesis is stronger than that found by the first scientist against their null hypothesis, despite the second hypothesis being weaker (i.e. a logical consequence of the first). Thus, whatever a p-value represents, it must never be interpreted as the probability that the null hypothesis is true conditional on the observed data. In this example it simply tells us how extreme the observed values of $\chi^2$ are when compared to their distribution over many repetitions of the experiment.
-:::
+Given that we want to understand the properties of $\theta$ given the data we have observed $\boldsymbol{y}$, then you might think it makes sense to investigate the distribution $\pi(\theta \mid \boldymbold{y})$. This distribution says what are the likely values of $\theta$ given the information we have observed from the data $\boldsmybol{y}$. We will talk about Bayes' theorem in more detail later on in this chapter, but, for now, we will use it to write down this distribution 
+$$
+\pi(\theta \mid \boldsymbol{y}) = \frac{\pi(\boldsymbol{y} \mid \theta)\pi(\theta)}{\pi(\boldsymbol{y})}. 
+$$
+This is where frequentist theory cannot help us, particularly the term $\pi(\theta)$. Randomness can only come from the data, so how can we assign a probability distribution to a constant $\theta$? The term $\pi(\theta)$ is meaningless under this philosophy. Instead, we turn to a different philosophy where we can assign a probability distribution to $\theta$.
 
 ## Bayesian Probability
-The Bayesian paradigm is built around a different definition of probability. We are simply building our view of statistics upon a different set of axioms. 
+The Bayesian paradigm is built around a different definition of probability. This allows us to generate probability distirbutuions for parameters values. 
 
 ::: {.definition}
 The subjective belief of an event is the **probability** of that event. 

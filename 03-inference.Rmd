@@ -240,7 +240,20 @@ In the next chapter, we will look at how to sample from these distributions.
 Another example is when dealing with a distribution with multiple parameters. In the previous section, we derived the posterior distribution for the mean of a normal distribution when the variance is known. We'll now repeat this exercise, but deriving the posterior distribution for both the mean and variance. 
 
 :::{.example}
-Consider the reaction time data $\boldsymbol{y}$ from Example \@{exm:normal}. Again, we assume the $y_i \sim N(\mu, \sigma^2)$, excpet that this time, we will place a prior distribution on both $\mu$ and $\sigma^2$.
+Consider the reaction time data $\boldsymbol{y}$ from Example \@{exm:normal}. Again, we assume the $y_i \sim N(\mu, \sigma^2)$, except that this time, we will place a prior distribution on both $\mu$ and $\sigma^2$.
+
+We're going to set up the following hierarchy
+\begin{align*}
+\boldsymbol{y} \mid \mu, \sigma^2 &\sim N(\mu, \sigma^2) \\
+\mu \mid \sigma^2 &\sim N(\mu_0, \sigma^2/k)\\
+\sigma^2 &\sim \hbox{inv}-\Gamma(\alpha, \beta) \\
+\end{align*}.
+
+The prior distribution on $\mu$ is similar to the prior distribution we use when the variance was known. This time, we assume the prior distribution has variance proportional to the distribution that generates the data. The prior distribution on $\sigma^2$ is an inverse-gamma distribution. This has density function
+$$
+\pi(y \mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}\left(\frac{1}{y}\right)^{\alpha+ 1}e^{-\frac{\beta}{x}}.
+$$
+
 :::
 
 ## Predicition
