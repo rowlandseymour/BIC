@@ -1,46 +1,52 @@
 # Sampling
 
-## Uniform random numbers
+## Uniform Random Numbers
 What we won't be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is because computers aren't good at being random, they require algorithmic instructions. True random number generation often uses physical methods, such as the radioactive decay of atoms, or atmospheric noise.
 
-Throughout this module, we will be using R's built in random number generation. This is a pseudo random number generator, that has excellent random properties, but will eventually repeat. A basic random number generation method is sampling from a uniform distribution on the unit interval
+Throughout this module, we will be using R's built in random number generation. This is a pseudo random number generator that has excellent random properties, but will eventually repeat. A basic random number generation tool that we will repeatedly use in the module involves sampling from a uniform distribution on the unit interval, which can be done in R using
 ```{r}
 runif(1, 0, 1)
 ```
 
-## Inverse transform sampling
+
+## Inverse Transform Sampling
 Suppose we want to sample from a non-uniform one-dimensional distribution. The inverse transform theorem allows us to do this using the distribution's inverse function. 
 
 ::: {.definition}
-The **inverse function** of a distribution $F$, denoted $F^{-1}$, is defined for all $u \in (0, 1)$ by
+Let $X$ be a real-valued random variable with a distribution function $F$. Then the **inverse function** of a distribution  function $F$, denoted $F^{-1}$, is defined for all $u \in (0, 1)$ by
 $$
 F^{-1}(u) = \inf\{x \in\mathbb{R} : F(x) > u\}.
 $$
 :::
 
 ::: {.theorem} 
-Let $F :\mathbb{R} \rightarrow [0, 1]$, $U \sim U[0, 1]$ and $Y = F^{-1}(U)$. Then $Y$ has distribution $F$.
+Let $F :\mathbb{R} \rightarrow [0, 1]$ be a continuous distribution function, $U \sim U[0, 1]$ and $Y = F^{-1}(U)$. Then $Y$ has distribution function $F$.
 :::
 
 ::: {.proof}
 We have
 $$
-\pi(Y \leq a) = \pi(F^{-1}(U) \leq a) = \pi(\inf\{x \in\mathbb{R} : F(x) > u\} \leq a). 
+\mathbb{P}(Y \leq a) = \mathbb{P}(F^{-1}(U) \leq a) = \mathbb{P}(\inf\{x \in\mathbb{R} : F(x) > u\} \leq a). 
 $$
 Since $\inf\{x \in\mathbb{R} : F(x) > u\} \leq a$ can only hold if $F(a) \geq U$, we have
 $$
-\pi(Y \leq a)  = \pi(F(a)\geq U)
+\mathbb{P}(Y \leq a)  = \mathbb{P}(F(a)\geq U)
 $$
-As $U \sim U[0, 1]$, we have $\pi(F(a)\geq U) = F(a)$. 
+As $U \sim U[0, 1]$, we have $\mathbb{P}(F(a)\geq U) = F(a)$. 
 :::
 
 This theorem says that if we have a random variable $U \sim U[0, 1]$ and we want to get $Y \sim F$, then we can use $F^{-1}(U)$. Viewing this theorem graphically can provide a much more intuitive understanding. 
 
 ::: {.example}
-We would like to sample from an exponential distribution with rate 0.5. The density function is given by
+We would like to sample from an exponential distribution with rate 0.5, i.e. $Y ~ \sim \hbox{Exp}(0.5)$. The density function is given by
+
 $$
-\pi(y \mid \lambda = 0.5) = 0.5e^{0.5y}.
+\pi(y \mid \lambda = 0.5) = \begin{cases} 
+      0.5e^{0.5y} & y \geq 0 \\
+    0  & \text{otherwise.}
+   \end{cases}
 $$
+
 The distribution function can be derived by
 \begin{align*}
 F(y \mid \lambda = 0.5) &= \int_0^y 0.5e^{0.5t}\,dt \\
@@ -50,7 +56,7 @@ Finally, the inverse function is given by
 $$
 F^{-1}(y \mid \lambda = 0.5) = -2\log(1-y).  
 $$
-Therefore, if $U \sim U[0, 1]$, $-2\log(1-U) \sim \hbox{Exp}(0.5)$. 
+Therefore, if $U \sim U[0, 1]$, then it follows that $-2\log(1-U) \sim \hbox{Exp}(0.5)$. 
 
 The R code below generates a plot to show this. We can plot the CDF for most one parameter distributions straightforwardly. We can think of this theorem as allowing us to sample a point on the y-axis and then computing the quantile this corresponds to. 
 
@@ -72,10 +78,10 @@ segments(x0 = f.inv, y0 = 0, x1 = f.inv, y1 = u, lty = 2)
 ```
 :::
 
-## Rejection sampling
-We now have a way of sampling methods where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. 
+## Rejection Sampling
+We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. 
 
-Suppose we want to sample from a density $p$, but can only generate samples from a density $q$. If there exists some constant $c > 0$, such that $\frac{\pi(y)}{q(y)} \leq c$ for all $y$, then we can generate samples from $p$ by
+Suppose we want to sample from a density $\pi$, but can only generate samples from a density $q$. If there exists some constant $c > 0$, such that $\frac{\pi(y)}{q(y)} \leq c$ for all $y$, then we can generate samples from $p$ by
 
 1. Sampling $Y \sim Q$
 
@@ -125,7 +131,7 @@ The plot also shows how the choices of $M$ and $q$ can make the sampling more or
 :::
 
 ## Markov Chain Monte Carlo
-Markov Chain Monte Carlo (MCMC) is a set of algorithms that sample from a posterior distribution. The combine the idea of rejection sampling, with the theory of Markov chains. Before we set out the theory of Markov chains, we'll go through an example to show how MCMC works.
+Markov Chain Monte Carlo (MCMC) is a class of algorithms that produce samples from a probability distribution. These methods combine the idea of rejection sampling with the theory of Markov chains. Before we set out the theory of Markov chains, we'll go through an example to show how MCMC works.
 
 
 ::: {.example #King} 
@@ -139,7 +145,7 @@ He decided to travel according to these rules:
 
 2. To decided if he is going to move to the proposal island, the King counts out a number of shells equal to the number of size of the island. So if island five is the proposal island, he counts out five shells. He then counts out a number of stones equal to the size of the current island. 
 
-3. If the number of seashells is greater than the number of stones, he moves to the proposed island. If the number of seashells is less than the number of stones, he takes a different strategy. He discards the number of stones equal to the number of seashells. So if there are six stone and five seashells, he ends up with 6-5=1 stone. He then places the stones and seashells into a bag a chooses one at random. If he picks a seashell, he moves to the proposed island, if he picks a shell, he stays put. 
+3. If the number of seashells is greater than the number of stones, he moves to the proposed island. If the number of seashells is less than the number of stones, he takes a different strategy. He discards the number of stones equal to the number of seashells. So if there are six stone and five seashells, he ends up with 6-5=1 stones. He then places the stones and seashells into a bag a chooses one at random. If he picks a seashell, he moves to the proposed island, otherwise if he picks a shell, he stays put. 
 
 This is a complex way of moving around, but it produces the required result; the time he spends on each island is proportionate to the size of the island. The code below shows an example of this over 10,000 weeks. 
 
@@ -148,7 +154,6 @@ weeks <- 10000
 island <- numeric(weeks)
 current <- 10
 for(i in 1:weeks){
-  
   ## record current position
   island[i] <- current
   
@@ -166,29 +171,27 @@ for(i in 1:weeks){
   u <- runif(1)
   if(u < p)
     current <- proposed
-  
-  
 }
 
 #Plot results
 par(mfrow = c(1, 2))
-plot(island, type = 'l', xlab = "week", ylab = "island")
-barplot(table(island)/weeks, xlab = "island", ylab = "Proportion of time")
+plot(island, type = 'l', xlab = "Week", ylab = "Island")
+barplot(table(island)/weeks, xlab = "Island", ylab = "Proportion of time")
 ```
 :::
 
-We can recognise several different statistical principles in this example. The King decides to move islands dependent on where he is currently, not based on where he has been previously (Markov principle). He proposes an island to move to and accepts or rejects this decision based on some distribution (rejection principle). We are now going to describe some of the properties of Markov chains, including the Markov principle. 
+We can recognise several different statistical principles in this example. The King decides to move islands dependent on where he is currently, not based on where he has been previously (Markov property). He proposes an island to move to and accepts or rejects this decision based on some distribution (rejection principle). We are now going to describe some of the properties of Markov chains, including the Markov property. 
 
 
 
 ## Properties of Markov Chains
 
 ::: {.definition #Markov}
-A sequence of random variables $\{Y_1, Y_2, \ldots\}$ is a **Markov chain** if $p(Y_{n+1} \mid Y_{n}, \ldots, Y_1) = p(Y_{n+1} \mid Y_{n})$. That is that distribution of the next state $Y_{n+1}$ only depends on the current state $Y_n$ and not any previous states. 
+A sequence of random variables $\{Y_1, Y_2, \ldots\}$ is a **Markov chain** if $\mathbb{P}(Y_{n+1} \mid Y_{n}, \ldots, Y_1) = \mathbb{P}(Y_{n+1} \mid Y_{n})$. That is that distribution of the next state $Y_{n+1}$ only depends on the current state $Y_n$ and not any previous states. 
 :::
 
 ::: {.definition}
-The probability of transitioning from state $i$ to state $j$ in a Markov chain is given by $p_{ij}$. The **transition matrix** for a Markov chain with $N$ states is the $N \times N$ matrix $P = p_{ij}$, where the $\{i, j\}^{th}$ entry is probability is moving from state $i$ to state $j$. 
+The probability of transitioning from state $i$ to state $j$ in a Markov chain is given by $p_{ij}$. The **transition matrix** for a Markov chain with $N$ states is the $N \times N$ matrix $P$, where the $\{i, j\}^{th}$ entry denoted by $p_{ij}$ is probability is moving from state $i$ to state $j$. 
 :::
 
 These two properties make Markov chains nice to work with, especially the Markov property (Definition \@ref(def:Markov)). Two other important definitions are
@@ -199,12 +202,12 @@ The **period **of a state $i$ is given by $d_i = \textrm{gcd}\{n  > 0; p_{ii} > 
 
 
 ::: {.definition}
-A Markov chain is **irreducible** if there exists an $n \in \mathbb{N}$ such that $p(Y_n = i \mid Y_0 = j)$ for all pairs $i$ and $j$. In other words, it is possible to move from any state to any other state in a finite number of steps. 
+A Markov chain is **irreducible** if there exists an $n \in \mathbb{N}$ such that $\mathbb{P} (Y_n = i \mid Y_0 = j)$ for all pairs $i$ and $j$. In other words, it is possible to move from any state to any other state in a finite number of steps. 
 :::
 
 We can use these definitions to start working with distributions. Suppose, the state we start at is drawn from some distribution $Y_1 \sim \boldsymbol{q}$. Then the distributions of the  second state $Y_2$ depends on the distribution of $Y_1$ and the transition probabilities
 $$
-p(Y_2 = j) = \sum_i q_ip_{ij}.
+\mathbb{P}(Y_2 = j) = \sum_i q_ip_{ij}.
 $$
 If we denote the distribution of $Y_2 \sim \boldsymbol{q}^{(2)}$, then we can write it in terms of the transition matrix $\boldsymbol{q}^\prime = \boldsymbol{q}P$. Now suppose we would like the distribution of $Y_3 \sim \boldsymbol{q}^{(3)}$, thanks to the Markov property, this is the distribution for $Y_2$ multiplied by the transition matrix, so $Y_3 \sim qP^2$. Inductively, $P_k \sim qP^{k-1}$. To use Markov chains to sample from distributions, we need to identify the Eigenvalues of the transition matrix. 
 
@@ -213,7 +216,7 @@ A transition matrix $P$ always has at least one eigenvalue equal to one.
 :::
 
 ::: {.proof}
-The columns of $P$ sum to 1 as they are probability distributions. Therefore, $1$ is an eigenvector. 
+The columns of $P$ sum to 1 as they are probability distributions. Therefore, $1$ is an eigenvalue. 
 :::
 
 ::: {.definition} 
@@ -226,7 +229,7 @@ This distribution $\pi$, is known as the **stationary distribution**.
 
 This important concept underpins MCMC methods. It says that no matter where we start our chain, we'll eventually end up sampling states according to the distribution $\pi$. It make take a long time to reach the stationary distribution, but it will eventually get there. 
 
-In order to check whether our Markov chain will converge to a stationary distributions, we need to check:
+In order to check whether our Markov chain will converge to a stationary distribution, we need to check:
 
 1. the Markov chain is aperiodic,
 
@@ -241,7 +244,7 @@ In Example \@ref(exm:King), the King wanted to visit the islands according to ho
 When designing a Markov chain, it is usually straightforward to design one that meets conditions one and two. Condition three is more difficult to prove, but for some chains it is possible to show they satisfy detailed balance. 
 
 ::: {.definition}
-The Markov chain $P$ satisfies **detailed balance** with respect to the distribution $\pi$ if
+The Markov chain with transition matrix $P$ satisfies the **detailed balance** equation with respect to the distribution $\pi$ if
 $$
 \pi_i p_{ij} = \pi_j p_{ji}. 
 $$
@@ -261,7 +264,7 @@ The $j^{th}$ row of $\pi P$ is
 Hence $\pi P = \pi$.
 :::
 
-The section has shown us that we can use a Markov chain to simulate from a distribution $\pi$. All we need is for the Markov chain to be irreducible, aperiodic, and for the transition matrix to satisfy $\pi P = \pi$. This provides the foundation theory for MCMC and allows us to sample from a posterior distribution $\pi$. What it doesn't tell us is how to design the Markov chain, and that is what the next sections deal with. 
+The section has shown us that we can use a Markov chain theory to simulate from a probability distribution $\pi$. All we need is for the Markov chain to be irreducible, aperiodic, and for the transition matrix to satisfy $\pi P = \pi$. This provides the foundation theory for MCMC and allows us to sample from a posterior distribution $\pi$. What it doesn't tell us is how to design the Markov chain, and that is what the next sections deal with. 
 
 ## Gibbs Sampler
 We're now going to look at two algorithms to draw samples from posterior distributions. The first is the Gibbs sampler. 
@@ -295,17 +298,21 @@ for(j in 1:M){
 }
 ```
 
-The sequence $\{\theta_0^{(0)},\ldots, \theta_N^{(0)}\}, \{\theta_0^{(1)},\ldots, \theta_N^{(1)}\}, \ldots, \{\theta_0^{(M)},\ldots, \theta_N^{(M)}\}$ form a Markov chain. They also form a series of samples from the posterior distribution. However, they are not iid. 
+The sequence $\left\{\theta_0^{(0)},\ldots, \theta_N^{(0)}\right\}, \left\{\theta_0^{(1)},\ldots, \theta_N^{(1)}\right\}, \ldots, \left\{\theta_0^{(M)},\ldots, \theta_N^{(M)}\right\}$ form a Markov chain. They also form a series of samples from the posterior distribution. However it is important to note that by construction, these samples are not independent since each realisation depends on the previous sample and we must take this into account when doing estimation.
 
 ::: {.example}
-Recall the lab in the previous chapter, where we derived the posterior distributions for the normal distribution with unknown mean and variance. The posterior distributions are given by
+Recall the lab in the previous chapter where we derived the posterior distribution for the mean $\mu$ and variance $\sigma^2$ for normally distributed data. The marginal posterior distributions are given by
 $$
-\mu \mid \boldsymbol{y}, \sigma^2 \sim N(\mu_1, \sigma^2_1)
+\mu \mid \boldsymbol{y}, \sigma^2 \sim N(\mu_1, \sigma^2_1),
 $$
-where $\mu_1 =\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)$ and $\sigma^2_1 = \left(\frac{30}{\sigma^2}  + \frac{1}{\sigma_0^2}\right)^{-1}$, and
+
 $$
-\sigma^2 \mid \boldsymbol{y}, \mu \sim \textrm{inv-Gamma}\left(\alpha + \frac{N}{2}, \,\beta + \frac{\sum_{i=1}^N (y_i - \mu)^2}{2}\right)
+\sigma^2 \mid \boldsymbol{y}, \mu \sim \textrm{inv-Gamma}\left(\alpha + \frac{N}{2}, \,\beta + \frac{\sum_{i=1}^N (y_i - \mu)^2}{2}\right),
 $$
+
+where $\mu_1 =\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)$ and $\sigma^2_1 = \left(\frac{30}{\sigma^2}  + \frac{1}{\sigma_0^2}\right)^{-1}$.
+
+
 In this example, we can use a Gibbs sampler to sample from the posterior distribution. The algorithm is given by
 
 1. Set $\mu^{(0)} = 0$ and $\sigma^{2(0)}$
@@ -383,13 +390,15 @@ Lets think again about the reaction time example in the previous chapter.The tim
 y <- c(0.34, 0.47, 0.58, 0.27, 0.74, 0.44, 0.46, 0.65, 0.36, 0.55, 0.58, 0.55, 0.53, 0.56, 0.54, 0.61, 0.43, 0.52, 0.45, 0.49, 0.32, 0.33, 0.47, 0.58, 0.34, 0.60, 0.59, 0.43, 0.57, 0.34)
 hist(y, main = "", xlab = "Reaction time (ms)")
 ```
-Assuming $y_i \sim N(\mu, \sigma^2)$, by Bayes' theorem, the posterior distribution is 
+
+Assuming $Y_i \sim N(\mu, \sigma^2)$ are independent and identically distributed for $i=1,...,n$, by Bayes' theorem, the posterior distribution is 
+
 $$
 \pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \pi(\boldsymbol{y} \mid \mu, \sigma^2) \pi(\mu).
 $$
-One of the issues, was the we assigned a normal prior distribution to the population mean parameter $\mu$. The advantage was that we could derive a posterior distribution with closed form. The disadvantage was the prior distribution assigned positive probability to impossible values of $\mu$. 
+One of the issues here is that we have assigned a normal prior distribution to the population mean parameter $\mu$. The advantage previously was that we could derive a posterior distribution with closed form. The disadvantage however is that the choice of prior distribution assigns some positive probability to impossible values of $\mu$, i.e. reaction times less than zero. 
 
-Now we have a tool to sample from posterior distributions that don't have a closed form. We can instead assign an exponential prior distribution, a distribution which only has non-negative support. Letting $\mu \sim \textrm{Exp}(0.01)$ sets a vague prior distribution on $\mu$. The posterior distribution is therefore
+Now we have a tool to sample from posterior distributions that don't have a closed form. We can instead assign an exponential prior distribution, a distribution which only has non-negative support. Letting $\mu \sim \textrm{Exp}(0.01)$ sets a vague prior distribution on $\mu$. It can be shown that the posterior distribution (exercise) is therefore
 $$
 \pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \exp\left\{-0.01\mu -\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}\right\} 
 $$
@@ -456,14 +465,14 @@ Recall that using the normal prior distribution, it was
 ```
 0.486 0.493
 ```
-It seems that the posterior distribution is very similar when using these two prior distributions. This is because the data is very informative. 
+It seems that the posterior distribution is very similar when using these two prior distributions. This is because the data are very informative. 
 :::
 
 
 ## MCMC Diagnostics
 When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well. 
 
-A key way of doing this is by looking at the trace plot. This is the plot out MCMC iterations over time. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn't look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.
+A key way of doing this is by looking at the trace plot, which is a time series of the posterior samples simulated by the algorithm. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn't look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.
 
 ::: {.definition}
 The **burn-in period** is the number of iterations the Markov chain takes to reach the stationary distribution. 
@@ -558,12 +567,13 @@ plot(mu.store[-c(1:5000)], type = 'l', xlab = "iteration", ylab = expression(mu)
 ## Exercises
 
 ::: {.exercise} 
-Let $Y$ have the density function 
+Let $Y$ be a random variable with a probability density function defined by
 $$
-\pi(y) = \alpha y^3 \quad \hbox{for } 0 \leq y \leq 4.
+\pi(y) = \alpha y^3 \quad \hbox{for } 0 \leq y \leq 4,
 $$
+where $\alpha \in \mathbb{R}$ is a constant.
 
-1. Compute the value of $\alpha$ that makes this a proper distribution. 
+1. Compute the value of $\alpha$. 
 2. Derive the distribution function $F(y)$. 
 3. Using the inverse transform theorem, derive a function $g$ such that if $U \sim U[0, 1]$, then $g(U)$ has the same distribution as $Y$. 
 ::: 
@@ -571,17 +581,17 @@ $$
 ::: {.solution}
 This exercise is about the inverse transform sampling method.
 
-1. As $\int_0^4 \pi(y) dy = 1$, we have $\alpha = \frac{1}{64}$.
+1. Using the fact that $\int_0^4 \pi(y) dy = 1$, we have $\alpha = \frac{1}{64}$.
 2. Introducing a dummy variable $x$, we have
 $$
 \int_0^y \frac{1}{64}x^3dx = \frac{1}{256}y^4.
 $$
-The distribution function for $Y$ is given by
+Hence the distribution function for $Y$ is given by
 $$
 F(y) = \begin{cases}
-0 & \hbox{for } y < 0\\
-\frac{1}{256}y^4 & \hbox{for } 0 \leq < y \leq 4 \\
-1 
+0 & \hbox{for } y \leq 0\\
+\frac{1}{256}y^4 & \hbox{for } 0  < y \leq 4 \\
+1 & y > 4
 \end{cases}.
 $$
 3. We have
@@ -598,7 +608,7 @@ $$
 f(y) = \frac{1}{2\sqrt{y}}e^{-\sqrt{y}} \quad \hbox{for } y \geq 0.
 $$
 
-1. Using integrating by substitution, derive the distribution function $F(y)$. 
+1. Using integration by substitution, derive the distribution function $F(y)$. 
 2. Using the inverse transform method, construct a method for sampling from this distribution. 
 :::  
     
@@ -611,11 +621,11 @@ $$
 $$
 
 The easiest substitution to use is $u = \sqrt{x}$. This gives us $dx = 2du\sqrt{x}$. Substituting these into the integral gives
-<!-- \begin{align*} -->
-<!-- \int_0^y \frac{1}{2\sqrt{x}}e^{-\sqrt{x}}\,dx & = \int_0^\sqrt{y} e^{-u}\,dx \\ -->
-<!-- &= [-e^{-u}]_0^\sqrt{y} \\ -->
-<!-- &= 1 - e^{-\sqrt{y}}. -->
-<!-- \end{align*} -->
+\begin{align*} 
+\int_0^y \frac{1}{2u}e^{-u}\,dx & = \int_0^\sqrt{y} e^{-u}\,dx \\
+&= [-e^{-u}]_0^\sqrt{y} \\ 
+&= 1 - e^{-\sqrt{y}}.
+\end{align*}
 A quicker, but less obvious way to compute the integral is to note that $\frac{d}{dx}e^{f(x)} = f'(x)e^{f(x)}$.
 The distribution function is therefore
 $$
@@ -630,15 +640,16 @@ $$
 F^{-1}(y) = (\log(1-y))^2.
 $$
 The method would be
-A. Sample $U\sim U[0, 1]$
-B. Compute $(\log(1-U))^2$
+
+i. Sample $U\sim U[0, 1]$
+ii. Compute $Y=(\log(1-U))^2$
 :::
     
     
 ::: {.exercise} 
 The density function for the half-normal distribution with variance 1 is 
 $$
-\pi(x) = \frac{2}{\sqrt{2\pi}}\exp\{-\frac{1}{2}x^2\} \qquad \hbox{for } x \geq 0. 
+\pi(x) = \frac{2}{\sqrt{2\pi}}\exp\left\{-\frac{1}{2}x^2\right\} \qquad \hbox{for } x \geq 0. 
 $$
 
 1. Using an exponential distribution with rate $\lambda$ as a proposal distribution, show that
@@ -685,9 +696,10 @@ legend('topright', c(expression(pi(x)), expression(Mq(x))), lty = c(1, 2), bty =
 ``` 
 
 3. The rejection sampling algorithm for the half normal distribution works as follows:
-    A. Sample $x$ from the exponential distribution. 
-    B. Sample $u \sim U[0, 1]$. 
-    C. If $u <  \frac{\pi(x)}{Mq(x)}$, then accept $x$ as a sample from the half normal distribution. 
+
+i. Sample $x$ from the exponential distribution. 
+ii. Sample $u \sim U[0, 1]$. 
+iii. If $u <  \frac{\pi(x)}{Mq(x)}$, then accept $x$ as a sample from the half normal distribution. 
 
 :::
 
@@ -737,7 +749,7 @@ Neither Alice nor Bob have constructed Markov chains that are aperiodic and irre
 :::
 
 ::: {.exercise}
-You observe $N$ data points $\{y_1, \ldots, y_N\} \sim N(\mu, sigma^2)$. Place a normal prior distribution on the mean parameter $\mu$ and inverse-gamma prior distribution $\sigma^2$ to derive the posterior distributions  $\pi(\mu, \sigma^2 \mid \boldsymbol{y})$. 
+You observe $N$ data points $\{y_1, \ldots, y_N\} \sim N(\mu, \sigma^2)$. Place a normal prior distribution on the mean parameter $\mu$ and inverse-gamma prior distribution $\sigma^2$ to derive the posterior distributions  $\pi(\mu, \sigma^2 \mid \boldsymbol{y})$. 
 :::
 
 ::: {.solution}
