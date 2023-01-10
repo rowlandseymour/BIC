@@ -38,27 +38,27 @@ As $U \sim U[0, 1]$, we have $\mathbb{P}(F(a)\geq U) = F(a)$.
 This theorem says that if we have a random variable $U \sim U[0, 1]$ and we want to get $Y \sim F$, then we can use $F^{-1}(U)$. Viewing this theorem graphically can provide a much more intuitive understanding. 
 
 ::: {.example}
-We would like to sample from an exponential distribution with rate 0.5, i.e. $Y ~ \sim \hbox{Exp}(0.5)$. The density function is given by
+We would like to sample from an exponential distribution with rate $\lambda$, i.e. $Y ~ \sim \hbox{Exp}(\lambda)$. The density function is given by
 
 $$
-\pi(y \mid \lambda = 0.5) = \begin{cases} 
-      0.5e^{0.5y} & y \geq 0 \\
+\pi(y \mid \lambda) = \begin{cases} 
+      \lambdae^{\lambday} & y \geq 0 \\
     0  & \text{otherwise.}
    \end{cases}
 $$
 
 The distribution function can be derived by
 \begin{align*}
-F(y \mid \lambda = 0.5) &= \int_0^y 0.5e^{0.5t}\,dt \\
-& =  1 - e^{0.5y}.
+F(y \mid \lambda) &= \int_0^y \lambda e^{\lambda t}\,dt \\
+& =  1 - e^{\lambda y}.
 \end{align*}
 Finally, the inverse function is given by
 $$
-F^{-1}(y \mid \lambda = 0.5) = -2\log(1-y).  
+F^{-1}(y \mid \lambda) = -\frac{1}{\lambda}\log(1-y).  
 $$
-Therefore, if $U \sim U[0, 1]$, then it follows that $-2\log(1-U) \sim \hbox{Exp}(0.5)$. 
+Therefore, if $U \sim U[0, 1]$, then it follows that $-\frac{1}{\lambda}log(1-U) \sim \hbox{Exp}(\lambda)$. 
 
-The R code below generates a plot to show this. We can plot the CDF for most one parameter distributions straightforwardly. We can think of this theorem as allowing us to sample a point on the y-axis and then computing the quantile this corresponds to. 
+The R code below generates a plot to show this (with $\lambda = 0.5$). We can plot the CDF for most one parameter distributions straightforwardly. We can think of this theorem as allowing us to sample a point on the y-axis and then computing the quantile this corresponds to. 
 
 ```{r}
 set.seed(12345) # to reproduce
@@ -75,11 +75,34 @@ f.inv <- -2*log(1-u)
 #plot 
 segments(x0 = 0, y0 = u, x1 = f.inv, y1 = u, lty = 2)
 segments(x0 = f.inv, y0 = 0, x1 = f.inv, y1 = u, lty = 2)
+text(x = f.inv, y = -0.01, expression(F[-1](U)), col = 4)
+text(x = -.1, y = u, "U", col = 4)
 ```
 :::
 
 ## Rejection Sampling
-We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. 
+We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling works by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. The plot below shows an example from this. We would like to generate a sample from the distribution with the curved density function, which is challenging. Instead, we find a distribution whose density function bounds the one we are interested in a sample from that. In this case we can use the uniform distribution. Once we have generated our sample from he uniform distribution, we choose to accept or reject it based on the distribution we are interested in. In this case we reject it. 
+
+```{r echo = FALSE}
+set.seed(1234)   #to reproduce
+M <- 3/4         #set M
+y <- runif(1)    #sample Y ~ Q
+p <- 3/4*y*(2-y) #compute pi(y)
+k <- p/(M*1)     #compute k
+u <- runif(1)    #sample U ~ U[0, 1]
+
+
+#Create nice plot
+a <- seq(0, 2, 0.01)
+b <- 3/4*a*(2-a)
+c <- M*rep(1, length(a))
+plot(a, b, ylim = c(0, M), type = 'l')
+lines(a, c)
+segments(x0 = y, y0 = 0, x1 = y,  y1 =3/4*y*(2-y) , lty = 2, lwd = 2)
+segments(x0 = y,  y0 =3/4*y*(2-y), x1 = y, y1 = M, lty = 2, col = 2, lwd = 2)
+points(x = y, y = u, pch = 19)
+```
+
 
 Suppose we want to sample from a density $\pi$, but can only generate samples from a density $q$. If there exists some constant $c > 0$, such that $\frac{\pi(y)}{q(y)} \leq c$ for all $y$, then we can generate samples from $p$ by
 
@@ -174,7 +197,7 @@ for(i in 1:weeks){
 }
 
 #Plot results
-par(mfrow = c(1, 2))
+par(mfrow = c(2, 1))
 plot(island, type = 'l', xlab = "Week", ylab = "Island")
 barplot(table(island)/weeks, xlab = "Island", ylab = "Proportion of time")
 ```
@@ -266,73 +289,9 @@ Hence $\pi P = \pi$.
 
 The section has shown us that we can use a Markov chain theory to simulate from a probability distribution $\pi$. All we need is for the Markov chain to be irreducible, aperiodic, and for the transition matrix to satisfy $\pi P = \pi$. This provides the foundation theory for MCMC and allows us to sample from a posterior distribution $\pi$. What it doesn't tell us is how to design the Markov chain, and that is what the next sections deal with. 
 
-## Gibbs Sampler
-We're now going to look at two algorithms to draw samples from posterior distributions. The first is the Gibbs sampler. 
-
-When we can sample directly from conditional posterior distributions, we can use a Gibbs sampler. Suppose we have a distribution with parameters $\{\theta_1, \ldots, \theta_N\}$, a Gibbs sampler works as follows: 
-
-1. Set initial values $\{\theta_1^{(0)}, \ldots, \theta_N^{(0)}\}$
-
-2. Set $i = 1$.
-
-3. Draw a value for $\theta_1^{(i)}$ from $\pi(\theta_1 \mid \theta_2^{(i-1)}, \ldots, \theta_N^{(i-1)}))$.
-
-4. Draw a value for $\theta_2^{(i)}$ from $\pi(\theta_2 \mid \theta_1^{(i-1)}, \theta_3^{(i-1)}, \ldots, \theta_N^{(i-1)}))$.
-
-5. Repeat steps 3 and 4 for parameters $\{\theta_3^{(i)}, \ldots, \theta_N^{(i)}\}$.
-
-6. Repeat steps 3, 4, and 5, for $i = 2, \ldots M$. 
-
-In code, this might look like 
-```
-M #number of iterations
-N #number of parameters
-theta.store   <- matrix(NA, N, M)
-theta         <- numeric(N)
-
-for(j in 1:M){
-  for(j in 1:N){
-    theta[i] <- #sample from conditional with theta[-i]
-  }
-  theta.store[, j] <- theta.current #store current values
-}
-```
-
-The sequence $\left\{\theta_0^{(0)},\ldots, \theta_N^{(0)}\right\}, \left\{\theta_0^{(1)},\ldots, \theta_N^{(1)}\right\}, \ldots, \left\{\theta_0^{(M)},\ldots, \theta_N^{(M)}\right\}$ form a Markov chain. They also form a series of samples from the posterior distribution. However it is important to note that by construction, these samples are not independent since each realisation depends on the previous sample and we must take this into account when doing estimation.
-
-::: {.example}
-Recall the lab in the previous chapter where we derived the posterior distribution for the mean $\mu$ and variance $\sigma^2$ for normally distributed data. The marginal posterior distributions are given by
-$$
-\mu \mid \boldsymbol{y}, \sigma^2 \sim N(\mu_1, \sigma^2_1),
-$$
-
-$$
-\sigma^2 \mid \boldsymbol{y}, \mu \sim \textrm{inv-Gamma}\left(\alpha + \frac{N}{2}, \,\beta + \frac{\sum_{i=1}^N (y_i - \mu)^2}{2}\right),
-$$
-
-where $\mu_1 =\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)$ and $\sigma^2_1 = \left(\frac{30}{\sigma^2}  + \frac{1}{\sigma_0^2}\right)^{-1}$.
-
-
-In this example, we can use a Gibbs sampler to sample from the posterior distribution. The algorithm is given by
->>>>>>> 944450e3dd449fc0f3707f3b8260ca47bdeaba6f
-
-We can set up a Metropolis-Hastings algorithm using Gibbs samplers to generate samples for $\lambda$ and $\gamma$. 
-
-
-1. Set initial values $\{\lambda^{(0)}, \gamma^{(0)}\}$
-
-2. Set $i = 1$.
-
-3. Draw a value for $\lambda^{(i)} \mid \boldsymbol{y}, \gamma^{(i-1)} &\sim \textrm{Gamma}(10, 95 + \gamma^{(i-1)})$
-
-4. Draw a value for $\gamma^{(i)} \mid \boldsymbol{y}, \,\lambda^{(i)} &\sim \hbox{Exp}(\lambda^{(i)} + \nu)$.
-
-6. Repeat steps 3 and 4 for $i = 2, \ldots M$. 
-
-:::
 
 ## Metropolis-Hastings
-The second algorithm we are going to look at is the Metropolis-Hasting algorithm. This is a useful algorithm if we cannot sample directly from the posterior distribution and if the conditional distributions do not have a closed form. 
+We're now going to look at MCMC algorithms. The first algorithm we are going to look at is the Metropolis-Hasting algorithm. This is a useful algorithm if we cannot sample directly from the posterior distribution and if the conditional distributions do not have a closed form. The Metropolis-Hastings algorithm is like the island example we saw earlier. At each iteration, we propose a new sample and then accept or reject it based on the likelihood function, the prior and how likely we are to propose this new sample given the current one. 
 
 Suppose we want to sample from the posterior distribution $\pi(\theta \mid \boldsymbol{y})$. The Metropolis-Hastings works as follows:
 
@@ -474,8 +433,68 @@ It seems that the posterior distribution is very similar when using these two pr
 :::
 
 
+## Gibbs Sampler
+When we can sample directly from conditional posterior distributions, we can use a Gibbs sampler. Suppose we have a distribution with parameters $\{\theta_1, \ldots, \theta_N\}$, a Gibbs sampler works as follows: 
+
+1. Set initial values $\{\theta_1^{(0)}, \ldots, \theta_N^{(0)}\}$
+
+2. Set $i = 1$.
+
+3. Draw a value for $\theta_1^{(i)}$ from $\pi(\theta_1 \mid \theta_2^{(i-1)}, \ldots, \theta_N^{(i-1)}))$.
+
+4. Draw a value for $\theta_2^{(i)}$ from $\pi(\theta_2 \mid \theta_1^{(i-1)}, \theta_3^{(i-1)}, \ldots, \theta_N^{(i-1)}))$.
+
+5. Repeat steps 3 and 4 for parameters $\{\theta_3^{(i)}, \ldots, \theta_N^{(i)}\}$.
+
+6. Repeat steps 3, 4, and 5, for $i = 2, \ldots M$. 
+
+In code, this might look like 
+```
+M #number of iterations
+N #number of parameters
+theta.store   <- matrix(NA, N, M)
+theta         <- numeric(N)
+
+for(j in 1:M){
+  for(j in 1:N){
+    theta[i] <- #sample from conditional with theta[-i]
+  }
+  theta.store[, j] <- theta.current #store current values
+}
+```
+
+The sequence $\left\{\theta_0^{(0)},\ldots, \theta_N^{(0)}\right\}, \left\{\theta_0^{(1)},\ldots, \theta_N^{(1)}\right\}, \ldots, \left\{\theta_0^{(M)},\ldots, \theta_N^{(M)}\right\}$ form a Markov chain. They also form a series of samples from the posterior distribution. However it is important to note that by construction, these samples are not independent since each realisation depends on the previous sample and we must take this into account when doing estimation.
+
+::: {.example}
+Recall the lab in the previous chapter where we derived the posterior distribution for the mean $\mu$ and variance $\sigma^2$ for normally distributed data. The marginal posterior distributions are given by
+$$
+\mu \mid \boldsymbol{y}, \sigma^2 \sim N(\mu_1, \sigma^2_1),
+$$
+
+$$
+\sigma^2 \mid \boldsymbol{y}, \mu \sim \textrm{inv-Gamma}\left(\alpha + \frac{N}{2}, \,\beta + \frac{\sum_{i=1}^N (y_i - \mu)^2}{2}\right),
+$$
+
+where $\mu_1 =\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)$ and $\sigma^2_1 = \left(\frac{30}{\sigma^2}  + \frac{1}{\sigma_0^2}\right)^{-1}$.
+
+We can set up a Metropolis-Hastings algorithm using Gibbs samplers to generate samples for $\lambda$ and $\gamma$. 
+
+
+1. Set initial values $\{\lambda^{(0)}, \gamma^{(0)}\}$
+
+2. Set $i = 1$.
+
+3. Draw a value for $\lambda^{(i)} \mid \boldsymbol{y}, \gamma^{(i-1)} &\sim \textrm{Gamma}(10, 95 + \gamma^{(i-1)})$
+
+4. Draw a value for $\gamma^{(i)} \mid \boldsymbol{y}, \,\lambda^{(i)} &\sim \hbox{Exp}(\lambda^{(i)} + \nu)$.
+
+6. Repeat steps 3 and 4 for $i = 2, \ldots M$. 
+
+:::
+
+
 ## MCMC Diagnostics
-When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well. 
+When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well. For our purposes, mixing well means the chain is exploring the space of possible values of $\theta$ effectively and effectively and not getting stuck on the same value for a long time. 
 
 A key way of doing this is by looking at the trace plot, which is a time series of the posterior samples simulated by the algorithm. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn't look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.
 

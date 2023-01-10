@@ -1,7 +1,7 @@
-h1:advanced-computation Advanced computation
+h1:advanced-computation Advanced Computation
 h2:data-augmentation Data Augmentation
 h3:imputing-censored-observations Imputing censored observations
-h3:imputing-latent-variables Imputing latent variables
+h3:imputing-latent-variables Imputing Latent Variables
 h2:gaussian-processes Gaussian Processes
 h3:covariance-functions Covariance Functions
 h3:gaussian-process-regression Gaussian Process Regression
