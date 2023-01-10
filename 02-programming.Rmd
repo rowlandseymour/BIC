@@ -18,8 +18,9 @@ There are three aims of this lab:
 ::: {.example}
 Computationally verify that the Poisson distribution with rate $\lambda = 100$ can be approximated by a normal distribution with mean and variance 100.
 
-
 To do this, we can generate lots of samples from a Poisson(100) distribution and plot them on top of the density function of the normal distribution with mean and variance 100.
+
+R has four built-in functions for working with distributions. They take the form `rdist`, `ddist`, `pdist`, and `qdist`. You replace the `dist` part with the name of the distribution you want to work with, for example `unif` for the uniform distribution or `norm` for the normal distribution. As we are working with the the Poisson distribution, we will use `pois`. The prefixes allow you to work with the distribution in different ways: `r` gives you random numbers sampled form the distribution, `d` evaluates the density function, `p` evaluates the density function, and `q` evaluates the inverse density function (or quantile function).
 
 The function `rpois` allows us to generate samples from a Poisson distribution. We store 10,000 samples in a vector `y` by calling
 ```{r}

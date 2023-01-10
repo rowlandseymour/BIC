@@ -1,6 +1,6 @@
 # Bayesian Inference
 
-Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definitions, Chapter 3 is much more practical. We're going to be deriving posterior distributions and proving when it does and doesn't work. 
+Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definitions, Chapter 3 is much more practical. We are going to be deriving posterior distributions and proving when it does and doesn't work. 
 
 
 ## The Binomial Distribution
@@ -16,10 +16,9 @@ $$
 $$
 \pi(\boldsymbol{y}\mid \theta) = \begin{pmatrix} 200 \\ 3 \end{pmatrix} \theta^3(1-\theta)^{197},
 $$
-assuming that any two accounts being a bot are independent of one another.
+assuming that any two accounts being a bot are independent of one another. 
 
 **Prior distribution** $\pi(\theta)$. We now need to describe our prior beliefs about $\theta$. We have no reason to suggest $\theta$ takes any specific value, so we use a uniform prior distribution $\theta \sim U[0, 1]$, where $\pi(\theta) = 1$ for $\theta \in [0, 1]$. 
-
 
 **Posterior distribution** $\pi(\theta \mid \boldsymbol{y})$. We can now derive the posterior distribution up to proportionality
 $$
@@ -238,24 +237,6 @@ Therefore the full conditional distribution of $\gamma$ is $\gamma \mid \boldsym
 In the next chapter, we will look at how to sample from these distributions. 
 :::
 
-Another example is when dealing with a distribution with multiple parameters. In the previous section, we derived the posterior distribution for the mean of a normal distribution when the variance is known. We'll now repeat this exercise, but deriving the posterior distribution for both the mean and variance. 
-
-:::{.example}
-Consider the reaction time data $\boldsymbol{y}$ from Example \@{exm:normal}. Again, we assume the $y_i \sim N(\mu, \sigma^2)$, except that this time, we will place a prior distribution on both $\mu$ and $\sigma^2$.
-
-We're going to set up the following hierarchy
-\begin{align*}
-\boldsymbol{y} \mid \mu, \sigma^2 &\sim N(\mu, \sigma^2) \\
-\mu \mid \sigma^2 &\sim N(\mu_0, \sigma^2/k)\\
-\sigma^2 &\sim \hbox{inv}-\Gamma(\alpha, \beta) \\
-\end{align*}.
-
-The prior distribution on $\mu$ is similar to the prior distribution we use when the variance was known. This time, we assume the prior distribution has variance proportional to the distribution that generates the data. The prior distribution on $\sigma^2$ is an inverse-gamma distribution. This has density function
-$$
-\pi(y \mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}\left(\frac{1}{y}\right)^{\alpha+ 1}e^{-\frac{\beta}{x}}.
-$$
-
-:::
 
 ## Prediction
 In many cases, although we are interested in drawing inference for the model parameters, what we may also be interested in is predicting new values, whose distribution is determined by the model parameters and observed data. 
@@ -306,7 +287,7 @@ We can check that our posterior predictive distribution is a valid probability m
 z <- 0:30
 ppd <- beta.binom.posterior.predictive.distribution(z)
 sum(ppd)
-plot(z, ppd, xlab = "z", ylab = expression(pi(z | y)))
+plot(z, ppd, xlab = "z", ylab = "Posterior predictive mass")
 ```
 
 The expected number of students who hand in late is 3.75 and there's a 95% chance that up to 8 hand in late. 
@@ -386,8 +367,7 @@ $$
 $$
 :::
 
-The Berstein-von-Mises theorem says that as the number of data points approaches infinity, the posterior distribution tends to a Normal distribution centered around the MLE and variance dependent on the Fisher information.
-
+The Berstein-von-Mises theorem says that as the number of data points approaches infinity, the posterior distribution tends to a Normal distribution centered around the MLE and variance dependent on the Fisher information. The proof of this theorem is out of the scope of this module, but can be found in Asymptotic Statistics (2000) by A. W. van der Vaart.
 
 ## Exercises
 
