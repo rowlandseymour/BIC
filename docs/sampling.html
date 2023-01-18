@@ -188,7 +188,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6" data-path="sampling.html"><a href="sampling.html#metropolis-hastings"><i class="fa fa-check"></i><b>4.6</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="4.7" data-path="sampling.html"><a href="sampling.html#gibbs-sampler"><i class="fa fa-check"></i><b>4.7</b> Gibbs Sampler</a></li>
 <li class="chapter" data-level="4.8" data-path="sampling.html"><a href="sampling.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>4.8</b> MCMC Diagnostics</a></li>
-<li class="chapter" data-level="4.9" data-path="sampling.html"><a href="sampling.html#exercises-2"><i class="fa fa-check"></i><b>4.9</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>5</b> Advanced Computation</a>
 <ul>
@@ -262,7 +261,7 @@ As <span class="math inline">\(U \sim U[0, 1]\)</span>, we have <span class="mat
 <p><span id="exm:unlabeled-div-66" class="example"><strong>Example 4.1  </strong></span>We would like to sample from an exponential distribution with rate <span class="math inline">\(\lambda\)</span>, i.e. <span class="math inline">\(Y ~ \sim \hbox{Exp}(\lambda)\)</span>. The density function is given by</p>
 <p><span class="math display">\[
 \pi(y \mid \lambda) = \begin{cases}
-      \lambdae^{\lambday} &amp; y \geq 0 \\
+      \lambda e^{\lambda y} &amp; y \geq 0 \\
     0  &amp; \text{otherwise.}
    \end{cases}
 \]</span></p>
@@ -293,13 +292,13 @@ Therefore, if <span class="math inline">\(U \sim U[0, 1]\)</span>, then it follo
 <span id="cb45-14"><a href="sampling.html#cb45-14" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> f.inv, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span>
 <span id="cb45-15"><a href="sampling.html#cb45-15" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> f.inv, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.01</span>, <span class="fu">expression</span>(F[<span class="sc">-</span><span class="dv">1</span>](U)), <span class="at">col =</span> <span class="dv">4</span>)</span>
 <span id="cb45-16"><a href="sampling.html#cb45-16" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> <span class="sc">-</span>.<span class="dv">1</span>, <span class="at">y =</span> u, <span class="st">&quot;U&quot;</span>, <span class="at">col =</span> <span class="dv">4</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 </div>
 </div>
 <div id="rejection-sampling" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> Rejection Sampling<a href="sampling.html#rejection-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling works by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we’re actually interested in. The plot below shows an example from this. We would like to generate a sample from the distribution with the curved density function, which is challenging. Instead, we find a distribution whose density function bounds the one we are interested in a sample from that. In this case we can use the uniform distribution. Once we have generated our sample from he uniform distribution, we choose to accept or reject it based on the distribution we are interested in. In this case we reject it.</p>
-<p><img src="_main_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p>Suppose we want to sample from a density <span class="math inline">\(\pi\)</span>, but can only generate samples from a density <span class="math inline">\(q\)</span>. If there exists some constant <span class="math inline">\(c &gt; 0\)</span>, such that <span class="math inline">\(\frac{\pi(y)}{q(y)} \leq c\)</span> for all <span class="math inline">\(y\)</span>, then we can generate samples from <span class="math inline">\(p\)</span> by</p>
 <ol style="list-style-type: decimal">
 <li><p>Sampling <span class="math inline">\(Y \sim Q\)</span></p></li>
@@ -338,7 +337,7 @@ This has a maximum at <span class="math inline">\(\frac{3}{4}\)</span>. We choos
 <span id="cb48-7"><a href="sampling.html#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> y,  <span class="at">y1 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) , <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
 <span id="cb48-8"><a href="sampling.html#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y,  <span class="at">y0 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y), <span class="at">x1 =</span> y, <span class="at">y1 =</span> M, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
 <span id="cb48-9"><a href="sampling.html#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="at">x =</span> y, <span class="at">y =</span> u, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<p><img src="_main_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 The plot also shows how the choices of <span class="math inline">\(M\)</span> and <span class="math inline">\(q\)</span> can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better <span class="math inline">\(q\)</span> to minimise this space.</p>
 </div>
 </div>
@@ -382,7 +381,7 @@ The plot also shows how the choices of <span class="math inline">\(M\)</span> an
 <span id="cb49-25"><a href="sampling.html#cb49-25" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
 <span id="cb49-26"><a href="sampling.html#cb49-26" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(island, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;Week&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Island&quot;</span>)</span>
 <span id="cb49-27"><a href="sampling.html#cb49-27" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(island)<span class="sc">/</span>weeks, <span class="at">xlab =</span> <span class="st">&quot;Island&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Proportion of time&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 </div>
 <p>We can recognise several different statistical principles in this example. The King decides to move islands dependent on where he is currently, not based on where he has been previously (Markov property). He proposes an island to move to and accepts or rejects this decision based on some distribution (rejection principle). We are now going to describe some of the properties of Markov chains, including the Markov property.</p>
 </div>
@@ -502,7 +501,7 @@ Hence, <span class="math inline">\(\pi(\theta \mid \boldsymbol{y}) \pi(\theta&#3
 <p><span id="exm:norm" class="example"><strong>Example 4.5  </strong></span>Lets think again about the reaction time example in the previous chapter.The time until each lorry driver reacts (in milliseconds) is</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="sampling.html#cb50-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.34</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, <span class="fl">0.27</span>, <span class="fl">0.74</span>, <span class="fl">0.44</span>, <span class="fl">0.46</span>, <span class="fl">0.65</span>, <span class="fl">0.36</span>, <span class="fl">0.55</span>, <span class="fl">0.58</span>, <span class="fl">0.55</span>, <span class="fl">0.53</span>, <span class="fl">0.56</span>, <span class="fl">0.54</span>, <span class="fl">0.61</span>, <span class="fl">0.43</span>, <span class="fl">0.52</span>, <span class="fl">0.45</span>, <span class="fl">0.49</span>, <span class="fl">0.32</span>, <span class="fl">0.33</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, <span class="fl">0.34</span>, <span class="fl">0.60</span>, <span class="fl">0.59</span>, <span class="fl">0.43</span>, <span class="fl">0.57</span>, <span class="fl">0.34</span>)</span>
 <span id="cb50-2"><a href="sampling.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Reaction time (ms)&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <p>Assuming <span class="math inline">\(Y_i \sim N(\mu, \sigma^2)\)</span> are independent and identically distributed for <span class="math inline">\(i=1,...,n\)</span>, by Bayes’ theorem, the posterior distribution is</p>
 <p><span class="math display">\[
 \pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \pi(\boldsymbol{y} \mid \mu, \sigma^2) \pi(\mu).
@@ -554,12 +553,12 @@ p_\textrm{acc} = \min\left\{\frac{\exp\left\{-0.01\mu&#39; -\sum_{i=1}^{30}\frac
 <span id="cb51-31"><a href="sampling.html#cb51-31" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
 <span id="cb51-32"><a href="sampling.html#cb51-32" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb51-33"><a href="sampling.html#cb51-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p>We can see that after about 300 iterations, the Markov chain has converged to its stationary distribution, the posterior distribution. We can see this more clearly by removing the first 300 iterations.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="sampling.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="sampling.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="at">xlab =</span> <span class="fu">expression</span>(mu), <span class="at">main =</span> <span class="st">&quot;Posterior distribution&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-25-2.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-2.png" width="672" /></p>
 <p>The 95% credible interval for <span class="math inline">\(\mu\)</span> using this prior distribution is</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="sampling.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
 <pre><code>##      2.5%     97.5% 
@@ -606,8 +605,8 @@ for(j in 1:M){
 <ol style="list-style-type: decimal">
 <li><p>Set initial values <span class="math inline">\(\{\lambda^{(0)}, \gamma^{(0)}\}\)</span></p></li>
 <li><p>Set <span class="math inline">\(i = 1\)</span>.</p></li>
-<li><p>Draw a value for <span class="math inline">\(\lambda^{(i)} \mid \boldsymbol{y}, \gamma^{(i-1)} &amp;\sim \textrm{Gamma}(10, 95 + \gamma^{(i-1)})\)</span></p></li>
-<li><p>Draw a value for <span class="math inline">\(\gamma^{(i)} \mid \boldsymbol{y}, \,\lambda^{(i)} &amp;\sim \hbox{Exp}(\lambda^{(i)} + \nu)\)</span>.</p></li>
+<li><p>Draw a value for <span class="math inline">\(\lambda^{(i)} \mid \boldsymbol{y}, \gamma^{(i-1)} \sim \textrm{Gamma}(10, 95 + \gamma^{(i-1)})\)</span></p></li>
+<li><p>Draw a value for <span class="math inline">\(\gamma^{(i)} \mid \boldsymbol{y}, \,\lambda^{(i)} \sim \hbox{Exp}(\lambda^{(i)} + \nu)\)</span>.</p></li>
 <li><p>Repeat steps 3 and 4 for <span class="math inline">\(i = 2, \ldots M\)</span>.</p></li>
 </ol>
 </div>
@@ -658,7 +657,7 @@ for(j in 1:M){
 <span id="cb58-30"><a href="sampling.html#cb58-30" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
 <span id="cb58-31"><a href="sampling.html#cb58-31" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb58-32"><a href="sampling.html#cb58-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3000</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <p>The next is where the step size is too small. It takes a long time for the chain to converge (~50% of the run time). When the chain does converge, it is inefficient at exploring the space.</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="sampling.html#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
 <span id="cb59-2"><a href="sampling.html#cb59-2" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
@@ -694,241 +693,7 @@ for(j in 1:M){
 <span id="cb59-32"><a href="sampling.html#cb59-32" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb59-33"><a href="sampling.html#cb59-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span>
 <span id="cb59-34"><a href="sampling.html#cb59-34" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
-</div>
-</div>
-<div id="exercises-2" class="section level2 hasAnchor" number="4.9">
-<h2><span class="header-section-number">4.9</span> Exercises<a href="sampling.html#exercises-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="exercise">
-<p><span id="exr:unlabeled-div-84" class="exercise"><strong>Exercise 4.1  </strong></span>Let <span class="math inline">\(Y\)</span> be a random variable with a probability density function defined by
-<span class="math display">\[
-\pi(y) = \alpha y^3 \quad \hbox{for } 0 \leq y \leq 4,
-\]</span>
-where <span class="math inline">\(\alpha \in \mathbb{R}\)</span> is a constant.</p>
-<ol style="list-style-type: decimal">
-<li>Compute the value of <span class="math inline">\(\alpha\)</span>.</li>
-<li>Derive the distribution function <span class="math inline">\(F(y)\)</span>.</li>
-<li>Using the inverse transform theorem, derive a function <span class="math inline">\(g\)</span> such that if <span class="math inline">\(U \sim U[0, 1]\)</span>, then <span class="math inline">\(g(U)\)</span> has the same distribution as <span class="math inline">\(Y\)</span>.</li>
-</ol>
-</div>
-<div class="solution">
-<p><span id="unlabeled-div-85" class="solution"><em>Solution</em>. </span>This exercise is about the inverse transform sampling method.</p>
-<ol style="list-style-type: decimal">
-<li>Using the fact that <span class="math inline">\(\int_0^4 \pi(y) dy = 1\)</span>, we have <span class="math inline">\(\alpha = \frac{1}{64}\)</span>.</li>
-<li>Introducing a dummy variable <span class="math inline">\(x\)</span>, we have
-<span class="math display">\[
-\int_0^y \frac{1}{64}x^3dx = \frac{1}{256}y^4.
-\]</span>
-Hence the distribution function for <span class="math inline">\(Y\)</span> is given by
-<span class="math display">\[
-F(y) = \begin{cases}
-0 &amp; \hbox{for } y \leq 0\\
-\frac{1}{256}y^4 &amp; \hbox{for } 0  &lt; y \leq 4 \\
-1 &amp; y &gt; 4
-\end{cases}.
-\]</span></li>
-<li>We have
-<span class="math display">\[
-F(y) = \frac{1}{256}y^4 \iff F^{-1}(y) = 4y^{\frac{1}{4}}.
-\]</span>
-By the inverse transform theorem, if <span class="math inline">\(U \sim U[0, 1]\)</span> then <span class="math inline">\(4U^{\frac{1}{4}}\)</span> has the same distribution as <span class="math inline">\(Y\)</span>.</li>
-</ol>
-</div>
-<div class="exercise">
-<p><span id="exr:unlabeled-div-86" class="exercise"><strong>Exercise 4.2  </strong></span>Suppose <span class="math inline">\(Y\)</span> has the density function
-<span class="math display">\[
-f(y) = \frac{1}{2\sqrt{y}}e^{-\sqrt{y}} \quad \hbox{for } y \geq 0.
-\]</span></p>
-<ol style="list-style-type: decimal">
-<li>Using integration by substitution, derive the distribution function <span class="math inline">\(F(y)\)</span>.</li>
-<li>Using the inverse transform method, construct a method for sampling from this distribution.</li>
-</ol>
-</div>
-<div class="solution">
-<p><span id="unlabeled-div-87" class="solution"><em>Solution</em>. </span>Another exercise about the inverse transform method, but this time with a slightly more complex density function.</p>
-<ol style="list-style-type: decimal">
-<li>Introducing the dummy variable <span class="math inline">\(x\)</span>, we need to evaluate
-<span class="math display">\[
-\int_0^y \frac{1}{2\sqrt{x}}e^{-\sqrt{x}}\,dx.
-\]</span></li>
-</ol>
-<p>The easiest substitution to use is <span class="math inline">\(u = \sqrt{x}\)</span>. This gives us <span class="math inline">\(dx = 2du\sqrt{x}\)</span>. Substituting these into the integral gives
-<span class="math display">\[\begin{align*}
-\int_0^y \frac{1}{2u}e^{-u}\,dx &amp; = \int_0^\sqrt{y} e^{-u}\,dx \\
-&amp;= [-e^{-u}]_0^\sqrt{y} \\
-&amp;= 1 - e^{-\sqrt{y}}.
-\end{align*}\]</span>
-A quicker, but less obvious way to compute the integral is to note that <span class="math inline">\(\frac{d}{dx}e^{f(x)} = f&#39;(x)e^{f(x)}\)</span>.
-The distribution function is therefore
-<span class="math display">\[
-F(y) = \begin{cases}
-1 - e^{-\sqrt{y}} &amp; \hbox{for } y \geq 0 \\
-0  &amp; \hbox{otherwise}
-\end{cases}.
-\]</span></p>
-<ol start="2" style="list-style-type: decimal">
-<li>Using the inverse transform method, if <span class="math inline">\(U\sim U[0, 1]\)</span> then <span class="math inline">\(F^{-1}(U)\)</span> will have the same distribution as <span class="math inline">\(Y\)</span>. The inverse of the distribution function is
-<span class="math display">\[
-F^{-1}(y) = (\log(1-y))^2.
-\]</span>
-The method would be</li>
-</ol>
-<ol style="list-style-type: lower-roman">
-<li>Sample <span class="math inline">\(U\sim U[0, 1]\)</span></li>
-<li>Compute <span class="math inline">\(Y=(\log(1-U))^2\)</span></li>
-</ol>
-</div>
-<div class="exercise">
-<p><span id="exr:unlabeled-div-88" class="exercise"><strong>Exercise 4.3  </strong></span>The density function for the half-normal distribution with variance 1 is
-<span class="math display">\[
-\pi(x) = \frac{2}{\sqrt{2\pi}}\exp\left\{-\frac{1}{2}x^2\right\} \qquad \hbox{for } x \geq 0.
-\]</span></p>
-<ol style="list-style-type: decimal">
-<li>Using an exponential distribution with rate <span class="math inline">\(\lambda\)</span> as a proposal distribution, show that
-<span class="math display">\[
-\frac{\pi(x)}{q(x)} = \frac{2}{\lambda\sqrt{2\pi}}\exp\left\{\lambda x - \frac{1}{2}x^2 \right\}.
-\]</span></li>
-<li>What is <span class="math inline">\(M\)</span>, the maximum value of this ratio? On the same plot, sketch <span class="math inline">\(\pi(x)\)</span> and <span class="math inline">\(Mq(x)\)</span>.</li>
-<li>Construct a rejection sampling algorithm to sample from the half normal distribution.</li>
-</ol>
-</div>
-<div class="solution">
-<p><span id="unlabeled-div-89" class="solution"><em>Solution</em>. </span>The normal distribution is difficult to sample from, especially as the inverse of its distribution is difficult to work with. One method to generate samples is using a rejection sampling method.</p>
-<ol style="list-style-type: decimal">
-<li>The density function of a exponential distribution with rate <span class="math inline">\(\lambda\)</span> is <span class="math inline">\(q(x \mid \lambda) = \lambda e^{-\lambda x}\)</span>. The ratio is given by
-<span class="math display">\[\begin{align*}
-\frac{\pi(x)}{q(x)} &amp;= \frac{\frac{2}{\sqrt{2\pi}}\exp\{-\frac{1}{2}x^2\}}{\lambda e^{-\lambda x}} \\
-&amp; = \frac{2}{\lambda\sqrt{2\pi}}\exp\left\{\lambda x - \frac{1}{2}x^2\right\}.
-\end{align*}\]</span></li>
-<li>The find the maximum value of this ratio, we first need to find the value of <span class="math inline">\(x\)</span> that maximises the ratio. Differentiating gives
-<span class="math display">\[
-\frac{d}{dx}\frac{2}{\lambda\sqrt{2\pi}}\exp\left\{\lambda x - \frac{1}{2}x^2 \right\} = \frac{2(\lambda - x)}{\lambda\sqrt{2\pi}}\exp\left\{\lambda x - \frac{1}{2}x^2 \right\}
-\]</span>
-Setting this equal to 0 shows that <span class="math inline">\(x = \lambda\)</span> maximises the ratio. The maxmimum value of the ratio is thus
-<span class="math display">\[
-M = \frac{\pi(\lambda)}{q(\lambda)} = \frac{2}{\lambda\sqrt{2\pi}}\exp\left\{-\frac{1}{2}\lambda^2\right\}
-\]</span>
-The plot below shows that not only is <span class="math inline">\(\pi(x) \leq Mq(x)\)</span>, but is that <span class="math inline">\(M\)</span> is the optimal value for a rejection sampling algorithm.</li>
-</ol>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="sampling.html#cb60-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="fl">0.01</span>)</span>
-<span id="cb60-2"><a href="sampling.html#cb60-2" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb60-3"><a href="sampling.html#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-4"><a href="sampling.html#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Denisties</span></span>
-<span id="cb60-5"><a href="sampling.html#cb60-5" aria-hidden="true" tabindex="-1"></a>pi.x <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">/</span>(<span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">*</span>pi))<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb60-6"><a href="sampling.html#cb60-6" aria-hidden="true" tabindex="-1"></a>q.x  <span class="ot">&lt;-</span> <span class="fu">dexp</span>(x, lambda) </span>
-<span id="cb60-7"><a href="sampling.html#cb60-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-8"><a href="sampling.html#cb60-8" aria-hidden="true" tabindex="-1"></a><span class="co">#M</span></span>
-<span id="cb60-9"><a href="sampling.html#cb60-9" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">/</span>(lambda<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">2</span><span class="sc">*</span>pi))<span class="sc">*</span><span class="fu">exp</span>(<span class="fl">0.5</span><span class="sc">*</span>lambda<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb60-10"><a href="sampling.html#cb60-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb60-11"><a href="sampling.html#cb60-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot</span></span>
-<span id="cb60-12"><a href="sampling.html#cb60-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, pi.x, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, M), <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;density&quot;</span>)</span>
-<span id="cb60-13"><a href="sampling.html#cb60-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, M<span class="sc">*</span>q.x, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb60-14"><a href="sampling.html#cb60-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&#39;topright&#39;</span>, <span class="fu">c</span>(<span class="fu">expression</span>(<span class="fu">pi</span>(x)), <span class="fu">expression</span>(<span class="fu">Mq</span>(x))), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
-<ol start="3" style="list-style-type: decimal">
-<li>The rejection sampling algorithm for the half normal distribution works as follows:</li>
-</ol>
-<ol style="list-style-type: lower-roman">
-<li>Sample <span class="math inline">\(x\)</span> from the exponential distribution.</li>
-<li>Sample <span class="math inline">\(u \sim U[0, 1]\)</span>.</li>
-<li>If <span class="math inline">\(u &lt; \frac{\pi(x)}{Mq(x)}\)</span>, then accept <span class="math inline">\(x\)</span> as a sample from the half normal distribution.</li>
-</ol>
-</div>
-<div class="exercise">
-<p><span id="exr:unlabeled-div-90" class="exercise"><strong>Exercise 4.4  </strong></span>We are using a rejection sampling algorithm to sample from <span class="math inline">\(f(y)\)</span> using the proposal distribution <span class="math inline">\(g(y)\)</span>. Given a proposed value <span class="math inline">\(y\)</span>, and let <span class="math inline">\(A\)</span> be the event of sample is accepted. The probability a sample is accepted, given it takes the value <span class="math inline">\(y\)</span> is
-<span class="math display">\[
-A \mid y \sim \hbox{Bernoulli}\left(\frac{f(y)}{Mg(y)}\right).
-\]</span></p>
-<ol style="list-style-type: decimal">
-<li>Using the tower property, show <span class="math inline">\(E(A) = \frac{1}{M}\)</span>.<br />
-</li>
-<li>Assuming each proposal is independent, what is the distribution of the number of samples generated until one is accepted?</li>
-</ol>
-</div>
-<div class="solution">
-<p><span id="unlabeled-div-91" class="solution"><em>Solution</em>. </span>We saw in the last question that we derived the optimal value of the constant <span class="math inline">\(M\)</span>. This exercise is about computing the efficiency of a rejection sampling algorithm, which depends on <span class="math inline">\(M\)</span>. The efficiency is the expected number of proposals generated until one is accepted.</p>
-<ol style="list-style-type: decimal">
-<li>Let <span class="math inline">\(A\)</span> be the event a proposal is accepted, we would like We have <span class="math inline">\(A \mid y \sim \hbox{Bernoulli}\left(\frac{f(y)}{Mg(y)}\right)\)</span>. By the tower property
-<span class="math display">\[\begin{align*}
-E(A) &amp; = E(E(A\mid y)) \\
-&amp; = E\left(\frac{f(y)}{Mg(y)}\right) \\
-&amp; = \int \frac{f(y)}{Mg(y)} g(y) dy \\
-&amp; = \frac{1}{M}\int f(y) dy \\
-&amp; = \frac{1}{M}.
-\end{align*}\]</span></li>
-<li>The number of events until a success is modelled by the geometric distribution. The number of samples proposed before one is accepted is distributed geometrically with mean <span class="math inline">\(\frac{1}{M}\)</span>. The smaller the value of <span class="math inline">\(M\)</span>, the more efficient the sampler.</li>
-</ol>
-</div>
-<div class="exercise">
-<p><span id="exr:unlabeled-div-92" class="exercise"><strong>Exercise 4.5  </strong></span>Alice wants to construct a Markov Chain to sample numbers from one to six. She chooses an initial number at random. She flips a coin and decides to stay with that number if it’s a head, and move to a different number if it’s a tails. If she chooses to move number she flips the coin again. If it’s heads, she moves to a number one larger than she is now, if it’s tails she moves to a number one smaller than she is now. Once she reaches one or six, she stops.</p>
-<ol style="list-style-type: decimal">
-<li>Draw a state space diagram for this chain.</li>
-<li>Is Alice’s Markov chain aperiodic and irreducible?</li>
-</ol>
-<p>Bob comes up with a similar Markov chain. Like Alice, he chooses an initial number at random and flips a coin to decide if he should keep that number of move to a different one. However, his next step differs from Alice’s. If he chooses to move number he flips the coin again. If it’s heads, he moves to a number two larger than he is now, if it’s tails he moves to a number two smaller than he is now. He also treats the numbers like a circle, where if he is on six, he can move to four or two. Likewise, if he is on one, he can move to five or three.</p>
-<ol style="list-style-type: decimal">
-<li>Draw a state space diagram for this chain.</li>
-<li>Is Bob’s Markov chain aperiodic and irreducible?</li>
-</ol>
-</div>
-<div class="solution">
-<p><span id="unlabeled-div-93" class="solution"><em>Solution</em>. </span>The state space diagram for Alice and Bob’s Markov chains are:
-<embed src="State_Space_Diagram.pdf" style="display: block; margin: auto;" type="application/pdf" />
-Neither Alice nor Bob have constructed Markov chains that are aperiodic and irreducible. In Alice’s chain, states one and six are absorbing states – if Alice ends up with one of these numbers, she is never going to choose another number. This means states one and six have period one. As Alice’s chain has absorbing states, it isn’t irreducible either. For example, it isn’t possible to get from state six to two in a finite (or any) number of steps. As Bob has introduce a mechanism to loop round the numbers, his chain is aperiodic. However, it isn’t irreducible. Moving up and down two numbers means that he is restricted to the even or odd numbers. If he starts on an even number, he is never going to reach an odd number.</p>
-</div>
-<div class="exercise">
-<p><span id="exr:unlabeled-div-94" class="exercise"><strong>Exercise 4.6  </strong></span>You observe <span class="math inline">\(N\)</span> data points <span class="math inline">\(\{y_1, \ldots, y_N\} \sim N(\mu, \sigma^2)\)</span>. Place a normal prior distribution on the mean parameter <span class="math inline">\(\mu\)</span> and inverse-gamma prior distribution <span class="math inline">\(\sigma^2\)</span> to derive the posterior distributions <span class="math inline">\(\pi(\mu, \sigma^2 \mid \boldsymbol{y})\)</span>.</p>
-</div>
-<div class="solution">
-<p><span id="unlabeled-div-95" class="solution"><em>Solution</em>. </span>Using the prior distributions
-<span class="math display">\[
-\mu \sim N(\mu_0, \sigma_0^2), \qquad \sigma^2 \sim \hbox{inv}-\Gamma(\alpha, \beta)
-\]</span>
-gives the posterior distribution ….</p>
-<p>The full conditional distributions are
-<span class="math display">\[
-\mu \mid \sigma^2, \boldsymbol{y} \sim N(\mu_1, \sigma_1^2), \qquad \sigma^2 \mid \mu,\boldsymbol{y} \sim \hbox{inv}-\Gamma(\alpha_1, \beta_1).
-\]</span>
-A good MCMC algorithm could look like this:</p>
-<ol style="list-style-type: decimal">
-<li>Set <span class="math inline">\(\mu^{(1)} = 0\)</span>, <span class="math inline">\(\sigma^{2(0)} = 1\)</span> and <span class="math inline">\(i = 1\)</span>.</li>
-<li>Sample <span class="math inline">\(\mu^{(i)} \mid \sigma^{2(i-1)}, \boldsymbol{y} \sim N(\mu_1, \sigma_1^2)\)</span>.</li>
-<li>Sample <span class="math inline">\(\sigma^{2(i)} \mid \mu^{(i)}, \boldsymbol{y} \sim \hbox{inv}-\Gamma(\alpha_1, \beta_1)\)</span>.</li>
-<li>Repeat steps 2 and 3 for a given number of iterations.</li>
-<li>Check the trace plots to ensure the Markov chain has converged and mixed well.</li>
-</ol>
-</div>
-<div class="exercise">
-<p><span id="exr:unlabeled-div-96" class="exercise"><strong>Exercise 4.7  </strong></span>In the lectures, we looked at Metropolis-Hastings Random Walk algorithms. Another algorithm is a Metropolis-Hastings Independence Sampler. In an independence sampler, the proposal distribution does not depend on the current values, that is
-<span class="math display">\[
-q(y&#39;\mid y) = q(y&#39;).
-\]</span></p>
-<ol style="list-style-type: decimal">
-<li>Let <span class="math inline">\(y_1, \ldots, y_N \sim N(\mu, \sigma^2)\)</span>, where <span class="math inline">\(\sigma^2\)</span> is know. Show the posterior distribution has no closed form when the prior distribution <span class="math inline">\(\mu \sim \Gamma(\alpha, \beta)\)</span> is used.</li>
-<li>Suppose you are constructing an MCMC algorithm to sample from this distribution. Denote the current value of the Markov chain <span class="math inline">\(\mu\)</span>. Given a proposal <span class="math inline">\(\mu&#39; \sim N(0, 5^2)\)</span> proposal distribution, derive the acceptance probability.</li>
-</ol>
-</div>
-<div class="solution">
-<p><span id="unlabeled-div-97" class="solution"><em>Solution</em>. </span>This question is about independence samplers. They are typically very good or very bad at sampling from the posterior distribution.</p>
-<ol style="list-style-type: decimal">
-<li><p>The likelihood function is given by
-<span class="math display">\[
-\pi(\boldsymbol{y} \mid \mu, \sigma^2) \propto \exp\left\{-\frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - \mu)^2 \right\}.
-\]</span>
-The prior distribution is <span class="math inline">\(\pi(\mu) \propto \mu^{\alpha-1}\exp\{-beta\mu\}\)</span>. The posterior distribution is the product of these and given by
-<span class="math display">\[
-\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \mu^{\alpha-1} \exp\left\{-\frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - \mu)^2  -
-\beta\mu\right\}.
-\]</span></p></li>
-<li><p>The acceptance probability is
-<span class="math display">\[
-p_{acc} = \frac{\pi(\mu&#39;\mid \boldsymbol{y}, \sigma^2)}{\pi(\mu&#39;\mid \boldsymbol{y}, \sigma^2)} \frac{\pi(\mu)}{\pi(\mu&#39;)}.
-\]</span>
-Substituting the proportional densities in yields
-<span class="math display">\[
-p_{acc} = \exp\left\{-\frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - \mu&#39;)^2 + \frac{1}{2\sigma^2}\sum_{i=1}^N (y_i - \mu)^2 -\frac{1}{50}\mu^2 + \frac{1}{50}{\mu&#39;}^2 \right\}.
-\]</span></p></li>
-</ol>
+<p><img src="_main_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 </div>
 
 </div>

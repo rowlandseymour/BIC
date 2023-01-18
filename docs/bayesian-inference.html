@@ -188,7 +188,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6" data-path="sampling.html"><a href="sampling.html#metropolis-hastings"><i class="fa fa-check"></i><b>4.6</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="4.7" data-path="sampling.html"><a href="sampling.html#gibbs-sampler"><i class="fa fa-check"></i><b>4.7</b> Gibbs Sampler</a></li>
 <li class="chapter" data-level="4.8" data-path="sampling.html"><a href="sampling.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>4.8</b> MCMC Diagnostics</a></li>
-<li class="chapter" data-level="4.9" data-path="sampling.html"><a href="sampling.html#exercises-2"><i class="fa fa-check"></i><b>4.9</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>5</b> Advanced Computation</a>
 <ul>
@@ -313,9 +312,9 @@ The distribution of the rate of the claims given the observed data is <span clas
 <span id="cb23-18"><a href="bayesian-inference.html#cb23-18" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb23-19"><a href="bayesian-inference.html#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-20"><a href="bayesian-inference.html#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.distributions</span>(<span class="fl">0.01</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="bayesian-inference.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.distributions</span>(<span class="dv">50</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
 <p>The insurance managers recommend that because this is a new premium, a vague prior distribution be used and <span class="math inline">\(\gamma = 0.01\)</span>. The posterior mean is <span class="math inline">\(\frac{10}{95.01} \approx 0.105\)</span> and the 95% credible interval is</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="bayesian-inference.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">qgamma</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="dv">10</span>, <span class="fl">95.01</span>), <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## [1] 0.05 0.18</code></pre>
@@ -328,7 +327,7 @@ The distribution of the rate of the claims given the observed data is <span clas
 <p><span id="exm:normal" class="example"><strong>Example 3.4  </strong></span>Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="bayesian-inference.html#cb27-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.34</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, <span class="fl">0.27</span>, <span class="fl">0.74</span>, <span class="fl">0.44</span>, <span class="fl">0.46</span>, <span class="fl">0.65</span>, <span class="fl">0.36</span>, <span class="fl">0.55</span>, <span class="fl">0.58</span>, <span class="fl">0.55</span>, <span class="fl">0.53</span>, <span class="fl">0.56</span>, <span class="fl">0.54</span>, <span class="fl">0.61</span>, <span class="fl">0.43</span>, <span class="fl">0.52</span>, <span class="fl">0.45</span>, <span class="fl">0.49</span>, <span class="fl">0.32</span>, <span class="fl">0.33</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, <span class="fl">0.34</span>, <span class="fl">0.60</span>, <span class="fl">0.59</span>, <span class="fl">0.43</span>, <span class="fl">0.57</span>, <span class="fl">0.34</span>)</span>
 <span id="cb27-2"><a href="bayesian-inference.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Reaction time (ms)&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="bayesian-inference.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y)</span></code></pre></div>
 <pre><code>## [1] 0.4896667</code></pre>
 <p>Suppose that, somehow, we know the population standard deviation is 0.01<span class="math inline">\(ms\)</span> and we wish to estimate the population mean <span class="math inline">\(\mu\)</span>. By Bayes’ theorem, the posterior distribution is
@@ -394,7 +393,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <span id="cb32-2"><a href="bayesian-inference.html#cb32-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.48</span>, <span class="fl">0.5</span>, <span class="fl">0.0001</span>) </span>
 <span id="cb32-3"><a href="bayesian-inference.html#cb32-3" aria-hidden="true" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(mu, <span class="at">mean =</span> mu1, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma1.sq))</span>
 <span id="cb32-4"><a href="bayesian-inference.html#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu, posterior, <span class="at">type =</span><span class="st">&#39;l&#39;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>The 95% credible interval for the population’s mean reaction time is</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="bayesian-inference.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), mu1, <span class="fu">sqrt</span>(sigma1.sq))</span></code></pre></div>
 <pre><code>## [1] 0.4860883 0.4932451</code></pre>
@@ -472,7 +471,7 @@ This integral is difficult to evaluate immediately. But by multiplying (and divi
 <span id="cb36-3"><a href="bayesian-inference.html#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(ppd)</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="bayesian-inference.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(z, ppd, <span class="at">xlab =</span> <span class="st">&quot;z&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Posterior predictive mass&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>The expected number of students who hand in late is 3.75 and there’s a 95% chance that up to 8 hand in late.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="bayesian-inference.html#cb39-1" aria-hidden="true" tabindex="-1"></a>z<span class="sc">%*%</span>ppd <span class="co">#expectation</span></span></code></pre></div>
 <pre><code>##      [,1]
