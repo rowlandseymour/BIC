@@ -188,7 +188,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6" data-path="sampling.html"><a href="sampling.html#metropolis-hastings"><i class="fa fa-check"></i><b>4.6</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="4.7" data-path="sampling.html"><a href="sampling.html#gibbs-sampler"><i class="fa fa-check"></i><b>4.7</b> Gibbs Sampler</a></li>
 <li class="chapter" data-level="4.8" data-path="sampling.html"><a href="sampling.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>4.8</b> MCMC Diagnostics</a></li>
-<li class="chapter" data-level="4.9" data-path="sampling.html"><a href="sampling.html#exercises-2"><i class="fa fa-check"></i><b>4.9</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>5</b> Advanced Computation</a>
 <ul>
@@ -266,7 +265,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \]</span></p>
 </div>
 <p>This means that if you had an infinite number of samples for <span class="math inline">\(Y\)</span> and the corresponding infinite number of confidence intervals, then <span class="math inline">\(100(1-\alpha)\)</span>% of them would contain the true value of <span class="math inline">\(\theta\)</span>. It does <em>not</em> mean that there is a <span class="math inline">\(100(1-\alpha)\)</span> probability a particular interval contains the true value of <span class="math inline">\(\theta\)</span>.</p>
-<p>Given that we want to understand the properties of <span class="math inline">\(\theta\)</span> given the data we have observed <span class="math inline">\(\boldsymbol{y}\)</span>, then you might think it makes sense to investigate the distribution <span class="math inline">\(\pi(\theta \mid \boldymbold{y})\)</span>. This distribution says what are the likely values of <span class="math inline">\(\theta\)</span> given the information we have observed from the data <span class="math inline">\(\boldsmybol{y}\)</span>. We will talk about Bayes’ theorem in more detail later on in this chapter, but, for now, we will use it to write down this distribution
+<p>Given that we want to understand the properties of <span class="math inline">\(\theta\)</span> given the data we have observed <span class="math inline">\(\boldsymbol{y}\)</span>, then you might think it makes sense to investigate the distribution <span class="math inline">\(\pi(\theta \mid \boldsymbol{y})\)</span>. This distribution says what are the likely values of <span class="math inline">\(\theta\)</span> given the information we have observed from the data <span class="math inline">\(\boldsymbol{y}\)</span>. We will talk about Bayes’ theorem in more detail later on in this chapter, but, for now, we will use it to write down this distribution
 <span class="math display">\[
 \pi(\theta \mid \boldsymbol{y}) = \frac{\pi(\boldsymbol{y} \mid \theta)\pi(\theta)}{\pi(\boldsymbol{y})}.
 \]</span>
@@ -432,7 +431,7 @@ We know the form of <span class="math inline">\(\pi(y \mid \theta) = \frac{1}{\s
 <span id="cb1-35"><a href="fundamentals.html#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, likelihood, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
 <span id="cb1-36"><a href="fundamentals.html#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, normal.prior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
 <span id="cb1-37"><a href="fundamentals.html#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, posterior3, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">yaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/prior-posterior-grid-1.png" width="672" /></p>
 <ol style="list-style-type: decimal">
 <li><p>The posterior distribution is proportional to the likelihood function. The prior distribution closely matches frequentist inference. Both the MLE and posterior mean are 0.</p></li>
 <li><p>We get a lopsided posterior distribution, that is proportional to the likelihood function for positive values of <span class="math inline">\(\theta\)</span>, but is 0 for negative values of <span class="math inline">\(\theta\)</span>.</p></li>

@@ -188,7 +188,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6" data-path="sampling.html"><a href="sampling.html#metropolis-hastings"><i class="fa fa-check"></i><b>4.6</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="4.7" data-path="sampling.html"><a href="sampling.html#gibbs-sampler"><i class="fa fa-check"></i><b>4.7</b> Gibbs Sampler</a></li>
 <li class="chapter" data-level="4.8" data-path="sampling.html"><a href="sampling.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>4.8</b> MCMC Diagnostics</a></li>
-<li class="chapter" data-level="4.9" data-path="sampling.html"><a href="sampling.html#exercises-2"><i class="fa fa-check"></i><b>4.9</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>5</b> Advanced Computation</a>
 <ul>
@@ -249,7 +248,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="programming-in-r.html#cb2-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> <span class="dv">10000</span>, <span class="at">lambda =</span> <span class="dv">100</span>)</span></code></pre></div>
 <p>We can generate a histogram of <code>y</code> using the <code>hist</code> command. Setting <code>freq = FALSE</code>, makes R plot a density histogram instead of a frequency histogram. Typing <code>?hist</code> will give you more information about this</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="programming-in-r.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>The last thing to do is to plot the normal density on top. There are a couple of ways of doing this. The way below generates a uniform grid of points and then evaluates the density at each point. Finally, it adds a line graph of these densities on top.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="programming-in-r.html#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">50</span>, <span class="at">to =</span> <span class="dv">150</span>, <span class="at">by =</span> <span class="dv">1</span>)           <span class="co">#create uniform grid on [50, 150]</span></span>
 <span id="cb4-2"><a href="programming-in-r.html#cb4-2" aria-hidden="true" tabindex="-1"></a>density <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">100</span>)) <span class="co">#compute density</span></span>
@@ -257,7 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-4"><a href="programming-in-r.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#plot together</span></span>
 <span id="cb4-5"><a href="programming-in-r.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
 <span id="cb4-6"><a href="programming-in-r.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, density)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>The two match up well, showing the normal distribution is a suitable approximation here.</p>
 </div>
 <p>Over the next two sessions, you will need to solve the following four problems in R. You can type <code>?</code> before any function in R (e.g. <code>?rnorm</code>) to bring up R’s helpage on the function. Googling can also bring up lots of information, possible solutions and support.</p>

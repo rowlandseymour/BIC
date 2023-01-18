@@ -50,7 +50,7 @@ $$
 This means that if you had an infinite number of samples for $Y$ and the corresponding infinite number of confidence intervals, then $100(1-\alpha)$% of them would contain the true value of $\theta$. It does *not* mean that there is a $100(1-\alpha)$ probability a particular interval contains the true value of $\theta$. 
 
 
-Given that we want to understand the properties of $\theta$ given the data we have observed $\boldsymbol{y}$, then you might think it makes sense to investigate the distribution $\pi(\theta \mid \boldymbold{y})$. This distribution says what are the likely values of $\theta$ given the information we have observed from the data $\boldsmybol{y}$. We will talk about Bayes' theorem in more detail later on in this chapter, but, for now, we will use it to write down this distribution 
+Given that we want to understand the properties of $\theta$ given the data we have observed $\boldsymbol{y}$, then you might think it makes sense to investigate the distribution $\pi(\theta \mid \boldsymbol{y})$. This distribution says what are the likely values of $\theta$ given the information we have observed from the data $\boldsymbol{y}$. We will talk about Bayes' theorem in more detail later on in this chapter, but, for now, we will use it to write down this distribution 
 $$
 \pi(\theta \mid \boldsymbol{y}) = \frac{\pi(\boldsymbol{y} \mid \theta)\pi(\theta)}{\pi(\boldsymbol{y})}. 
 $$
@@ -200,7 +200,7 @@ We now go and observe some data. After a lot of time and effort, we collect one 
 
 Now we have all the ingredients to construct the posterior distribution. We multiply the likelihood function evaluated at $y = 0$ by each of the three prior distributions. This gives us the posterior distributions (up to proportionality).
 
-```{r}
+```{r prior-posterior-grid}
 #The likelihood function is the normal PDF
 #To illustrate this, we evaluate this from [-5, 5].
 x <- seq(-5, 5, 0.01)
