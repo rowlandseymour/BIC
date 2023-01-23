@@ -1,7 +1,7 @@
 
 # Fundamentals of Bayesian Inference {#fundamentals}
 
-Bayesian inference is built on a different way of thinking about parameters of probability distributions using methods you have learnt so far. In the past 30 years or so, Bayesian inference has become much more popular. This is partly due to increased computational power becoming available. In this first chapter, we are going to set out to answer:
+Bayesian inference is built on a different way of thinking about parameters of probability distributions than methods you have learnt so far. In the past 30 years or so, Bayesian inference has become much more popular. This is partly due to increased computational power becoming available. In this first chapter, we are going to set out to answer:
 
 1. What are the fundamental principles of Bayesian inference? 
 
@@ -35,13 +35,13 @@ The sampling distribution is an important concept in frequentist theory as it de
 The most common way to estimate the value of $\theta$ is using maximum likelihood estimation. Although other methods do exist (e.g. method of moments, or generalised maximum likelihood estimation). 
 
 :::{.definition}
-The maximum likelihood estimate of $\theta$, $\hat{\theta}$, is the value such that $\hat{\theta} = \max_{\theta} \pi(\theta \mid \boldsymbol{y})$.
+The maximum likelihood estimate of $\theta$, $\hat{\theta}$, is the value such that $\hat{\theta} = \max_{\theta} \pi(\boldsymbol{y}\mid \theta)$.
 :::
 
 Uncertainty around the maximum likelihood estimate is based on the theory of long running events that underpin frequentist theory.
 
 ::: {.definition} 
-Let $X$ be a random sample from a probability distribution $\theta$. A **100(1-\alpha)% confidence interval** for $\theta$ is an interval $(u(Y), v(Y))$ such that 
+Let $X$ be a random sample from a probability distribution $\theta$. A $100(1-\alpha)%$ **confidence interval** for $\theta$ is an interval $(u(Y), v(Y))$ such that 
 $$
 \mathbb{P}(u(Y) < \theta < v(Y)) = 1-\alpha
 $$
@@ -196,9 +196,13 @@ We know the form of $\pi(y \mid \theta) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}(y
 
 3. We decide to talk to a series of experts about $\theta$ asking for their views on likely values of $\theta$. Averaging the experts opinions gives $\theta \sim N(3, 0.7^2)$. This is a method known as prior elicitation. 
 
-We now go and observe some data. After a lot of time and effort, we collect one data point -- $y = 0$.
+We now go and observe some data. After a lot of time and effort, we collect one data point: $y = 0$.
 
-Now we have all the ingredients to construct the posterior distribution. We multiply the likelihood function evaluated at $y = 0$ by each of the three prior distributions. This gives us the posterior distributions (up to proportionality).
+Now we have all the ingredients to construct the posterior distribution. We multiply the likelihood function evaluated at $y = 0$ by each of the three prior distributions. This gives us the posterior distributions. These are
+
+1. For the uniform prior distribution, the posterior distribution is $\pi(\theta \mid \boldsymbol{y}) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}\theta^2\right)$ for $\theta \in [-1000, 1000]$.  
+2. For the uniform prior distribution, the posterior distribution is $\pi(\theta \mid \boldsymbol{y}) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}\theta^2\right)$ for $\theta \in [-1000, 1000]$. 
+3. For the normal prior distribution, as we are only interested in the posterior distribution up to proportionality, we can write it as $\pi(\theta \mid \boldsymbol{y}) \propto \exp\left(-\frac{1}{2}\theta^2\right)\exp\left(-\frac{1}{2}\left(\frac{\theta - 3}{0.7}\right)^2\right)$. Combining like terms, gives $\pi(\theta \mid \boldsymbol{y}) \propto \exp\left(-\frac{1}{2}\left(\frac{1.7\theta^2 - 6\theta}{0.7^2}\right)\right)$ for $\theta \in \mathbb{R}$.
 
 ```{r prior-posterior-grid}
 #The likelihood function is the normal PDF

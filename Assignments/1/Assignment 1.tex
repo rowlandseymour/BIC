@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{inputenc}
+
+\title{Bayesian Inference and Computation: Assignment 1}
+\date{Deadline: }
+
+\begin{document}
+
+\maketitle
+
+In a game, players can buy loot boxes. Each box contains one item chosen at random from fifty loot items in the game. By simulating lots of players buying loots boxes, compute the expected number of boxes a player needs to buy in order to collect all fifty items. 
+
+\begin{enumerate}
+    \item Write a function that buys a new box and, if the player doesn't own it already, adds it to the set of items the player doesn't own already. 
+    \item Write another function using a while loop that simulates a player buying boxes until they own all the items. 
+    \item Use a for loop to simulate 10,000 players buying boxes until they own all the items and compute the expected number of boxes a player needs to buy in order to collect all fifty items. 
+\end{enumerate}
+% 4. It turns out there are three types of items in the loot boxes. 25 items are common, 20 are rare, and 5 are epic. Players are twice as likely to get at common item than a rare item, and four times as likely to get a rare item than an epic item. Modify the function from part 1 to account for this and repeat the simulation.
+You should submit upload one R script to Canvas that can be run on any computer. It should contain three code chunks, one for each part of the coursework. Each chunk should build on the previous chunk and the code should be commented. 
+\end{document}

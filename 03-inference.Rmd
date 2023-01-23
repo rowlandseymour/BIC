@@ -4,7 +4,7 @@ Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definiti
 
 
 ## The Binomial Distribution
-The first example we're going to go through is with the Binomial distribution. 
+The first example we are going to go through is with the Binomial distribution. 
 
 ::: {.example #binom}
 A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that eight are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability an account is a bot is $\theta$. By Bayes' theorem, we obtain the following,
@@ -114,25 +114,16 @@ round(qgamma(c(0.025, 0.975), 10, 95.01), 3)
 The Normal distribution is incredibly useful for modelling a wide range of natural phenomena and in its own right. We're now going to derive posterior distributions for the normal distribution. As we're going to see, the concepts behind deriving posterior distributions are the same as in the previous two examples. However, the algebraic accounting is a lot more taxing. 
 
 ::: {.example #normal}
-Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is 
-```{r}
-y <- c(0.34, 0.47, 0.58, 0.27, 0.74, 0.44, 0.46, 0.65, 0.36, 0.55, 0.58, 0.55, 0.53, 0.56, 0.54, 0.61, 0.43, 0.52, 0.45, 0.49, 0.32, 0.33, 0.47, 0.58, 0.34, 0.60, 0.59, 0.43, 0.57, 0.34)
-hist(y, main = "", xlab = "Reaction time (ms)")
-mean(y)
-```
-Suppose that, somehow, we know the population standard deviation is 0.01$ms$ and we wish to estimate the population mean $\mu$. By Bayes' theorem, the posterior distribution is 
+Suppose we observe $N$ data points $\boldsymbol{y} = \{y_1, \ldots, y_N\}$ and we assume $y_i \sim N(\mu, \sigma^2)$ and each observation is independent. Suppose that, somehow, we know the population standard deviation and we wish to estimate the population mean $\mu$. By Bayes' theorem, the posterior distribution is 
 $$
 \pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \pi(\boldsymbol{y} \mid \mu, \sigma^2) \pi(\mu)
 $$
 
-**Likelihood function**. We assume the each driver's reaction time is independently and identically distributed such that
-$$
-y_i \sim N(\mu, \sigma^2)
-$$
-The likelihood function is therefore given by the product of the 30 normal density functions as follows,
+**Likelihood function**. 
+As the observations are independent, the likelihood function is given by the product of the $N$ normal density functions as follows,
 \begin{align*}
-\pi(\boldsymbol{y} \mid \mu, \theta^2) &= \prod_{i=1}^{30} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{(y_i - \mu)^2}{2\sigma^2}\right\} \\
-&= (2\pi\sigma^2)^{-\frac{30}{2}}\exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}.
+\pi(\boldsymbol{y} \mid \mu, \theta^2) &= \prod_{i=1}^{N} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{(y_i - \mu)^2}{2\sigma^2}\right\} \\
+&= (2\pi\sigma^2)^{-\frac{N}{2}}\exp\left\{-\sum_{i=1}^{N}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}.
 \end{align*}
 
 **Prior distribution** We suppose we have no prior beliefs about the values that $\mu$ can take. We assign a normal prior distribution to $\mu \sim N(\mu_0, \sigma_0^2)$ despite it being a time. We will set $\mu = 0$ and $\sigma_0^2 = 1000$ to signify our vague prior beliefs, but, for ease, we will use the symbolic values during the derivation of the posterior distribution. We have 
@@ -143,16 +134,16 @@ $$
 
 **Posterior distribution**. To derive the posterior distribution, up to proportionality, we multiply the prior distribution by the likelihood function. As the fractions out the front of both terms do not depend on $\mu$, we can ignore these. 
 \begin{align*}
-\pi(\mu \mid \boldsymbol{y}, \sigma^2) &\propto\exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}  \exp\left\{\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
-& = \exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{2\sigma^2}-\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
-& = \exp\left\{-\frac{\sum_{i=1}^{30}y_i^2}{2\sigma^2} + \frac{\mu\sum_{i=1}^{30}y_i}{\sigma^2} - \frac{30\mu^2}{2\sigma^2} - \frac{\mu^2}{2\sigma_0^2} + \frac{\mu\mu_0}{\sigma_0^2} - \frac{\mu_0^2}{2\sigma_0^2}\right\}.
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) &\propto\exp\left\{-\sum_{i=1}^{N}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}  \exp\left\{\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
+& = \exp\left\{-\sum_{i=1}^{N}\frac{(y_i - \mu)^2}{2\sigma^2}-\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
+& = \exp\left\{-\frac{\sum_{i=1}^{N}y_i^2}{2\sigma^2} + \frac{\mu\sum_{i=1}^{N}y_i}{\sigma^2} - \frac{N\mu^2}{2\sigma^2} - \frac{\mu^2}{2\sigma_0^2} + \frac{\mu\mu_0}{\sigma_0^2} - \frac{\mu_0^2}{2\sigma_0^2}\right\}.
 \end{align*}
 
 We can drop the first and last term as they do not depend on $\mu$. With some arranging, the equation becomes
 $$
-\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \exp\left\{-\mu^2\left(\frac{30}{2\sigma^2}  + \frac{1}{2\sigma_0^2}\right) + \mu\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)  \right\}
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \exp\left\{-\mu^2\left(\frac{N}{2\sigma^2}  + \frac{1}{2\sigma_0^2}\right) + \mu\left(\frac{\sum_{i=1}^{N}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)  \right\}
 $$
-Defining $\mu_1 =\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)$ and $\sigma^2_1 = \left(\frac{30}{\sigma^2}  + \frac{1}{\sigma_0^2}\right)^{-1}$ tidies this up and gives
+Defining $\mu_1 =\left(\frac{\sum_{i=1}^{N}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)$ and $\sigma^2_1 = \left(\frac{N}{\sigma^2}  + \frac{1}{\sigma_0^2}\right)^{-1}$ tidies this up and gives
 $$
 \pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \exp\left\{-\frac{\mu^2}{2\sigma_1^2} + \mu\mu_1 \right\}.
 $$
@@ -168,27 +159,29 @@ and so the posterior distribution of $\mu$ is $\mu \mid \boldsymbol{y}, \sigma^2
 
 It may help to consider the meaning of $\mu_1$ and $\sigma^2_1$. The variance of the posterior distribution can be thought of as the weighted average of the population and sample precision, where the weight is the number of data points collected. The interpretation of the posterior mean can be seen more easily by writing is as
 $$
-\mu  = \sigma_1^2\left(\frac{30\bar{y}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right).
+\mu  = \sigma_1^2\left(\frac{N\bar{y}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right).
 $$
 The posterior mean is partially defined through the weighted average of the population and prior means, where the weighting depends on the number of data points collected and how precise the distributions are. 
 
-Now we have derived the posterior distribution, we can explore it using R. 
+Now we have derived the posterior distribution, we can explore it using R.  We simulate some data with $N = 30$, $mu = 5$ and $\sigma^2 = 1$.
 ```{r}
 #data
 N <- 30
+sigma <- 1
+y <- rnorm(N, 5, sigma)
 
 #prior
 sigma0 <- 1000
 mu0     <- 0
 
 #posterior
-sigma1.sq <- (1/(sigma0^2)  + N/(0.01^2))^-1
-mu1       <- sigma1.sq*(sum(y)/(0.01^2) + mu0/(sigma0^2))
+sigma1.sq <- (1/(sigma0^2)  + N/(sigma^2))^-1
+mu1       <- sigma1.sq*(sum(y)/(sigma^2) + mu0/(sigma0^2))
 
 c(mu1, sigma1.sq) #output mean and variance
 
 #Create plot
-mu <- seq(0.48, 0.5, 0.0001) 
+mu <- seq(4, 6, 0.01)
 posterior <- dnorm(mu, mean = mu1, sd = sqrt(sigma1.sq))
 plot(mu, posterior, type ='l')
 
@@ -200,7 +193,7 @@ qnorm(c(0.025, 0.975), mu1, sqrt(sigma1.sq))
 ```
 :::
 
-One issue in this example is the choice of the prior distribution for $\mu$. Why are we putting a prior distribution that places weight on negative values, when we are modelling reaction times? We could argue that the resulting posterior distribution places negligible weight on invalid times. The real reason is analytical ease. The resulting posterior distribution has a nice closed form, the normal distribution. When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.  
+When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.  
 
 ::: {.defintion}
 If the prior distribution $\pi(\theta)$ has the same distributional family as the posterior distribution $\pi(\theta \mid \boldsymbol{y})$, then the prior distribution is a **conjugate prior distribution**. 
@@ -210,7 +203,7 @@ If the prior distribution $\pi(\theta)$ has the same distributional family as th
 In many modelling problems, there will be multiple parameters each related to one another. These parameters may be directly related to the model, or they may be parameters we introduce through prior distributions. We can form a hierarchy of these parameters, from closest to further from the data, to construct our model.
 
 ::: {.example}
-Let's consider \@ref{exm:exponential} again. We have some data $\boldsymbol{y}$ that are assumed to have been generated from an Exponential distribution with rate parameter $\lambda$. We placed an Exponential prior distribution with rate $\gamma$ on $\lambda$ and the posterior distribution was $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)$. 
+Let's consider \@ref(exm:exponential) again. We have some data $\boldsymbol{y}$ that are assumed to have been generated from an Exponential distribution with rate parameter $\lambda$. We placed an Exponential prior distribution with rate $\gamma$ on $\lambda$ and the posterior distribution was $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)$. 
 
 In that example, we discussed how the choice of $\gamma$ can affect the posterior distribution and conclusions presented to the company. One option is to place a prior distribution on $\gamma$ -- a hyperprior distribution. The hierachy formed is
 \begin{align*}
@@ -218,10 +211,9 @@ In that example, we discussed how the choice of $\gamma$ can affect the posterio
 \lambda \mid \gamma &\sim \hbox{Exp}(\gamma) & \textrm{(prior distribution)} \\
 \gamma \mid \nu &\sim \hbox{Exp}(\nu) & \textrm{(hyperprior distribution)}  \\
 \end{align*}.
-
 By Bayes' theorem, we can write the posterior distribution as
 \begin{align*}
-\pi(\lambda, \gamma \mid \boldsymbol{y}) &\propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda \mid \gamma)\pi(\gamma)
+\pi(\lambda, \gamma \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda \mid \gamma)\pi(\gamma)\\
 &\propto \lambda^{11}e^{-\lambda(95 + \gamma)}\nu e^{-\nu\gamma}.
 \end{align*}
 
@@ -302,14 +294,14 @@ cbind(z, cumsum(ppd)) #CDF
 We have seen in a few examples how the choice of the prior distribution (and prior parameters) can impact posterior distributions and the resulting conclusions. As the choice of prior distribution is subjective, it is the main criticism of Bayesian inference. A possible way around this is to use a prior distribution that reflects a lack of information about $\theta$. 
 
 ::: {.definition}
-A **non-informative prior distribution** is a prior distribution that places equal weight on the every possible value of $\theta$.   
+A **non-informative prior distribution** is a prior distribution that places equal weight on the every possible value of $\theta$.
 :::
-
 
 ::: {.example}
 In Example \@ref(exm:binom), we assigned a uniform prior distribution to the parameter $\theta$. 
 :::
 
+Such a prior distribution can have interesting and perhaps unintended side effects. Suppose we do indeed have some parameter $\theta$ and we place a uniform prior distribution on $\theta$ such that $\theta \sim U[0, 1]$. This means, for example, our prior beliefs about $\theta$ are that it is equally likely to be in $[0, 0.1]$ as it is to lie in $[0.8, 0.9]$ or any other interval of size 0.1. However, our prior beliefs about $\theta^2$ are not uniform. Letting $\phi = \theta^2$, changing variables gives $\pi(\phi) = \frac{1}{2\sqrt{\phi}}$, something that is not uniform. That raises the question, if we have little to say about $\theta$ \textit{a priori}, shouldn't we have little to say about any reasonable transformation of $\theta$?
 
 ::: {.theorem name="Jeffrey"}
 Given some observed data $\boldsymbol{y} = \{y_1, \ldots, y_N\}$, an invariant prior distribution is
@@ -337,7 +329,7 @@ Thus $\sqrt{I_\psi(\boldsymbol{y})} = \sqrt{I_\theta(\boldsymbol{y})} \left|\fra
 
 
 ::: {.example}
-In Example \@ref(exm:binom), we modelled the number of bot accounts on a social media website by $Y \sim \textrm{Bin}(n, \theta)$. To construct Jeffrey's prior distribution for $\theta$, we must first derive the Fisher's information matrix.  
+In Example \@ref(exm:binom), we modelled the number of bot accounts on a social media website by $Y \sim \textrm{Bin}(n, \theta)$. To construct Jeffrey's prior distribution for $\theta$, we must first derive the Fisher information.  
 \begin{align*}
 &\pi(y \mid \theta) = \begin{pmatrix} n \\ y \end{pmatrix} \theta^y (1-\theta)^{n-y}\\ 
 \implies &\log \pi(y \mid \theta) = \log \begin{pmatrix} n \\ y \end{pmatrix} + y \log\theta + (n-y)\log(1-\theta) \\
@@ -432,32 +424,29 @@ Let $Y_1, \ldots, Y_N \sim \hbox{Pois}(\lambda)$.
 :::
     
 ::: {.exercise}
-Consider the data from \@{exm:normal}. Suppose the police pull over a lorry driver after they failed to stop at a red light. During a test at the side of the road, the lorry driver's reaction time is tested and comes out as 77ms. 
+Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is
+
+```{r}
+y <- c(0.34, 0.47, 0.58, 0.27, 0.74, 0.44, 0.46, 0.65, 0.36, 0.55, 0.58, 0.55,
+       0.53, 0.56, 0.54, 0.61, 0.43, 0.52, 0.45, 0.49, 0.32, 0.33, 0.47, 0.58,
+       0.34, 0.60, 0.59, 0.43, 0.57, 0.34)
+hist(y, main = "", xlab = "Reaction time (ms)")
+mean(y)
+```
+Suppose that, somehow, we know the population standard deviation is 0.01$ms$. Derive a posterior distribution for $\mu$. 
+
+Suppose the police pull over a lorry driver after they failed to stop at a red light. During a test at the side of the road, the lorry driver's reaction time is tested and comes out as 77ms. 
 
 1. By constructing a credible interval from the posterior predictive distribution, determine if the driver's reaction time is suspicious. 
 2. Why is this not a good comparison to make?
 :::
 
 ::: {.exercise}
-A distribution is said to belong to the exponential family of distributions if its density function has the form
-$$
-\pi(y_i \mid \theta) = f(y_i)g(\theta)\exp\{\nu(\theta)T(x)\}. 
-$$
-
-1. Derive the likelihood function with the data $\{y_1, \ldots, y_N\}$. 
-2. Show that the following prior distribution induces conjugacy:
-    $$
-    \pi(\theta) \propto g(\theta)^\alpha\exp\{\beta\nu(\theta)\}.
-    $$
-_Note: In general, distributions that belong to the exponential family have conjugate prior distributions. This is because conjugacy involve manipulation of sufficient statistics._
+Consider the motivation in the lecture notes for invariant prior distributions. Show that if $\theta \sim U[0, 1]$ and $\psi = \theta^2$ then $\pi(\psi) = \frac{1}{2\sqrt{\psi}}$ for $\psi \in [0, 1]$. 
 :::
 
 ::: {.exercise}
-Let $Y_1, \ldots, Y_N \sim N(\mu, \sigma^2)$, where $\sigma^2$ is known. Derive an invariant prior distribution (Jeffrey's prior distribution) for $\mu$.
-:::
-
-::: {.exercise}
-Consider Example \@(exm:exponential) featuring the exponential distribution. 
+Consider Example \@ref(exm:exponential) featuring the exponential distribution. 
     
 1. Construct an invariant prior distribution for this distribution.
 2. Derive the posterior distribution using the invariant prior distribution. 
