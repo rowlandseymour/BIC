@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Markov Chain Monte Carlo | Bayesian Inference and Computation</title>
+  <meta name="description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
+  <meta name="generator" content="bookdown 0.28.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Markov Chain Monte Carlo | Bayesian Inference and Computation" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="/uob_logo.png" />
+  <meta property="og:description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Markov Chain Monte Carlo | Bayesian Inference and Computation" />
+  
+  <meta name="twitter:description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
+  <meta name="twitter:image" content="/uob_logo.png" />
+
+<meta name="author" content="Dr Rowland Seymour" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="sampling.html"/>
+<link rel="next" href="advanced-computation.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Bayesian Inference and Computation</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Practicalities</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#module-aims"><i class="fa fa-check"></i><b>0.1</b> Module Aims</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#module-structure"><i class="fa fa-check"></i><b>0.2</b> Module Structure</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#assessment"><i class="fa fa-check"></i><b>0.3</b> Assessment</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#getting-help"><i class="fa fa-check"></i><b>0.4</b> Getting Help</a></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#recommended-books-and-videos"><i class="fa fa-check"></i><b>0.5</b> Recommended Books and Videos</a></li>
+<li class="chapter" data-level="0.6" data-path="index.html"><a href="index.html#common-distributions"><i class="fa fa-check"></i><b>0.6</b> Common Distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="fundamentals.html"><a href="fundamentals.html"><i class="fa fa-check"></i><b>1</b> Fundamentals of Bayesian Inference</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="fundamentals.html"><a href="fundamentals.html#statistical-inference"><i class="fa fa-check"></i><b>1.1</b> Statistical Inference</a></li>
+<li class="chapter" data-level="1.2" data-path="fundamentals.html"><a href="fundamentals.html#frequentist-theory"><i class="fa fa-check"></i><b>1.2</b> Frequentist Theory</a></li>
+<li class="chapter" data-level="1.3" data-path="fundamentals.html"><a href="fundamentals.html#bayesian-probability"><i class="fa fa-check"></i><b>1.3</b> Bayesian Probability</a></li>
+<li class="chapter" data-level="1.4" data-path="fundamentals.html"><a href="fundamentals.html#conditional-probability-and-exchangability"><i class="fa fa-check"></i><b>1.4</b> Conditional Probability and Exchangability</a></li>
+<li class="chapter" data-level="1.5" data-path="fundamentals.html"><a href="fundamentals.html#bayes-theorem"><i class="fa fa-check"></i><b>1.5</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="1.6" data-path="fundamentals.html"><a href="fundamentals.html#exercises"><i class="fa fa-check"></i><b>1.6</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="programming-in-r.html"><a href="programming-in-r.html"><i class="fa fa-check"></i><b>2</b> Programming in R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="programming-in-r.html"><a href="programming-in-r.html#random-numbers-for-loops-and-r"><i class="fa fa-check"></i><b>2.1</b> Random Numbers, For Loops and R</a></li>
+<li class="chapter" data-level="2.2" data-path="programming-in-r.html"><a href="programming-in-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="programming-in-r.html"><a href="programming-in-r.html#built-in-commands"><i class="fa fa-check"></i><b>2.2.1</b> Built in commands</a></li>
+<li class="chapter" data-level="2.2.2" data-path="programming-in-r.html"><a href="programming-in-r.html#user-defined-functions"><i class="fa fa-check"></i><b>2.2.2</b> User defined functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="programming-in-r.html"><a href="programming-in-r.html#good-coding-practices"><i class="fa fa-check"></i><b>2.3</b> Good Coding Practices</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="programming-in-r.html"><a href="programming-in-r.html#code-style"><i class="fa fa-check"></i><b>2.3.1</b> Code Style</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>3</b> Bayesian Inference</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#the-binomial-distribution"><i class="fa fa-check"></i><b>3.1</b> The Binomial Distribution</a></li>
+<li class="chapter" data-level="3.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#reporting-conclsuions-from-bayesian-inference"><i class="fa fa-check"></i><b>3.2</b> Reporting Conclsuions from Bayesian Inference</a></li>
+<li class="chapter" data-level="3.3" data-path="bayesian-inference.html"><a href="bayesian-inference.html#the-exponential-distribution"><i class="fa fa-check"></i><b>3.3</b> The Exponential Distribution</a></li>
+<li class="chapter" data-level="3.4" data-path="bayesian-inference.html"><a href="bayesian-inference.html#the-normal-distribtuion"><i class="fa fa-check"></i><b>3.4</b> The Normal Distribtuion</a></li>
+<li class="chapter" data-level="3.5" data-path="bayesian-inference.html"><a href="bayesian-inference.html#hierarchical-models"><i class="fa fa-check"></i><b>3.5</b> Hierarchical Models</a></li>
+<li class="chapter" data-level="3.6" data-path="bayesian-inference.html"><a href="bayesian-inference.html#prediction"><i class="fa fa-check"></i><b>3.6</b> Prediction</a></li>
+<li class="chapter" data-level="3.7" data-path="bayesian-inference.html"><a href="bayesian-inference.html#non-informative-prior-distibrutions"><i class="fa fa-check"></i><b>3.7</b> Non-informative Prior Distibrutions</a></li>
+<li class="chapter" data-level="3.8" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bernstein-von-mises-theorem"><i class="fa fa-check"></i><b>3.8</b> Bernstein-von-Mises Theorem</a></li>
+<li class="chapter" data-level="3.9" data-path="bayesian-inference.html"><a href="bayesian-inference.html#exercises-1"><i class="fa fa-check"></i><b>3.9</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>4</b> Sampling</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="sampling.html"><a href="sampling.html#uniform-random-numbers"><i class="fa fa-check"></i><b>4.1</b> Uniform Random Numbers</a></li>
+<li class="chapter" data-level="4.2" data-path="sampling.html"><a href="sampling.html#inverse-transform-sampling"><i class="fa fa-check"></i><b>4.2</b> Inverse Transform Sampling</a></li>
+<li class="chapter" data-level="4.3" data-path="sampling.html"><a href="sampling.html#rejection-sampling"><i class="fa fa-check"></i><b>4.3</b> Rejection Sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>5</b> Markov Chain Monte Carlo</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#properties-of-markov-chains"><i class="fa fa-check"></i><b>5.1</b> Properties of Markov Chains</a></li>
+<li class="chapter" data-level="5.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#metropolis-hastings"><i class="fa fa-check"></i><b>5.2</b> Metropolis-Hastings</a></li>
+<li class="chapter" data-level="5.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#gibbs-sampler"><i class="fa fa-check"></i><b>5.3</b> Gibbs Sampler</a></li>
+<li class="chapter" data-level="5.4" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>5.4</b> MCMC Diagnostics</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>6.1</b> Data Augmentation</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>6.1.1</b> Imputing censored observations</a></li>
+<li class="chapter" data-level="6.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>6.1.2</b> Imputing Latent Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>6.2</b> Gaussian Processes</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>6.2.1</b> Covariance Functions</a></li>
+<li class="chapter" data-level="6.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>6.2.2</b> Gaussian Process Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-data-augmenatation"><i class="fa fa-check"></i><b>6.3</b> Lab: Data Augmenatation</a></li>
+<li class="chapter" data-level="6.4" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-gaussian-processes"><i class="fa fa-check"></i><b>6.4</b> Lab: Gaussian Processes</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Inference and Computation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="markov-chain-monte-carlo" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Markov Chain Monte Carlo<a href="markov-chain-monte-carlo.html#markov-chain-monte-carlo" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Markov Chain Monte Carlo (MCMC) is a class of algorithms that produce samples from a probability distribution. These methods combine the idea of rejection sampling with the theory of Markov chains. Before we set out the theory of Markov chains, we’ll go through an example to show how MCMC works.</p>
+<div class="example">
+<p><span id="exm:King" class="example"><strong>Example 5.1  </strong></span>(<a href="https://xcelab.net/rm/statistical-rethinking/">Adapted from Statistical Rethinking 9</a>) Consider an eccentric King whose kingdom consists of a ring of 10 islands. Directly north is island one, the smallest island. Going clockwise around the archipelago, next is island two, which is twice the size of island one, then island three, which is three times as large as island one. Finally, island 10 is next to island one and ten times as large.</p>
+<p>The King wanted to visit all of his islands, but spending time on each one according to its size. That is he should spend the most time on island ten and the least on island one. Being climate conscious, he also decided that flying from one side of the archipelago to the other was not allowed. Instead, he would only sail from one island to either of its neighbors. So from island one, he could reach islands two and ten.</p>
+<p>He decided to travel according to these rules:</p>
+<ol style="list-style-type: decimal">
+<li><p>At the end of each week, he decides to stay on the same island or move to a neighboring island according to a coin toss. If it’s heads he proposes moving clockwise, and tails anti-clockwise. The island he is considering moving to is called the proposal island.</p></li>
+<li><p>To decided if he is going to move to the proposal island, the King counts out a number of shells equal to the number of size of the island. So if island five is the proposal island, he counts out five shells. He then counts out a number of stones equal to the size of the current island.</p></li>
+<li><p>If the number of seashells is greater than the number of stones, he moves to the proposed island. If the number of seashells is less than the number of stones, he takes a different strategy. He discards the number of stones equal to the number of seashells. So if there are six stone and five seashells, he ends up with 6-5=1 stones. He then places the stones and seashells into a bag a chooses one at random. If he picks a seashell, he moves to the proposed island, otherwise if he picks a shell, he stays put.</p></li>
+</ol>
+<p>This is a complex way of moving around, but it produces the required result; the time he spends on each island is proportionate to the size of the island. The code below shows an example of this over 10,000 weeks.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="markov-chain-monte-carlo.html#cb49-1" aria-hidden="true" tabindex="-1"></a>weeks <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb49-2"><a href="markov-chain-monte-carlo.html#cb49-2" aria-hidden="true" tabindex="-1"></a>island <span class="ot">&lt;-</span> <span class="fu">numeric</span>(weeks)</span>
+<span id="cb49-3"><a href="markov-chain-monte-carlo.html#cb49-3" aria-hidden="true" tabindex="-1"></a>current <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb49-4"><a href="markov-chain-monte-carlo.html#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>weeks){</span>
+<span id="cb49-5"><a href="markov-chain-monte-carlo.html#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="do">## record current position</span></span>
+<span id="cb49-6"><a href="markov-chain-monte-carlo.html#cb49-6" aria-hidden="true" tabindex="-1"></a>  island[i] <span class="ot">&lt;-</span> current</span>
+<span id="cb49-7"><a href="markov-chain-monte-carlo.html#cb49-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-8"><a href="markov-chain-monte-carlo.html#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Flip a coin to move to a propose a new island</span></span>
+<span id="cb49-9"><a href="markov-chain-monte-carlo.html#cb49-9" aria-hidden="true" tabindex="-1"></a>  proposed <span class="ot">&lt;-</span> current <span class="sc">+</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>), <span class="at">size =</span> <span class="dv">1</span>)</span>
+<span id="cb49-10"><a href="markov-chain-monte-carlo.html#cb49-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-11"><a href="markov-chain-monte-carlo.html#cb49-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ensure he loops round the island</span></span>
+<span id="cb49-12"><a href="markov-chain-monte-carlo.html#cb49-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(proposed <span class="sc">&lt;</span> <span class="dv">1</span>) </span>
+<span id="cb49-13"><a href="markov-chain-monte-carlo.html#cb49-13" aria-hidden="true" tabindex="-1"></a>    proposed <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb49-14"><a href="markov-chain-monte-carlo.html#cb49-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(proposed <span class="sc">&gt;</span> <span class="dv">10</span>)</span>
+<span id="cb49-15"><a href="markov-chain-monte-carlo.html#cb49-15" aria-hidden="true" tabindex="-1"></a>    proposed <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb49-16"><a href="markov-chain-monte-carlo.html#cb49-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-17"><a href="markov-chain-monte-carlo.html#cb49-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Decide to move</span></span>
+<span id="cb49-18"><a href="markov-chain-monte-carlo.html#cb49-18" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> proposed<span class="sc">/</span>current</span>
+<span id="cb49-19"><a href="markov-chain-monte-carlo.html#cb49-19" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb49-20"><a href="markov-chain-monte-carlo.html#cb49-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(u <span class="sc">&lt;</span> p)</span>
+<span id="cb49-21"><a href="markov-chain-monte-carlo.html#cb49-21" aria-hidden="true" tabindex="-1"></a>    current <span class="ot">&lt;-</span> proposed</span>
+<span id="cb49-22"><a href="markov-chain-monte-carlo.html#cb49-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb49-23"><a href="markov-chain-monte-carlo.html#cb49-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-24"><a href="markov-chain-monte-carlo.html#cb49-24" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot results</span></span>
+<span id="cb49-25"><a href="markov-chain-monte-carlo.html#cb49-25" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(island, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;Week&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Island&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="markov-chain-monte-carlo.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(island)<span class="sc">/</span>weeks, <span class="at">xlab =</span> <span class="st">&quot;Island&quot;</span>, </span>
+<span id="cb50-2"><a href="markov-chain-monte-carlo.html#cb50-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">&quot;Proportion of time&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-21-2.png" width="672" /></p>
+</div>
+<p>We can recognise several different statistical principles in this example. The King decides to move islands dependent on where he is currently, not based on where he has been previously (Markov property). He proposes an island to move to and accepts or rejects this decision based on some distribution (rejection principle). We are now going to describe some of the properties of Markov chains, including the Markov property.</p>
+<div id="properties-of-markov-chains" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Properties of Markov Chains<a href="markov-chain-monte-carlo.html#properties-of-markov-chains" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="definition">
+<p><span id="def:Markov" class="definition"><strong>Definition 5.1  </strong></span>A sequence of random variables <span class="math inline">\(\{Y_1, Y_2, \ldots\}\)</span> is a <strong>Markov chain</strong> if <span class="math inline">\(\mathbb{P}(Y_{n+1} \mid Y_{n}, \ldots, Y_1) = \mathbb{P}(Y_{n+1} \mid Y_{n})\)</span>. That is that distribution of the next state <span class="math inline">\(Y_{n+1}\)</span> only depends on the current state <span class="math inline">\(Y_n\)</span> and not any previous states.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-67" class="definition"><strong>Definition 5.2  </strong></span>The probability of transitioning from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span> in a Markov chain is given by <span class="math inline">\(p_{ij}\)</span>. The <strong>transition matrix</strong> for a Markov chain with <span class="math inline">\(N\)</span> states is the <span class="math inline">\(N \times N\)</span> matrix <span class="math inline">\(P\)</span>, where the <span class="math inline">\(\{i, j\}^{th}\)</span> entry denoted by <span class="math inline">\(p_{ij}\)</span> is probability is moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span>.</p>
+</div>
+<p>These two properties make Markov chains nice to work with, especially the Markov property (Definition <a href="markov-chain-monte-carlo.html#def:Markov">5.1</a>). Two other important definitions are</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-68" class="definition"><strong>Definition 5.3  </strong></span>The <strong>period </strong>of a state <span class="math inline">\(i\)</span> is given by <span class="math inline">\(d_i = \textrm{gcd}\{n &gt; 0; p_{ii} &gt; 0 \}\)</span>. A state is <strong>aperiodic</strong> if <span class="math inline">\(d_i = 1\)</span>. An <strong>aperiodic chain</strong> is a chain where all states are a periodic.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-69" class="definition"><strong>Definition 5.4  </strong></span>A Markov chain is <strong>irreducible</strong> if there exists an <span class="math inline">\(n \in \mathbb{N}\)</span> such that <span class="math inline">\(\mathbb{P} (Y_n = i \mid Y_0 = j)\)</span> for all pairs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. In other words, it is possible to move from any state to any other state in a finite number of steps.</p>
+</div>
+<p>We can use these definitions to start working with distributions. Suppose, the state we start at is drawn from some distribution <span class="math inline">\(Y_1 \sim \boldsymbol{q}\)</span>. Then the distributions of the second state <span class="math inline">\(Y_2\)</span> depends on the distribution of <span class="math inline">\(Y_1\)</span> and the transition probabilities
+<span class="math display">\[
+\mathbb{P}(Y_2 = j) = \sum_i q_ip_{ij}.
+\]</span>
+If we denote the distribution of <span class="math inline">\(Y_2 \sim \boldsymbol{q}^{(2)}\)</span>, then we can write it in terms of the transition matrix <span class="math inline">\(\boldsymbol{q}^\prime = \boldsymbol{q}P\)</span>. Now suppose we would like the distribution of <span class="math inline">\(Y_3 \sim \boldsymbol{q}^{(3)}\)</span>, thanks to the Markov property, this is the distribution for <span class="math inline">\(Y_2\)</span> multiplied by the transition matrix, so <span class="math inline">\(Y_3 \sim qP^2\)</span>. Inductively, <span class="math inline">\(P_k \sim qP^{k-1}\)</span>. To use Markov chains to sample from distributions, we need to identify the Eigenvalues of the transition matrix.</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-70" class="proposition"><strong>Proposition 5.1  </strong></span>A transition matrix <span class="math inline">\(P\)</span> always has at least one eigenvalue equal to one.</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-71" class="proof"><em>Proof</em>. </span>The columns of <span class="math inline">\(P\)</span> sum to 1 as they are probability distributions. Therefore, <span class="math inline">\(1\)</span> is an eigenvalue.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-72" class="definition"><strong>Definition 5.5  </strong></span>If a transition matrix <span class="math inline">\(P\)</span> has a unique Eigenvalue that takes the value 1, there is a unique distribution <span class="math inline">\(\pi\)</span> such that
+<span class="math display">\[
+\pi P = \pi.
+\]</span>
+This distribution <span class="math inline">\(\pi\)</span>, is known as the <strong>stationary distribution</strong>.</p>
+</div>
+<p>This important concept underpins MCMC methods. It says that no matter where we start our chain, we’ll eventually end up sampling states according to the distribution <span class="math inline">\(\pi\)</span>. It make take a long time to reach the stationary distribution, but it will eventually get there.</p>
+<p>In order to check whether our Markov chain will converge to a stationary distribution, we need to check:</p>
+<ol style="list-style-type: decimal">
+<li><p>the Markov chain is aperiodic,</p></li>
+<li><p>the Markov chain is irreducible, and</p></li>
+<li><p>that there exists a unique distribution <span class="math inline">\(\pi\)</span> such that <span class="math inline">\(\pi P = \pi\)</span>.</p></li>
+</ol>
+<div class="example">
+<p><span id="exm:unlabeled-div-73" class="example"><strong>Example 5.2  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:King">5.1</a>, the King wanted to visit the islands according to how large they are. We can think of the islands as the states and the stationary distribution as <span class="math inline">\(p(Y = i) \propto i\)</span>. The eccentric method the King used allowed him to construct a transition matrix for an aperiodic Markov chain. He also never visited islands regularly using this method.</p>
+</div>
+<p>When designing a Markov chain, it is usually straightforward to design one that meets conditions one and two. Condition three is more difficult to prove, but for some chains it is possible to show they satisfy detailed balance.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-74" class="definition"><strong>Definition 5.6  </strong></span>The Markov chain with transition matrix <span class="math inline">\(P\)</span> satisfies the <strong>detailed balance</strong> equation with respect to the distribution <span class="math inline">\(\pi\)</span> if
+<span class="math display">\[
+\pi_i p_{ij} = \pi_j p_{ji}.
+\]</span></p>
+</div>
+<div class="theorem">
+<p><span id="thm:unlabeled-div-75" class="theorem"><strong>Theorem 5.1  (Detailed Balance) </strong></span>Let <span class="math inline">\(P\)</span> be a transition matrix that satisfies detailed balance with respect to the distribution <span class="math inline">\(\pi\)</span>. Then <span class="math inline">\(\pi P = \pi\)</span>.</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-76" class="proof"><em>Proof</em>. </span>The <span class="math inline">\(j^{th}\)</span> row of <span class="math inline">\(\pi P\)</span> is
+<span class="math display">\[\begin{align*}
+\sum_{i} \pi_i p_{ij} &amp; = \sum_{i} \pi_j p_{ji} \quad \textrm{(detailed balance)} \\
+&amp; = \pi_j \sum_{i} p_{ji} \\
+&amp; = \pi_j.\qquad \textrm{(probaility sums to 1)}
+\end{align*}\]</span>
+Hence <span class="math inline">\(\pi P = \pi\)</span>.</p>
+</div>
+<p>The section has shown us that we can use a Markov chain theory to simulate from a probability distribution <span class="math inline">\(\pi\)</span>. All we need is for the Markov chain to be irreducible, aperiodic, and for the transition matrix to satisfy <span class="math inline">\(\pi P = \pi\)</span>. This provides the foundation theory for MCMC and allows us to sample from a posterior distribution <span class="math inline">\(\pi\)</span>. What it doesn’t tell us is how to design the Markov chain, and that is what the next sections deal with.</p>
+</div>
+<div id="metropolis-hastings" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Metropolis-Hastings<a href="markov-chain-monte-carlo.html#metropolis-hastings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We’re now going to look at MCMC algorithms. The first algorithm we are going to look at is the Metropolis-Hasting algorithm. This is a useful algorithm if we cannot sample directly from the posterior distribution and if the conditional distributions do not have a closed form. The Metropolis-Hastings algorithm is like the island example we saw earlier. At each iteration, we propose a new sample and then accept or reject it based on the likelihood function, the prior and how likely we are to propose this new sample given the current one.</p>
+<p>Suppose we want to sample from the posterior distribution <span class="math inline">\(\pi(\theta \mid \boldsymbol{y})\)</span>. The Metropolis-Hastings works as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>Set the initial value <span class="math inline">\(\theta^{(0)}\)</span>.</p></li>
+<li><p>Set <span class="math inline">\(i = 1\)</span>.</p></li>
+<li><p>Propose a new value of <span class="math inline">\(\theta&#39;\)</span> from some distribution <span class="math inline">\(q\)</span></p></li>
+<li><p>Accept <span class="math inline">\(\theta&#39;\)</span> with probability
+<span class="math display">\[
+p_{\textrm{acc}} = \min\left\{\frac{\pi(\theta&#39; \mid \boldsymbol{y})}{\pi(\theta \mid \boldsymbol{y})}\frac{q(\theta \mid \theta&#39;)}{q(\theta&#39; \mid \theta)}, 1\right\}.
+\]</span></p></li>
+<li><p>Repeat steps 3 to 4 for <span class="math inline">\(i = 2, \ldots, M\)</span>.</p></li>
+</ol>
+<p>There are two parts to the acceptance probability in step 4. The first is the posterior ratio, similar to saying the likelihood of <span class="math inline">\(\theta&#39;\)</span> given the observed data over the likelihood of <span class="math inline">\(\theta\)</span> given the data. The second is the proposal ratio. It is similar to saying the likelihood of proposing <span class="math inline">\(\theta\)</span> given the current value <span class="math inline">\(\theta&#39;\)</span>, over the likelihood of proposing <span class="math inline">\(\theta&#39;\)</span> given the current value <span class="math inline">\(\theta\)</span>.</p>
+<p>In practice, we don’t need to evaluate the full posterior distribution. Recall
+<span class="math display">\[
+\pi(\theta \mid \boldsymbol{y}) = \frac{\pi(\boldsymbol{y} \mid \theta) \pi(\theta)}{\pi(y)}
+\]</span>
+As the the denominator doesn’t depend on <span class="math inline">\(\theta\)</span>, it cancels in the ration. The ratio becomes
+<span class="math display">\[
+\frac{\pi(\theta&#39; \mid \boldsymbol{y})}{\pi(\theta \mid \boldsymbol{y})} = \frac{\pi(\boldsymbol{y} \mid \theta&#39;) \pi(\theta&#39;)}{\pi(\boldsymbol{y} \mid \theta) \pi(\theta)}.
+\]</span>
+This is the likelihood ratio multiplied by the prior ratio.</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-77" class="proposition"><strong>Proposition 5.2  </strong></span>The Markov chain generated by the Metropolis-Hastings algorithm satisfies detailed balance with respect to the posterior distribution.</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-78" class="proof"><em>Proof</em>. </span>Denote the current state <span class="math inline">\(\theta\)</span> and the proposed state <span class="math inline">\(\theta&#39;\)</span>. We would like to show
+<span class="math display">\[
+\pi(\theta \mid \boldsymbol{y}) \pi(\theta&#39;\mid\theta) = \pi(\theta&#39; \mid \boldsymbol{y}) \pi(\theta\mid\theta&#39;).
+\]</span>
+The density of <span class="math inline">\(\theta&#39;\)</span> given the proposed state <span class="math inline">\(\theta\)</span> is the proposal density multiplied by the acceptance probability. It is given by
+<span class="math display">\[\begin{align*}
+\pi(\theta&#39; \mid \theta) &amp;= q(\theta&#39; \mid \theta)p_{acc}\\
+&amp;=  q(\theta&#39; \mid \theta)\min\left\{\frac{\pi(\theta&#39; \mid \boldsymbol{y})}{\pi(\theta&#39; \mid \boldsymbol{y})}\frac{q(\theta \mid \theta&#39;)}{q(\theta&#39; \mid \theta)}, \, 1\right\} \\
+&amp; = \min\left\{\frac{\pi(\theta&#39; \mid \boldsymbol{y})}{\pi(\theta&#39; \mid \boldsymbol{y})}q(\theta \mid \theta&#39;),\, q(\theta&#39; \mid \theta)\right\}.
+\end{align*}\]</span></p>
+<p>The left hand side of the detailed balance equation becomes
+<span class="math display">\[
+\pi(\theta \mid \boldsymbol{y})\pi(\theta&#39; \mid \theta) = \min\{\pi(\theta&#39; \mid \boldsymbol{y})q(\theta \mid \theta&#39;),\, \pi(\theta \mid \boldsymbol{y})q(\theta&#39; \mid \theta)\}.
+\]</span>
+Analogously, we can show the right hand side is</p>
+<p><span class="math display">\[
+\pi(\theta&#39; \mid \boldsymbol{y})\pi(\theta \mid \theta&#39;) = \min\{\pi(\theta&#39; \mid \boldsymbol{y})q(\theta \mid \theta&#39;),\, \pi(\theta \mid \boldsymbol{y})q(\theta&#39; \mid \theta)\}.
+\]</span>
+Hence, <span class="math inline">\(\pi(\theta \mid \boldsymbol{y}) \pi(\theta&#39;\mid\theta) = \pi(\theta&#39; \mid \boldsymbol{y}) \pi(\theta\mid\theta&#39;)\)</span> and the Markov chain satisfies detailed balance with respect to the posterior disquisition.</p>
+</div>
+<div class="example">
+<p><span id="exm:norm" class="example"><strong>Example 5.3  </strong></span>Lets think again about the reaction time example in the previous chapter.The time until each lorry driver reacts (in milliseconds) is</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="markov-chain-monte-carlo.html#cb51-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.34</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, <span class="fl">0.27</span>, <span class="fl">0.74</span>, <span class="fl">0.44</span>, <span class="fl">0.46</span>, <span class="fl">0.65</span>, <span class="fl">0.36</span>, <span class="fl">0.55</span>, <span class="fl">0.58</span>, <span class="fl">0.55</span>, </span>
+<span id="cb51-2"><a href="markov-chain-monte-carlo.html#cb51-2" aria-hidden="true" tabindex="-1"></a>       <span class="fl">0.53</span>, <span class="fl">0.56</span>, <span class="fl">0.54</span>, <span class="fl">0.61</span>, <span class="fl">0.43</span>, <span class="fl">0.52</span>, <span class="fl">0.45</span>, <span class="fl">0.49</span>, <span class="fl">0.32</span>, <span class="fl">0.33</span>, <span class="fl">0.47</span>, <span class="fl">0.58</span>, </span>
+<span id="cb51-3"><a href="markov-chain-monte-carlo.html#cb51-3" aria-hidden="true" tabindex="-1"></a>       <span class="fl">0.34</span>, <span class="fl">0.60</span>, <span class="fl">0.59</span>, <span class="fl">0.43</span>, <span class="fl">0.57</span>, <span class="fl">0.34</span>)</span>
+<span id="cb51-4"><a href="markov-chain-monte-carlo.html#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Reaction time (ms)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>Assuming <span class="math inline">\(Y_i \sim N(\mu, \sigma^2)\)</span> are independent and identically distributed for <span class="math inline">\(i=1,...,n\)</span>, by Bayes’ theorem, the posterior distribution is</p>
+<p><span class="math display">\[
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \pi(\boldsymbol{y} \mid \mu, \sigma^2) \pi(\mu).
+\]</span>
+One of the issues here is that we have assigned a normal prior distribution to the population mean parameter <span class="math inline">\(\mu\)</span>. The advantage previously was that we could derive a posterior distribution with closed form. The disadvantage however is that the choice of prior distribution assigns some positive probability to impossible values of <span class="math inline">\(\mu\)</span>, i.e. reaction times less than zero.</p>
+<p>Now we have a tool to sample from posterior distributions that don’t have a closed form. We can instead assign an exponential prior distribution, a distribution which only has non-negative support. Letting <span class="math inline">\(\mu \sim \textrm{Exp}(0.01)\)</span> sets a vague prior distribution on <span class="math inline">\(\mu\)</span>. It can be shown that the posterior distribution (exercise) is therefore
+<span class="math display">\[
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \exp\left\{-0.01\mu -\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}\right\}
+\]</span></p>
+<p>We can use the Metropolis-Hasting algorithm to sample from this posterior distribution. But how should we propose new value of <span class="math inline">\(\mu\)</span>? A common method is a Metropolis-Hastings Random Walk proposal distribution. The proposal distribution is symmetric and centered on <span class="math inline">\(\mu\)</span>. The two most common methods are <span class="math inline">\(\mu&#39; \mid \mu \sim U[\mu - \varepsilon, \mu + \varepsilon]\)</span> and <span class="math inline">\(\mu&#39; \mid \mu \sim N(\mu, \tau^2)\)</span>. We choose the uniform proposal distribution, with
+<span class="math display">\[
+q(\mu&#39; \mid \mu) = \frac{1}{2\varepsilon}.
+\]</span></p>
+<p>The acceptance probability is therefore
+<span class="math display">\[
+p_\textrm{acc} = \min\left\{\frac{\exp\left\{-0.01\mu&#39; -\sum_{i=1}^{30}\frac{(y_i - \mu&#39;)^2}{\sigma^2}\right\} }{\exp\left\{-0.01\mu -\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}\right\} }, 1\right\}
+\]</span></p>
+<p>We can implement a sampler in R as follows:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="markov-chain-monte-carlo.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set up elements for MCMC</span></span>
+<span id="cb52-2"><a href="markov-chain-monte-carlo.html#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
+<span id="cb52-3"><a href="markov-chain-monte-carlo.html#cb52-3" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb52-4"><a href="markov-chain-monte-carlo.html#cb52-4" aria-hidden="true" tabindex="-1"></a>mu.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb52-5"><a href="markov-chain-monte-carlo.html#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="markov-chain-monte-carlo.html#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial values</span></span>
+<span id="cb52-7"><a href="markov-chain-monte-carlo.html#cb52-7" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb52-8"><a href="markov-chain-monte-carlo.html#cb52-8" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co">#known</span></span>
+<span id="cb52-9"><a href="markov-chain-monte-carlo.html#cb52-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-10"><a href="markov-chain-monte-carlo.html#cb52-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb52-11"><a href="markov-chain-monte-carlo.html#cb52-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb52-12"><a href="markov-chain-monte-carlo.html#cb52-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Propose value for mu</span></span>
+<span id="cb52-13"><a href="markov-chain-monte-carlo.html#cb52-13" aria-hidden="true" tabindex="-1"></a>  mu.proposed <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, mu <span class="sc">-</span> <span class="fl">0.01</span>, mu <span class="sc">+</span> <span class="fl">0.01</span>)</span>
+<span id="cb52-14"><a href="markov-chain-monte-carlo.html#cb52-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb52-15"><a href="markov-chain-monte-carlo.html#cb52-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(mu.proposed <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="co">#If mu &lt; 0 we can reject straight away</span></span>
+<span id="cb52-16"><a href="markov-chain-monte-carlo.html#cb52-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb52-17"><a href="markov-chain-monte-carlo.html#cb52-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Compute (log) acceptance probability</span></span>
+<span id="cb52-18"><a href="markov-chain-monte-carlo.html#cb52-18" aria-hidden="true" tabindex="-1"></a>    log.numerator   <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu.proposed <span class="sc">-</span> </span>
+<span id="cb52-19"><a href="markov-chain-monte-carlo.html#cb52-19" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">sum</span>(y <span class="sc">-</span> mu.proposed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb52-20"><a href="markov-chain-monte-carlo.html#cb52-20" aria-hidden="true" tabindex="-1"></a>    log.denominator <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb52-21"><a href="markov-chain-monte-carlo.html#cb52-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb52-22"><a href="markov-chain-monte-carlo.html#cb52-22" aria-hidden="true" tabindex="-1"></a>    log.p.acc <span class="ot">&lt;-</span> log.numerator <span class="sc">-</span> log.denominator</span>
+<span id="cb52-23"><a href="markov-chain-monte-carlo.html#cb52-23" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb52-24"><a href="markov-chain-monte-carlo.html#cb52-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb52-25"><a href="markov-chain-monte-carlo.html#cb52-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Accept/Reject step</span></span>
+<span id="cb52-26"><a href="markov-chain-monte-carlo.html#cb52-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">log</span>(u) <span class="sc">&lt;</span> log.p.acc){</span>
+<span id="cb52-27"><a href="markov-chain-monte-carlo.html#cb52-27" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> mu.proposed</span>
+<span id="cb52-28"><a href="markov-chain-monte-carlo.html#cb52-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb52-29"><a href="markov-chain-monte-carlo.html#cb52-29" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb52-30"><a href="markov-chain-monte-carlo.html#cb52-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb52-31"><a href="markov-chain-monte-carlo.html#cb52-31" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Store mu at each iteration</span></span>
+<span id="cb52-32"><a href="markov-chain-monte-carlo.html#cb52-32" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
+<span id="cb52-33"><a href="markov-chain-monte-carlo.html#cb52-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-34"><a href="markov-chain-monte-carlo.html#cb52-34" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, </span>
+<span id="cb52-35"><a href="markov-chain-monte-carlo.html#cb52-35" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>We can see that after about 300 iterations, the Markov chain has converged to its stationary distribution, the posterior distribution. We can see this more clearly by removing the first 300 iterations.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="markov-chain-monte-carlo.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="markov-chain-monte-carlo.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="at">xlab =</span> <span class="fu">expression</span>(mu), <span class="at">main =</span> <span class="st">&quot;Posterior distribution&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-2.png" width="672" /></p>
+<p>The 95% credible interval for <span class="math inline">\(\mu\)</span> using this prior distribution is</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="markov-chain-monte-carlo.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">300</span>)], <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<pre><code>##      2.5%     97.5% 
+## 0.4832146 0.4961484</code></pre>
+<p>Recall that using the normal prior distribution, it was</p>
+<pre><code>0.486 0.493</code></pre>
+<p>It seems that the posterior distribution is very similar when using these two prior distributions. This is because the data are very informative.</p>
+</div>
+</div>
+<div id="gibbs-sampler" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Gibbs Sampler<a href="markov-chain-monte-carlo.html#gibbs-sampler" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When we can sample directly from conditional posterior distributions, we can use a Gibbs sampler. Suppose we have a distribution with parameters <span class="math inline">\(\{\theta_1, \ldots, \theta_N\}\)</span>, a Gibbs sampler works as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>Set initial values <span class="math inline">\(\{\theta_1^{(0)}, \ldots, \theta_N^{(0)}\}\)</span></p></li>
+<li><p>Set <span class="math inline">\(i = 1\)</span>.</p></li>
+<li><p>Draw a value for <span class="math inline">\(\theta_1^{(i)}\)</span> from <span class="math inline">\(\pi(\theta_1 \mid \theta_2^{(i-1)}, \ldots, \theta_N^{(i-1)}))\)</span>.</p></li>
+<li><p>Draw a value for <span class="math inline">\(\theta_2^{(i)}\)</span> from <span class="math inline">\(\pi(\theta_2 \mid \theta_1^{(i-1)}, \theta_3^{(i-1)}, \ldots, \theta_N^{(i-1)}))\)</span>.</p></li>
+<li><p>Repeat steps 3 and 4 for parameters <span class="math inline">\(\{\theta_3^{(i)}, \ldots, \theta_N^{(i)}\}\)</span>.</p></li>
+<li><p>Repeat steps 3, 4, and 5, for <span class="math inline">\(i = 2, \ldots M\)</span>.</p></li>
+</ol>
+<p>In code, this might look like</p>
+<pre><code>M #number of iterations
+N #number of parameters
+theta.store   &lt;- matrix(NA, N, M)
+theta         &lt;- numeric(N)
+
+for(j in 1:M){
+  for(j in 1:N){
+    theta[i] &lt;- #sample from conditional with theta[-i]
+  }
+  theta.store[, j] &lt;- theta.current #store current values
+}</code></pre>
+<p>The sequence <span class="math inline">\(\left\{\theta_0^{(0)},\ldots, \theta_N^{(0)}\right\}, \left\{\theta_0^{(1)},\ldots, \theta_N^{(1)}\right\}, \ldots, \left\{\theta_0^{(M)},\ldots, \theta_N^{(M)}\right\}\)</span> form a Markov chain. They also form a series of samples from the posterior distribution. However it is important to note that by construction, these samples are not independent since each realisation depends on the previous sample and we must take this into account when doing estimation.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-79" class="example"><strong>Example 5.4  </strong></span>Recall the lab in the previous chapter where we derived the posterior distribution for the mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span> for normally distributed data. The marginal posterior distributions are given by
+<span class="math display">\[
+\mu \mid \boldsymbol{y}, \sigma^2 \sim N(\mu_1, \sigma^2_1),
+\]</span></p>
+<p><span class="math display">\[
+\sigma^2 \mid \boldsymbol{y}, \mu \sim \textrm{inv-Gamma}\left(\alpha + \frac{N}{2}, \,\beta + \frac{\sum_{i=1}^N (y_i - \mu)^2}{2}\right),
+\]</span></p>
+<p>where <span class="math inline">\(\mu_1 =\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)\)</span> and <span class="math inline">\(\sigma^2_1 = \left(\frac{30}{\sigma^2} + \frac{1}{\sigma_0^2}\right)^{-1}\)</span>.</p>
+<p>We can set up a Metropolis-Hastings algorithm using Gibbs samplers to generate samples for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\gamma\)</span>.</p>
+<ol style="list-style-type: decimal">
+<li><p>Set initial values <span class="math inline">\(\{\lambda^{(0)}, \gamma^{(0)}\}\)</span></p></li>
+<li><p>Set <span class="math inline">\(i = 1\)</span>.</p></li>
+<li><p>Draw a value for <span class="math inline">\(\lambda^{(i)} \mid \boldsymbol{y}, \gamma^{(i-1)} \sim \textrm{Gamma}(10, 95 + \gamma^{(i-1)})\)</span></p></li>
+<li><p>Draw a value for <span class="math inline">\(\gamma^{(i)} \mid \boldsymbol{y}, \,\lambda^{(i)} \sim \hbox{Exp}(\lambda^{(i)} + \nu)\)</span>.</p></li>
+<li><p>Repeat steps 3 and 4 for <span class="math inline">\(i = 2, \ldots M\)</span>.</p></li>
+</ol>
+</div>
+</div>
+<div id="mcmc-diagnostics" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> MCMC Diagnostics<a href="markov-chain-monte-carlo.html#mcmc-diagnostics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well. For our purposes, mixing well means the chain is exploring the space of possible values of <span class="math inline">\(\theta\)</span> effectively and effectively and not getting stuck on the same value for a long time.</p>
+<p>A key way of doing this is by looking at the trace plot, which is a time series of the posterior samples simulated by the algorithm. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn’t look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-80" class="definition"><strong>Definition 5.7  </strong></span>The <strong>burn-in period</strong> is the number of iterations the Markov chain takes to reach the stationary distribution.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-81" class="definition"><strong>Definition 5.8  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-82" class="example"><strong>Example 5.5  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:norm">5.3</a>, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge.</p>
+<p>In a Metropolis-Hasting random walk algorithm, the proposal distribution often has a large impact on how well the Markov chain mixes. The variance, or step size, of the proposal distribution can be tuned to ensure the chain mixes well.</p>
+<p>The following two examples show poorly mixing Markov chains. The first is where the step size is too big and the chain frequently gets stuck for several hundred iterations.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="markov-chain-monte-carlo.html#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
+<span id="cb59-2"><a href="markov-chain-monte-carlo.html#cb59-2" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb59-3"><a href="markov-chain-monte-carlo.html#cb59-3" aria-hidden="true" tabindex="-1"></a>mu.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb59-4"><a href="markov-chain-monte-carlo.html#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="markov-chain-monte-carlo.html#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial values</span></span>
+<span id="cb59-6"><a href="markov-chain-monte-carlo.html#cb59-6" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb59-7"><a href="markov-chain-monte-carlo.html#cb59-7" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co">#known</span></span>
+<span id="cb59-8"><a href="markov-chain-monte-carlo.html#cb59-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-9"><a href="markov-chain-monte-carlo.html#cb59-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb59-10"><a href="markov-chain-monte-carlo.html#cb59-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb59-11"><a href="markov-chain-monte-carlo.html#cb59-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Propose value for mu</span></span>
+<span id="cb59-12"><a href="markov-chain-monte-carlo.html#cb59-12" aria-hidden="true" tabindex="-1"></a>  mu.proposed <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, mu <span class="sc">-</span> <span class="fl">0.1</span>, mu <span class="sc">+</span> <span class="fl">0.1</span>) <span class="co">#Step size too big</span></span>
+<span id="cb59-13"><a href="markov-chain-monte-carlo.html#cb59-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb59-14"><a href="markov-chain-monte-carlo.html#cb59-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(mu.proposed <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="co">#If mu &lt; 0 we can reject straight away</span></span>
+<span id="cb59-15"><a href="markov-chain-monte-carlo.html#cb59-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb59-16"><a href="markov-chain-monte-carlo.html#cb59-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Compute (log) acceptance probability</span></span>
+<span id="cb59-17"><a href="markov-chain-monte-carlo.html#cb59-17" aria-hidden="true" tabindex="-1"></a>    log.numerator   <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu.proposed <span class="sc">-</span> </span>
+<span id="cb59-18"><a href="markov-chain-monte-carlo.html#cb59-18" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">sum</span>(y <span class="sc">-</span> mu.proposed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb59-19"><a href="markov-chain-monte-carlo.html#cb59-19" aria-hidden="true" tabindex="-1"></a>    log.denominator <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb59-20"><a href="markov-chain-monte-carlo.html#cb59-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb59-21"><a href="markov-chain-monte-carlo.html#cb59-21" aria-hidden="true" tabindex="-1"></a>    log.p.acc <span class="ot">&lt;-</span> log.numerator <span class="sc">-</span> log.denominator</span>
+<span id="cb59-22"><a href="markov-chain-monte-carlo.html#cb59-22" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb59-23"><a href="markov-chain-monte-carlo.html#cb59-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb59-24"><a href="markov-chain-monte-carlo.html#cb59-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Accept/Reject step</span></span>
+<span id="cb59-25"><a href="markov-chain-monte-carlo.html#cb59-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">log</span>(u) <span class="sc">&lt;</span> log.p.acc){</span>
+<span id="cb59-26"><a href="markov-chain-monte-carlo.html#cb59-26" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> mu.proposed</span>
+<span id="cb59-27"><a href="markov-chain-monte-carlo.html#cb59-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb59-28"><a href="markov-chain-monte-carlo.html#cb59-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb59-29"><a href="markov-chain-monte-carlo.html#cb59-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb59-30"><a href="markov-chain-monte-carlo.html#cb59-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Store mu at each iteration</span></span>
+<span id="cb59-31"><a href="markov-chain-monte-carlo.html#cb59-31" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
+<span id="cb59-32"><a href="markov-chain-monte-carlo.html#cb59-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-33"><a href="markov-chain-monte-carlo.html#cb59-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3000</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, </span>
+<span id="cb59-34"><a href="markov-chain-monte-carlo.html#cb59-34" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>The next is where the step size is too small. It takes a long time for the chain to converge (~50% of the run time). When the chain does converge, it is inefficient at exploring the space.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="markov-chain-monte-carlo.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
+<span id="cb60-2"><a href="markov-chain-monte-carlo.html#cb60-2" aria-hidden="true" tabindex="-1"></a>n.iter   <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb60-3"><a href="markov-chain-monte-carlo.html#cb60-3" aria-hidden="true" tabindex="-1"></a>mu.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb60-4"><a href="markov-chain-monte-carlo.html#cb60-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-5"><a href="markov-chain-monte-carlo.html#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial values</span></span>
+<span id="cb60-6"><a href="markov-chain-monte-carlo.html#cb60-6" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb60-7"><a href="markov-chain-monte-carlo.html#cb60-7" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co">#known</span></span>
+<span id="cb60-8"><a href="markov-chain-monte-carlo.html#cb60-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-9"><a href="markov-chain-monte-carlo.html#cb60-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb60-10"><a href="markov-chain-monte-carlo.html#cb60-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb60-11"><a href="markov-chain-monte-carlo.html#cb60-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Propose value for mu</span></span>
+<span id="cb60-12"><a href="markov-chain-monte-carlo.html#cb60-12" aria-hidden="true" tabindex="-1"></a>  mu.proposed <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, mu <span class="sc">-</span> <span class="fl">0.0005</span>, mu <span class="sc">+</span> <span class="fl">0.0005</span>) <span class="co">#Step size too small</span></span>
+<span id="cb60-13"><a href="markov-chain-monte-carlo.html#cb60-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb60-14"><a href="markov-chain-monte-carlo.html#cb60-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(mu.proposed <span class="sc">&gt;</span> <span class="dv">0</span>){ <span class="co">#If mu &lt; 0 we can reject straight away</span></span>
+<span id="cb60-15"><a href="markov-chain-monte-carlo.html#cb60-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb60-16"><a href="markov-chain-monte-carlo.html#cb60-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Compute (log) acceptance probability</span></span>
+<span id="cb60-17"><a href="markov-chain-monte-carlo.html#cb60-17" aria-hidden="true" tabindex="-1"></a>    log.numerator   <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu.proposed <span class="sc">-</span></span>
+<span id="cb60-18"><a href="markov-chain-monte-carlo.html#cb60-18" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">sum</span>(y <span class="sc">-</span> mu.proposed)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb60-19"><a href="markov-chain-monte-carlo.html#cb60-19" aria-hidden="true" tabindex="-1"></a>    log.denominator <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.01</span><span class="sc">*</span>mu <span class="sc">-</span> <span class="fu">sum</span>(y <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span>sigma<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb60-20"><a href="markov-chain-monte-carlo.html#cb60-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb60-21"><a href="markov-chain-monte-carlo.html#cb60-21" aria-hidden="true" tabindex="-1"></a>    log.p.acc <span class="ot">&lt;-</span> log.numerator <span class="sc">-</span> log.denominator</span>
+<span id="cb60-22"><a href="markov-chain-monte-carlo.html#cb60-22" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb60-23"><a href="markov-chain-monte-carlo.html#cb60-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb60-24"><a href="markov-chain-monte-carlo.html#cb60-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Accept/Reject step</span></span>
+<span id="cb60-25"><a href="markov-chain-monte-carlo.html#cb60-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">log</span>(u) <span class="sc">&lt;</span> log.p.acc){</span>
+<span id="cb60-26"><a href="markov-chain-monte-carlo.html#cb60-26" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> mu.proposed</span>
+<span id="cb60-27"><a href="markov-chain-monte-carlo.html#cb60-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb60-28"><a href="markov-chain-monte-carlo.html#cb60-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb60-29"><a href="markov-chain-monte-carlo.html#cb60-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb60-30"><a href="markov-chain-monte-carlo.html#cb60-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Store mu at each iteration</span></span>
+<span id="cb60-31"><a href="markov-chain-monte-carlo.html#cb60-31" aria-hidden="true" tabindex="-1"></a>  mu.store[i] <span class="ot">&lt;-</span> mu</span>
+<span id="cb60-32"><a href="markov-chain-monte-carlo.html#cb60-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb60-33"><a href="markov-chain-monte-carlo.html#cb60-33" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb60-34"><a href="markov-chain-monte-carlo.html#cb60-34" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span>
+<span id="cb60-35"><a href="markov-chain-monte-carlo.html#cb60-35" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>,</span>
+<span id="cb60-36"><a href="markov-chain-monte-carlo.html#cb60-36" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sampling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="advanced-computation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

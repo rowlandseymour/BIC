@@ -55,7 +55,7 @@ The full conditional distribution of $y_5$ given $p$, the other data points an $
 $$
   \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 < 1, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=0}^{1000}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{j}}, \qquad y < 6
 $$
-We can use a Gibbs sampler alternating between sampling $p$ and $y_5$. 
+This is a truncated distribution. We can use a Gibbs sampler alternating between sampling $p$ and $y_5$. 
 :::
 
 ### Imputing Latent Variables
@@ -82,7 +82,8 @@ We introduce a latent variable $z_i \sim \hbox{Bernoulli}(p)$ that describes if 
 a <- seq(0.5, 0.9, 0.001)
 x <- dnorm(a, 0.7, 0.05)
 y <- dnorm(a, 0.8, 0.02)
-plot(a, x, type = 'l', ylim = c(0, 20), xlab = expression(y), ylab = "density")
+plot(a, x, type = 'l', ylim = c(0, 20), xlab = expression(y),
+     ylab = "density")
 lines(a, y, lty = 2)
 ```
 

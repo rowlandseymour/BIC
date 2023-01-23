@@ -238,7 +238,7 @@ where \(p \in [0, 1]\).
 \hypertarget{fundamentals}{%
 \chapter{Fundamentals of Bayesian Inference}\label{fundamentals}}
 
-Bayesian inference is built on a different way of thinking about parameters of probability distributions using methods you have learnt so far. In the past 30 years or so, Bayesian inference has become much more popular. This is partly due to increased computational power becoming available. In this first chapter, we are going to set out to answer:
+Bayesian inference is built on a different way of thinking about parameters of probability distributions than methods you have learnt so far. In the past 30 years or so, Bayesian inference has become much more popular. This is partly due to increased computational power becoming available. In this first chapter, we are going to set out to answer:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -286,13 +286,14 @@ The sampling distribution is an important concept in frequentist theory as it de
 The most common way to estimate the value of \(\theta\) is using maximum likelihood estimation. Although other methods do exist (e.g.~method of moments, or generalised maximum likelihood estimation).
 
 \begin{definition}
-The maximum likelihood estimate of \(\theta\), \(\hat{\theta}\), is the value such that \(\hat{\theta} = \max_{\theta} \pi(\theta \mid \boldsymbol{y})\).
+The maximum likelihood estimate of \(\theta\), \(\hat{\theta}\), is the value such that \(\hat{\theta} = \max_{\theta} \pi(\boldsymbol{y}\mid \theta)\).
 \end{definition}
 
 Uncertainty around the maximum likelihood estimate is based on the theory of long running events that underpin frequentist theory.
 
 \begin{definition}
-Let \(X\) be a random sample from a probability distribution \(\theta\). A \textbf{100(1-\alpha)\% confidence interval} for \(\theta\) is an interval \((u(Y), v(Y))\) such that
+Let \(X\) be a random sample from a probability distribution \(\theta\). A \(100(1-\alpha)%
+\) \textbf{confidence interval} for \(\theta\) is an interval \((u(Y), v(Y))\) such that
 \[
 \mathbb{P}(u(Y) < \theta < v(Y)) = 1-\alpha
 \]
@@ -472,9 +473,20 @@ We know the form of \(\pi(y \mid \theta) = \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}(
   We decide to talk to a series of experts about \(\theta\) asking for their views on likely values of \(\theta\). Averaging the experts opinions gives \(\theta \sim N(3, 0.7^2)\). This is a method known as prior elicitation.
 \end{enumerate}
 
-We now go and observe some data. After a lot of time and effort, we collect one data point -- \(y = 0\).
+We now go and observe some data. After a lot of time and effort, we collect one data point: \(y = 0\).
 
-Now we have all the ingredients to construct the posterior distribution. We multiply the likelihood function evaluated at \(y = 0\) by each of the three prior distributions. This gives us the posterior distributions (up to proportionality).
+Now we have all the ingredients to construct the posterior distribution. We multiply the likelihood function evaluated at \(y = 0\) by each of the three prior distributions. This gives us the posterior distributions. These are
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For the uniform prior distribution, the posterior distribution is \(\pi(\theta \mid \boldsymbol{y}) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}\theta^2\right)\) for \(\theta \in [-1000, 1000]\).\\
+\item
+  For the uniform prior distribution, the posterior distribution is \(\pi(\theta \mid \boldsymbol{y}) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}\theta^2\right)\) for \(\theta \in [-1000, 1000]\).
+\item
+  For the normal prior distribution, as we are only interested in the posterior distribution up to proportionality, we can write it as \(\pi(\theta \mid \boldsymbol{y}) \propto \exp\left(-\frac{1}{2}\theta^2\right)\exp\left(-\frac{1}{2}\left(\frac{\theta - 3}{0.7}\right)^2\right)\). Combining like terms, gives \(\pi(\theta \mid \boldsymbol{y}) \propto \exp\left(-\frac{1}{2}\left(\frac{1.7\theta^2 - 6\theta}{0.7^2}\right)\right)\) for \(\theta \in \mathbb{R}\).
+\end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1058,8 +1070,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.09357866  0.62952178  0.99912039 -0.57849704  0.37552161  0.32493536
-##  [7]  0.60381753  0.03332988 -0.13922159 -0.63415921
+##  [1] -0.34390976 -0.37733827 -0.53358328 -0.27697411  0.30405928 -0.65771316
+##  [7]  0.80001659  0.73569066  0.09771916 -0.10055296
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1142,25 +1154,11 @@ Why might R's function be faster and more reliable than ours?
 \end{example}
 
 \begin{exercise}
-Consider the stock exchange problem in Exercise 2.1. Write a function that simulates 100 days of the stock exchange. Use the \texttt{replicate} function to call this function 10,000 times.
+Write a function to evaluate the log of the probability density function of a Poisson distribution with rate \(\lambda\).
 \end{exercise}
 
 \begin{exercise}
-
-In a game, players can buy loot boxes. Each box contains one item chosen at random from fifty loot items in the game. By simulating lots of players buying loots boxes, what is the expected number of boxes a player needs to buy in order to collect all fifty items.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  Write a function that buys a new box and, it the player doesn't own it already, adds it to the set of items the player doesn't own already.
-\item
-  Write another function using a while loop that simulates a player buying boxes until they own all the items.
-\item
-  Use a for loop to simulate 10,000 players buying boxes until they own all the items.
-\item
-  It turns out there are three types of items in the loot boxes. 25 items are common, 20 are rare, and 5 are epic. Players are twice as likely to get at common item than a rare item, and four times as likely to get a rare item than an epic item. Modify the function from part 1 to account for this and repeat the simulation.
-\end{enumerate}
-
+Consider the stock exchange problem in Exercise 2.1. Write a function that simulates 100 days of the stock exchange. Use the \texttt{replicate} function to call this function 10,000 times.
 \end{exercise}
 
 \hypertarget{good-coding-practices}{%
@@ -1241,7 +1239,7 @@ Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definiti
 \hypertarget{the-binomial-distribution}{%
 \section{The Binomial Distribution}\label{the-binomial-distribution}}
 
-The first example we're going to go through is with the Binomial distribution.
+The first example we are going to go through is with the Binomial distribution.
 
 \begin{example}
 \protect\hypertarget{exm:binom}{}\label{exm:binom}A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that eight are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by \(\boldsymbol{y} = \{y_1, \ldots, y_{200}\}\) and the probability an account is a bot is \(\theta\). By Bayes' theorem, we obtain the following,
@@ -1386,40 +1384,16 @@ The Normal distribution is incredibly useful for modelling a wide range of natur
 \begin{example}
 \protect\hypertarget{exm:normal}{}\label{exm:normal}
 
-Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.34}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.27}\NormalTok{, }\FloatTok{0.74}\NormalTok{, }\FloatTok{0.44}\NormalTok{, }\FloatTok{0.46}\NormalTok{, }\FloatTok{0.65}\NormalTok{, }\FloatTok{0.36}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }\FloatTok{0.53}\NormalTok{, }\FloatTok{0.56}\NormalTok{, }\FloatTok{0.54}\NormalTok{, }\FloatTok{0.61}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.52}\NormalTok{, }\FloatTok{0.45}\NormalTok{, }\FloatTok{0.49}\NormalTok{, }\FloatTok{0.32}\NormalTok{, }\FloatTok{0.33}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.34}\NormalTok{, }\FloatTok{0.60}\NormalTok{, }\FloatTok{0.59}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.57}\NormalTok{, }\FloatTok{0.34}\NormalTok{)}
-\FunctionTok{hist}\NormalTok{(y, }\AttributeTok{main =} \StringTok{""}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Reaction time (ms)"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{_main_files/figure-latex/unnamed-chunk-11-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{mean}\NormalTok{(y)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] 0.4896667
-\end{verbatim}
-
-Suppose that, somehow, we know the population standard deviation is 0.01\(ms\) and we wish to estimate the population mean \(\mu\). By Bayes' theorem, the posterior distribution is
+Suppose we observe \(N\) data points \(\boldsymbol{y} = \{y_1, \ldots, y_N\}\) and we assume \(y_i \sim N(\mu, \sigma^2)\) and each observation is independent. Suppose that, somehow, we know the population standard deviation and we wish to estimate the population mean \(\mu\). By Bayes' theorem, the posterior distribution is
 \[
 \pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \pi(\boldsymbol{y} \mid \mu, \sigma^2) \pi(\mu)
 \]
 
-\textbf{Likelihood function}. We assume the each driver's reaction time is independently and identically distributed such that
-\[
-y_i \sim N(\mu, \sigma^2)
-\]
-The likelihood function is therefore given by the product of the 30 normal density functions as follows,
+\textbf{Likelihood function}.
+As the observations are independent, the likelihood function is given by the product of the \(N\) normal density functions as follows,
 \begin{align*}
-\pi(\boldsymbol{y} \mid \mu, \theta^2) &= \prod_{i=1}^{30} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{(y_i - \mu)^2}{2\sigma^2}\right\} \\
-&= (2\pi\sigma^2)^{-\frac{30}{2}}\exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}.
+\pi(\boldsymbol{y} \mid \mu, \theta^2) &= \prod_{i=1}^{N} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{(y_i - \mu)^2}{2\sigma^2}\right\} \\
+&= (2\pi\sigma^2)^{-\frac{N}{2}}\exp\left\{-\sum_{i=1}^{N}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}.
 \end{align*}
 
 \textbf{Prior distribution} We suppose we have no prior beliefs about the values that \(\mu\) can take. We assign a normal prior distribution to \(\mu \sim N(\mu_0, \sigma_0^2)\) despite it being a time. We will set \(\mu = 0\) and \(\sigma_0^2 = 1000\) to signify our vague prior beliefs, but, for ease, we will use the symbolic values during the derivation of the posterior distribution. We have
@@ -1429,16 +1403,16 @@ The likelihood function is therefore given by the product of the 30 normal densi
 
 \textbf{Posterior distribution}. To derive the posterior distribution, up to proportionality, we multiply the prior distribution by the likelihood function. As the fractions out the front of both terms do not depend on \(\mu\), we can ignore these.
 \begin{align*}
-\pi(\mu \mid \boldsymbol{y}, \sigma^2) &\propto\exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}  \exp\left\{\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
-& = \exp\left\{-\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{2\sigma^2}-\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
-& = \exp\left\{-\frac{\sum_{i=1}^{30}y_i^2}{2\sigma^2} + \frac{\mu\sum_{i=1}^{30}y_i}{\sigma^2} - \frac{30\mu^2}{2\sigma^2} - \frac{\mu^2}{2\sigma_0^2} + \frac{\mu\mu_0}{\sigma_0^2} - \frac{\mu_0^2}{2\sigma_0^2}\right\}.
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) &\propto\exp\left\{-\sum_{i=1}^{N}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}  \exp\left\{\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
+& = \exp\left\{-\sum_{i=1}^{N}\frac{(y_i - \mu)^2}{2\sigma^2}-\frac{1}{2\sigma_0^2}(\mu - \mu_0)^2\right\} \\
+& = \exp\left\{-\frac{\sum_{i=1}^{N}y_i^2}{2\sigma^2} + \frac{\mu\sum_{i=1}^{N}y_i}{\sigma^2} - \frac{N\mu^2}{2\sigma^2} - \frac{\mu^2}{2\sigma_0^2} + \frac{\mu\mu_0}{\sigma_0^2} - \frac{\mu_0^2}{2\sigma_0^2}\right\}.
 \end{align*}
 
 We can drop the first and last term as they do not depend on \(\mu\). With some arranging, the equation becomes
 \[
-\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \exp\left\{-\mu^2\left(\frac{30}{2\sigma^2}  + \frac{1}{2\sigma_0^2}\right) + \mu\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)  \right\}
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \exp\left\{-\mu^2\left(\frac{N}{2\sigma^2}  + \frac{1}{2\sigma_0^2}\right) + \mu\left(\frac{\sum_{i=1}^{N}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)  \right\}
 \]
-Defining \(\mu_1 =\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)\) and \(\sigma^2_1 = \left(\frac{30}{\sigma^2} + \frac{1}{\sigma_0^2}\right)^{-1}\) tidies this up and gives
+Defining \(\mu_1 =\left(\frac{\sum_{i=1}^{N}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)\) and \(\sigma^2_1 = \left(\frac{N}{\sigma^2} + \frac{1}{\sigma_0^2}\right)^{-1}\) tidies this up and gives
 \[
 \pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \exp\left\{-\frac{\mu^2}{2\sigma_1^2} + \mu\mu_1 \right\}.
 \]
@@ -1454,43 +1428,45 @@ and so the posterior distribution of \(\mu\) is \(\mu \mid \boldsymbol{y}, \sigm
 
 It may help to consider the meaning of \(\mu_1\) and \(\sigma^2_1\). The variance of the posterior distribution can be thought of as the weighted average of the population and sample precision, where the weight is the number of data points collected. The interpretation of the posterior mean can be seen more easily by writing is as
 \[
-\mu  = \sigma_1^2\left(\frac{30\bar{y}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right).
+\mu  = \sigma_1^2\left(\frac{N\bar{y}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right).
 \]
 The posterior mean is partially defined through the weighted average of the population and prior means, where the weighting depends on the number of data points collected and how precise the distributions are.
 
-Now we have derived the posterior distribution, we can explore it using R.
+Now we have derived the posterior distribution, we can explore it using R. We simulate some data with \(N = 30\), \(mu = 5\) and \(\sigma^2 = 1\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\#data}
 \NormalTok{N }\OtherTok{\textless{}{-}} \DecValTok{30}
+\NormalTok{sigma }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(N, }\DecValTok{5}\NormalTok{, sigma)}
 
 \CommentTok{\#prior}
 \NormalTok{sigma0 }\OtherTok{\textless{}{-}} \DecValTok{1000}
 \NormalTok{mu0     }\OtherTok{\textless{}{-}} \DecValTok{0}
 
 \CommentTok{\#posterior}
-\NormalTok{sigma1.sq }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(sigma0}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)  }\SpecialCharTok{+}\NormalTok{ N}\SpecialCharTok{/}\NormalTok{(}\FloatTok{0.01}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}\SpecialCharTok{\^{}{-}}\DecValTok{1}
-\NormalTok{mu1       }\OtherTok{\textless{}{-}}\NormalTok{ sigma1.sq}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{sum}\NormalTok{(y)}\SpecialCharTok{/}\NormalTok{(}\FloatTok{0.01}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ mu0}\SpecialCharTok{/}\NormalTok{(sigma0}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{sigma1.sq }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(sigma0}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)  }\SpecialCharTok{+}\NormalTok{ N}\SpecialCharTok{/}\NormalTok{(sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}\SpecialCharTok{\^{}{-}}\DecValTok{1}
+\NormalTok{mu1       }\OtherTok{\textless{}{-}}\NormalTok{ sigma1.sq}\SpecialCharTok{*}\NormalTok{(}\FunctionTok{sum}\NormalTok{(y)}\SpecialCharTok{/}\NormalTok{(sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ mu0}\SpecialCharTok{/}\NormalTok{(sigma0}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
 
 \FunctionTok{c}\NormalTok{(mu1, sigma1.sq) }\CommentTok{\#output mean and variance}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.896667e-01 3.333333e-06
+## [1] 4.86136183 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\#Create plot}
-\NormalTok{mu }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.48}\NormalTok{, }\FloatTok{0.5}\NormalTok{, }\FloatTok{0.0001}\NormalTok{) }
+\NormalTok{mu }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{6}\NormalTok{, }\FloatTok{0.01}\NormalTok{)}
 \NormalTok{posterior }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(mu, }\AttributeTok{mean =}\NormalTok{ mu1, }\AttributeTok{sd =} \FunctionTok{sqrt}\NormalTok{(sigma1.sq))}
 \FunctionTok{plot}\NormalTok{(mu, posterior, }\AttributeTok{type =}\StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-12-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-11-1.pdf}
 
 The 95\% credible interval for the population's mean reaction time is
 
@@ -1501,12 +1477,12 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.4860883 0.4932451
+## [1] 4.503523 5.219201
 \end{verbatim}
 
 \end{example}
 
-One issue in this example is the choice of the prior distribution for \(\mu\). Why are we putting a prior distribution that places weight on negative values, when we are modelling reaction times? We could argue that the resulting posterior distribution places negligible weight on invalid times. The real reason is analytical ease. The resulting posterior distribution has a nice closed form, the normal distribution. When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.
+When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.
 
 If the prior distribution \(\pi(\theta)\) has the same distributional family as the posterior distribution \(\pi(\theta \mid \boldsymbol{y})\), then the prior distribution is a \textbf{conjugate prior distribution}.
 
@@ -1516,7 +1492,7 @@ If the prior distribution \(\pi(\theta)\) has the same distributional family as 
 In many modelling problems, there will be multiple parameters each related to one another. These parameters may be directly related to the model, or they may be parameters we introduce through prior distributions. We can form a hierarchy of these parameters, from closest to further from the data, to construct our model.
 
 \begin{example}
-Let's consider @ref\{exm:exponential\} again. We have some data \(\boldsymbol{y}\) that are assumed to have been generated from an Exponential distribution with rate parameter \(\lambda\). We placed an Exponential prior distribution with rate \(\gamma\) on \(\lambda\) and the posterior distribution was \(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)\).
+Let's consider \ref{exm:exponential} again. We have some data \(\boldsymbol{y}\) that are assumed to have been generated from an Exponential distribution with rate parameter \(\lambda\). We placed an Exponential prior distribution with rate \(\gamma\) on \(\lambda\) and the posterior distribution was \(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)\).
 
 In that example, we discussed how the choice of \(\gamma\) can affect the posterior distribution and conclusions presented to the company. One option is to place a prior distribution on \(\gamma\) -- a hyperprior distribution. The hierachy formed is
 \begin{align*}
@@ -1524,10 +1500,9 @@ In that example, we discussed how the choice of \(\gamma\) can affect the poster
 \lambda \mid \gamma &\sim \hbox{Exp}(\gamma) & \textrm{(prior distribution)} \\
 \gamma \mid \nu &\sim \hbox{Exp}(\nu) & \textrm{(hyperprior distribution)}  \\
 \end{align*}.
-
 By Bayes' theorem, we can write the posterior distribution as
 \begin{align*}
-\pi(\lambda, \gamma \mid \boldsymbol{y}) &\propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda \mid \gamma)\pi(\gamma)
+\pi(\lambda, \gamma \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda \mid \gamma)\pi(\gamma)\\
 &\propto \lambda^{11}e^{-\lambda(95 + \gamma)}\nu e^{-\nu\gamma}.
 \end{align*}
 
@@ -1612,7 +1587,7 @@ We can check that our posterior predictive distribution is a valid probability m
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-15-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-14-1.pdf}
 
 The expected number of students who hand in late is 3.75 and there's a 95\% chance that up to 8 hand in late.
 
@@ -1683,6 +1658,8 @@ A \textbf{non-informative prior distribution} is a prior distribution that place
 In Example \ref{exm:binom}, we assigned a uniform prior distribution to the parameter \(\theta\).
 \end{example}
 
+Such a prior distribution can have interesting and perhaps unintended side effects. Suppose we do indeed have some parameter \(\theta\) and we place a uniform prior distribution on \(\theta\) such that \(\theta \sim U[0, 1]\). This means, for example, our prior beliefs about \(\theta\) are that it is equally likely to be in \([0, 0.1]\) as it is to lie in \([0.8, 0.9]\) or any other interval of size 0.1. However, our prior beliefs about \(\theta^2\) are not uniform. Letting \(\phi = \theta^2\), changing variables gives \(\pi(\phi) = \frac{1}{2\sqrt{\phi}}\), something that is not uniform. That raises the question, if we have little to say about \(\theta\) \textit{a priori}, shouldn't we have little to say about any reasonable transformation of \(\theta\)?
+
 \begin{theorem}[Jeffrey]
 Given some observed data \(\boldsymbol{y} = \{y_1, \ldots, y_N\}\), an invariant prior distribution is
 \[
@@ -1708,7 +1685,7 @@ Thus \(\sqrt{I_\psi(\boldsymbol{y})} = \sqrt{I_\theta(\boldsymbol{y})} \left|\fr
 \end{proof}
 
 \begin{example}
-In Example \ref{exm:binom}, we modelled the number of bot accounts on a social media website by \(Y \sim \textrm{Bin}(n, \theta)\). To construct Jeffrey's prior distribution for \(\theta\), we must first derive the Fisher's information matrix.\\
+In Example \ref{exm:binom}, we modelled the number of bot accounts on a social media website by \(Y \sim \textrm{Bin}(n, \theta)\). To construct Jeffrey's prior distribution for \(\theta\), we must first derive the Fisher information.\\
 \begin{align*}
 &\pi(y \mid \theta) = \begin{pmatrix} n \\ y \end{pmatrix} \theta^y (1-\theta)^{n-y}\\ 
 \implies &\log \pi(y \mid \theta) = \log \begin{pmatrix} n \\ y \end{pmatrix} + y \log\theta + (n-y)\log(1-\theta) \\
@@ -1833,7 +1810,32 @@ Let \(Y_1, \ldots, Y_N \sim \hbox{Pois}(\lambda)\).
 
 \begin{exercise}
 
-Consider the data from @\{exm:normal\}. Suppose the police pull over a lorry driver after they failed to stop at a red light. During a test at the side of the road, the lorry driver's reaction time is tested and comes out as 77ms.
+Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.34}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.27}\NormalTok{, }\FloatTok{0.74}\NormalTok{, }\FloatTok{0.44}\NormalTok{, }\FloatTok{0.46}\NormalTok{, }\FloatTok{0.65}\NormalTok{, }\FloatTok{0.36}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.55}\NormalTok{,}
+       \FloatTok{0.53}\NormalTok{, }\FloatTok{0.56}\NormalTok{, }\FloatTok{0.54}\NormalTok{, }\FloatTok{0.61}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.52}\NormalTok{, }\FloatTok{0.45}\NormalTok{, }\FloatTok{0.49}\NormalTok{, }\FloatTok{0.32}\NormalTok{, }\FloatTok{0.33}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{,}
+       \FloatTok{0.34}\NormalTok{, }\FloatTok{0.60}\NormalTok{, }\FloatTok{0.59}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.57}\NormalTok{, }\FloatTok{0.34}\NormalTok{)}
+\FunctionTok{hist}\NormalTok{(y, }\AttributeTok{main =} \StringTok{""}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Reaction time (ms)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.4896667
+\end{verbatim}
+
+Suppose that, somehow, we know the population standard deviation is 0.01\(ms\). Derive a posterior distribution for \(\mu\).
+
+Suppose the police pull over a lorry driver after they failed to stop at a red light. During a test at the side of the road, the lorry driver's reaction time is tested and comes out as 77ms.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1847,34 +1849,12 @@ Consider the data from @\{exm:normal\}. Suppose the police pull over a lorry dri
 \end{exercise}
 
 \begin{exercise}
-
-A distribution is said to belong to the exponential family of distributions if its density function has the form
-\[
-\pi(y_i \mid \theta) = f(y_i)g(\theta)\exp\{\nu(\theta)T(x)\}. 
-\]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Derive the likelihood function with the data \(\{y_1, \ldots, y_N\}\).
-\item
-  Show that the following prior distribution induces conjugacy:
-  \[
-   \pi(\theta) \propto g(\theta)^\alpha\exp\{\beta\nu(\theta)\}.
-   \]
-  \emph{Note: In general, distributions that belong to the exponential family have conjugate prior distributions. This is because conjugacy involve manipulation of sufficient statistics.}
-\end{enumerate}
-
-\end{exercise}
-
-\begin{exercise}
-Let \(Y_1, \ldots, Y_N \sim N(\mu, \sigma^2)\), where \(\sigma^2\) is known. Derive an invariant prior distribution (Jeffrey's prior distribution) for \(\mu\).
+Consider the motivation in the lecture notes for invariant prior distributions. Show that if \(\theta \sim U[0, 1]\) and \(\psi = \theta^2\) then \(\pi(\psi) = \frac{1}{2\sqrt{\psi}}\) for \(\psi \in [0, 1]\).
 \end{exercise}
 
 \begin{exercise}
 
-Consider Example @(exm:exponential) featuring the exponential distribution.
+Consider Example \ref{exm:exponential} featuring the exponential distribution.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1906,7 +1886,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.06463621
+## [1] 0.5315635
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -1966,7 +1946,8 @@ The R code below generates a plot to show this (with \(\lambda = 0.5\)). We can 
 \begin{Highlighting}[]
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{12345}\NormalTok{) }\CommentTok{\# to reproduce}
 \NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.01}\NormalTok{) }\CommentTok{\#Show on the interval [0, 5]}
-\NormalTok{f }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5}\SpecialCharTok{*}\NormalTok{y)    }\CommentTok{\#Construct the cumulative density function (CDF)}
+\NormalTok{f }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5}\SpecialCharTok{*}\NormalTok{y)    }\CommentTok{\#Construct the cumulative density }
+                        \CommentTok{\#function (CDF)}
 \FunctionTok{plot}\NormalTok{(y, f, }\AttributeTok{type =}\StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"y"}\NormalTok{, }\AttributeTok{ylab=} \StringTok{"CDF"}\NormalTok{)}
 
 \CommentTok{\#Sample u}
@@ -2007,7 +1988,7 @@ Suppose we want to sample from a density \(\pi\), but can only generate samples 
   Accepting \(y\) if \(U < k\) and rejecting otherwise.
 \end{enumerate}
 
-This says draw sample a point \(y\) according to the density \(q\). Draw a vertical line at \(y\) from the x-axis to \(cq(y)\). Sample uniformly on this line. If the uniformly random sample is below \(q\), then accept it. Otherwise, reject it. The theory behind this is as follows. Suppose we sample some point y according to this algorithm and we want to work out its density \(f\), then
+This says draw sample a point \(y\) according to the density \(q\). Draw a vertical line at \(y\) from the \(x\)-axis to \(cq(y)\). Sample uniformly on this line. If the uniformly random sample is below \(q\), then accept it. Otherwise, reject it. The theory behind this is as follows. Suppose we sample some point y according to this algorithm and we want to work out its density \(f\), then
 \[
 f(y) \propto q(y)\pi(U < k) = q(y)\frac{\pi(u)}{cq(y)} = \frac{\pi(u)}{c}.
 \]
@@ -2047,8 +2028,10 @@ This has a maximum at \(\frac{3}{4}\). We choose \(p \sim U[0, 1]\) and \(c = \f
 \NormalTok{c }\OtherTok{\textless{}{-}}\NormalTok{ M}\SpecialCharTok{*}\FunctionTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FunctionTok{length}\NormalTok{(a))}
 \FunctionTok{plot}\NormalTok{(a, b, }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, M), }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
 \FunctionTok{lines}\NormalTok{(a, c)}
-\FunctionTok{segments}\NormalTok{(}\AttributeTok{x0 =}\NormalTok{ y, }\AttributeTok{y0 =} \DecValTok{0}\NormalTok{, }\AttributeTok{x1 =}\NormalTok{ y,  }\AttributeTok{y1 =}\DecValTok{3}\SpecialCharTok{/}\DecValTok{4}\SpecialCharTok{*}\NormalTok{y}\SpecialCharTok{*}\NormalTok{(}\DecValTok{2}\SpecialCharTok{{-}}\NormalTok{y) , }\AttributeTok{lty =} \DecValTok{2}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
-\FunctionTok{segments}\NormalTok{(}\AttributeTok{x0 =}\NormalTok{ y,  }\AttributeTok{y0 =}\DecValTok{3}\SpecialCharTok{/}\DecValTok{4}\SpecialCharTok{*}\NormalTok{y}\SpecialCharTok{*}\NormalTok{(}\DecValTok{2}\SpecialCharTok{{-}}\NormalTok{y), }\AttributeTok{x1 =}\NormalTok{ y, }\AttributeTok{y1 =}\NormalTok{ M, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{, }\AttributeTok{col =} \DecValTok{2}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\AttributeTok{x0 =}\NormalTok{ y, }\AttributeTok{y0 =} \DecValTok{0}\NormalTok{, }\AttributeTok{x1 =}\NormalTok{ y,  }\AttributeTok{y1 =}\DecValTok{3}\SpecialCharTok{/}\DecValTok{4}\SpecialCharTok{*}\NormalTok{y}\SpecialCharTok{*}\NormalTok{(}\DecValTok{2}\SpecialCharTok{{-}}\NormalTok{y) , }
+          \AttributeTok{lty =} \DecValTok{2}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\AttributeTok{x0 =}\NormalTok{ y,  }\AttributeTok{y0 =}\DecValTok{3}\SpecialCharTok{/}\DecValTok{4}\SpecialCharTok{*}\NormalTok{y}\SpecialCharTok{*}\NormalTok{(}\DecValTok{2}\SpecialCharTok{{-}}\NormalTok{y), }\AttributeTok{x1 =}\NormalTok{ y, }\AttributeTok{y1 =}\NormalTok{ M, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{, }
+          \AttributeTok{col =} \DecValTok{2}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
 \FunctionTok{points}\NormalTok{(}\AttributeTok{x =}\NormalTok{ y, }\AttributeTok{y =}\NormalTok{ u, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -2058,7 +2041,7 @@ The plot also shows how the choices of \(M\) and \(q\) can make the sampling mor
 \end{example}
 
 \hypertarget{markov-chain-monte-carlo}{%
-\section{Markov Chain Monte Carlo}\label{markov-chain-monte-carlo}}
+\chapter{Markov Chain Monte Carlo}\label{markov-chain-monte-carlo}}
 
 Markov Chain Monte Carlo (MCMC) is a class of algorithms that produce samples from a probability distribution. These methods combine the idea of rejection sampling with the theory of Markov chains. Before we set out the theory of Markov chains, we'll go through an example to show how MCMC works.
 
@@ -2107,13 +2090,20 @@ This is a complex way of moving around, but it produces the required result; the
 \NormalTok{\}}
 
 \CommentTok{\#Plot results}
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
 \FunctionTok{plot}\NormalTok{(island, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Week"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Island"}\NormalTok{)}
-\FunctionTok{barplot}\NormalTok{(}\FunctionTok{table}\NormalTok{(island)}\SpecialCharTok{/}\NormalTok{weeks, }\AttributeTok{xlab =} \StringTok{"Island"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Proportion of time"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{_main_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{barplot}\NormalTok{(}\FunctionTok{table}\NormalTok{(island)}\SpecialCharTok{/}\NormalTok{weeks, }\AttributeTok{xlab =} \StringTok{"Island"}\NormalTok{, }
+        \AttributeTok{ylab =} \StringTok{"Proportion of time"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-21-2.pdf}
 \end{example}
 
 We can recognise several different statistical principles in this example. The King decides to move islands dependent on where he is currently, not based on where he has been previously (Markov property). He proposes an island to move to and accepts or rejects this decision based on some distribution (rejection principle). We are now going to describe some of the properties of Markov chains, including the Markov property.
@@ -2273,7 +2263,9 @@ Hence, \(\pi(\theta \mid \boldsymbol{y}) \pi(\theta'\mid\theta) = \pi(\theta' \m
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.34}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.27}\NormalTok{, }\FloatTok{0.74}\NormalTok{, }\FloatTok{0.44}\NormalTok{, }\FloatTok{0.46}\NormalTok{, }\FloatTok{0.65}\NormalTok{, }\FloatTok{0.36}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }\FloatTok{0.53}\NormalTok{, }\FloatTok{0.56}\NormalTok{, }\FloatTok{0.54}\NormalTok{, }\FloatTok{0.61}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.52}\NormalTok{, }\FloatTok{0.45}\NormalTok{, }\FloatTok{0.49}\NormalTok{, }\FloatTok{0.32}\NormalTok{, }\FloatTok{0.33}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.34}\NormalTok{, }\FloatTok{0.60}\NormalTok{, }\FloatTok{0.59}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.57}\NormalTok{, }\FloatTok{0.34}\NormalTok{)}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.34}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.27}\NormalTok{, }\FloatTok{0.74}\NormalTok{, }\FloatTok{0.44}\NormalTok{, }\FloatTok{0.46}\NormalTok{, }\FloatTok{0.65}\NormalTok{, }\FloatTok{0.36}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }
+       \FloatTok{0.53}\NormalTok{, }\FloatTok{0.56}\NormalTok{, }\FloatTok{0.54}\NormalTok{, }\FloatTok{0.61}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.52}\NormalTok{, }\FloatTok{0.45}\NormalTok{, }\FloatTok{0.49}\NormalTok{, }\FloatTok{0.32}\NormalTok{, }\FloatTok{0.33}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }
+       \FloatTok{0.34}\NormalTok{, }\FloatTok{0.60}\NormalTok{, }\FloatTok{0.59}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.57}\NormalTok{, }\FloatTok{0.34}\NormalTok{)}
 \FunctionTok{hist}\NormalTok{(y, }\AttributeTok{main =} \StringTok{""}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Reaction time (ms)"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -2323,7 +2315,8 @@ We can implement a sampler in R as follows:
   \ControlFlowTok{if}\NormalTok{(mu.proposed }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)\{ }\CommentTok{\#If mu \textless{} 0 we can reject straight away}
     
     \CommentTok{\#Compute (log) acceptance probability}
-\NormalTok{    log.numerator   }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu.proposed }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu.proposed)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{    log.numerator   }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu.proposed }\SpecialCharTok{{-}} 
+                      \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu.proposed)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
 \NormalTok{    log.denominator }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
     
 \NormalTok{    log.p.acc }\OtherTok{\textless{}{-}}\NormalTok{ log.numerator }\SpecialCharTok{{-}}\NormalTok{ log.denominator}
@@ -2338,7 +2331,8 @@ We can implement a sampler in R as follows:
   \CommentTok{\#Store mu at each iteration}
 \NormalTok{  mu.store[i] }\OtherTok{\textless{}{-}}\NormalTok{ mu}
 \NormalTok{\}}
-\FunctionTok{plot}\NormalTok{(mu.store, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }\AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
+\FunctionTok{plot}\NormalTok{(mu.store, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }
+     \AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2470,7 +2464,7 @@ The \textbf{thinning parameter} is the period of iterations of the Markov chain 
 \end{definition}
 
 \begin{example}
-In Example @\{exm:norm\}, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge.
+In Example \ref{exm:norm}, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge.
 
 In a Metropolis-Hasting random walk algorithm, the proposal distribution often has a large impact on how well the Markov chain mixes. The variance, or step size, of the proposal distribution can be tuned to ensure the chain mixes well.
 
@@ -2494,7 +2488,8 @@ The following two examples show poorly mixing Markov chains. The first is where 
   \ControlFlowTok{if}\NormalTok{(mu.proposed }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)\{ }\CommentTok{\#If mu \textless{} 0 we can reject straight away}
     
     \CommentTok{\#Compute (log) acceptance probability}
-\NormalTok{    log.numerator   }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu.proposed }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu.proposed)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{    log.numerator   }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu.proposed }\SpecialCharTok{{-}} 
+                        \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu.proposed)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
 \NormalTok{    log.denominator }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
     
 \NormalTok{    log.p.acc }\OtherTok{\textless{}{-}}\NormalTok{ log.numerator }\SpecialCharTok{{-}}\NormalTok{ log.denominator}
@@ -2509,7 +2504,8 @@ The following two examples show poorly mixing Markov chains. The first is where 
   \CommentTok{\#Store mu at each iteration}
 \NormalTok{  mu.store[i] }\OtherTok{\textless{}{-}}\NormalTok{ mu}
 \NormalTok{\}}
-\FunctionTok{plot}\NormalTok{(mu.store[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3000}\NormalTok{)], }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }\AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
+\FunctionTok{plot}\NormalTok{(mu.store[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3000}\NormalTok{)], }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }
+     \AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2535,7 +2531,8 @@ The next is where the step size is too small. It takes a long time for the chain
   \ControlFlowTok{if}\NormalTok{(mu.proposed }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)\{ }\CommentTok{\#If mu \textless{} 0 we can reject straight away}
     
     \CommentTok{\#Compute (log) acceptance probability}
-\NormalTok{    log.numerator   }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu.proposed }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu.proposed)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{    log.numerator   }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu.proposed }\SpecialCharTok{{-}}
+                        \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu.proposed)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
 \NormalTok{    log.denominator }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
     
 \NormalTok{    log.p.acc }\OtherTok{\textless{}{-}}\NormalTok{ log.numerator }\SpecialCharTok{{-}}\NormalTok{ log.denominator}
@@ -2552,7 +2549,8 @@ The next is where the step size is too small. It takes a long time for the chain
 \NormalTok{\}}
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
 \FunctionTok{plot}\NormalTok{(mu.store, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }\AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
-\FunctionTok{plot}\NormalTok{(mu.store[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5000}\NormalTok{)], }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }\AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
+\FunctionTok{plot}\NormalTok{(mu.store[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5000}\NormalTok{)], }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{,}
+     \AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2624,7 +2622,7 @@ The full conditional distribution of \(y_5\) given \(p\), the other data points 
 \[
   \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 < 1, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=0}^{1000}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{j}}, \qquad y < 6
 \]
-We can use a Gibbs sampler alternating between sampling \(p\) and \(y_5\).
+This is a truncated distribution. We can use a Gibbs sampler alternating between sampling \(p\) and \(y_5\).
 \end{example}
 
 \hypertarget{imputing-latent-variables}{%
@@ -2651,7 +2649,8 @@ We introduce a latent variable \(z_i \sim \hbox{Bernoulli}(p)\) that describes i
 \NormalTok{a }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\FloatTok{0.001}\NormalTok{)}
 \NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(a, }\FloatTok{0.7}\NormalTok{, }\FloatTok{0.05}\NormalTok{)}
 \NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(a, }\FloatTok{0.8}\NormalTok{, }\FloatTok{0.02}\NormalTok{)}
-\FunctionTok{plot}\NormalTok{(a, x, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{20}\NormalTok{), }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(y), }\AttributeTok{ylab =} \StringTok{"density"}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(a, x, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{20}\NormalTok{), }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(y),}
+     \AttributeTok{ylab =} \StringTok{"density"}\NormalTok{)}
 \FunctionTok{lines}\NormalTok{(a, y, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
