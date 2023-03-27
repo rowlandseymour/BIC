@@ -1,7 +1,7 @@
 ---
 title: "Bayesian Inference and Computation"
 author: "Dr Rowland Seymour"
-date: "Semester 2, 2023"
+date: "Semester 2, 2024"
 site: bookdown::bookdown_site
 output: gitbook
 documentclass: book
@@ -10,87 +10,129 @@ biblio-style: apalike
 link-citations: yes
 description: "This book contains the lecture notes for the module Bayesian Inference and Computation."
 cover-image: uob_logo.png
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
+# Practicalities {.unnumbered}
 
-
-# Practicalities {-}
 ```{r fig.align='center', echo=FALSE, include=identical(knitr:::pandoc_to(), 'html')}
 knitr::include_graphics('uob_logo.png', dpi = NA)
 ```
 
 ## Module Aims
 
-The module aims to give you an overview of the Bayesian paradigm. By the end of the course, you should
+Bayesian inference is a set of methods where the probability of an event
+occurring can be updated as more information becomes available. It is
+fundamentally different from frequentist methods, which are based on
+long running relative frequencies. This module gives an introduction to
+the Bayesian approach to statistical analysis and the theory that
+underpins it.
 
-1.  Be able to conceptualise the Bayesian approach for statistics
+Students will be able to explain the distinctive features of Bayesian
+methodology, understand and appreciate the role of prior distributions
+and compute posterior distributions. It will cover the derivation of
+posterior distributions, the construction of prior distributions, and
+inference for missing data. Extensions are considered to models with
+more than a single parameter and how these can be used to analyse data.
+Computational methods have greatly advanced the use of Bayesian methods
+and this module covers, and allows students to apply, procedures for the
+sampling and analysis of intractable Bayesian problems.
 
-2.  Be able to derive posterior and posterior predictive distributions for univariate and multivariate models
+By the end of the course, students should be able to:
 
-3.  Identify suitable prior distributions and understand how the choice of prior distribution may affect the final result
-
-4.  Understand the principles of Markov chain Monte Carlo and be able to construct MCMC algorithms
+1.  Demonstrate a full and rigorous understanding of all definitions
+    associated with Bayesian inference and understand the differences
+    between the Bayesian and frequentist approaches to inference
+2.  Demonstrate a sound understanding of the fundamental concepts of
+    Bayesian inference and computational sampling methods
+3.  Understand how to make inferences assuming various population
+    distributions while taking into account expert opinion and the
+    implications of weak prior knowledge and large samples
+4.  Demonstrate an understanding of the principles of Markov Chain Monte
+    Carlo and be able to programme an MCMC algorithm
+5.  Engage in Bayesian data analysis in diverse situations drawn from
+    physics, biological, engineering and other mathematical contexts.
 
 ## Module Structure
 
-The module is split between theory and programming. Each week (excluding week 6) will have three lectures and one computer labs.
+The module is split between theory and computation Each week (excluding
+week 6) will have three lectures, one computer lab and one problem
+class.
 
 ## Assessment
 
-Assessment for this module is 50% via an exam and 50% via coursework assignments during the semester. The exam will last 1h 30m and take place during the summer exam period. There will be three coursework assignment -- assignment 1 will be worth 10% of the final mark, with assignments 2 and three counting for 20% each. More details about the assignment will be made available during the semester. 
+Assessment for this module is 50% via an exam and 50% via coursework
+assignments during the semester. The exam will last 1h 30m and take
+place during the summer exam period. There will be three coursework
+assignment -- assignment 1 will be worth 10% of the final mark, with
+assignments 2 and three counting for 20% each. More details about the
+assignment will be made available during the semester.
 
 ## Getting Help
 
-There are lots of ways of getting help throughout the module. You can visit my office hour (Watson 317) on ..... or email me at [r.g.seymour\@bham.ac.uk](mailto:r.g.seymour@bham.ac.uk){.email}. Each week, there will also be a problem class.
+There are lots of ways of getting help throughout the module. You can
+visit my office hour (Watson 317) on ..... or email me at
+[r.g.seymour\@bham.ac.uk](mailto:r.g.seymour@bham.ac.uk){.email}.
 
 ## Recommended Books and Videos
 
-No books are required for this course and the whole material is contained in these notes. However, you may find it useful to use other resources in your studies. I recommend the following:
+No books are required for this course and the whole material is
+contained in these notes. However, you may find it useful to use other
+resources in your studies. I recommend the following:
 
-1.  [A First Course in Bayesian Statistical Methods - Peter D. Hoff](https://link.springer.com/book/10.1007/978-0-387-92407-6). This is a short book that covers the basics of Bayesian inference and computation. To the point and well written, it's a useful place to look topics up.
+1.  [A First Course in Bayesian Statistical Methods - Peter D.
+    Hoff](https://link.springer.com/book/10.1007/978-0-387-92407-6).
+    This is a short book that covers the basics of Bayesian inference
+    and computation. To the point and well written, it's a useful place
+    to look topics up.
 
-2.  [Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin](http://www.stat.columbia.edu/~gelman/book/). This is a thorough book explaining everything you'd need to know to carry out Bayesian data analysis. It's a fairly long and in-depth book, but the authors are authoritative and give good advice throughout. Example code on the website is in R, Python and Stan.
+2.  [Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern,
+    David Dunson, Aki Vehtari, and Donald
+    Rubin](http://www.stat.columbia.edu/~gelman/book/). This is a
+    thorough book explaining everything you'd need to know to carry out
+    Bayesian data analysis. It's a fairly long and in-depth book, but
+    the authors are authoritative and give good advice throughout.
+    Example code on the website is in R, Python and Stan.
 
-3.  [Statistical Rethinking - Richard McElrath](https://xcelab.net/rm/statistical-rethinking/). This book provides a friendly intuitive understanding of Bayesian inference and computation. Aimed at social and natural scientists, it has less theory that the other two books but is perhaps more approachable. A set of video lectures for this book can be found on [YouTube](https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN).
-
+3.  [Statistical Rethinking - Richard
+    McElrath](https://xcelab.net/rm/statistical-rethinking/). This book
+    provides a friendly intuitive understanding of Bayesian inference
+    and computation. Aimed at social and natural scientists, it has less
+    theory that the other two books but is perhaps more approachable. A
+    set of video lectures for this book can be found on
+    [YouTube](https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN).
 
 ## Common Distributions
-For many Bayesian inference problems, it is useful to be able to identify probability density functions (for continuous random variables) and probability mass functions (for discrete random variables) up to proportionality. Some common density/mass functions are given below.
 
-**Normal distribution**
-$$
+For many Bayesian inference problems, it is useful to be able to
+identify probability density functions (for continuous random variables)
+and probability mass functions (for discrete random variables) up to
+proportionality. Some common density/mass functions are given below.
+
+**Normal distribution** $$
 \pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\} \qquad x \in\mathbb{R},
-$$
-where $\mu \in \mathbb{R}$ and $\sigma > 0$.
+$$ where $\mu \in \mathbb{R}$ and $\sigma > 0$.
 
-**Beta distribution**
-$$
+**Beta distribution** $$
 \pi(x\mid \alpha, \beta) = \frac{1}{B(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad  x \in [0, 1],
-$$
-where $\alpha, \beta > 0$ and $B(\alpha, \beta)$ is the [beta function](https://en.wikipedia.org/wiki/Beta_function).
+$$ where $\alpha, \beta > 0$ and $B(\alpha, \beta)$ is the [beta
+function](https://en.wikipedia.org/wiki/Beta_function).
 
-**Gamma distribution**
-$$
+**Gamma distribution** $$
 \pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x} \qquad  x > 0,
-$$
-where $\alpha, \beta > 0$ and $\Gamma(\alpha)$ is the [gamma function](https://en.wikipedia.org/wiki/Gamma_function).
+$$ where $\alpha, \beta > 0$ and $\Gamma(\alpha)$ is the [gamma
+function](https://en.wikipedia.org/wiki/Gamma_function).
 
-**Exponential distribution**
-$$
+**Exponential distribution** $$
 f(x \mid \lambda) = \lambda e^{-\lambda x} \qquad x > 0,
-$$
-where $\lambda > 0$.
+$$ where $\lambda > 0$.
 
-**Poisson distribution**
-$$
+**Poisson distribution** $$
 \pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{1, 2, \ldots\},
-$$
-where $\lambda > 0$.
+$$ where $\lambda > 0$.
 
-**Binomial distribution**
-$$
+**Binomial distribution** $$
 \pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}
-$$
-where $p \in [0, 1]$.
-
-
+$$ where $p \in [0, 1]$.
