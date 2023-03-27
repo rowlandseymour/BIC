@@ -155,3 +155,64 @@ points(x = y, y = u, pch = 19)
 ```
 The plot also shows how the choices of $M$ and $q$ can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better $q$ to minimise this space. 
 :::
+
+### Rejection Sampling Efficiency
+Suppose we are using a rejection sampling algorithm to sample from $f(y)$ using the proposal distribution $g(y)$. How good is our rejection sampling algorithm? What does it mean to be a 'good' rejection sampling algorithm. One measure of the efficiency of a sampler is, on average, how many samples to we need to generate until one is accepted. 
+
+::: {.proposition}
+The number of samples proposed in a rejection sampling algorithm before one is accepted is distributed geometrically with mean $\frac{1}{M}$. 
+:::
+
+::: {.proof}
+Given a proposed value $y$, and let $A$ be the event of sample is accepted. The probability a sample is accepted, given it takes the value $y$ is 
+$$
+A \mid y \sim \hbox{Bernoulli}\left(\frac{f(y)}{Mg(y)}\right).
+$$
+
+By the tower property
+\begin{align*}
+E(A) & = E(E(A\mid y)) \\
+& = E\left(\frac{f(y)}{Mg(y)}\right) \\
+& = \int \frac{f(y)}{Mg(y)} g(y) dy \\
+& = \frac{1}{M}\int f(y) dy \\
+& = \frac{1}{M}.
+\end{align*}
+
+Therefore, the number of samples proposed before one is accepted is distributed geometrically with mean $\frac{1}{M}$. 
+:::
+
+## Ziggurat Sampling
+The final method we are going to look at in this chapter is Ziggurat sampling. It is used to sample from a $N(0, 1)$ distribution using samples from a $U(0, 1)$ distribution. A Ziggurat is a kind of stepped pyramid. To start the sampling algorithm, we approximate the normal distribution by a series of horizontal rectangles, each with the same area. An example of this is shown below. 
+
+```{r echo = FALSE}
+x <- seq(0, 5, 0.01)
+y <- dnorm(x, 0, 1)
+plot(x, y, type = 'l', col = "blue", lwd = 3)
+
+table <- 0
+table$x <- c(2.093446, 2.093446, 1.676493, 1.393368, 1.100918, 0.765337)
+table$y <- c(0.044592, 0.097856, 0.151121, 0.217632, 0.297658, 0.398943)
+
+segments(x0 = 0, x1 = table$x, y0= table$y, y1 = table$y)
+segments(x0 = table$x[2:6], x1 = table$x[2:6] , y0= table$y[1:5], y1 = table$y[2:6])
+segments(x0 = table$x[1], x1 = 2.5, y0 = table$y[1], y1 = table$y[1])
+segments(x0 = table$x[1], x1 = 2.5, y0 = table$y[1], y1 = table$y[1])
+segments(x0 = 2.5, x1 = 2.5, y0 = 0, y1 = table$y[1])
+```
+To generate a sample, we choose a rectangle at random -- we might do this by sampling on the y-axis uniformly at random. We then sample uniformly at random within the rectangle. We accept the sample if it is 'clearly' in the box. By clearly, we mean that is is also contained in the rectangle above. If it is, not contained in the rectangle above, we generate a new uniform random number to accept or reject the sample. 
+
+Suppose the bottom right corner of the $i^{th}$ rectangle has coordinates $(x_i, y_i)$. The Ziggurat algorithm is 
+\begin{enumerate}
+\item Sample a rectangle $i$ uniformly at random
+\item Sample $u_0 \sim U[0, 1]$ and set $x = u_0x_i$
+\item If $x < x_{i+1}$ accept the sample
+\item Sample $u_1 \sim U[0, 1]$ and set $y = y_i + u_1(y_{i+1} − y_i)$
+\item If $y < f(y)$, where $f$ is the density function of a standard normal distribution, then accept the sample.
+\end{enumerate}
+
+This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half. 
+
+
+
+
+

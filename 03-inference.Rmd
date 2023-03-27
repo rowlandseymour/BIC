@@ -361,94 +361,106 @@ $$
 
 The Berstein-von-Mises theorem says that as the number of data points approaches infinity, the posterior distribution tends to a Normal distribution centered around the MLE and variance dependent on the Fisher information. The proof of this theorem is out of the scope of this module, but can be found in Asymptotic Statistics (2000) by A. W. van der Vaart.
 
-## Exercises
+## Lab
 
-::: {.exercise}
-Suppose $y_1, \ldots, y_N \sim \hbox{Geom}(p)$. 
+The aim of this lab is to work with some posterior distributions in cases when the prior distribution is or is not conjugate. Recall the definition of a conjugate prior distribution:
 
-1. Derive the likelihood function and then the maximum likelihood estimator for $p$.
-2. By letting $p \sim \hbox{Beta}(\alpha, \beta)$, derive the posterior distribution for $p$ given the data. 
-3. Compare the maximum likelihood estimate with with expectation of the posterior distribution. What values of $\alpha$ and $\beta$ result in a posterior expectation that is equal to the maximum likelihood estimate? Why is this inadvisable?
+::: {.defintion}
+If the prior distribution $\pi(\theta)$ has the same distributional family as the posterior distribution $\pi(\theta \mid \boldsymbol{y})$, then the prior distribution is a **conjugate prior distribution**. 
+:::
 
+Working with conjugate prior distributions often makes the analytical work much easier, as we can work with the posterior distribution. But sometimes, conjugate prior distributions may not be appropriate. This is where R can help, as we do not need a closed form to carry out computations.
+
+
+::: {.example}
+The total number of goals scored in 50 games of a low level football league is shown below.
+```{r}
+y <- c(2, 6, 2, 3, 4, 3, 4, 3, 1, 2, 3, 2, 6, 6, 2, 3, 5, 1, 2, 2, 4, 2, 5, 3,
+       6, 4, 1, 2, 7, 8, 4, 3, 7, 3, 3, 5, 2, 6, 1, 3, 7, 4, 2, 6, 8, 8, 4, 5,
+       7, 4)
+hist(y, main = "", xlab = "Reaction time (ms)")
+mean(y)
+```
+We can model the number of goals scored using a Poisson distribution 
+$$
+y \sim \hbox{Po}(\lambda).
+$$
+By Bayes' theorem, the posterior distribution is given by
+$$
+\pi(\lambda \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda). 
+$$
+The likelihood function is given by
+\begin{align*}
+\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^50 \frac{e^{-\lambda}\lambda^{y_i}}{y_i!}\\
+&= \frac{e^{-50\lambda}\lambda^{\sum y_i}}{\prod_{i=1}^50 y_i!} 
+\end{align*}
+
+
+R has a set of inbuilt functions for working with the Poisson distribution so we can rely on those to write functions for the likelihood and loglikelihood. 
+
+```{r}
+lambda <- seq(0, 10, 0.01) #grid of lambda values
+likelihood.function <- function(lambda, y) prod(dpois(y, lambda)) #compute likelihood
+log.likelihood.function  <- function(lambda, y) sum(dpois(y, lambda, log = TRUE)) #compute loglikelihood
+likelihood <- sapply(lambda,  likelihood.function, y) #evaluate at grid of points
+log.likelihood <- sapply(lambda,  log.likelihood.function, y) #evaluate at grid of points
+
+#Plot likelihood
+plot(lambda, likelihood, 
+     xlab = expression(mu), ylab = "likelihood", type = 'l')
+plot(lambda, log.likelihood, 
+     xlab = expression(mu), ylab = "loglikelihood", type = 'l')
+```
+When coding posterior distributions, we often work on the log scale because the numbers can be smaller that R can deal with. The denominator with the factorial can get very large very quickly. 
+
+After speaking to football experts, we decide to place a normal prior distribution on $\lambda$ with mean 5 goals and standard deviation one goal, i.e.
+$$
+\lambda \sim N(5, 1).
+$$
+The prior distribution can be plotted by
+```{r}
+lambda   <- seq(0, 10, 0.01) #grid of lambda values
+prior    <- dnorm(lambda, 5, 1)
+log.prior <- dnorm(lambda, 5, 1, log = TRUE)
+plot(lambda, prior, type = 'l', xlab = expression(lambda), ylab = "density")
+plot(lambda, log.prior, type = 'l', 
+     xlab = expression(lambda), ylab = "log density")
+```
+
+Writing the posterior distribution up to proportionality, we get
+$$
+\pi(\lambda \mid \boldsymbol{y}) \propto \exp\left(-50\lambda -\frac{1}{2}(\lambda - 5)^2\right)\lambda^{\sum y_i}.
+$$
+There is no closed form for this distribution and it is not that nice to work with. But with R, we can easily evaluate the posterior distribution at a grid of points.
+
+```{r}
+posterior <- prior*likelihood
+posterior <- posterior/sum(posterior) #normalise
+plot(lambda, posterior, type = 'l', xlab = expression(lambda), 
+     ylab = "posterior density")
+```
+
+We can now visually inspect the posterior distribution and see that it has a strong peak around 4. One important statistic is the **maximum a posteriori estimation** or MAP estimate, this is the mode of the posterior distribution and it is a similar principle to the maximum likelihood estimate.
+
+We can compute this using the command
+```{r}
+lambda[which.max(posterior)]
+```
+which shows the MAP estimate is exactly 4. 
 :::
 
 ::: {.exercise}
-When someone is infected with a disease, it's common to model the time that they are infectious for, denoted by T, with a Gamma distribution. Suppose you observe 100 measles infections and $\sum_{i=1}^{100}t_i$ = 870 days. Based on advice from clinicians, you suppose $T \sim \Gamma(5, \theta)$. Using an $\theta \sim \hbox{Exp}(0.01)$ prior distribution, derive the posterior distribution. What is the 95\% credible interval for $\theta$?
-:::
-
-::: {.exercise}
-The density function for the Pareto distribution with scale $\alpha$ and shape $\beta$ is given by
-$$
-\pi(x \mid \alpha = 1,\, \beta) = \frac{\beta}{x^{\beta+1}}, \qquad x > 1,
-$$
-where $\beta$ is positive real valued parameter and $\alpha = 1$. Suppose the data are denoted by $\boldsymbol{y} = \{y_1, \ldots, y_N\}$. Place a Gamma prior distribution on $\beta$ such that $\beta \sim \Gamma(a, b)$. Derive the posterior distribution for $\beta$ given the data. 
+Adapt the code in the Example above to use an exponential prior distribution with rate 0.1. Then derive the posterior distribution analytically and compare to the numerical version. 
 :::
 
 ::: {.exercise}
 You are given the data are exponentially distributed with rate $\lambda,$ i.e. $Y_1, \ldots, Y_N \sim \hbox{Exp}(\lambda)$. Your prior belief is that $\lambda \in (0, 1)$. Show that the posterior distribution $\pi(\lambda \mid \boldsymbol{y})$ has no closed form when the prior distribution for $\lambda \sim \hbox{Beta}(\alpha, \beta)$. 
-:::
 
-::: {.solution}
-Since our observations are independent, the likelihood function is the product of $N$ exponential density functions,
-\begin{align*}
-\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^N \lambda \exp\left\{-\lambda y_i\right\}\\
-& = \lambda^N  \exp\left\{-\lambda \sum_{i=1}^N y_i\right\}.
-\end{align*}
-
-The prior distribution is $\pi(\lambda) = \frac{1}{B(\alpha, \beta)}\lambda^{\alpha - 1}(1-\lambda)^{\beta - 1}$ and the posterior distribution is therefore proportional to 
-$$
-\pi(\lambda \mid \boldsymbol{y}) \propto \lambda^{\alpha +N - 1}(1-\lambda)^{\beta - 1}\exp\left\{-\lambda \sum_{i=1}^N y_i \right\}.
-$$
-Hence, the posterior distribution has no closed form. 
-:::
-
-
-::: {.exercise}
-Suppose that $Y_i \sim \hbox{Binom}(n, p)$ are iid for $i \in \{1, \ldots, N\}$. 
-
-1. By placing a Beta prior distribution on $p$ such that $p \sim \hbox{Beta}(\alpha, \beta)$ derive the posterior distribution. 
-2. Suppose that $y_{N+1}$ is then observed and is also independently drawn from the same distribution. Derive the posterior distribution by updating the previous distribution (i.e. your posterior distribution for the previous part becomes your prior distribution). 
-3. Show that you obtain the same distribution if you observe all $N+1$ data points at the start of the process. 
-:::
-
-::: {.exercise}
-Let $Y_1, \ldots, Y_N \sim \hbox{Pois}(\lambda)$. 
-
-1. Use Bayes' theorem to derive the posterior distribution of $\lambda$ given the observed data. 
-2. Place a Gamma prior distribution on $\lambda \sim \Gamma(\alpha, \beta)$ and derive the form the posterior distribution takes. 
-3. Discuss the effects of $\alpha$ and $\beta$ on the posterior distribution. 
-4. Derive the posterior predictive distribution for a new observation $\tilde{y}$. _Hint: The mass function for the negative binomial distribution with failures $r$ and probability of success $p$ is _
-    $$
-   \pi(x = k \mid r, p) = \begin{pmatrix} k + r - 1 \\ k \end{pmatrix} (1-p)^k p^r.
-    $$
-:::
-    
-::: {.exercise}
-Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is
-
+The data is given by 
 ```{r}
-y <- c(0.34, 0.47, 0.58, 0.27, 0.74, 0.44, 0.46, 0.65, 0.36, 0.55, 0.58, 0.55,
-       0.53, 0.56, 0.54, 0.61, 0.43, 0.52, 0.45, 0.49, 0.32, 0.33, 0.47, 0.58,
-       0.34, 0.60, 0.59, 0.43, 0.57, 0.34)
-hist(y, main = "", xlab = "Reaction time (ms)")
-mean(y)
+y <- c(1.95, 1.46, 4.81, 1.52, 4.24, 3.00, 0.46, 2.27, 1.76, 0.41)
 ```
-Suppose that, somehow, we know the population standard deviation is 0.01$ms$. Derive a posterior distribution for $\mu$. 
-
-Suppose the police pull over a lorry driver after they failed to stop at a red light. During a test at the side of the road, the lorry driver's reaction time is tested and comes out as 77ms. 
-
-1. By constructing a credible interval from the posterior predictive distribution, determine if the driver's reaction time is suspicious. 
-2. Why is this not a good comparison to make?
 :::
+By writing an R function to evaluate the likelihood function, evaute the posterior distribution for $\lambda$ over a grid of points. 
 
-::: {.exercise}
-Consider the motivation in the lecture notes for invariant prior distributions. Show that if $\theta \sim U[0, 1]$ and $\psi = \theta^2$ then $\pi(\psi) = \frac{1}{2\sqrt{\psi}}$ for $\psi \in [0, 1]$. 
-:::
 
-::: {.exercise}
-Consider Example \@ref(exm:exponential) featuring the exponential distribution. 
-    
-1. Construct an invariant prior distribution for this distribution.
-2. Derive the posterior distribution using the invariant prior distribution. 
-3. Using integration, discuss the validity of the prior distribution. 
-:::

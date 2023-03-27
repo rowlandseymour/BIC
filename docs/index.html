@@ -151,7 +151,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.3" data-path="fundamentals.html"><a href="fundamentals.html#bayesian-probability"><i class="fa fa-check"></i><b>1.3</b> Bayesian Probability</a></li>
 <li class="chapter" data-level="1.4" data-path="fundamentals.html"><a href="fundamentals.html#conditional-probability-and-exchangability"><i class="fa fa-check"></i><b>1.4</b> Conditional Probability and Exchangability</a></li>
 <li class="chapter" data-level="1.5" data-path="fundamentals.html"><a href="fundamentals.html#bayes-theorem"><i class="fa fa-check"></i><b>1.5</b> Bayes’ Theorem</a></li>
-<li class="chapter" data-level="1.6" data-path="fundamentals.html"><a href="fundamentals.html#exercises"><i class="fa fa-check"></i><b>1.6</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="programming-in-r.html"><a href="programming-in-r.html"><i class="fa fa-check"></i><b>2</b> Programming in R</a>
 <ul>
@@ -176,13 +175,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.6" data-path="bayesian-inference.html"><a href="bayesian-inference.html#prediction"><i class="fa fa-check"></i><b>3.6</b> Prediction</a></li>
 <li class="chapter" data-level="3.7" data-path="bayesian-inference.html"><a href="bayesian-inference.html#non-informative-prior-distibrutions"><i class="fa fa-check"></i><b>3.7</b> Non-informative Prior Distibrutions</a></li>
 <li class="chapter" data-level="3.8" data-path="bayesian-inference.html"><a href="bayesian-inference.html#bernstein-von-mises-theorem"><i class="fa fa-check"></i><b>3.8</b> Bernstein-von-Mises Theorem</a></li>
-<li class="chapter" data-level="3.9" data-path="bayesian-inference.html"><a href="bayesian-inference.html#exercises-1"><i class="fa fa-check"></i><b>3.9</b> Exercises</a></li>
+<li class="chapter" data-level="3.9" data-path="bayesian-inference.html"><a href="bayesian-inference.html#lab"><i class="fa fa-check"></i><b>3.9</b> Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>4</b> Sampling</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="sampling.html"><a href="sampling.html#uniform-random-numbers"><i class="fa fa-check"></i><b>4.1</b> Uniform Random Numbers</a></li>
 <li class="chapter" data-level="4.2" data-path="sampling.html"><a href="sampling.html#inverse-transform-sampling"><i class="fa fa-check"></i><b>4.2</b> Inverse Transform Sampling</a></li>
-<li class="chapter" data-level="4.3" data-path="sampling.html"><a href="sampling.html#rejection-sampling"><i class="fa fa-check"></i><b>4.3</b> Rejection Sampling</a></li>
+<li class="chapter" data-level="4.3" data-path="sampling.html"><a href="sampling.html#rejection-sampling"><i class="fa fa-check"></i><b>4.3</b> Rejection Sampling</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="sampling.html"><a href="sampling.html#rejection-sampling-efficiency"><i class="fa fa-check"></i><b>4.3.1</b> Rejection Sampling Efficiency</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="sampling.html"><a href="sampling.html#ziggurat-sampling"><i class="fa fa-check"></i><b>4.4</b> Ziggurat Sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>5</b> Markov Chain Monte Carlo</a>
 <ul>
@@ -229,75 +232,118 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Bayesian Inference and Computation</h1>
 <p class="author"><em>Dr Rowland Seymour</em></p>
-<p class="date"><em>Semester 2, 2023</em></p>
+<p class="date"><em>Semester 2, 2024</em></p>
 </div>
 <div id="practicalities" class="section level1 unnumbered hasAnchor">
 <h1>Practicalities<a href="index.html#practicalities" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p><img src="uob_logo.png" style="display: block; margin: auto;" /></p>
 <div id="module-aims" class="section level2 hasAnchor" number="0.1">
 <h2><span class="header-section-number">0.1</span> Module Aims<a href="index.html#module-aims" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The module aims to give you an overview of the Bayesian paradigm. By the end of the course, you should</p>
+<p>Bayesian inference is a set of methods where the probability of an event
+occurring can be updated as more information becomes available. It is
+fundamentally different from frequentist methods, which are based on
+long running relative frequencies. This module gives an introduction to
+the Bayesian approach to statistical analysis and the theory that
+underpins it.</p>
+<p>Students will be able to explain the distinctive features of Bayesian
+methodology, understand and appreciate the role of prior distributions
+and compute posterior distributions. It will cover the derivation of
+posterior distributions, the construction of prior distributions, and
+inference for missing data. Extensions are considered to models with
+more than a single parameter and how these can be used to analyse data.
+Computational methods have greatly advanced the use of Bayesian methods
+and this module covers, and allows students to apply, procedures for the
+sampling and analysis of intractable Bayesian problems.</p>
+<p>By the end of the course, students should be able to:</p>
 <ol style="list-style-type: decimal">
-<li><p>Be able to conceptualise the Bayesian approach for statistics</p></li>
-<li><p>Be able to derive posterior and posterior predictive distributions for univariate and multivariate models</p></li>
-<li><p>Identify suitable prior distributions and understand how the choice of prior distribution may affect the final result</p></li>
-<li><p>Understand the principles of Markov chain Monte Carlo and be able to construct MCMC algorithms</p></li>
+<li>Demonstrate a full and rigorous understanding of all definitions
+associated with Bayesian inference and understand the differences
+between the Bayesian and frequentist approaches to inference</li>
+<li>Demonstrate a sound understanding of the fundamental concepts of
+Bayesian inference and computational sampling methods</li>
+<li>Understand how to make inferences assuming various population
+distributions while taking into account expert opinion and the
+implications of weak prior knowledge and large samples</li>
+<li>Demonstrate an understanding of the principles of Markov Chain Monte
+Carlo and be able to programme an MCMC algorithm</li>
+<li>Engage in Bayesian data analysis in diverse situations drawn from
+physics, biological, engineering and other mathematical contexts.</li>
 </ol>
 </div>
 <div id="module-structure" class="section level2 hasAnchor" number="0.2">
 <h2><span class="header-section-number">0.2</span> Module Structure<a href="index.html#module-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The module is split between theory and programming. Each week (excluding week 6) will have three lectures and one computer labs.</p>
+<p>The module is split between theory and computation Each week (excluding
+week 6) will have three lectures, one computer lab and one problem
+class.</p>
 </div>
 <div id="assessment" class="section level2 hasAnchor" number="0.3">
 <h2><span class="header-section-number">0.3</span> Assessment<a href="index.html#assessment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Assessment for this module is 50% via an exam and 50% via coursework assignments during the semester. The exam will last 1h 30m and take place during the summer exam period. There will be three coursework assignment – assignment 1 will be worth 10% of the final mark, with assignments 2 and three counting for 20% each. More details about the assignment will be made available during the semester.</p>
+<p>Assessment for this module is 50% via an exam and 50% via coursework
+assignments during the semester. The exam will last 1h 30m and take
+place during the summer exam period. There will be three coursework
+assignment – assignment 1 will be worth 10% of the final mark, with
+assignments 2 and three counting for 20% each. More details about the
+assignment will be made available during the semester.</p>
 </div>
 <div id="getting-help" class="section level2 hasAnchor" number="0.4">
 <h2><span class="header-section-number">0.4</span> Getting Help<a href="index.html#getting-help" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>There are lots of ways of getting help throughout the module. You can visit my office hour (Watson 317) on ….. or email me at <a href="mailto:r.g.seymour@bham.ac.uk" class="email">r.g.seymour@bham.ac.uk</a>. Each week, there will also be a problem class.</p>
+<p>There are lots of ways of getting help throughout the module. You can
+visit my office hour (Watson 317) on ….. or email me at
+<a href="mailto:r.g.seymour@bham.ac.uk" class="email">r.g.seymour@bham.ac.uk</a>.</p>
 </div>
 <div id="recommended-books-and-videos" class="section level2 hasAnchor" number="0.5">
 <h2><span class="header-section-number">0.5</span> Recommended Books and Videos<a href="index.html#recommended-books-and-videos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>No books are required for this course and the whole material is contained in these notes. However, you may find it useful to use other resources in your studies. I recommend the following:</p>
+<p>No books are required for this course and the whole material is
+contained in these notes. However, you may find it useful to use other
+resources in your studies. I recommend the following:</p>
 <ol style="list-style-type: decimal">
-<li><p><a href="https://link.springer.com/book/10.1007/978-0-387-92407-6">A First Course in Bayesian Statistical Methods - Peter D. Hoff</a>. This is a short book that covers the basics of Bayesian inference and computation. To the point and well written, it’s a useful place to look topics up.</p></li>
-<li><p><a href="http://www.stat.columbia.edu/~gelman/book/">Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</a>. This is a thorough book explaining everything you’d need to know to carry out Bayesian data analysis. It’s a fairly long and in-depth book, but the authors are authoritative and give good advice throughout. Example code on the website is in R, Python and Stan.</p></li>
-<li><p><a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking - Richard McElrath</a>. This book provides a friendly intuitive understanding of Bayesian inference and computation. Aimed at social and natural scientists, it has less theory that the other two books but is perhaps more approachable. A set of video lectures for this book can be found on <a href="https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN">YouTube</a>.</p></li>
+<li><p><a href="https://link.springer.com/book/10.1007/978-0-387-92407-6">A First Course in Bayesian Statistical Methods - Peter D.
+Hoff</a>.
+This is a short book that covers the basics of Bayesian inference
+and computation. To the point and well written, it’s a useful place
+to look topics up.</p></li>
+<li><p><a href="http://www.stat.columbia.edu/~gelman/book/">Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern,
+David Dunson, Aki Vehtari, and Donald
+Rubin</a>. This is a
+thorough book explaining everything you’d need to know to carry out
+Bayesian data analysis. It’s a fairly long and in-depth book, but
+the authors are authoritative and give good advice throughout.
+Example code on the website is in R, Python and Stan.</p></li>
+<li><p><a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking - Richard
+McElrath</a>. This book
+provides a friendly intuitive understanding of Bayesian inference
+and computation. Aimed at social and natural scientists, it has less
+theory that the other two books but is perhaps more approachable. A
+set of video lectures for this book can be found on
+<a href="https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN">YouTube</a>.</p></li>
 </ol>
 </div>
 <div id="common-distributions" class="section level2 hasAnchor" number="0.6">
 <h2><span class="header-section-number">0.6</span> Common Distributions<a href="index.html#common-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>For many Bayesian inference problems, it is useful to be able to identify probability density functions (for continuous random variables) and probability mass functions (for discrete random variables) up to proportionality. Some common density/mass functions are given below.</p>
-<p><strong>Normal distribution</strong>
-<span class="math display">\[
+<p>For many Bayesian inference problems, it is useful to be able to
+identify probability density functions (for continuous random variables)
+and probability mass functions (for discrete random variables) up to
+proportionality. Some common density/mass functions are given below.</p>
+<p><strong>Normal distribution</strong> <span class="math display">\[
 \pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\} \qquad x \in\mathbb{R},
-\]</span>
-where <span class="math inline">\(\mu \in \mathbb{R}\)</span> and <span class="math inline">\(\sigma &gt; 0\)</span>.</p>
-<p><strong>Beta distribution</strong>
-<span class="math display">\[
+\]</span> where <span class="math inline">\(\mu \in \mathbb{R}\)</span> and <span class="math inline">\(\sigma &gt; 0\)</span>.</p>
+<p><strong>Beta distribution</strong> <span class="math display">\[
 \pi(x\mid \alpha, \beta) = \frac{1}{B(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad  x \in [0, 1],
-\]</span>
-where <span class="math inline">\(\alpha, \beta &gt; 0\)</span> and <span class="math inline">\(B(\alpha, \beta)\)</span> is the <a href="https://en.wikipedia.org/wiki/Beta_function">beta function</a>.</p>
-<p><strong>Gamma distribution</strong>
-<span class="math display">\[
+\]</span> where <span class="math inline">\(\alpha, \beta &gt; 0\)</span> and <span class="math inline">\(B(\alpha, \beta)\)</span> is the <a href="https://en.wikipedia.org/wiki/Beta_function">beta
+function</a>.</p>
+<p><strong>Gamma distribution</strong> <span class="math display">\[
 \pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x} \qquad  x &gt; 0,
-\]</span>
-where <span class="math inline">\(\alpha, \beta &gt; 0\)</span> and <span class="math inline">\(\Gamma(\alpha)\)</span> is the <a href="https://en.wikipedia.org/wiki/Gamma_function">gamma function</a>.</p>
-<p><strong>Exponential distribution</strong>
-<span class="math display">\[
+\]</span> where <span class="math inline">\(\alpha, \beta &gt; 0\)</span> and <span class="math inline">\(\Gamma(\alpha)\)</span> is the <a href="https://en.wikipedia.org/wiki/Gamma_function">gamma
+function</a>.</p>
+<p><strong>Exponential distribution</strong> <span class="math display">\[
 f(x \mid \lambda) = \lambda e^{-\lambda x} \qquad x &gt; 0,
-\]</span>
-where <span class="math inline">\(\lambda &gt; 0\)</span>.</p>
-<p><strong>Poisson distribution</strong>
-<span class="math display">\[
+\]</span> where <span class="math inline">\(\lambda &gt; 0\)</span>.</p>
+<p><strong>Poisson distribution</strong> <span class="math display">\[
 \pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{1, 2, \ldots\},
-\]</span>
-where <span class="math inline">\(\lambda &gt; 0\)</span>.</p>
-<p><strong>Binomial distribution</strong>
-<span class="math display">\[
+\]</span> where <span class="math inline">\(\lambda &gt; 0\)</span>.</p>
+<p><strong>Binomial distribution</strong> <span class="math display">\[
 \pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}
-\]</span>
-where <span class="math inline">\(p \in [0, 1]\)</span>.</p>
+\]</span> where <span class="math inline">\(p \in [0, 1]\)</span>.</p>
 
 </div>
 </div>

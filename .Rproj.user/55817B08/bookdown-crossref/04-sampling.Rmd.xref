@@ -1,11 +1,5 @@
 h1:sampling Sampling
-h2:uniform-random-numbers Uniform random numbers
-h2:inverse-transform-sampling Inverse transform sampling
-h2:rejection-sampling Rejection sampling
-h2:markov-chain-monte-carlo Markov Chain Monte Carlo
-h2:properties-of-markov-chains Properties of Markov Chains
-h2:gibbs-sampler Gibbs Sampler
-h2:metropolis-hastings Metropolis-Hastings
-h2:mcmc-diagnostics MCMC Diagnostics
-h2:exercises Exercises
+h2:uniform-random-numbers Uniform Random Numbers
+h2:inverse-transform-sampling Inverse Transform Sampling
+h2:rejection-sampling Rejection Sampling
 

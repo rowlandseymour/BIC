@@ -117,7 +117,7 @@
 
 \title{Bayesian Inference and Computation}
 \author{Dr Rowland Seymour}
-\date{Semester 2, 2023}
+\date{Semester 2, 2024}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[chapter]
@@ -150,90 +150,137 @@
 \hypertarget{module-aims}{%
 \section{Module Aims}\label{module-aims}}
 
-The module aims to give you an overview of the Bayesian paradigm. By the end of the course, you should
+Bayesian inference is a set of methods where the probability of an event
+occurring can be updated as more information becomes available. It is
+fundamentally different from frequentist methods, which are based on
+long running relative frequencies. This module gives an introduction to
+the Bayesian approach to statistical analysis and the theory that
+underpins it.
+
+Students will be able to explain the distinctive features of Bayesian
+methodology, understand and appreciate the role of prior distributions
+and compute posterior distributions. It will cover the derivation of
+posterior distributions, the construction of prior distributions, and
+inference for missing data. Extensions are considered to models with
+more than a single parameter and how these can be used to analyse data.
+Computational methods have greatly advanced the use of Bayesian methods
+and this module covers, and allows students to apply, procedures for the
+sampling and analysis of intractable Bayesian problems.
+
+By the end of the course, students should be able to:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
+\tightlist
 \item
-  Be able to conceptualise the Bayesian approach for statistics
+  Demonstrate a full and rigorous understanding of all definitions
+  associated with Bayesian inference and understand the differences
+  between the Bayesian and frequentist approaches to inference
 \item
-  Be able to derive posterior and posterior predictive distributions for univariate and multivariate models
+  Demonstrate a sound understanding of the fundamental concepts of
+  Bayesian inference and computational sampling methods
 \item
-  Identify suitable prior distributions and understand how the choice of prior distribution may affect the final result
+  Understand how to make inferences assuming various population
+  distributions while taking into account expert opinion and the
+  implications of weak prior knowledge and large samples
 \item
-  Understand the principles of Markov chain Monte Carlo and be able to construct MCMC algorithms
+  Demonstrate an understanding of the principles of Markov Chain Monte
+  Carlo and be able to programme an MCMC algorithm
+\item
+  Engage in Bayesian data analysis in diverse situations drawn from
+  physics, biological, engineering and other mathematical contexts.
 \end{enumerate}
 
 \hypertarget{module-structure}{%
 \section{Module Structure}\label{module-structure}}
 
-The module is split between theory and programming. Each week (excluding week 6) will have three lectures and one computer labs.
+The module is split between theory and computation Each week (excluding
+week 6) will have three lectures, one computer lab and one problem
+class.
 
 \hypertarget{assessment}{%
 \section{Assessment}\label{assessment}}
 
-Assessment for this module is 50\% via an exam and 50\% via coursework assignments during the semester. The exam will last 1h 30m and take place during the summer exam period. There will be three coursework assignment -- assignment 1 will be worth 10\% of the final mark, with assignments 2 and three counting for 20\% each. More details about the assignment will be made available during the semester.
+Assessment for this module is 50\% via an exam and 50\% via coursework
+assignments during the semester. The exam will last 1h 30m and take
+place during the summer exam period. There will be three coursework
+assignment -- assignment 1 will be worth 10\% of the final mark, with
+assignments 2 and three counting for 20\% each. More details about the
+assignment will be made available during the semester.
 
 \hypertarget{getting-help}{%
 \section{Getting Help}\label{getting-help}}
 
-There are lots of ways of getting help throughout the module. You can visit my office hour (Watson 317) on \ldots.. or email me at \href{mailto:r.g.seymour@bham.ac.uk}{\nolinkurl{r.g.seymour@bham.ac.uk}}. Each week, there will also be a problem class.
+There are lots of ways of getting help throughout the module. You can
+visit my office hour (Watson 317) on \ldots.. or email me at
+\href{mailto:r.g.seymour@bham.ac.uk}{\nolinkurl{r.g.seymour@bham.ac.uk}}.
 
 \hypertarget{recommended-books-and-videos}{%
 \section{Recommended Books and Videos}\label{recommended-books-and-videos}}
 
-No books are required for this course and the whole material is contained in these notes. However, you may find it useful to use other resources in your studies. I recommend the following:
+No books are required for this course and the whole material is
+contained in these notes. However, you may find it useful to use other
+resources in your studies. I recommend the following:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \href{https://link.springer.com/book/10.1007/978-0-387-92407-6}{A First Course in Bayesian Statistical Methods - Peter D. Hoff}. This is a short book that covers the basics of Bayesian inference and computation. To the point and well written, it's a useful place to look topics up.
+  \href{https://link.springer.com/book/10.1007/978-0-387-92407-6}{A First Course in Bayesian Statistical Methods - Peter D.
+  Hoff}.
+  This is a short book that covers the basics of Bayesian inference
+  and computation. To the point and well written, it's a useful place
+  to look topics up.
 \item
-  \href{http://www.stat.columbia.edu/~gelman/book/}{Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin}. This is a thorough book explaining everything you'd need to know to carry out Bayesian data analysis. It's a fairly long and in-depth book, but the authors are authoritative and give good advice throughout. Example code on the website is in R, Python and Stan.
+  \href{http://www.stat.columbia.edu/~gelman/book/}{Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern,
+  David Dunson, Aki Vehtari, and Donald
+  Rubin}. This is a
+  thorough book explaining everything you'd need to know to carry out
+  Bayesian data analysis. It's a fairly long and in-depth book, but
+  the authors are authoritative and give good advice throughout.
+  Example code on the website is in R, Python and Stan.
 \item
-  \href{https://xcelab.net/rm/statistical-rethinking/}{Statistical Rethinking - Richard McElrath}. This book provides a friendly intuitive understanding of Bayesian inference and computation. Aimed at social and natural scientists, it has less theory that the other two books but is perhaps more approachable. A set of video lectures for this book can be found on \href{https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN}{YouTube}.
+  \href{https://xcelab.net/rm/statistical-rethinking/}{Statistical Rethinking - Richard
+  McElrath}. This book
+  provides a friendly intuitive understanding of Bayesian inference
+  and computation. Aimed at social and natural scientists, it has less
+  theory that the other two books but is perhaps more approachable. A
+  set of video lectures for this book can be found on
+  \href{https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN}{YouTube}.
 \end{enumerate}
 
 \hypertarget{common-distributions}{%
 \section{Common Distributions}\label{common-distributions}}
 
-For many Bayesian inference problems, it is useful to be able to identify probability density functions (for continuous random variables) and probability mass functions (for discrete random variables) up to proportionality. Some common density/mass functions are given below.
+For many Bayesian inference problems, it is useful to be able to
+identify probability density functions (for continuous random variables)
+and probability mass functions (for discrete random variables) up to
+proportionality. Some common density/mass functions are given below.
 
-\textbf{Normal distribution}
-\[
+\textbf{Normal distribution} \[
 \pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\} \qquad x \in\mathbb{R},
-\]
-where \(\mu \in \mathbb{R}\) and \(\sigma > 0\).
+\] where \(\mu \in \mathbb{R}\) and \(\sigma > 0\).
 
-\textbf{Beta distribution}
-\[
+\textbf{Beta distribution} \[
 \pi(x\mid \alpha, \beta) = \frac{1}{B(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad  x \in [0, 1],
-\]
-where \(\alpha, \beta > 0\) and \(B(\alpha, \beta)\) is the \href{https://en.wikipedia.org/wiki/Beta_function}{beta function}.
+\] where \(\alpha, \beta > 0\) and \(B(\alpha, \beta)\) is the \href{https://en.wikipedia.org/wiki/Beta_function}{beta
+function}.
 
-\textbf{Gamma distribution}
-\[
+\textbf{Gamma distribution} \[
 \pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x} \qquad  x > 0,
-\]
-where \(\alpha, \beta > 0\) and \(\Gamma(\alpha)\) is the \href{https://en.wikipedia.org/wiki/Gamma_function}{gamma function}.
+\] where \(\alpha, \beta > 0\) and \(\Gamma(\alpha)\) is the \href{https://en.wikipedia.org/wiki/Gamma_function}{gamma
+function}.
 
-\textbf{Exponential distribution}
-\[
+\textbf{Exponential distribution} \[
 f(x \mid \lambda) = \lambda e^{-\lambda x} \qquad x > 0,
-\]
-where \(\lambda > 0\).
+\] where \(\lambda > 0\).
 
-\textbf{Poisson distribution}
-\[
+\textbf{Poisson distribution} \[
 \pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{1, 2, \ldots\},
-\]
-where \(\lambda > 0\).
+\] where \(\lambda > 0\).
 
-\textbf{Binomial distribution}
-\[
+\textbf{Binomial distribution} \[
 \pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}
-\]
-where \(p \in [0, 1]\).
+\] where \(p \in [0, 1]\).
 
 \hypertarget{fundamentals}{%
 \chapter{Fundamentals of Bayesian Inference}\label{fundamentals}}
@@ -544,226 +591,6 @@ Now we have all the ingredients to construct the posterior distribution. We mult
 
 \end{example}
 
-\hypertarget{exercises}{%
-\section{Exercises}\label{exercises}}
-
-\begin{exercise}
-
-Consider a standard pack of 52 playing cards. You pick a card at random, what is the probability you pick:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  A Queen, given you have picked a picture card (King, Queen, Jack)?
-\item
-  The five of clubs, given you have picked a black card?
-\item
-  A black card, given you have not picked the five of clubs?
-\end{enumerate}
-
-\end{exercise}
-
-\begin{solution}
-
-A pack of playing cards is equally divided into four suits: Hearts (red), Diamonds (red), Clubs (black), and Spades (black). Each suit has 13 cards numbered 2 - 10, Jack, Queen, King (all three picture cards), and Ace.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \begin{align*}
-  P(\hbox{Queen} \mid \hbox{Picture}) &= \frac{P(\hbox{Queen and Picture})}{P(\hbox{Picture)}} \\
-  & = \frac{4/52}{12/52} \\
-  & = \frac{1}{3}.
-  \end{align*}
-\item
-  \begin{align*}
-  P(\hbox{5 Clubs} \mid \hbox{Black}) &= \frac{P(\hbox{5 Clubs and Black})}{P(\hbox{Black)}} \\
-  & = \frac{1/52}{1/2} \\
-  & = \frac{1}{26}.
-  \end{align*}
-\item
-  \begin{align*}
-  P(\hbox{Black} \mid \hbox{Not 5 Clubs}) & = \frac{P(\hbox{Black} \mid \hbox{Not 5 Clubs})}{P(\hbox{Not 5 Clubs})} \\
-  & = \frac{25/52}{51/52}\\
-  &= \frac{25}{51}.
-  \end{align*}
-\end{enumerate}
-
-\end{solution}
-
-\begin{exercise}
-
-Decide if each of the following events can be assigned probabilities by frequentists:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  The Bermuda triangle exists.
-\item
-  Getting a 6 when rolling a dice.
-\item
-  Someone will test positive for Covid-19 after contracting the disease.
-\item
-  The sun will rise tomorrow.
-\end{enumerate}
-
-\end{exercise}
-
-\begin{solution}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  No, this can't be assigned a probability.
-\item
-  Yes, you can repeatedly roll of dice.
-\item
-  Yes, this can be assigned a probability. You can repeatedly test someone for the disease, hence there is a long-run frequency of the test returning a positive result.
-\item
-  It depends what you mean by tomorrow. Suppose today is 1st January 2023, if tomorrow means 2nd January 2023, then no. 2nd January 2023 will on occur once and there is no long-run frequency. If, however, you define tomorrow by the day after today, then yes. There have been many (The Earth has been going round the Sun for \textasciitilde4.5 billion years, so approximately 4.5*365 tomorrows), so it can be assigned a probability.
-\end{enumerate}
-
-\end{solution}
-
-\begin{exercise}
-
-An urn contains three coins. Two of the coins are fair, but one of the coins has heads on both sides.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  You pick a coin out of the urn without looking and flip it. What's the probability you get heads?
-\item
-  You pick a coin out of the urn without looking and flip it and get heads. What's the probability it's the two-headed coin?
-\end{enumerate}
-
-\end{exercise}
-
-\begin{solution}
-
-Label the coins 1, 2, 3, where \(P(\hbox{Heads} \mid \hbox{Coin } 1) = P(\hbox{Heads} \mid \hbox{Coin } 2) = \frac{1}{2}\) and \(P(\hbox{Heads} \mid \hbox{Coin } 3) = 1\).
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  Using the law of total probability
-  \begin{align*}
-  P(\hbox{Heads}) & = P(\hbox{Heads} \mid \hbox{Coin } 1) P(\hbox{Coin } 1) + \\
-  & \qquad  P(\hbox{Heads} \mid \hbox{Coin } 2) P(\hbox{Coin } 2) + P(\hbox{Heads} \mid \hbox{Coin } 3) P(\hbox{Coin } 3) \\
-  & = \frac{1}{2}\cdot\frac{1}{3} + \frac{1}{2}\cdot\frac{1}{3} + 1\cdot\frac{1}{3} \\
-  & = \frac{2}{3}.
-  \end{align*}
-\item
-  Using Bayes' theorem
-  \begin{align*}
-  P(\hbox{Coin 1}\mid \hbox{Heads}) &= \frac{P(\hbox{Heads} \mid \hbox{Coin 1})P(\hbox{Coin 1})}{P(\hbox{Heads})} \\
-  & = \frac{1\cdot\frac{1}{3}}{\frac{2}{3}} \\
-  & = \frac{1}{2}.
-  \end{align*}
-\end{enumerate}
-
-\end{solution}
-
-\begin{exercise}
-
-You see a sponsored post online with the word \emph{bitcoin} in. You want to work out the probability the post is spam.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Using the law of total probability, show the probability the post is spam, given it contains the word probability is
-  \[
-    \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam})}{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam}) + \pi(\textrm{bitcoin} \mid \textrm{not spam})\pi(\textrm{not spam})}
-    \]
-\item
-  Most spam filters take a naive approach and set
-  \[
-    \pi(\textrm{spam}) =\pi(\textrm{not spam}) = \frac{1}{2}. 
-    \]
-  If an post is known to be spam, there's an 80\% chance it contains the word bitcoin. If an post is not spam, then there's a 1\% chance it contains the word bitcoin. Calculate the probability the post is spam given it contains bitcoin.
-\item
-  Suppose you take a much more pessimistic view, and assume that 80\% of all sponsered posts are spam. Recalculate the probability the post is spam given it contains bitcoin.
-\end{enumerate}
-
-\end{exercise}
-
-\begin{solution}
-
-By Bayes' theorem, we have
-\[
- \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam})}{\pi(\textrm{bitcoin})}.
-\]
-1. By the law of total probability,
-\[
-\pi(\textrm{bitcoin}) = \pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam}) + \pi(\textrm{bitcoin} \mid \textrm{not spam})\pi(\textrm{not spam}). 
-\]
-Thus,
-\[
-  \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam})}{\pi(\textrm{bitcoin} \mid \textrm{spam})\pi(\textrm{spam}) + \pi(\textrm{bitcoin} \mid \textrm{not spam})\pi(\textrm{not spam})}
-\]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
-\item
-  From the question, we have \(\pi(\textrm{spam}) =\pi(\textrm{not spam}) = \frac{1}{2}\), \(\pi(\textrm{bitcoin} \mid \textrm{spam}) = 0.8\) and \(\pi(\textrm{bitcoin} \mid \textrm{not spam}) = 0.01\). Plugging these into the probability gives
-  \[
-    \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{80}{81} \approx 98.7\%.
-  \]
-\item
-  This time \(\pi(\textrm{spam}) = 0.8\) and \(\pi(\textrm{not spam}) = 0.2\), which yields
-  \[
-    \pi(\textrm{spam} \mid \textrm{bitcoin}) = \frac{320}{321} \approx 99.7\%.
-  \]
-\end{enumerate}
-
-\end{solution}
-
-\begin{exercise}
-
-You are working on a project investigating pollution related illnesses in the West Midlands. I have sampled the proportion of people with pollution related illnesses in five areas of the West Midlands, \(y_1, \ldots, y_5\), with nothing to distinguish the data. This exercise is about the last data point \(y_5\).
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Should you model these data points exchangeably?
-\item
-  I now tell you the first four of these rates (0.72, 1.00, 0.85, 0.78 per 100,000). Should you continue to model these data points exchangeably?
-\item
-  Now, suppose instead of telling you these four rates, I had told you the five areas I have information about are Birmingham City Centre, Smethwick, Edgbaston, Dorridge, and Sutton Coldfield. Should you continue to model these data points exchangeably?
-\item
-  Now suppose I give you the data in part 2 and say that the missing data point \(y_5\) is Birmingham City Centre. Should you continue to model these data points exchangeably?
-\end{enumerate}
-
-\end{exercise}
-
-\begin{solution}
-
-This is based on Gelman et. al (2013, p.~105).
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Yes, you have no information to distinguish the data points so exchangability seems a reasonable assumption.
-\item
-  Yes, you still have no information to distinguish between any of the data points.
-\item
-  Yes, the joint distribution of these variables doesn't depend on the labels. However, you may start to formulate prior beliefs. Birmingham City Centre and Smethwick are likely to have higher rates of air pollution than leafy Dorridge.
-\item
-  No, these can no longer be modelled exchangably. You have reason to believe that Birmingham City Centre is likely to have a substantially higher value than the rest. That is you have information about \(\pi(y_5 > \max(y_1, y_2, y_3, y_4) \mid y_1, y_2, y_3, y_4)\), so exchangability is no longer a suitable assumption.
-\end{enumerate}
-
-\end{solution}
-
 \hypertarget{programming-in-r}{%
 \chapter{Programming in R}\label{programming-in-r}}
 
@@ -1070,8 +897,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] -0.34390976 -0.37733827 -0.53358328 -0.27697411  0.30405928 -0.65771316
-##  [7]  0.80001659  0.73569066  0.09771916 -0.10055296
+##  [1] -0.2061108 -0.7351177 -0.8577413  0.7971234  0.2971683 -0.6285580
+##  [7] -0.8250613  0.2022188 -0.7740931 -0.9904295
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1454,7 +1281,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.86136183 0.03333333
+## [1] 5.02729007 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1477,7 +1304,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.503523 5.219201
+## [1] 4.669451 5.385129
 \end{verbatim}
 
 \end{example}
@@ -1719,104 +1546,23 @@ where \(||p - q||_{TV}\) is the total variation distance between distributions \
 
 The Berstein-von-Mises theorem says that as the number of data points approaches infinity, the posterior distribution tends to a Normal distribution centered around the MLE and variance dependent on the Fisher information. The proof of this theorem is out of the scope of this module, but can be found in Asymptotic Statistics (2000) by A. W. van der Vaart.
 
-\hypertarget{exercises-1}{%
-\section{Exercises}\label{exercises-1}}
+\hypertarget{lab}{%
+\section{Lab}\label{lab}}
 
-\begin{exercise}
+The aim of this lab is to work with some posterior distributions in cases when the prior distribution is or is not conjugate. Recall the definition of a conjugate prior distribution:
 
-Suppose \(y_1, \ldots, y_N \sim \hbox{Geom}(p)\).
+If the prior distribution \(\pi(\theta)\) has the same distributional family as the posterior distribution \(\pi(\theta \mid \boldsymbol{y})\), then the prior distribution is a \textbf{conjugate prior distribution}.
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Derive the likelihood function and then the maximum likelihood estimator for \(p\).
-\item
-  By letting \(p \sim \hbox{Beta}(\alpha, \beta)\), derive the posterior distribution for \(p\) given the data.
-\item
-  Compare the maximum likelihood estimate with with expectation of the posterior distribution. What values of \(\alpha\) and \(\beta\) result in a posterior expectation that is equal to the maximum likelihood estimate? Why is this inadvisable?
-\end{enumerate}
+Working with conjugate prior distributions often makes the analytical work much easier, as we can work with the posterior distribution. But sometimes, conjugate prior distributions may not be appropriate. This is where R can help, as we do not need a closed form to carry out computations.
 
-\end{exercise}
-
-\begin{exercise}
-When someone is infected with a disease, it's common to model the time that they are infectious for, denoted by T, with a Gamma distribution. Suppose you observe 100 measles infections and \(\sum_{i=1}^{100}t_i\) = 870 days. Based on advice from clinicians, you suppose \(T \sim \Gamma(5, \theta)\). Using an \(\theta \sim \hbox{Exp}(0.01)\) prior distribution, derive the posterior distribution. What is the 95\% credible interval for \(\theta\)?
-\end{exercise}
-
-\begin{exercise}
-The density function for the Pareto distribution with scale \(\alpha\) and shape \(\beta\) is given by
-\[
-\pi(x \mid \alpha = 1,\, \beta) = \frac{\beta}{x^{\beta+1}}, \qquad x > 1,
-\]
-where \(\beta\) is positive real valued parameter and \(\alpha = 1\). Suppose the data are denoted by \(\boldsymbol{y} = \{y_1, \ldots, y_N\}\). Place a Gamma prior distribution on \(\beta\) such that \(\beta \sim \Gamma(a, b)\). Derive the posterior distribution for \(\beta\) given the data.
-\end{exercise}
-
-\begin{exercise}
-You are given the data are exponentially distributed with rate \(\lambda,\) i.e.~\(Y_1, \ldots, Y_N \sim \hbox{Exp}(\lambda)\). Your prior belief is that \(\lambda \in (0, 1)\). Show that the posterior distribution \(\pi(\lambda \mid \boldsymbol{y})\) has no closed form when the prior distribution for \(\lambda \sim \hbox{Beta}(\alpha, \beta)\).
-\end{exercise}
-
-\begin{solution}
-Since our observations are independent, the likelihood function is the product of \(N\) exponential density functions,
-\begin{align*}
-\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^N \lambda \exp\left\{-\lambda y_i\right\}\\
-& = \lambda^N  \exp\left\{-\lambda \sum_{i=1}^N y_i\right\}.
-\end{align*}
-
-The prior distribution is \(\pi(\lambda) = \frac{1}{B(\alpha, \beta)}\lambda^{\alpha - 1}(1-\lambda)^{\beta - 1}\) and the posterior distribution is therefore proportional to
-\[
-\pi(\lambda \mid \boldsymbol{y}) \propto \lambda^{\alpha +N - 1}(1-\lambda)^{\beta - 1}\exp\left\{-\lambda \sum_{i=1}^N y_i \right\}.
-\]
-Hence, the posterior distribution has no closed form.
-\end{solution}
-
-\begin{exercise}
-
-Suppose that \(Y_i \sim \hbox{Binom}(n, p)\) are iid for \(i \in \{1, \ldots, N\}\).
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  By placing a Beta prior distribution on \(p\) such that \(p \sim \hbox{Beta}(\alpha, \beta)\) derive the posterior distribution.
-\item
-  Suppose that \(y_{N+1}\) is then observed and is also independently drawn from the same distribution. Derive the posterior distribution by updating the previous distribution (i.e.~your posterior distribution for the previous part becomes your prior distribution).
-\item
-  Show that you obtain the same distribution if you observe all \(N+1\) data points at the start of the process.
-\end{enumerate}
-
-\end{exercise}
-
-\begin{exercise}
-
-Let \(Y_1, \ldots, Y_N \sim \hbox{Pois}(\lambda)\).
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Use Bayes' theorem to derive the posterior distribution of \(\lambda\) given the observed data.
-\item
-  Place a Gamma prior distribution on \(\lambda \sim \Gamma(\alpha, \beta)\) and derive the form the posterior distribution takes.
-\item
-  Discuss the effects of \(\alpha\) and \(\beta\) on the posterior distribution.
-\item
-  Derive the posterior predictive distribution for a new observation \(\tilde{y}\). \emph{Hint: The mass function for the negative binomial distribution with failures \(r\) and probability of success \(p\) is }
-  \[
-  \pi(x = k \mid r, p) = \begin{pmatrix} k + r - 1 \\ k \end{pmatrix} (1-p)^k p^r.
-   \]
-\end{enumerate}
-
-\end{exercise}
-
-\begin{exercise}
-
-Reaction times can be modeled with a normal distribution. Suppose we have a data set of the reaction times of 30 lorry drivers when they see an obstacle. The reaction times were collected in a test environment on a rolling road. The time until each lorry driver reacts (in milliseconds) is
+\begin{example}
+The total number of goals scored in 50 games of a low level football league is shown below.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.34}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.27}\NormalTok{, }\FloatTok{0.74}\NormalTok{, }\FloatTok{0.44}\NormalTok{, }\FloatTok{0.46}\NormalTok{, }\FloatTok{0.65}\NormalTok{, }\FloatTok{0.36}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.55}\NormalTok{,}
-       \FloatTok{0.53}\NormalTok{, }\FloatTok{0.56}\NormalTok{, }\FloatTok{0.54}\NormalTok{, }\FloatTok{0.61}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.52}\NormalTok{, }\FloatTok{0.45}\NormalTok{, }\FloatTok{0.49}\NormalTok{, }\FloatTok{0.32}\NormalTok{, }\FloatTok{0.33}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{,}
-       \FloatTok{0.34}\NormalTok{, }\FloatTok{0.60}\NormalTok{, }\FloatTok{0.59}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.57}\NormalTok{, }\FloatTok{0.34}\NormalTok{)}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{3}\NormalTok{,}
+       \DecValTok{6}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{,}
+       \DecValTok{7}\NormalTok{, }\DecValTok{4}\NormalTok{)}
 \FunctionTok{hist}\NormalTok{(y, }\AttributeTok{main =} \StringTok{""}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Reaction time (ms)"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -1830,44 +1576,130 @@ Reaction times can be modeled with a normal distribution. Suppose we have a data
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.4896667
+## [1] 3.92
 \end{verbatim}
 
-Suppose that, somehow, we know the population standard deviation is 0.01\(ms\). Derive a posterior distribution for \(\mu\).
+We can model the number of goals scored using a Poisson distribution
+\[
+y \sim \hbox{Po}(\lambda).
+\]
+By Bayes' theorem, the posterior distribution is given by
+\[
+\pi(\lambda \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda). 
+\]
+The likelihood function is given by
+\begin{align*}
+\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^50 \frac{e^{-\lambda}\lambda^{y_i}}{y_i!}\\
+&= \frac{e^{-50\lambda}\lambda^{\sum y_i}}{\prod_{i=1}^50 y_i!} 
+\end{align*}
 
-Suppose the police pull over a lorry driver after they failed to stop at a red light. During a test at the side of the road, the lorry driver's reaction time is tested and comes out as 77ms.
+R has a set of inbuilt functions for working with the Poisson distribution so we can rely on those to write functions for the likelihood and loglikelihood.
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  By constructing a credible interval from the posterior predictive distribution, determine if the driver's reaction time is suspicious.
-\item
-  Why is this not a good comparison to make?
-\end{enumerate}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lambda }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.01}\NormalTok{) }\CommentTok{\#grid of lambda values}
+\NormalTok{likelihood.function }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(lambda, y) }\FunctionTok{prod}\NormalTok{(}\FunctionTok{dpois}\NormalTok{(y, lambda)) }\CommentTok{\#compute likelihood}
+\NormalTok{log.likelihood.function  }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(lambda, y) }\FunctionTok{sum}\NormalTok{(}\FunctionTok{dpois}\NormalTok{(y, lambda, }\AttributeTok{log =} \ConstantTok{TRUE}\NormalTok{)) }\CommentTok{\#compute loglikelihood}
+\NormalTok{likelihood }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(lambda,  likelihood.function, y) }\CommentTok{\#evaluate at grid of points}
+\NormalTok{log.likelihood }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(lambda,  log.likelihood.function, y) }\CommentTok{\#evaluate at grid of points}
 
+\CommentTok{\#Plot likelihood}
+\FunctionTok{plot}\NormalTok{(lambda, likelihood, }
+     \AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(mu), }\AttributeTok{ylab =} \StringTok{"likelihood"}\NormalTok{, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(lambda, log.likelihood, }
+     \AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(mu), }\AttributeTok{ylab =} \StringTok{"loglikelihood"}\NormalTok{, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-17-2.pdf}
+When coding posterior distributions, we often work on the log scale because the numbers can be smaller that R can deal with. The denominator with the factorial can get very large very quickly.
+
+After speaking to football experts, we decide to place a normal prior distribution on \(\lambda\) with mean 5 goals and standard deviation one goal, i.e.
+\[
+\lambda \sim N(5, 1).
+\]
+The prior distribution can be plotted by
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lambda   }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.01}\NormalTok{) }\CommentTok{\#grid of lambda values}
+\NormalTok{prior    }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(lambda, }\DecValTok{5}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{log.prior }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(lambda, }\DecValTok{5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\AttributeTok{log =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(lambda, prior, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(lambda), }\AttributeTok{ylab =} \StringTok{"density"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(lambda, log.prior, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }
+     \AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(lambda), }\AttributeTok{ylab =} \StringTok{"log density"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-18-2.pdf}
+
+Writing the posterior distribution up to proportionality, we get
+\[
+\pi(\lambda \mid \boldsymbol{y}) \propto \exp\left(-50\lambda -\frac{1}{2}(\lambda - 5)^2\right)\lambda^{\sum y_i}.
+\]
+There is no closed form for this distribution and it is not that nice to work with. But with R, we can easily evaluate the posterior distribution at a grid of points.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{posterior }\OtherTok{\textless{}{-}}\NormalTok{ prior}\SpecialCharTok{*}\NormalTok{likelihood}
+\NormalTok{posterior }\OtherTok{\textless{}{-}}\NormalTok{ posterior}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(posterior) }\CommentTok{\#normalise}
+\FunctionTok{plot}\NormalTok{(lambda, posterior, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(lambda), }
+     \AttributeTok{ylab =} \StringTok{"posterior density"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+We can now visually inspect the posterior distribution and see that it has a strong peak around 4. One important statistic is the \textbf{maximum a posteriori estimation} or MAP estimate, this is the mode of the posterior distribution and it is a similar principle to the maximum likelihood estimate.
+
+We can compute this using the command
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lambda[}\FunctionTok{which.max}\NormalTok{(posterior)]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4
+\end{verbatim}
+
+which shows the MAP estimate is exactly 4.
+\end{example}
+
+\begin{exercise}
+Adapt the code in the Example above to use an exponential prior distribution with rate 0.1. Then derive the posterior distribution analytically and compare to the numerical version.
 \end{exercise}
 
 \begin{exercise}
-Consider the motivation in the lecture notes for invariant prior distributions. Show that if \(\theta \sim U[0, 1]\) and \(\psi = \theta^2\) then \(\pi(\psi) = \frac{1}{2\sqrt{\psi}}\) for \(\psi \in [0, 1]\).
-\end{exercise}
 
-\begin{exercise}
+You are given the data are exponentially distributed with rate \(\lambda,\) i.e.~\(Y_1, \ldots, Y_N \sim \hbox{Exp}(\lambda)\). Your prior belief is that \(\lambda \in (0, 1)\). Show that the posterior distribution \(\pi(\lambda \mid \boldsymbol{y})\) has no closed form when the prior distribution for \(\lambda \sim \hbox{Beta}(\alpha, \beta)\).
 
-Consider Example \ref{exm:exponential} featuring the exponential distribution.
+The data is given by
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Construct an invariant prior distribution for this distribution.
-\item
-  Derive the posterior distribution using the invariant prior distribution.
-\item
-  Using integration, discuss the validity of the prior distribution.
-\end{enumerate}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{1.95}\NormalTok{, }\FloatTok{1.46}\NormalTok{, }\FloatTok{4.81}\NormalTok{, }\FloatTok{1.52}\NormalTok{, }\FloatTok{4.24}\NormalTok{, }\FloatTok{3.00}\NormalTok{, }\FloatTok{0.46}\NormalTok{, }\FloatTok{2.27}\NormalTok{, }\FloatTok{1.76}\NormalTok{, }\FloatTok{0.41}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \end{exercise}
+
+By writing an R function to evaluate the likelihood function, evaute the posterior distribution for \(\lambda\) over a grid of points.
 
 \hypertarget{sampling}{%
 \chapter{Sampling}\label{sampling}}
@@ -1886,7 +1718,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.5315635
+## [1] 0.6881259
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -1964,7 +1796,7 @@ The R code below generates a plot to show this (with \(\lambda = 0.5\)). We can 
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-18-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-23-1.pdf}
 \end{example}
 
 \hypertarget{rejection-sampling}{%
@@ -1972,7 +1804,7 @@ The R code below generates a plot to show this (with \(\lambda = 0.5\)). We can 
 
 We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling works by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. The plot below shows an example from this. We would like to generate a sample from the distribution with the curved density function, which is challenging. Instead, we find a distribution whose density function bounds the one we are interested in a sample from that. In this case we can use the uniform distribution. Once we have generated our sample from he uniform distribution, we choose to accept or reject it based on the distribution we are interested in. In this case we reject it.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-24-1.pdf}
 
 Suppose we want to sample from a density \(\pi\), but can only generate samples from a density \(q\). If there exists some constant \(c > 0\), such that \(\frac{\pi(y)}{q(y)} \leq c\) for all \(y\), then we can generate samples from \(p\) by
 
@@ -2036,9 +1868,61 @@ This has a maximum at \(\frac{3}{4}\). We choose \(p \sim U[0, 1]\) and \(c = \f
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-25-1.pdf}
 The plot also shows how the choices of \(M\) and \(q\) can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better \(q\) to minimise this space.
 \end{example}
+
+\hypertarget{rejection-sampling-efficiency}{%
+\subsection{Rejection Sampling Efficiency}\label{rejection-sampling-efficiency}}
+
+Suppose we are using a rejection sampling algorithm to sample from \(f(y)\) using the proposal distribution \(g(y)\). How good is our rejection sampling algorithm? What does it mean to be a `good' rejection sampling algorithm. One measure of the efficiency of a sampler is, on average, how many samples to we need to generate until one is accepted.
+
+\begin{proposition}
+The number of samples proposed in a rejection sampling algorithm before one is accepted is distributed geometrically with mean \(\frac{1}{M}\).
+\end{proposition}
+
+\begin{proof}
+Given a proposed value \(y\), and let \(A\) be the event of sample is accepted. The probability a sample is accepted, given it takes the value \(y\) is
+\[
+A \mid y \sim \hbox{Bernoulli}\left(\frac{f(y)}{Mg(y)}\right).
+\]
+
+By the tower property
+\begin{align*}
+E(A) & = E(E(A\mid y)) \\
+& = E\left(\frac{f(y)}{Mg(y)}\right) \\
+& = \int \frac{f(y)}{Mg(y)} g(y) dy \\
+& = \frac{1}{M}\int f(y) dy \\
+& = \frac{1}{M}.
+\end{align*}
+
+Therefore, the number of samples proposed before one is accepted is distributed geometrically with mean \(\frac{1}{M}\).
+\end{proof}
+
+\hypertarget{ziggurat-sampling}{%
+\section{Ziggurat Sampling}\label{ziggurat-sampling}}
+
+The final method we are going to look at in this chapter is Ziggurat sampling. It is used to sample from a \(N(0, 1)\) distribution using samples from a \(U(0, 1)\) distribution. A Ziggurat is a kind of stepped pyramid. To start the sampling algorithm, we approximate the normal distribution by a series of horizontal rectangles, each with the same area. An example of this is shown below.
+
+\begin{verbatim}
+## Warning in table$x <- c(2.093446, 2.093446, 1.676493, 1.393368, 1.100918, :
+## Coercing LHS to a list
+\end{verbatim}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-26-1.pdf}
+To generate a sample, we choose a rectangle at random -- we might do this by sampling on the y-axis uniformly at random. We then sample uniformly at random within the rectangle. We accept the sample if it is `clearly' in the box. By clearly, we mean that is is also contained in the rectangle above. If it is, not contained in the rectangle above, we generate a new uniform random number to accept or reject the sample.
+
+Suppose the bottom right corner of the \(i^{th}\) rectangle has coordinates \((x_i, y_i)\). The Ziggurat algorithm is
+
+\begin{enumerate}
+\item Sample a rectangle $i$ uniformly at random
+\item Sample $u_0 \sim U[0, 1]$ and set $x = u_0x_i$
+\item If $x < x_{i+1}$ accept the sample
+\item Sample $u_1 \sim U[0, 1]$ and set $y = y_i + u_1(y_{i+1} − y_i)$
+\item If $y < f(y)$, where $f$ is the density function of a standard normal distribution, then accept the sample.
+\end{enumerate}
+
+This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half.
 
 \hypertarget{markov-chain-monte-carlo}{%
 \chapter{Markov Chain Monte Carlo}\label{markov-chain-monte-carlo}}
@@ -2094,7 +1978,7 @@ This is a complex way of moving around, but it produces the required result; the
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-21-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-27-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2103,7 +1987,7 @@ This is a complex way of moving around, but it produces the required result; the
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-21-2.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-27-2.pdf}
 \end{example}
 
 We can recognise several different statistical principles in this example. The King decides to move islands dependent on where he is currently, not based on where he has been previously (Markov property). He proposes an island to move to and accepts or rejects this decision based on some distribution (rejection principle). We are now going to describe some of the properties of Markov chains, including the Markov property.
@@ -2270,7 +2154,7 @@ Hence, \(\pi(\theta \mid \boldsymbol{y}) \pi(\theta'\mid\theta) = \pi(\theta' \m
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-22-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-28-1.pdf}
 
 Assuming \(Y_i \sim N(\mu, \sigma^2)\) are independent and identically distributed for \(i=1,...,n\), by Bayes' theorem, the posterior distribution is
 
@@ -2336,7 +2220,7 @@ We can implement a sampler in R as follows:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-23-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-29-1.pdf}
 
 We can see that after about 300 iterations, the Markov chain has converged to its stationary distribution, the posterior distribution. We can see this more clearly by removing the first 300 iterations.
 
@@ -2346,7 +2230,7 @@ We can see that after about 300 iterations, the Markov chain has converged to it
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-24-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-30-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2354,7 +2238,7 @@ We can see that after about 300 iterations, the Markov chain has converged to it
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-24-2.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-30-2.pdf}
 
 The 95\% credible interval for \(\mu\) using this prior distribution is
 
@@ -2509,7 +2393,7 @@ The following two examples show poorly mixing Markov chains. The first is where 
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-26-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-32-1.pdf}
 
 The next is where the step size is too small. It takes a long time for the chain to converge (\textasciitilde50\% of the run time). When the chain does converge, it is inefficient at exploring the space.
 
@@ -2554,7 +2438,7 @@ The next is where the step size is too small. It takes a long time for the chain
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-27-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-33-1.pdf}
 \end{example}
 
 \hypertarget{advanced-computation}{%
@@ -2655,7 +2539,7 @@ We introduce a latent variable \(z_i \sim \hbox{Bernoulli}(p)\) that describes i
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-29-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-35-1.pdf}
 
 As the variables \(\boldsymbol{z}\) are latent, the observed data likelihood function is
 \[
@@ -2713,7 +2597,7 @@ Before, we define a GP, we're going to build an intuitive definition of it. Reca
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-30-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-36-1.pdf}
 
 The multivariate normal distribution extends this to a vector space, \(\mathbb{R}^N\). Instead of having a mean and variance value, the distribution is defined through a mean vector and covariance matrix. The mean vector describes the expected value of each component of the vector and the covariance matrix describes the relationship between each pair of components in the vector. When we draw samples, we get vectors. The plot below shows the density of the multivariate normal distribution with \(N = 2\), zero mean, \(\sigma^2_x = \sigma^2_y = 1\) and \(\rho = 0.7\).
 
@@ -2739,11 +2623,11 @@ The multivariate normal distribution extends this to a vector space, \(\mathbb{R
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-31-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-37-1.pdf}
 
 A GP takes this one step further and puts a prior distribution on a function space. It is specified by a mean function, \(\mu(\cdot)\) and covariance function \(k(\cdot, \cdot)\). The mean function describes the expected value of each point the function can be evaluated at, and the covariance function describes the relationship between each point on the function. The plot below shows three samples from a GP distribution with mean function the zero function \(\mu(x) = 0\, \forall x\) and a covariance function that supports smooth functions.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-32-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-38-1.pdf}
 
 \begin{definition}
 A \textbf{Gaussian Process} is a collection of random variables, any finite number of which have a joint Gaussian distribution.
@@ -2783,7 +2667,7 @@ where \(\alpha^2\) is the signal variance and \(l>0\) is the length scale parame
 
 For now, consider \(\alpha = l = 1\). What is the covariance between the function evaluated at 0 and the function evaluated at \(x\)? The plot below shows the covariance.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-33-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-39-1.pdf}
 
 The covariance is highest when the \(x\) is near to 0, i.e.~the points are immediately next to each other. If the value of \(x\) is \(\pm 2\), the covariance is 0. As we are dealing with a joint normal distribution, a covariance of 0 implies independence. So with this covariance function, the value of \(f(x)\) is independent of \(f(0)\) if \(|x|\) is larger than about two. The parameter \(l\) is called the length scale parameter and dictates how quickly the covariance decays. Small values of \(l\) mean that the value of the function at nearby points are independent of each other, resulting in functions that look like white noise. Large values of \(l\) mean that even if points are far away, they are still highly dependent on each other. This gives very flat functions.
 
@@ -2817,7 +2701,7 @@ One of the main applications of GPs in in regression. Suppose we observe the poi
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-34-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-40-1.pdf}
 
 One difficulty is writing down the design matrices \(X\), it is often not straightforward to propose or justify these forms GPs allow us to take a much less arbitrary approach, simply saying that \(y_i = f(x_i) + \varepsilon_i\) and placing a GP prior distribution on \(f\).
 
@@ -2826,7 +2710,7 @@ Although we're placing an prior distribution with an infinite dimension on \(f\)
 \begin{example}
 Suppose we observe \(\boldsymbol{y} = \{y_1, \ldots, y_N\}\) at \(\boldsymbol{x} = \{x_1, \ldots, x_N\}\). The plot below shows these points.
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-35-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-41-1.pdf}
 
 Using the model \(y_i = f(x_i) + \varepsilon_i\), where \(\varepsilon_i \sim N(0, \sigma^2)\), we want to infer the function \(f\) evaluated at a gird of points \(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\). We place a GP prior distribution on \(f \sim \mathcal{GP}(0, k)\), where \(k\) is the squared exponential covariance function. Using the model, the covariance between points \(y_i\) and \(y_j\) is
 \[
@@ -2853,7 +2737,7 @@ The off-diagonal terms in the covariance matrix describe the relationship betwee
 where \(\boldsymbol{\mu}^* = K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2 I)^{-1} \boldsymbol{y}\) and \(K^* = K(\boldsymbol{x}^*, \boldsymbol{x}^*) - K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)^{-1}K(\boldsymbol{x}, \boldsymbol{x}^*)\).
 
 We set the fine gird to be \(\boldsymbol{x}^* = \{-5, -4.99, -4.98, \ldots, 5\}\), the GP parameters \(\alpha = l = 1\) and \(\sigma = 0.2\). The posterior mean and 95\% credible interval are shown below.
-\includegraphics{_main_files/figure-latex/unnamed-chunk-36-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-42-1.pdf}
 The posterior mean for \(f\) is a smooth line passing near each point. The 95\% credible interval for \(f\) has the smallest variance near each point, and largest furthest away from the points.
 \end{example}
 
