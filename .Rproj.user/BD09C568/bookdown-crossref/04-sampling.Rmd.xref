@@ -1,7 +1,0 @@
-h1:sampling Sampling
-h2:uniform-random-numbers Uniform Random Numbers
-h2:inverse-transform-sampling Inverse Transform Sampling
-h2:rejection-sampling Rejection Sampling
-h3:rejection-sampling-efficiency Rejection Sampling Efficiency
-h2:ziggurat-sampling Ziggurat Sampling
-
