@@ -57,9 +57,15 @@ By the end of the course, students should be able to:
 
 ## Module Structure
 
-The module is split between theory and computation Each week (excluding
-week 6) will have three lectures, one computer lab and one problem
-class.
+The module is split between theory and computation. Each week will have three lectures, one computer lab and one problem class. In the labs, you will need to bring your own laptop. The timetable for this module is
+
+| Day       | Time | Room    | Type         |
+|-----------|------|---------|--------------|
+| Monday    | 0900 | TLB-109 | Lecture      |
+| Tuesday   | 1100 | TLB-118 | Computer Lab |
+| Wednesday | 1100 | TLB-202 | Lecture      |
+| Friday    | 1400 | TLB-118 | Lecture      |
+| Friday    | 1500 | TLB-118 | Guided Study |
 
 ## Assessment
 
@@ -67,13 +73,13 @@ Assessment for this module is 50% via an exam and 50% via coursework
 assignments during the semester. The exam will last 1h 30m and take
 place during the summer exam period. There will be three coursework
 assignment -- assignment 1 will be worth 10% of the final mark, with
-assignments 2 and three counting for 20% each. More details about the
+assignments 2 and 3 counting for 20% each. More details about the
 assignments will be made available during the semester.
 
 ## Getting Help
 
 There are lots of ways of getting help throughout the module. You can
-visit my office hour (Watson 317) on ..... or email me at
+visit my office hour (Watson 317) on Wednesdays at 0900-1030 or email me at
 [r.g.seymour\@bham.ac.uk](mailto:r.g.seymour@bham.ac.uk){.email}.
 
 ## Recommended Books and Videos

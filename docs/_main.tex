@@ -197,9 +197,21 @@ By the end of the course, students should be able to:
 \hypertarget{module-structure}{%
 \section{Module Structure}\label{module-structure}}
 
-The module is split between theory and computation Each week (excluding
-week 6) will have three lectures, one computer lab and one problem
-class.
+The module is split between theory and computation. Each week will have three lectures, one computer lab and one problem class. In the labs, you will need to bring your own laptop. The timetable for this module is
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Day & Time & Room & Type \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Monday & 0900 & TLB-109 & Lecture \\
+Tuesday & 1100 & TLB-118 & Computer Lab \\
+Wednesday & 1100 & TLB-202 & Lecture \\
+Friday & 1400 & TLB-118 & Lecture \\
+Friday & 1500 & TLB-118 & Guided Study \\
+\end{longtable}
 
 \hypertarget{assessment}{%
 \section{Assessment}\label{assessment}}
@@ -208,14 +220,14 @@ Assessment for this module is 50\% via an exam and 50\% via coursework
 assignments during the semester. The exam will last 1h 30m and take
 place during the summer exam period. There will be three coursework
 assignment -- assignment 1 will be worth 10\% of the final mark, with
-assignments 2 and three counting for 20\% each. More details about the
+assignments 2 and 3 counting for 20\% each. More details about the
 assignments will be made available during the semester.
 
 \hypertarget{getting-help}{%
 \section{Getting Help}\label{getting-help}}
 
 There are lots of ways of getting help throughout the module. You can
-visit my office hour (Watson 317) on \ldots.. or email me at
+visit my office hour (Watson 317) on Wednesdays at 0900-1030 or email me at
 \href{mailto:r.g.seymour@bham.ac.uk}{\nolinkurl{r.g.seymour@bham.ac.uk}}.
 
 \hypertarget{recommended-books-and-videos}{%
@@ -901,8 +913,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.30435145 -0.81130779  0.06190906  0.42479362  0.51982703  0.31529447
-##  [7] -0.41550978  0.61593000 -0.70939597  0.95880796
+##  [1]  0.42383397 -0.53285505 -0.77486146  0.90971536  0.04702120 -0.60524159
+##  [7]  0.42012746  0.89706053 -0.81864093  0.07126975
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1285,7 +1297,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.97575608 0.03333333
+## [1] 4.99068026 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1308,7 +1320,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.617917 5.333595
+## [1] 4.632841 5.348519
 \end{verbatim}
 
 \end{example}
