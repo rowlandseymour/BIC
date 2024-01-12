@@ -61,11 +61,11 @@ The module is split between theory and computation. Each week will have three le
 
 | Day       | Time | Room    | Type         |
 |-----------|------|---------|--------------|
-| Monday    | 0900 | TLB-109 | Lecture      |
-| Tuesday   | 1100 | TLB-118 | Computer Lab |
-| Wednesday | 1100 | TLB-202 | Lecture      |
-| Friday    | 1400 | TLB-118 | Lecture      |
-| Friday    | 1500 | TLB-118 | Guided Study |
+| Monday    | 1200 | Physics West 115 | Lecture      |
+| Tuesday   | 1000 | Nuffield G18 | Computer Lab |
+| Thursday | 1100 | Strathcona SR8 | Lecture      |
+| Thursday | 1200 | Strathcona SR8 | Guided Study   |
+| Friday    | 1200 | Muirhead 122 | Lecture |
 
 ## Assessment
 
