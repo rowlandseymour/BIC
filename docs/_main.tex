@@ -227,7 +227,7 @@ assignments will be made available during the semester.
 \section{Getting Help}\label{getting-help}}
 
 There are lots of ways of getting help throughout the module. You can
-visit my office hour (Watson 317) on Wednesdays at 0900-1030 or email me at
+visit my office hour (Watson 317) on Thursdays at 0900-1030 or email me at
 \href{mailto:r.g.seymour@bham.ac.uk}{\nolinkurl{r.g.seymour@bham.ac.uk}}.
 
 \hypertarget{recommended-books-and-videos}{%
@@ -354,7 +354,7 @@ The maximum likelihood estimate of \(\theta\), \(\hat{\theta}\), is the value su
 Uncertainty around the maximum likelihood estimate is based on the theory of long running events that underpin frequentist theory.
 
 \begin{definition}
-Let \(X\) be a random sample from a probability distribution \(\theta\). A \(100(1-\alpha)%
+Let \(Y\) be a random sample from a probability distribution \(\theta\). A \(100(1-\alpha)%
 \) \textbf{confidence interval} for \(\theta\) is an interval \((u(Y), v(Y))\) such that
 \[
 \mathbb{P}(u(Y) < \theta < v(Y)) = 1-\alpha
@@ -913,8 +913,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.3109564  0.7504818  0.8569217  0.2432958  0.9171027  0.3974050
-##  [7]  0.5332841 -0.3138511  0.1700218 -0.5629790
+##  [1]  0.96133471 -0.77902249 -0.88930828  0.01253127  0.24387294  0.15840847
+##  [7] -0.39392525 -0.11619275 -0.28217700 -0.01909013
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1297,7 +1297,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 5.13874562 0.03333333
+## [1] 4.94586501 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1320,7 +1320,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.780907 5.496584
+## [1] 4.588026 5.303704
 \end{verbatim}
 
 \end{example}

@@ -41,7 +41,7 @@ The maximum likelihood estimate of $\theta$, $\hat{\theta}$, is the value such t
 Uncertainty around the maximum likelihood estimate is based on the theory of long running events that underpin frequentist theory.
 
 ::: {.definition} 
-Let $X$ be a random sample from a probability distribution $\theta$. A $100(1-\alpha)%$ **confidence interval** for $\theta$ is an interval $(u(Y), v(Y))$ such that 
+Let $Y$ be a random sample from a probability distribution $\theta$. A $100(1-\alpha)%$ **confidence interval** for $\theta$ is an interval $(u(Y), v(Y))$ such that 
 $$
 \mathbb{P}(u(Y) < \theta < v(Y)) = 1-\alpha
 $$
