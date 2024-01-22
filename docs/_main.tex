@@ -210,7 +210,7 @@ Monday & 1200 & Physics West 115 & Lecture \\
 Tuesday & 1000 & Nuffield G18 & Computer Lab \\
 Thursday & 1100 & Strathcona SR8 & Lecture \\
 Thursday & 1200 & Strathcona SR8 & Guided Study \\
-Friday & 1200 & Muirhead 122 & Lecture \\
+Friday & 1200 & Nuffield G19 & Lecture \\
 \end{longtable}
 
 \hypertarget{assessment}{%
@@ -433,13 +433,13 @@ If \(\theta \sim \pi(\theta)\) and \((Y_1, \ldots, Y_N)\) from a sample space \(
 \end{proposition}
 
 \begin{proof}
-Suppose \((Y_1, \ldots, Y_N)\) are conditionally iid given some parameter \(\theta\). Then for any permutation \(\pi\) of \(\{1, \ldots, N\}\) and observations \(\{y_1, \ldots, y_N\}\)
+Suppose \((Y_1, \ldots, Y_N)\) are conditionally iid given some parameter \(\theta\). Then for any permutation \(\sigma\) of \(\{1, \ldots, N\}\) and observations \(\{y_1, \ldots, y_N\}\)
 \begin{equation}
 \begin{split}
 \pi(y_1, \ldots, y_N) &= \int \pi(y_1, \ldots, y_N \mid \theta) \pi(\theta)\, d\theta \qquad \textrm{(definition of marginal distribution)}\\
  & = \int \left\{\prod_{i=1}^N\pi(y_i \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(definition of conditionally iid)}\\
-& = \int \left\{\prod_{i=1}^N\pi(y_{\pi_i} \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(product is commutative)} \\
- & = \pi(y_{\pi_1}, \ldots, y_{\pi_N}) \qquad \textrm{(definition of marginal distribution)}
+& = \int \left\{\prod_{i=1}^N\pi(y_{\sigma_i} \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(product is commutative)} \\
+ & = \pi(y_{\pi_1}, \ldots, y_{\sigma_N}) \qquad \textrm{(definition of marginal distribution)}
 \end{split}
 \end{equation}
 \end{proof}
@@ -913,8 +913,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.96133471 -0.77902249 -0.88930828  0.01253127  0.24387294  0.15840847
-##  [7] -0.39392525 -0.11619275 -0.28217700 -0.01909013
+##  [1]  0.8258991  0.8537517 -0.8580878  0.9768551  0.2945088 -0.2347917
+##  [7]  0.3603654  0.7582147 -0.5573377  0.1587472
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1172,15 +1172,15 @@ The posterior mean months until a claim is \(\frac{10}{95 + \gamma}\). We can se
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{plot.distributions }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(chi)\{}
+\NormalTok{plot.distributions }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(gamma.prior)\{}
   \CommentTok{\#evaluate at selected values of theta}
 \NormalTok{  theta }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.001}\NormalTok{, }\FloatTok{0.3}\NormalTok{, }\FloatTok{0.001}\NormalTok{) }
   
   \CommentTok{\#evaluate prior density}
-\NormalTok{  prior }\OtherTok{\textless{}{-}} \FunctionTok{dexp}\NormalTok{(theta, }\AttributeTok{rate =}\NormalTok{ chi)}
+\NormalTok{  prior }\OtherTok{\textless{}{-}} \FunctionTok{dexp}\NormalTok{(theta, }\AttributeTok{rate =}\NormalTok{ gamma.prior)}
   
   \CommentTok{\#evaluate posterior density}
-\NormalTok{  posterior }\OtherTok{\textless{}{-}} \FunctionTok{dgamma}\NormalTok{(theta, }\AttributeTok{shape =} \DecValTok{10}\NormalTok{, }\AttributeTok{rate =} \DecValTok{95} \SpecialCharTok{+}\NormalTok{ chi)}
+\NormalTok{  posterior }\OtherTok{\textless{}{-}} \FunctionTok{dgamma}\NormalTok{(theta, }\AttributeTok{shape =} \DecValTok{10}\NormalTok{, }\AttributeTok{rate =} \DecValTok{95} \SpecialCharTok{+}\NormalTok{ gamma.prior)}
   
   
   \CommentTok{\#plot}
@@ -1297,7 +1297,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.94586501 0.03333333
+## [1] 5.08969873 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1320,7 +1320,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.588026 5.303704
+## [1] 4.731860 5.447538
 \end{verbatim}
 
 \end{example}

@@ -81,15 +81,15 @@ The distribution of the rate of the claims given the observed data is $\lambda \
 The posterior mean months until a claim is $\frac{10}{95 + \gamma}$. We can see the effect of the choice of rate parameter in this mean. Small values of $\gamma$ yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of $\gamma$ result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for $\gamma = 0.01$ and $\gamma = 50$. 
 
 ```{r}
-plot.distributions <- function(chi){
+plot.distributions <- function(gamma.prior){
   #evaluate at selected values of theta
   theta <- seq(0.001, 0.3, 0.001) 
   
   #evaluate prior density
-  prior <- dexp(theta, rate = chi)
+  prior <- dexp(theta, rate = gamma.prior)
   
   #evaluate posterior density
-  posterior <- dgamma(theta, shape = 10, rate = 95 + chi)
+  posterior <- dgamma(theta, shape = 10, rate = 95 + gamma.prior)
   
   
   #plot
