@@ -113,13 +113,13 @@ If $\theta \sim \pi(\theta)$ and $(Y_1, \ldots, Y_N)$ from a sample space $\math
 :::
 
 ::: {.proof}
-Suppose $(Y_1, \ldots, Y_N)$ are conditionally iid given some parameter $\theta$. Then for any permutation $\pi$ of $\{1, \ldots, N\}$ and observations $\{y_1, \ldots, y_N\}$
+Suppose $(Y_1, \ldots, Y_N)$ are conditionally iid given some parameter $\theta$. Then for any permutation $\sigma$ of $\{1, \ldots, N\}$ and observations $\{y_1, \ldots, y_N\}$
 \begin{equation}
 \begin{split}
 \pi(y_1, \ldots, y_N) &= \int \pi(y_1, \ldots, y_N \mid \theta) \pi(\theta)\, d\theta \qquad \textrm{(definition of marginal distribution)}\\
  & = \int \left\{\prod_{i=1}^N\pi(y_i \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(definition of conditionally iid)}\\
-& = \int \left\{\prod_{i=1}^N\pi(y_{\pi_i} \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(product is commutative)} \\
- & = \pi(y_{\pi_1}, \ldots, y_{\pi_N}) \qquad \textrm{(definition of marginal distribution)}
+& = \int \left\{\prod_{i=1}^N\pi(y_{\sigma_i} \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(product is commutative)} \\
+ & = \pi(y_{\pi_1}, \ldots, y_{\sigma_N}) \qquad \textrm{(definition of marginal distribution)}
 \end{split}
 \end{equation}
 :::

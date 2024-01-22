@@ -289,13 +289,13 @@ when <span class="math inline">\(\pi(B) &gt; 0\)</span>.</p>
 <p><span id="prp:unlabeled-div-13" class="proposition"><strong>Proposition 1.1  </strong></span>If <span class="math inline">\(\theta \sim \pi(\theta)\)</span> and <span class="math inline">\((Y_1, \ldots, Y_N)\)</span> from a sample space <span class="math inline">\(\mathcal{Y}\)</span> are conditionally iid given some parameter <span class="math inline">\(\theta\)</span>, then marginally <span class="math inline">\(Y_1, \ldots, Y_N\)</span> are exchangable.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-14" class="proof"><em>Proof</em>. </span>Suppose <span class="math inline">\((Y_1, \ldots, Y_N)\)</span> are conditionally iid given some parameter <span class="math inline">\(\theta\)</span>. Then for any permutation <span class="math inline">\(\pi\)</span> of <span class="math inline">\(\{1, \ldots, N\}\)</span> and observations <span class="math inline">\(\{y_1, \ldots, y_N\}\)</span>
+<p><span id="unlabeled-div-14" class="proof"><em>Proof</em>. </span>Suppose <span class="math inline">\((Y_1, \ldots, Y_N)\)</span> are conditionally iid given some parameter <span class="math inline">\(\theta\)</span>. Then for any permutation <span class="math inline">\(\sigma\)</span> of <span class="math inline">\(\{1, \ldots, N\}\)</span> and observations <span class="math inline">\(\{y_1, \ldots, y_N\}\)</span>
 <span class="math display">\[\begin{equation}
 \begin{split}
 \pi(y_1, \ldots, y_N) &amp;= \int \pi(y_1, \ldots, y_N \mid \theta) \pi(\theta)\, d\theta \qquad \textrm{(definition of marginal distribution)}\\
 &amp; = \int \left\{\prod_{i=1}^N\pi(y_i \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(definition of conditionally iid)}\\
-&amp; = \int \left\{\prod_{i=1}^N\pi(y_{\pi_i} \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(product is commutative)} \\
-&amp; = \pi(y_{\pi_1}, \ldots, y_{\pi_N}) \qquad \textrm{(definition of marginal distribution)}
+&amp; = \int \left\{\prod_{i=1}^N\pi(y_{\sigma_i} \mid \theta)\right\} \pi(\theta)\, d\theta \qquad \textrm{(product is commutative)} \\
+&amp; = \pi(y_{\pi_1}, \ldots, y_{\sigma_N}) \qquad \textrm{(definition of marginal distribution)}
 \end{split}
 \end{equation}\]</span></p>
 </div>
