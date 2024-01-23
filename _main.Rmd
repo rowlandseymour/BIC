@@ -57,16 +57,19 @@ By the end of the course, students should be able to:
 
 ## Module Structure
 
-The module is split between theory and computation. Each week will have three lectures, one computer lab and one problem class. In the labs, you will need to bring your own laptop. The timetable for this module is
+The module is split between theory and computation. Each week will have three lectures, one computer lab and one guided study. In the labs, you will need to bring your own laptop. The timetable for this module is
 
-| Day       | Time | Room    | Type         |
-|-----------|------|---------|--------------|
-| Monday    | 1200 | Physics West 115 | Lecture      |
-| Tuesday   | 1000 | Nuffield G18 | Computer Lab |
-| Thursday | 1100 | Strathcona SR8 | Lecture      |
-| Thursday | 1200 | Strathcona SR8 | Guided Study   |
-| Friday    | 1200 | Nuffield G19 | Lecture |
-
+| Week | Monday (1200)    | Tuesday (1000) | Thursday (1100) | Friday (1200) |
+|------|------------------|----------------|-----------------|---------------|
+| 2    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G19  |
+| 3    | Physics West 115 | Nuffield G18   | Arts LR5        | Nuffield G19  |
+| 4    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
+| 5    | Physics West 115 | Nuffield G18   | Arts LR5        | Nuffield G19  |
+| 6    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
+| 7    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
+| 8    | Physics West 115 | Nuffield G18   | Arts LR5        | Nuffield G19  |
+| 9    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G19  |
+| 10   | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
 ## Assessment
 
 Assessment for this module is 50% via an exam and 50% via coursework
@@ -789,7 +792,7 @@ Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definiti
 The first example we are going to go through is with the Binomial distribution. 
 
 ::: {.example #binom}
-A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that eight are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability an account is a bot is $\theta$. By Bayes' theorem, we obtain the following,
+A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that three are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability an account is a bot is $\theta$. By Bayes' theorem, we obtain the following,
 $$
 \pi(\theta \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y}\mid \theta) \pi(\theta).
 $$
@@ -945,7 +948,7 @@ $$
 $$
 The posterior mean is partially defined through the weighted average of the population and prior means, where the weighting depends on the number of data points collected and how precise the distributions are. 
 
-Now we have derived the posterior distribution, we can explore it using R.  We simulate some data with $N = 30$, $mu = 5$ and $\sigma^2 = 1$.
+Now we have derived the posterior distribution, we can explore it using R.  We simulate some data with $N = 30$, $\mu = 5$ and $\sigma^2 = 1$.
 ```{r}
 #data
 N <- 30

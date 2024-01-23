@@ -204,7 +204,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">3.1</span> The Binomial Distribution<a href="bayesian-inference.html#the-binomial-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The first example we are going to go through is with the Binomial distribution.</p>
 <div class="example">
-<p><span id="exm:binom" class="example"><strong>Example 3.1  </strong></span>A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that eight are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_{200}\}\)</span> and the probability an account is a bot is <span class="math inline">\(\theta\)</span>. By Bayes’ theorem, we obtain the following,
+<p><span id="exm:binom" class="example"><strong>Example 3.1  </strong></span>A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that three are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_{200}\}\)</span> and the probability an account is a bot is <span class="math inline">\(\theta\)</span>. By Bayes’ theorem, we obtain the following,
 <span class="math display">\[
 \pi(\theta \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y}\mid \theta) \pi(\theta).
 \]</span></p>
@@ -339,7 +339,7 @@ and so the posterior distribution of <span class="math inline">\(\mu\)</span> is
 \mu  = \sigma_1^2\left(\frac{N\bar{y}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right).
 \]</span>
 The posterior mean is partially defined through the weighted average of the population and prior means, where the weighting depends on the number of data points collected and how precise the distributions are.</p>
-<p>Now we have derived the posterior distribution, we can explore it using R. We simulate some data with <span class="math inline">\(N = 30\)</span>, <span class="math inline">\(mu = 5\)</span> and <span class="math inline">\(\sigma^2 = 1\)</span>.</p>
+<p>Now we have derived the posterior distribution, we can explore it using R. We simulate some data with <span class="math inline">\(N = 30\)</span>, <span class="math inline">\(\mu = 5\)</span> and <span class="math inline">\(\sigma^2 = 1\)</span>.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="bayesian-inference.html#cb27-1" tabindex="-1"></a><span class="co">#data</span></span>
 <span id="cb27-2"><a href="bayesian-inference.html#cb27-2" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">30</span></span>
 <span id="cb27-3"><a href="bayesian-inference.html#cb27-3" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">1</span></span>
@@ -354,7 +354,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <span id="cb27-12"><a href="bayesian-inference.html#cb27-12" tabindex="-1"></a>mu1       <span class="ot">&lt;-</span> sigma1.sq<span class="sc">*</span>(<span class="fu">sum</span>(y)<span class="sc">/</span>(sigma<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> mu0<span class="sc">/</span>(sigma0<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb27-13"><a href="bayesian-inference.html#cb27-13" tabindex="-1"></a></span>
 <span id="cb27-14"><a href="bayesian-inference.html#cb27-14" tabindex="-1"></a><span class="fu">c</span>(mu1, sigma1.sq) <span class="co">#output mean and variance</span></span></code></pre></div>
-<pre><code>## [1] 5.18338304 0.03333333</code></pre>
+<pre><code>## [1] 4.96402300 0.03333333</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bayesian-inference.html#cb29-1" tabindex="-1"></a><span class="co">#Create plot</span></span>
 <span id="cb29-2"><a href="bayesian-inference.html#cb29-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
 <span id="cb29-3"><a href="bayesian-inference.html#cb29-3" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(mu, <span class="at">mean =</span> mu1, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma1.sq))</span>
@@ -362,7 +362,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>The 95% credible interval for the population’s mean reaction time is</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="bayesian-inference.html#cb30-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), mu1, <span class="fu">sqrt</span>(sigma1.sq))</span></code></pre></div>
-<pre><code>## [1] 4.825544 5.541222</code></pre>
+<pre><code>## [1] 4.606184 5.321862</code></pre>
 </div>
 <p>When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.</p>
 <div class="defintion">
