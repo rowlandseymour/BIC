@@ -7,7 +7,7 @@ Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definiti
 The first example we are going to go through is with the Binomial distribution. 
 
 ::: {.example #binom}
-A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that eight are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability an account is a bot is $\theta$. By Bayes' theorem, we obtain the following,
+A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that three are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by $\boldsymbol{y} = \{y_1, \ldots, y_{200}\}$ and the probability an account is a bot is $\theta$. By Bayes' theorem, we obtain the following,
 $$
 \pi(\theta \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y}\mid \theta) \pi(\theta).
 $$
@@ -163,7 +163,7 @@ $$
 $$
 The posterior mean is partially defined through the weighted average of the population and prior means, where the weighting depends on the number of data points collected and how precise the distributions are. 
 
-Now we have derived the posterior distribution, we can explore it using R.  We simulate some data with $N = 30$, $mu = 5$ and $\sigma^2 = 1$.
+Now we have derived the posterior distribution, we can explore it using R.  We simulate some data with $N = 30$, $\mu = 5$ and $\sigma^2 = 1$.
 ```{r}
 #data
 N <- 30

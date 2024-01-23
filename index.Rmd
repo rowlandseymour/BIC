@@ -57,16 +57,19 @@ By the end of the course, students should be able to:
 
 ## Module Structure
 
-The module is split between theory and computation. Each week will have three lectures, one computer lab and one problem class. In the labs, you will need to bring your own laptop. The timetable for this module is
+The module is split between theory and computation. Each week will have three lectures, one computer lab and one guided study. In the labs, you will need to bring your own laptop. The timetable for this module is
 
-| Day       | Time | Room    | Type         |
-|-----------|------|---------|--------------|
-| Monday    | 1200 | Physics West 115 | Lecture      |
-| Tuesday   | 1000 | Nuffield G18 | Computer Lab |
-| Thursday | 1100 | Strathcona SR8 | Lecture      |
-| Thursday | 1200 | Strathcona SR8 | Guided Study   |
-| Friday    | 1200 | Nuffield G19 | Lecture |
-
+| Week | Monday (1200)    | Tuesday (1000) | Thursday (1100) | Friday (1200) |
+|------|------------------|----------------|-----------------|---------------|
+| 2    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G19  |
+| 3    | Physics West 115 | Nuffield G18   | Arts LR5        | Nuffield G19  |
+| 4    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
+| 5    | Physics West 115 | Nuffield G18   | Arts LR5        | Nuffield G19  |
+| 6    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
+| 7    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
+| 8    | Physics West 115 | Nuffield G18   | Arts LR5        | Nuffield G19  |
+| 9    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G19  |
+| 10   | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
 ## Assessment
 
 Assessment for this module is 50% via an exam and 50% via coursework

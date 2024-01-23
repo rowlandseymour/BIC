@@ -197,20 +197,39 @@ By the end of the course, students should be able to:
 \hypertarget{module-structure}{%
 \section{Module Structure}\label{module-structure}}
 
-The module is split between theory and computation. Each week will have three lectures, one computer lab and one problem class. In the labs, you will need to bring your own laptop. The timetable for this module is
+The module is split between theory and computation. Each week will have three lectures, one computer lab and one guided study. In the labs, you will need to bring your own laptop. The timetable for this module is
 
-\begin{longtable}[]{@{}llll@{}}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2222}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2361}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2083}}@{}}
 \toprule\noalign{}
-Day & Time & Room & Type \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Week
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Monday (1200)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tuesday (1000)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Thursday (1100)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Friday (1200)
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Monday & 1200 & Physics West 115 & Lecture \\
-Tuesday & 1000 & Nuffield G18 & Computer Lab \\
-Thursday & 1100 & Strathcona SR8 & Lecture \\
-Thursday & 1200 & Strathcona SR8 & Guided Study \\
-Friday & 1200 & Nuffield G19 & Lecture \\
+2 & Physics West 115 & Nuffield G18 & Nuffield G13 & Nuffield G19 \\
+3 & Physics West 115 & Nuffield G18 & Arts LR5 & Nuffield G19 \\
+4 & Physics West 115 & Nuffield G18 & Nuffield G13 & Nuffield G13 \\
+5 & Physics West 115 & Nuffield G18 & Arts LR5 & Nuffield G19 \\
+6 & Physics West 115 & Nuffield G18 & Nuffield G13 & Nuffield G13 \\
+7 & Physics West 115 & Nuffield G18 & Nuffield G13 & Nuffield G13 \\
+8 & Physics West 115 & Nuffield G18 & Arts LR5 & Nuffield G19 \\
+9 & Physics West 115 & Nuffield G18 & Nuffield G13 & Nuffield G19 \\
+10 & Physics West 115 & Nuffield G18 & Nuffield G13 & Nuffield G13 \\
 \end{longtable}
 
 \hypertarget{assessment}{%
@@ -913,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.8258991  0.8537517 -0.8580878  0.9768551  0.2945088 -0.2347917
-##  [7]  0.3603654  0.7582147 -0.5573377  0.1587472
+##  [1] -0.7713748 -0.2857383  0.2410156  0.9106466 -0.4283069 -0.5837293
+##  [7]  0.6463238 -0.4184182 -0.7388854 -0.3251476
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1085,7 +1104,7 @@ Whereas Chapter 1 dealt with the fundamentals of Bayesian inference and definiti
 The first example we are going to go through is with the Binomial distribution.
 
 \begin{example}
-\protect\hypertarget{exm:binom}{}\label{exm:binom}A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that eight are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by \(\boldsymbol{y} = \{y_1, \ldots, y_{200}\}\) and the probability an account is a bot is \(\theta\). By Bayes' theorem, we obtain the following,
+\protect\hypertarget{exm:binom}{}\label{exm:binom}A social media company wants to determine how many of its users are bots. A software engineer collects a random sample of 200 accounts and finds that three are bots. She uses a Bayesian method to estimate the probability of an account being a bot. She labels the accounts with a 1 if they are a bot and 0 if there is are a real person. The set of account labels is given by \(\boldsymbol{y} = \{y_1, \ldots, y_{200}\}\) and the probability an account is a bot is \(\theta\). By Bayes' theorem, we obtain the following,
 \[
 \pi(\theta \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y}\mid \theta) \pi(\theta).
 \]
@@ -1275,7 +1294,7 @@ It may help to consider the meaning of \(\mu_1\) and \(\sigma^2_1\). The varianc
 \]
 The posterior mean is partially defined through the weighted average of the population and prior means, where the weighting depends on the number of data points collected and how precise the distributions are.
 
-Now we have derived the posterior distribution, we can explore it using R. We simulate some data with \(N = 30\), \(mu = 5\) and \(\sigma^2 = 1\).
+Now we have derived the posterior distribution, we can explore it using R. We simulate some data with \(N = 30\), \(\mu = 5\) and \(\sigma^2 = 1\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1297,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 5.08969873 0.03333333
+## [1] 4.88351837 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1320,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.731860 5.447538
+## [1] 4.525680 5.241357
 \end{verbatim}
 
 \end{example}
