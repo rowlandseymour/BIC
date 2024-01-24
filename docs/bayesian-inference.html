@@ -263,8 +263,8 @@ The functional form tells us that the posterior distribution is a Gamma distribu
 <span class="math display">\[
 \pi(x \mid \alpha, \beta) = \frac{\alpha^\beta}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}.
 \]</span>
-The distribution of the rate of the claims given the observed data is <span class="math inline">\(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)\)</span>.</p>
-<p>The posterior mean months until a claim is <span class="math inline">\(\frac{10}{95 + \gamma}\)</span>. We can see the effect of the choice of rate parameter in this mean. Small values of <span class="math inline">\(\gamma\)</span> yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of <span class="math inline">\(\gamma\)</span> result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for <span class="math inline">\(\gamma = 0.01\)</span> and <span class="math inline">\(\gamma = 50\)</span>.</p>
+The distribution of the rate of the claims given the observed data is <span class="math inline">\(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(12, 95 + \gamma)\)</span>.</p>
+<p>The posterior mean months until a claim is <span class="math inline">\(\frac{12}{95 + \gamma}\)</span>. We can see the effect of the choice of rate parameter in this mean. Small values of <span class="math inline">\(\gamma\)</span> yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of <span class="math inline">\(\gamma\)</span> result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for <span class="math inline">\(\gamma = 0.01\)</span> and <span class="math inline">\(\gamma = 50\)</span>.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="bayesian-inference.html#cb23-1" tabindex="-1"></a>plot.distributions <span class="ot">&lt;-</span> <span class="cf">function</span>(gamma.prior){</span>
 <span id="cb23-2"><a href="bayesian-inference.html#cb23-2" tabindex="-1"></a>  <span class="co">#evaluate at selected values of theta</span></span>
 <span id="cb23-3"><a href="bayesian-inference.html#cb23-3" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">0.3</span>, <span class="fl">0.001</span>) </span>
@@ -273,7 +273,7 @@ The distribution of the rate of the claims given the observed data is <span clas
 <span id="cb23-6"><a href="bayesian-inference.html#cb23-6" tabindex="-1"></a>  prior <span class="ot">&lt;-</span> <span class="fu">dexp</span>(theta, <span class="at">rate =</span> gamma.prior)</span>
 <span id="cb23-7"><a href="bayesian-inference.html#cb23-7" tabindex="-1"></a>  </span>
 <span id="cb23-8"><a href="bayesian-inference.html#cb23-8" tabindex="-1"></a>  <span class="co">#evaluate posterior density</span></span>
-<span id="cb23-9"><a href="bayesian-inference.html#cb23-9" tabindex="-1"></a>  posterior <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(theta, <span class="at">shape =</span> <span class="dv">10</span>, <span class="at">rate =</span> <span class="dv">95</span> <span class="sc">+</span> gamma.prior)</span>
+<span id="cb23-9"><a href="bayesian-inference.html#cb23-9" tabindex="-1"></a>  posterior <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(theta, <span class="at">shape =</span> <span class="dv">12</span>, <span class="at">rate =</span> <span class="dv">95</span> <span class="sc">+</span> gamma.prior)</span>
 <span id="cb23-10"><a href="bayesian-inference.html#cb23-10" tabindex="-1"></a>  </span>
 <span id="cb23-11"><a href="bayesian-inference.html#cb23-11" tabindex="-1"></a>  </span>
 <span id="cb23-12"><a href="bayesian-inference.html#cb23-12" tabindex="-1"></a>  <span class="co">#plot</span></span>
@@ -289,8 +289,8 @@ The distribution of the rate of the claims given the observed data is <span clas
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="bayesian-inference.html#cb24-1" tabindex="-1"></a><span class="fu">plot.distributions</span>(<span class="dv">50</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
 <p>The insurance managers recommend that because this is a new premium, a vague prior distribution be used and <span class="math inline">\(\gamma = 0.01\)</span>. The posterior mean is <span class="math inline">\(\frac{10}{95.01} \approx 0.105\)</span> and the 95% credible interval is</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="bayesian-inference.html#cb25-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">qgamma</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="dv">10</span>, <span class="fl">95.01</span>), <span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 0.05 0.18</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="bayesian-inference.html#cb25-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">qgamma</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="dv">12</span>, <span class="fl">95.01</span>), <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 0.065 0.207</code></pre>
 </div>
 </div>
 <div id="the-normal-distribtuion" class="section level2 hasAnchor" number="3.4">
@@ -354,7 +354,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <span id="cb27-12"><a href="bayesian-inference.html#cb27-12" tabindex="-1"></a>mu1       <span class="ot">&lt;-</span> sigma1.sq<span class="sc">*</span>(<span class="fu">sum</span>(y)<span class="sc">/</span>(sigma<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> mu0<span class="sc">/</span>(sigma0<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb27-13"><a href="bayesian-inference.html#cb27-13" tabindex="-1"></a></span>
 <span id="cb27-14"><a href="bayesian-inference.html#cb27-14" tabindex="-1"></a><span class="fu">c</span>(mu1, sigma1.sq) <span class="co">#output mean and variance</span></span></code></pre></div>
-<pre><code>## [1] 4.96402300 0.03333333</code></pre>
+<pre><code>## [1] 5.11398999 0.03333333</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bayesian-inference.html#cb29-1" tabindex="-1"></a><span class="co">#Create plot</span></span>
 <span id="cb29-2"><a href="bayesian-inference.html#cb29-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
 <span id="cb29-3"><a href="bayesian-inference.html#cb29-3" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(mu, <span class="at">mean =</span> mu1, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma1.sq))</span>
@@ -362,7 +362,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>The 95% credible interval for the population’s mean reaction time is</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="bayesian-inference.html#cb30-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), mu1, <span class="fu">sqrt</span>(sigma1.sq))</span></code></pre></div>
-<pre><code>## [1] 4.606184 5.321862</code></pre>
+<pre><code>## [1] 4.756151 5.471829</code></pre>
 </div>
 <p>When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.</p>
 <div class="defintion">

@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] -0.7713748 -0.2857383  0.2410156  0.9106466 -0.4283069 -0.5837293
-##  [7]  0.6463238 -0.4184182 -0.7388854 -0.3251476
+##  [1]  0.662826113 -0.859804642  0.242019134 -0.377038265  0.623249080
+##  [6] -0.009851461 -0.959424059 -0.798277554 -0.392503749  0.604332793
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1185,9 +1185,9 @@ The functional form tells us that the posterior distribution is a Gamma distribu
 \[
 \pi(x \mid \alpha, \beta) = \frac{\alpha^\beta}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}.
 \]
-The distribution of the rate of the claims given the observed data is \(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)\).
+The distribution of the rate of the claims given the observed data is \(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(12, 95 + \gamma)\).
 
-The posterior mean months until a claim is \(\frac{10}{95 + \gamma}\). We can see the effect of the choice of rate parameter in this mean. Small values of \(\gamma\) yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of \(\gamma\) result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for \(\gamma = 0.01\) and \(\gamma = 50\).
+The posterior mean months until a claim is \(\frac{12}{95 + \gamma}\). We can see the effect of the choice of rate parameter in this mean. Small values of \(\gamma\) yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of \(\gamma\) result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for \(\gamma = 0.01\) and \(\gamma = 50\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1199,7 +1199,7 @@ The posterior mean months until a claim is \(\frac{10}{95 + \gamma}\). We can se
 \NormalTok{  prior }\OtherTok{\textless{}{-}} \FunctionTok{dexp}\NormalTok{(theta, }\AttributeTok{rate =}\NormalTok{ gamma.prior)}
   
   \CommentTok{\#evaluate posterior density}
-\NormalTok{  posterior }\OtherTok{\textless{}{-}} \FunctionTok{dgamma}\NormalTok{(theta, }\AttributeTok{shape =} \DecValTok{10}\NormalTok{, }\AttributeTok{rate =} \DecValTok{95} \SpecialCharTok{+}\NormalTok{ gamma.prior)}
+\NormalTok{  posterior }\OtherTok{\textless{}{-}} \FunctionTok{dgamma}\NormalTok{(theta, }\AttributeTok{shape =} \DecValTok{12}\NormalTok{, }\AttributeTok{rate =} \DecValTok{95} \SpecialCharTok{+}\NormalTok{ gamma.prior)}
   
   
   \CommentTok{\#plot}
@@ -1228,12 +1228,12 @@ The insurance managers recommend that because this is a new premium, a vague pri
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{round}\NormalTok{(}\FunctionTok{qgamma}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{, }\FloatTok{0.975}\NormalTok{), }\DecValTok{10}\NormalTok{, }\FloatTok{95.01}\NormalTok{), }\DecValTok{3}\NormalTok{)}
+\FunctionTok{round}\NormalTok{(}\FunctionTok{qgamma}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{, }\FloatTok{0.975}\NormalTok{), }\DecValTok{12}\NormalTok{, }\FloatTok{95.01}\NormalTok{), }\DecValTok{3}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.05 0.18
+## [1] 0.065 0.207
 \end{verbatim}
 
 \end{example}
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.88351837 0.03333333
+## [1] 5.06272755 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.525680 5.241357
+## [1] 4.704889 5.420566
 \end{verbatim}
 
 \end{example}
