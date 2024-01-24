@@ -76,9 +76,9 @@ The functional form tells us that the posterior distribution is a Gamma distribu
 $$
 \pi(x \mid \alpha, \beta) = \frac{\alpha^\beta}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}.
 $$
-The distribution of the rate of the claims given the observed data is $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)$. 
+The distribution of the rate of the claims given the observed data is $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(12, 95 + \gamma)$. 
 
-The posterior mean months until a claim is $\frac{10}{95 + \gamma}$. We can see the effect of the choice of rate parameter in this mean. Small values of $\gamma$ yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of $\gamma$ result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for $\gamma = 0.01$ and $\gamma = 50$. 
+The posterior mean months until a claim is $\frac{12}{95 + \gamma}$. We can see the effect of the choice of rate parameter in this mean. Small values of $\gamma$ yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of $\gamma$ result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for $\gamma = 0.01$ and $\gamma = 50$. 
 
 ```{r}
 plot.distributions <- function(gamma.prior){
@@ -89,7 +89,7 @@ plot.distributions <- function(gamma.prior){
   prior <- dexp(theta, rate = gamma.prior)
   
   #evaluate posterior density
-  posterior <- dgamma(theta, shape = 10, rate = 95 + gamma.prior)
+  posterior <- dgamma(theta, shape = 12, rate = 95 + gamma.prior)
   
   
   #plot
@@ -106,7 +106,7 @@ plot.distributions(50)
 
 The insurance managers recommend that because this is a new premium, a vague prior distribution be used and $\gamma = 0.01$. The posterior mean is $\frac{10}{95.01} \approx 0.105$ and the 95% credible interval is
 ```{r}
-round(qgamma(c(0.025, 0.975), 10, 95.01), 3)
+round(qgamma(c(0.025, 0.975), 12, 95.01), 3)
 ```
 :::
 
