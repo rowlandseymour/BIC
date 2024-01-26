@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.662826113 -0.859804642  0.242019134 -0.377038265  0.623249080
-##  [6] -0.009851461 -0.959424059 -0.798277554 -0.392503749  0.604332793
+##  [1] -0.689323418  0.824145133 -0.002340148  0.605296652  0.179419230
+##  [6]  0.143255400  0.906923922  0.435683180 -0.245673555 -0.153296436
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1178,34 +1178,34 @@ An insurance company want to estimate the time until a claim is made on a specif
 
 \textbf{Posterior distribution} \(\pi(\lambda \mid \boldsymbol{y})\). We now have all the ingredients to derive the posterior distribution. It is given by
 \begin{align*}
-\pi(\lambda \mid \boldsymbol{y}) &\propto \lambda^{10} e^{-95\lambda} \times \lambda e^{-\gamma\lambda} \\
-& \propto \lambda^{11}e^{-(95 + \gamma)\lambda}
+\pi(\lambda \mid \boldsymbol{y}) &\propto \lambda^{10} e^{-95\lambda} \times e^{-\gamma\lambda} \\
+& \propto \lambda^{10}e^{-(95 + \gamma)\lambda}
 \end{align*}
 The functional form tells us that the posterior distribution is a Gamma distribution. The PDF of a gamma random variable with shape \(\alpha\) and rate \(\beta\) is
 \[
 \pi(x \mid \alpha, \beta) = \frac{\alpha^\beta}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}.
 \]
-The distribution of the rate of the claims given the observed data is \(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(12, 95 + \gamma)\).
+The distribution of the rate of the claims given the observed data is \(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(11, 95 + \gamma)\).
 
-The posterior mean months until a claim is \(\frac{12}{95 + \gamma}\). We can see the effect of the choice of rate parameter in this mean. Small values of \(\gamma\) yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of \(\gamma\) result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for \(\gamma = 0.01\) and \(\gamma = 50\).
+The posterior mean months until a claim is \(\frac{11}{95 + \gamma}\). We can see the effect of the choice of rate parameter in this mean. Small values of \(\gamma\) yield vague prior distribution, which plays a minimal role in the posterior distribution. Large values of \(\gamma\) result in prior distributions that contribute a lot to the posterior distribution. The plots below show the prior and posterior distributions for \(\gamma = 0.01\) and \(\gamma = 50\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{plot.distributions }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(gamma.prior)\{}
-  \CommentTok{\#evaluate at selected values of theta}
-\NormalTok{  theta }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.001}\NormalTok{, }\FloatTok{0.3}\NormalTok{, }\FloatTok{0.001}\NormalTok{) }
+  \CommentTok{\#evaluate at selected values of lambda}
+\NormalTok{  lambda }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.001}\NormalTok{, }\FloatTok{0.3}\NormalTok{, }\FloatTok{0.001}\NormalTok{) }
   
   \CommentTok{\#evaluate prior density}
-\NormalTok{  prior }\OtherTok{\textless{}{-}} \FunctionTok{dexp}\NormalTok{(theta, }\AttributeTok{rate =}\NormalTok{ gamma.prior)}
+\NormalTok{  prior }\OtherTok{\textless{}{-}} \FunctionTok{dexp}\NormalTok{(lambda, }\AttributeTok{rate =}\NormalTok{ gamma.prior)}
   
   \CommentTok{\#evaluate posterior density}
-\NormalTok{  posterior }\OtherTok{\textless{}{-}} \FunctionTok{dgamma}\NormalTok{(theta, }\AttributeTok{shape =} \DecValTok{12}\NormalTok{, }\AttributeTok{rate =} \DecValTok{95} \SpecialCharTok{+}\NormalTok{ gamma.prior)}
+\NormalTok{  posterior }\OtherTok{\textless{}{-}} \FunctionTok{dgamma}\NormalTok{(lambda, }\AttributeTok{shape =} \DecValTok{11}\NormalTok{, }\AttributeTok{rate =} \DecValTok{95} \SpecialCharTok{+}\NormalTok{ gamma.prior)}
   
   
   \CommentTok{\#plot}
-  \FunctionTok{plot}\NormalTok{(theta, posterior, }\AttributeTok{type=} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }
-       \AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{50}\NormalTok{), }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(theta), }\AttributeTok{ylab =} \StringTok{"density"}\NormalTok{)}
-  \FunctionTok{lines}\NormalTok{(theta, prior, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
+  \FunctionTok{plot}\NormalTok{(lambda, posterior, }\AttributeTok{type=} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }
+       \AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{50}\NormalTok{), }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(lambda), }\AttributeTok{ylab =} \StringTok{"density"}\NormalTok{)}
+  \FunctionTok{lines}\NormalTok{(lambda, prior, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
   \FunctionTok{legend}\NormalTok{(}\StringTok{\textquotesingle{}topright\textquotesingle{}}\NormalTok{, }\AttributeTok{lty =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{), }\AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Posterior"}\NormalTok{, }\StringTok{"Prior"}\NormalTok{),  }
          \AttributeTok{bty =} \StringTok{"n"}\NormalTok{)}
 \NormalTok{\}}
@@ -1224,16 +1224,16 @@ The posterior mean months until a claim is \(\frac{12}{95 + \gamma}\). We can se
 
 \includegraphics{_main_files/figure-latex/unnamed-chunk-9-2.pdf}
 
-The insurance managers recommend that because this is a new premium, a vague prior distribution be used and \(\gamma = 0.01\). The posterior mean is \(\frac{10}{95.01} \approx 0.105\) and the 95\% credible interval is
+The insurance managers recommend that because this is a new premium, a vague prior distribution be used and \(\gamma = 0.01\). The posterior mean is \(\frac{11}{95.01} \approx 0.116\) and the 95\% credible interval is
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{round}\NormalTok{(}\FunctionTok{qgamma}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{, }\FloatTok{0.975}\NormalTok{), }\DecValTok{12}\NormalTok{, }\FloatTok{95.01}\NormalTok{), }\DecValTok{3}\NormalTok{)}
+\FunctionTok{round}\NormalTok{(}\FunctionTok{qgamma}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{, }\FloatTok{0.975}\NormalTok{), }\DecValTok{11}\NormalTok{, }\FloatTok{95.01}\NormalTok{), }\DecValTok{3}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.065 0.207
+## [1] 0.058 0.194
 \end{verbatim}
 
 \end{example}
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 5.06272755 0.03333333
+## [1] 4.90541866 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.704889 5.420566
+## [1] 4.547580 5.263257
 \end{verbatim}
 
 \end{example}
