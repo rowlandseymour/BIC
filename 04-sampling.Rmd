@@ -189,7 +189,7 @@ x <- seq(0, 5, 0.01)
 y <- dnorm(x, 0, 1)
 plot(x, y, type = 'l', col = "blue", lwd = 3)
 
-table <- 0
+table <- list()
 table$x <- c(2.093446, 2.093446, 1.676493, 1.393368, 1.100918, 0.765337)
 table$y <- c(0.044592, 0.097856, 0.151121, 0.217632, 0.297658, 0.398943)
 
@@ -202,19 +202,49 @@ segments(x0 = 2.5, x1 = 2.5, y0 = 0, y1 = table$y[1])
 To generate a sample, we choose a rectangle at random -- we might do this by sampling on the y-axis uniformly at random. We then sample uniformly at random within the rectangle. We accept the sample if it is 'clearly' in the box. By clearly, we mean that is is also contained in the rectangle above. If it is, not contained in the rectangle above, we generate a new uniform random number to accept or reject the sample. 
 
 Suppose the bottom right corner of the $i^{th}$ rectangle has coordinates $(x_i, y_i)$. The Ziggurat algorithm is 
-\begin{enumerate}
-\item Sample a rectangle $i$ uniformly at random
-\item Sample $u_0 \sim U[0, 1]$ and set $x = u_0x_i$
-\item If $x < x_{i+1}$ accept the sample
-\item Sample $u_1 \sim U[0, 1]$ and set $y = y_i + u_1(y_{i+1} − y_i)$
-\item If $y < f(y)$, where $f$ is the density function of a standard normal distribution, then accept the sample.
-\end{enumerate}
+
+1. Sample a rectangle $i$ uniformly at random
+2. Sample $u_0 \sim U[0, 1]$ and set $x = u_0x_i$
+3. If $x < x_{i+1}$ accept the sample
+4. Sample $u_1 \sim U[0, 1]$ and set $y = y_i + u_1(y_{i+1} − y_i)$
+5. If $y < f(y)$, where $f$ is the density function of a standard normal distribution, then accept the sample.
+
 
 This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half. 
 
 
 ## Lab
 
-The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1. 
+The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1 (e.g. estimating $\pi$). 
+
+::: {.exercise}
+Visit random.org to generate some truly random numbers. How does this site generate numbers that are truly random?
+:::
+
+::: {.exercise}
+A random variable $X$ has density $\pi(x) = ax^2$ for $x\in[0,1]$ and 0 otherwise.  Find the value $a$. Use the inverse transform method to generate 10,000 samples from this distribution. Plot a histogram against the true density function. 
+:::
+
+::: {.exercise}
+Let $X$ have the density $\pi(x) = \frac{1}{\theta}x^{\frac{1-\theta}{\theta}}$ for $x \in [0, 1]$. Use the inverse transform method to generate 10,000 samples from this distribution with $\theta = \{1, 5, 10\}$. 
+:::
+
+::: {.exercise}
+Let $X$ have the density $\pi(x) = 3x^2$ for $x \in [0, 1]$ and 0 otherwise. Use a rejection sampling method to generate 10,000 from this distribution. Plot the results against the true density to check you have the same distribution. 
+:::
+
+::: {.exercise}
+The half normal distribution with mean 0 and variance 1 has density function 
+$$
+\pi(x) = \frac{2}{\sqrt{2\pi}}\exp{(-x^2/2)}
+$$
+for $x \geq 0$ and 0 otherwise.
+
+1. Denote the exponential density function by $q(x) = \lambda \exp(-\lambda x)$. Find the smallest $c$ such that  $\pi(x)/q(x) < c$. 
+2. Use a rejection sampling algorithm with an exponential proposal distribution to generate samples from the half normal distibrution with mean 0 and variance 1. 
+:::
+
+
+
 
 

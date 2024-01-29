@@ -237,7 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>What we won’t be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is because computers aren’t good at being random, they require algorithmic instructions. True random number generation often uses physical methods, such as the radioactive decay of atoms, or atmospheric noise.</p>
 <p>Throughout this module, we will be using R’s built in random number generation. This is a pseudo random number generator that has excellent random properties, but will eventually repeat. A basic random number generation tool that we will repeatedly use in the module involves sampling from a uniform distribution on the unit interval, which can be done in R using</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="sampling.html#cb52-1" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.2099466</code></pre>
+<pre><code>## [1] 0.4806678</code></pre>
 </div>
 <div id="inverse-transform-sampling" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Inverse Transform Sampling<a href="sampling.html#inverse-transform-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -375,16 +375,44 @@ E(A) &amp; = E(E(A\mid y)) \\
 <div id="ziggurat-sampling" class="section level2 hasAnchor" number="4.4">
 <h2><span class="header-section-number">4.4</span> Ziggurat Sampling<a href="sampling.html#ziggurat-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The final method we are going to look at in this chapter is Ziggurat sampling. It is used to sample from a <span class="math inline">\(N(0, 1)\)</span> distribution using samples from a <span class="math inline">\(U(0, 1)\)</span> distribution. A Ziggurat is a kind of stepped pyramid. To start the sampling algorithm, we approximate the normal distribution by a series of horizontal rectangles, each with the same area. An example of this is shown below.</p>
-<pre><code>## Warning in table$x &lt;- c(2.093446, 2.093446, 1.676493, 1.393368, 1.100918, :
-## Coercing LHS to a list</code></pre>
 <p><img src="_main_files/figure-html/unnamed-chunk-26-1.png" width="672" />
 To generate a sample, we choose a rectangle at random – we might do this by sampling on the y-axis uniformly at random. We then sample uniformly at random within the rectangle. We accept the sample if it is ‘clearly’ in the box. By clearly, we mean that is is also contained in the rectangle above. If it is, not contained in the rectangle above, we generate a new uniform random number to accept or reject the sample.</p>
-Suppose the bottom right corner of the <span class="math inline">\(i^{th}\)</span> rectangle has coordinates <span class="math inline">\((x_i, y_i)\)</span>. The Ziggurat algorithm is
+<p>Suppose the bottom right corner of the <span class="math inline">\(i^{th}\)</span> rectangle has coordinates <span class="math inline">\((x_i, y_i)\)</span>. The Ziggurat algorithm is</p>
+<ol style="list-style-type: decimal">
+<li>Sample a rectangle <span class="math inline">\(i\)</span> uniformly at random</li>
+<li>Sample <span class="math inline">\(u_0 \sim U[0, 1]\)</span> and set <span class="math inline">\(x = u_0x_i\)</span></li>
+<li>If <span class="math inline">\(x &lt; x_{i+1}\)</span> accept the sample</li>
+<li>Sample <span class="math inline">\(u_1 \sim U[0, 1]\)</span> and set <span class="math inline">\(y = y_i + u_1(y_{i+1} − y_i)\)</span></li>
+<li>If <span class="math inline">\(y &lt; f(y)\)</span>, where <span class="math inline">\(f\)</span> is the density function of a standard normal distribution, then accept the sample.</li>
+</ol>
 <p>This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half.</p>
 </div>
 <div id="lab-1" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> Lab<a href="sampling.html#lab-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1.</p>
+<p>The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1 (e.g. estimating <span class="math inline">\(\pi\)</span>).</p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-55" class="exercise"><strong>Exercise 4.1  </strong></span>Visit random.org to generate some truly random numbers. How does this site generate numbers that are truly random?</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-56" class="exercise"><strong>Exercise 4.2  </strong></span>A random variable <span class="math inline">\(X\)</span> has density <span class="math inline">\(\pi(x) = ax^2\)</span> for <span class="math inline">\(x\in[0,1]\)</span> and 0 otherwise. Find the value <span class="math inline">\(a\)</span>. Use the inverse transform method to generate 10,000 samples from this distribution. Plot a histogram against the true density function.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-57" class="exercise"><strong>Exercise 4.3  </strong></span>Let <span class="math inline">\(X\)</span> have the density <span class="math inline">\(\pi(x) = \frac{1}{\theta}x^{\frac{1-\theta}{\theta}}\)</span> for <span class="math inline">\(x \in [0, 1]\)</span>. Use the inverse transform method to generate 10,000 samples from this distribution with <span class="math inline">\(\theta = \{1, 5, 10\}\)</span>.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-58" class="exercise"><strong>Exercise 4.4  </strong></span>Let <span class="math inline">\(X\)</span> have the density <span class="math inline">\(\pi(x) = 3x^2\)</span> for <span class="math inline">\(x \in [0, 1]\)</span> and 0 otherwise. Use a rejection sampling method to generate 10,000 from this distribution. Plot the results against the true density to check you have the same distribution.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-59" class="exercise"><strong>Exercise 4.5  </strong></span>The half normal distribution with mean 0 and variance 1 has density function
+<span class="math display">\[
+\pi(x) = \frac{2}{\sqrt{2\pi}}\exp{(-x^2/2)}
+\]</span>
+for <span class="math inline">\(x \geq 0\)</span> and 0 otherwise.</p>
+<ol style="list-style-type: decimal">
+<li>Denote the exponential density function by <span class="math inline">\(q(x) = \lambda \exp(-\lambda x)\)</span>. Find the smallest <span class="math inline">\(c\)</span> such that <span class="math inline">\(\pi(x)/q(x) &lt; c\)</span>.</li>
+<li>Use a rejection sampling algorithm with an exponential proposal distribution to generate samples from the half normal distibrution with mean 0 and variance 1.</li>
+</ol>
+</div>
 
 </div>
 </div>
