@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] -0.06995844 -0.03307749  0.93620593  0.04357139  0.46883103 -0.65925485
-##  [7]  0.02088577  0.24458855  0.95877787  0.82505123
+##  [1]  0.3235084  0.1081377 -0.9608438 -0.7659683 -0.2523210 -0.1910156
+##  [7] -0.2608554  0.4613834  0.3332784  0.1765459
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.87441888 0.03333333
+## [1] 4.86843784 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.516580 5.232258
+## [1] 4.510599 5.226277
 \end{verbatim}
 
 \end{example}
@@ -1781,7 +1781,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.5648107
+## [1] 0.2506406
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -1967,22 +1967,24 @@ Therefore, the number of samples proposed before one is accepted is distributed 
 
 The final method we are going to look at in this chapter is Ziggurat sampling. It is used to sample from a \(N(0, 1)\) distribution using samples from a \(U(0, 1)\) distribution. A Ziggurat is a kind of stepped pyramid. To start the sampling algorithm, we approximate the normal distribution by a series of horizontal rectangles, each with the same area. An example of this is shown below.
 
-\begin{verbatim}
-## Warning in table$x <- c(2.093446, 2.093446, 1.676493, 1.393368, 1.100918, :
-## Coercing LHS to a list
-\end{verbatim}
-
 \includegraphics{_main_files/figure-latex/unnamed-chunk-26-1.pdf}
 To generate a sample, we choose a rectangle at random -- we might do this by sampling on the y-axis uniformly at random. We then sample uniformly at random within the rectangle. We accept the sample if it is `clearly' in the box. By clearly, we mean that is is also contained in the rectangle above. If it is, not contained in the rectangle above, we generate a new uniform random number to accept or reject the sample.
 
 Suppose the bottom right corner of the \(i^{th}\) rectangle has coordinates \((x_i, y_i)\). The Ziggurat algorithm is
 
 \begin{enumerate}
-\item Sample a rectangle $i$ uniformly at random
-\item Sample $u_0 \sim U[0, 1]$ and set $x = u_0x_i$
-\item If $x < x_{i+1}$ accept the sample
-\item Sample $u_1 \sim U[0, 1]$ and set $y = y_i + u_1(y_{i+1} − y_i)$
-\item If $y < f(y)$, where $f$ is the density function of a standard normal distribution, then accept the sample.
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Sample a rectangle \(i\) uniformly at random
+\item
+  Sample \(u_0 \sim U[0, 1]\) and set \(x = u_0x_i\)
+\item
+  If \(x < x_{i+1}\) accept the sample
+\item
+  Sample \(u_1 \sim U[0, 1]\) and set \(y = y_i + u_1(y_{i+1} − y_i)\)
+\item
+  If \(y < f(y)\), where \(f\) is the density function of a standard normal distribution, then accept the sample.
 \end{enumerate}
 
 This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half.
@@ -1990,7 +1992,42 @@ This only generates samples for the positive side of the normal distribution. To
 \hypertarget{lab-1}{%
 \section{Lab}\label{lab-1}}
 
-The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1.
+The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1 (e.g.~estimating \(\pi\)).
+
+\begin{exercise}
+Visit random.org to generate some truly random numbers. How does this site generate numbers that are truly random?
+\end{exercise}
+
+\begin{exercise}
+A random variable \(X\) has density \(\pi(x) = ax^2\) for \(x\in[0,1]\) and 0 otherwise. Find the value \(a\). Use the inverse transform method to generate 10,000 samples from this distribution. Plot a histogram against the true density function.
+\end{exercise}
+
+\begin{exercise}
+Let \(X\) have the density \(\pi(x) = \frac{1}{\theta}x^{\frac{1-\theta}{\theta}}\) for \(x \in [0, 1]\). Use the inverse transform method to generate 10,000 samples from this distribution with \(\theta = \{1, 5, 10\}\).
+\end{exercise}
+
+\begin{exercise}
+Let \(X\) have the density \(\pi(x) = 3x^2\) for \(x \in [0, 1]\) and 0 otherwise. Use a rejection sampling method to generate 10,000 from this distribution. Plot the results against the true density to check you have the same distribution.
+\end{exercise}
+
+\begin{exercise}
+
+The half normal distribution with mean 0 and variance 1 has density function
+\[
+\pi(x) = \frac{2}{\sqrt{2\pi}}\exp{(-x^2/2)}
+\]
+for \(x \geq 0\) and 0 otherwise.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Denote the exponential density function by \(q(x) = \lambda \exp(-\lambda x)\). Find the smallest \(c\) such that \(\pi(x)/q(x) < c\).
+\item
+  Use a rejection sampling algorithm with an exponential proposal distribution to generate samples from the half normal distibrution with mean 0 and variance 1.
+\end{enumerate}
+
+\end{exercise}
 
 \hypertarget{markov-chain-monte-carlo}{%
 \chapter{Markov Chain Monte Carlo}\label{markov-chain-monte-carlo}}
