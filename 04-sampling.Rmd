@@ -213,6 +213,8 @@ Suppose the bottom right corner of the $i^{th}$ rectangle has coordinates $(x_i,
 This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half. 
 
 
+## Lab
 
+The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1. 
 
 
