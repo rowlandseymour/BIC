@@ -203,7 +203,7 @@ If the prior distribution $\pi(\theta)$ has the same distributional family as th
 In many modelling problems, there will be multiple parameters each related to one another. These parameters may be directly related to the model, or they may be parameters we introduce through prior distributions. We can form a hierarchy of these parameters, from closest to further from the data, to construct our model.
 
 ::: {.example}
-Let's consider \@ref(exm:exponential) again. We have some data $\boldsymbol{y}$ that are assumed to have been generated from an Exponential distribution with rate parameter $\lambda$. We placed an Exponential prior distribution with rate $\gamma$ on $\lambda$ and the posterior distribution was $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)$. 
+Let's consider \@ref(exm:exponential) again. We have some data $\boldsymbol{y}$ that are assumed to have been generated from an Exponential distribution with rate parameter $\lambda$. We placed an Exponential prior distribution with rate $\gamma$ on $\lambda$ and the posterior distribution was $\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(11, 95 + \gamma)$. 
 
 In that example, we discussed how the choice of $\gamma$ can affect the posterior distribution and conclusions presented to the company. One option is to place a prior distribution on $\gamma$ -- a hyperprior distribution. The hierachy formed is
 \begin{align*}
@@ -214,14 +214,14 @@ In that example, we discussed how the choice of $\gamma$ can affect the posterio
 By Bayes' theorem, we can write the posterior distribution as
 \begin{align*}
 \pi(\lambda, \gamma \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda \mid \gamma)\pi(\gamma)\\
-&\propto \lambda^{11}e^{-\lambda(95 + \gamma)}\nu e^{-\nu\gamma}.
+&\propto \lambda^{10}e^{-\lambda(95 + \gamma)}\nu e^{-\nu\gamma}.
 \end{align*}
 
 To derive the full conditional distributions, we only consider the terms that depends on the parameters we are interested in. The full conditional distribution for $\lambda$ is
 $$
-\pi(\lambda \mid \boldsymbol{y}, \,\gamma) \propto \lambda^{11}e^{-\lambda(95 + \gamma)}.
+\pi(\lambda \mid \boldsymbol{y}, \,\gamma) \propto \lambda^{10}e^{-\lambda(95 + \gamma)}.
 $$
-This is unchanged and shows that $\lambda \mid \boldsymbol{y}, \gamma \sim \textrm{Gamma}(10, 95 + \gamma)$. The full conditional distribution for $\gamma$ is
+This is unchanged and shows that $\lambda \mid \boldsymbol{y}, \gamma \sim \textrm{Gamma}(11, 95 + \gamma)$. The full conditional distribution for $\gamma$ is
 $$
 \pi(\gamma \mid \boldsymbol{y}, \,\lambda) \propto e^{-\nu\gamma}.
 $$
@@ -391,8 +391,8 @@ $$
 $$
 The likelihood function is given by
 \begin{align*}
-\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^50 \frac{e^{-\lambda}\lambda^{y_i}}{y_i!}\\
-&= \frac{e^{-50\lambda}\lambda^{\sum y_i}}{\prod_{i=1}^50 y_i!} 
+\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^{50} \frac{e^{-\lambda}\lambda^{y_i}}{y_i!}\\
+&= \frac{e^{-50\lambda}\lambda^{\sum y_i}}{\prod_{i=1}^{50} y_i!} 
 \end{align*}
 
 
@@ -435,7 +435,8 @@ There is no closed form for this distribution and it is not that nice to work wi
 
 ```{r}
 posterior <- prior*likelihood
-posterior <- posterior/sum(posterior) #normalise
+integrating.factor <- 0.5*0.01*(posterior[1] + posterior[1001] + 2*sum(posterior[-c(1, 1001)])) #Using trapezium rule
+posterior <- posterior/integrating.factor #normalise
 plot(lambda, posterior, type = 'l', xlab = expression(lambda), 
      ylab = "posterior density")
 ```
@@ -461,6 +462,22 @@ The data is given by
 y <- c(1.95, 1.46, 4.81, 1.52, 4.24, 3.00, 0.46, 2.27, 1.76, 0.41)
 ```
 :::
-By writing an R function to evaluate the likelihood function, evaute the posterior distribution for $\lambda$ over a grid of points. 
+By writing an R function to evaluate the likelihood function, evaluate the posterior distribution for $\lambda$ over a grid of points. 
+
+::: {.exercise}
+Suppose you have $X_1, ..., X_N \sim \hbox{Bin}(100, p)$. Using $p \sim \hbox{Beta}(\alpha, \beta)$ as the prior distribution, derive the posterior distribution and the posterior mean (Wikipedia is a helpful place for properties of distributions). 
+
+1.  (Large data scenario) Fix $\alpha = 2$, $N = 150$ and $\Sigma x_i = 2,971$. Plot the prior and posterior distributions for different values of $\beta$ on the same figure. Plot the posterior mean against $\beta \in (0, 10)$. Plot the prior mean against the posterior mean for $\beta \in (0, 10)$. 
+2.  (Small data scenario) Fix $\alpha = 2$, $N = 10$ and $\Sigma x_i = 101$ Plot the prior and posterior distributions for different values of $\beta$ on the same figure.Plot the posterior distribution for different values of $\beta$. Plot the posterior mean against $\beta \in (0, 10)$. Plot the prior mean against the posterior mean for $\beta \in (0, 10)$. 
+:::
+
+::: {.exercise}
+Code up the posterior distribution in question 4 of problem sheet 2 (the Pareto distribution). Set $a = 1$, $b = 2$ and let the data be
+```
+y <- c(0.71966737, 0.01349912, 0.21396869, 0.11983329, 0.23884887, 0.11191048, 0.28225739, 0.49056709, 0.22539346, 0.91335674)
+```
+Find the MAP estimate for $\beta$
+:::
+
 
 

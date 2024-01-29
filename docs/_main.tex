@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] -0.81459064 -0.53032753 -0.49182386 -0.98476408 -0.58553484  0.79510913
-##  [7] -0.08366620  0.03616259 -0.92604338 -0.37457339
+##  [1] -0.06995844 -0.03307749  0.93620593  0.04357139  0.46883103 -0.65925485
+##  [7]  0.02088577  0.24458855  0.95877787  0.82505123
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.85578403 0.03333333
+## [1] 4.87441888 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.497945 5.213623
+## [1] 4.516580 5.232258
 \end{verbatim}
 
 \end{example}
@@ -1356,7 +1356,7 @@ If the prior distribution \(\pi(\theta)\) has the same distributional family as 
 In many modelling problems, there will be multiple parameters each related to one another. These parameters may be directly related to the model, or they may be parameters we introduce through prior distributions. We can form a hierarchy of these parameters, from closest to further from the data, to construct our model.
 
 \begin{example}
-Let's consider \ref{exm:exponential} again. We have some data \(\boldsymbol{y}\) that are assumed to have been generated from an Exponential distribution with rate parameter \(\lambda\). We placed an Exponential prior distribution with rate \(\gamma\) on \(\lambda\) and the posterior distribution was \(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)\).
+Let's consider \ref{exm:exponential} again. We have some data \(\boldsymbol{y}\) that are assumed to have been generated from an Exponential distribution with rate parameter \(\lambda\). We placed an Exponential prior distribution with rate \(\gamma\) on \(\lambda\) and the posterior distribution was \(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(11, 95 + \gamma)\).
 
 In that example, we discussed how the choice of \(\gamma\) can affect the posterior distribution and conclusions presented to the company. One option is to place a prior distribution on \(\gamma\) -- a hyperprior distribution. The hierachy formed is
 \begin{align*}
@@ -1367,14 +1367,14 @@ In that example, we discussed how the choice of \(\gamma\) can affect the poster
 By Bayes' theorem, we can write the posterior distribution as
 \begin{align*}
 \pi(\lambda, \gamma \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda \mid \gamma)\pi(\gamma)\\
-&\propto \lambda^{11}e^{-\lambda(95 + \gamma)}\nu e^{-\nu\gamma}.
+&\propto \lambda^{10}e^{-\lambda(95 + \gamma)}\nu e^{-\nu\gamma}.
 \end{align*}
 
 To derive the full conditional distributions, we only consider the terms that depends on the parameters we are interested in. The full conditional distribution for \(\lambda\) is
 \[
-\pi(\lambda \mid \boldsymbol{y}, \,\gamma) \propto \lambda^{11}e^{-\lambda(95 + \gamma)}.
+\pi(\lambda \mid \boldsymbol{y}, \,\gamma) \propto \lambda^{10}e^{-\lambda(95 + \gamma)}.
 \]
-This is unchanged and shows that \(\lambda \mid \boldsymbol{y}, \gamma \sim \textrm{Gamma}(10, 95 + \gamma)\). The full conditional distribution for \(\gamma\) is
+This is unchanged and shows that \(\lambda \mid \boldsymbol{y}, \gamma \sim \textrm{Gamma}(11, 95 + \gamma)\). The full conditional distribution for \(\gamma\) is
 \[
 \pi(\gamma \mid \boldsymbol{y}, \,\lambda) \propto e^{-\nu\gamma}.
 \]
@@ -1626,8 +1626,8 @@ By Bayes' theorem, the posterior distribution is given by
 \]
 The likelihood function is given by
 \begin{align*}
-\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^50 \frac{e^{-\lambda}\lambda^{y_i}}{y_i!}\\
-&= \frac{e^{-50\lambda}\lambda^{\sum y_i}}{\prod_{i=1}^50 y_i!} 
+\pi(\boldsymbol{y} \mid \lambda) &= \prod_{i=1}^{50} \frac{e^{-\lambda}\lambda^{y_i}}{y_i!}\\
+&= \frac{e^{-50\lambda}\lambda^{\sum y_i}}{\prod_{i=1}^{50} y_i!} 
 \end{align*}
 
 R has a set of inbuilt functions for working with the Poisson distribution so we can rely on those to write functions for the likelihood and loglikelihood.
@@ -1693,7 +1693,8 @@ There is no closed form for this distribution and it is not that nice to work wi
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{posterior }\OtherTok{\textless{}{-}}\NormalTok{ prior}\SpecialCharTok{*}\NormalTok{likelihood}
-\NormalTok{posterior }\OtherTok{\textless{}{-}}\NormalTok{ posterior}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(posterior) }\CommentTok{\#normalise}
+\NormalTok{integrating.factor }\OtherTok{\textless{}{-}} \FloatTok{0.5}\SpecialCharTok{*}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{(posterior[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ posterior[}\DecValTok{1001}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2}\SpecialCharTok{*}\FunctionTok{sum}\NormalTok{(posterior[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1001}\NormalTok{)])) }\CommentTok{\#Using trapezium rule}
+\NormalTok{posterior }\OtherTok{\textless{}{-}}\NormalTok{ posterior}\SpecialCharTok{/}\NormalTok{integrating.factor }\CommentTok{\#normalise}
 \FunctionTok{plot}\NormalTok{(lambda, posterior, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(lambda), }
      \AttributeTok{ylab =} \StringTok{"posterior density"}\NormalTok{)}
 \end{Highlighting}
@@ -1736,7 +1737,32 @@ The data is given by
 
 \end{exercise}
 
-By writing an R function to evaluate the likelihood function, evaute the posterior distribution for \(\lambda\) over a grid of points.
+By writing an R function to evaluate the likelihood function, evaluate the posterior distribution for \(\lambda\) over a grid of points.
+
+\begin{exercise}
+
+Suppose you have \(X_1, ..., X_N \sim \hbox{Bin}(100, p)\). Using \(p \sim \hbox{Beta}(\alpha, \beta)\) as the prior distribution, derive the posterior distribution and the posterior mean (Wikipedia is a helpful place for properties of distributions).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  (Large data scenario) Fix \(\alpha = 2\), \(N = 150\) and \(\Sigma x_i = 2,971\). Plot the prior and posterior distributions for different values of \(\beta\) on the same figure. Plot the posterior mean against \(\beta \in (0, 10)\). Plot the prior mean against the posterior mean for \(\beta \in (0, 10)\).
+\item
+  (Small data scenario) Fix \(\alpha = 2\), \(N = 10\) and \(\Sigma x_i = 101\) Plot the prior and posterior distributions for different values of \(\beta\) on the same figure.Plot the posterior distribution for different values of \(\beta\). Plot the posterior mean against \(\beta \in (0, 10)\). Plot the prior mean against the posterior mean for \(\beta \in (0, 10)\).
+\end{enumerate}
+
+\end{exercise}
+
+\begin{exercise}
+Code up the posterior distribution in question 4 of problem sheet 2 (the Pareto distribution). Set \(a = 1\), \(b = 2\) and let the data be
+
+\begin{verbatim}
+y <- c(0.71966737, 0.01349912, 0.21396869, 0.11983329, 0.23884887, 0.11191048, 0.28225739, 0.49056709, 0.22539346, 0.91335674)
+\end{verbatim}
+
+Find the MAP estimate for \(\beta\)
+\end{exercise}
 
 \hypertarget{sampling}{%
 \chapter{Sampling}\label{sampling}}
@@ -1755,7 +1781,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.3370351
+## [1] 0.5648107
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -1960,6 +1986,11 @@ Suppose the bottom right corner of the \(i^{th}\) rectangle has coordinates \((x
 \end{enumerate}
 
 This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half.
+
+\hypertarget{lab-1}{%
+\section{Lab}\label{lab-1}}
+
+The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1.
 
 \hypertarget{markov-chain-monte-carlo}{%
 \chapter{Markov Chain Monte Carlo}\label{markov-chain-monte-carlo}}

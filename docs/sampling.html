@@ -186,6 +186,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3.1" data-path="sampling.html"><a href="sampling.html#rejection-sampling-efficiency"><i class="fa fa-check"></i><b>4.3.1</b> Rejection Sampling Efficiency</a></li>
 </ul></li>
 <li class="chapter" data-level="4.4" data-path="sampling.html"><a href="sampling.html#ziggurat-sampling"><i class="fa fa-check"></i><b>4.4</b> Ziggurat Sampling</a></li>
+<li class="chapter" data-level="4.5" data-path="sampling.html"><a href="sampling.html#lab-1"><i class="fa fa-check"></i><b>4.5</b> Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>5</b> Markov Chain Monte Carlo</a>
 <ul>
@@ -235,23 +236,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.1</span> Uniform Random Numbers<a href="sampling.html#uniform-random-numbers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>What we won’t be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is because computers aren’t good at being random, they require algorithmic instructions. True random number generation often uses physical methods, such as the radioactive decay of atoms, or atmospheric noise.</p>
 <p>Throughout this module, we will be using R’s built in random number generation. This is a pseudo random number generator that has excellent random properties, but will eventually repeat. A basic random number generation tool that we will repeatedly use in the module involves sampling from a uniform distribution on the unit interval, which can be done in R using</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="sampling.html#cb51-1" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.3875339</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="sampling.html#cb52-1" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] 0.2099466</code></pre>
 </div>
 <div id="inverse-transform-sampling" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Inverse Transform Sampling<a href="sampling.html#inverse-transform-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Suppose we want to sample from a non-uniform one-dimensional distribution. The inverse transform theorem allows us to do this using the distribution’s inverse function.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-46" class="definition"><strong>Definition 4.1  </strong></span>Let <span class="math inline">\(X\)</span> be a real-valued random variable with a distribution function <span class="math inline">\(F\)</span>. Then the <strong>inverse function</strong> of a distribution function <span class="math inline">\(F\)</span>, denoted <span class="math inline">\(F^{-1}\)</span>, is defined for all <span class="math inline">\(u \in (0, 1)\)</span> by
+<p><span id="def:unlabeled-div-48" class="definition"><strong>Definition 4.1  </strong></span>Let <span class="math inline">\(X\)</span> be a real-valued random variable with a distribution function <span class="math inline">\(F\)</span>. Then the <strong>inverse function</strong> of a distribution function <span class="math inline">\(F\)</span>, denoted <span class="math inline">\(F^{-1}\)</span>, is defined for all <span class="math inline">\(u \in (0, 1)\)</span> by
 <span class="math display">\[
 F^{-1}(u) = \inf\{x \in\mathbb{R} : F(x) &gt; u\}.
 \]</span></p>
 </div>
 <div class="theorem">
-<p><span id="thm:unlabeled-div-47" class="theorem"><strong>Theorem 4.1  </strong></span>Let <span class="math inline">\(F :\mathbb{R} \rightarrow [0, 1]\)</span> be a continuous distribution function, <span class="math inline">\(U \sim U[0, 1]\)</span> and <span class="math inline">\(Y = F^{-1}(U)\)</span>. Then <span class="math inline">\(Y\)</span> has distribution function <span class="math inline">\(F\)</span>.</p>
+<p><span id="thm:unlabeled-div-49" class="theorem"><strong>Theorem 4.1  </strong></span>Let <span class="math inline">\(F :\mathbb{R} \rightarrow [0, 1]\)</span> be a continuous distribution function, <span class="math inline">\(U \sim U[0, 1]\)</span> and <span class="math inline">\(Y = F^{-1}(U)\)</span>. Then <span class="math inline">\(Y\)</span> has distribution function <span class="math inline">\(F\)</span>.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-48" class="proof"><em>Proof</em>. </span>We have
+<p><span id="unlabeled-div-50" class="proof"><em>Proof</em>. </span>We have
 <span class="math display">\[
 \mathbb{P}(Y \leq a) = \mathbb{P}(F^{-1}(U) \leq a) = \mathbb{P}(\inf\{x \in\mathbb{R} : F(x) &gt; u\} \leq a).
 \]</span>
@@ -263,7 +264,7 @@ As <span class="math inline">\(U \sim U[0, 1]\)</span>, we have <span class="mat
 </div>
 <p>This theorem says that if we have a random variable <span class="math inline">\(U \sim U[0, 1]\)</span> and we want to get <span class="math inline">\(Y \sim F\)</span>, then we can use <span class="math inline">\(F^{-1}(U)\)</span>. Viewing this theorem graphically can provide a much more intuitive understanding.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-49" class="example"><strong>Example 4.1  </strong></span>We would like to sample from an exponential distribution with rate <span class="math inline">\(\lambda\)</span>, i.e. <span class="math inline">\(Y ~ \sim \hbox{Exp}(\lambda)\)</span>. The density function is given by</p>
+<p><span id="exm:unlabeled-div-51" class="example"><strong>Example 4.1  </strong></span>We would like to sample from an exponential distribution with rate <span class="math inline">\(\lambda\)</span>, i.e. <span class="math inline">\(Y ~ \sim \hbox{Exp}(\lambda)\)</span>. The density function is given by</p>
 <p><span class="math display">\[
 \pi(y \mid \lambda) = \begin{cases}
       \lambda e^{\lambda y} &amp; y \geq 0 \\
@@ -281,23 +282,23 @@ F^{-1}(y \mid \lambda) = -\frac{1}{\lambda}\log(1-y).
 \]</span>
 Therefore, if <span class="math inline">\(U \sim U[0, 1]\)</span>, then it follows that <span class="math inline">\(-\frac{1}{\lambda}log(1-U) \sim \hbox{Exp}(\lambda)\)</span>.</p>
 <p>The R code below generates a plot to show this (with <span class="math inline">\(\lambda = 0.5\)</span>). We can plot the CDF for most one parameter distributions straightforwardly. We can think of this theorem as allowing us to sample a point on the y-axis and then computing the quantile this corresponds to.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="sampling.html#cb53-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>) <span class="co"># to reproduce</span></span>
-<span id="cb53-2"><a href="sampling.html#cb53-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="fl">0.01</span>) <span class="co">#Show on the interval [0, 5]</span></span>
-<span id="cb53-3"><a href="sampling.html#cb53-3" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span><span class="sc">*</span>y)    <span class="co">#Construct the cumulative density </span></span>
-<span id="cb53-4"><a href="sampling.html#cb53-4" tabindex="-1"></a>                        <span class="co">#function (CDF)</span></span>
-<span id="cb53-5"><a href="sampling.html#cb53-5" tabindex="-1"></a><span class="fu">plot</span>(y, f, <span class="at">type =</span><span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">ylab=</span> <span class="st">&quot;CDF&quot;</span>)</span>
-<span id="cb53-6"><a href="sampling.html#cb53-6" tabindex="-1"></a></span>
-<span id="cb53-7"><a href="sampling.html#cb53-7" tabindex="-1"></a><span class="co">#Sample u</span></span>
-<span id="cb53-8"><a href="sampling.html#cb53-8" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb53-9"><a href="sampling.html#cb53-9" tabindex="-1"></a></span>
-<span id="cb53-10"><a href="sampling.html#cb53-10" tabindex="-1"></a><span class="co">#Get the corresponding y value</span></span>
-<span id="cb53-11"><a href="sampling.html#cb53-11" tabindex="-1"></a>f.inv <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u)</span>
-<span id="cb53-12"><a href="sampling.html#cb53-12" tabindex="-1"></a></span>
-<span id="cb53-13"><a href="sampling.html#cb53-13" tabindex="-1"></a><span class="co">#plot </span></span>
-<span id="cb53-14"><a href="sampling.html#cb53-14" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> u, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb53-15"><a href="sampling.html#cb53-15" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> f.inv, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb53-16"><a href="sampling.html#cb53-16" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> f.inv, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.01</span>, <span class="fu">expression</span>(F[<span class="sc">-</span><span class="dv">1</span>](U)), <span class="at">col =</span> <span class="dv">4</span>)</span>
-<span id="cb53-17"><a href="sampling.html#cb53-17" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> <span class="sc">-</span>.<span class="dv">1</span>, <span class="at">y =</span> u, <span class="st">&quot;U&quot;</span>, <span class="at">col =</span> <span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="sampling.html#cb54-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>) <span class="co"># to reproduce</span></span>
+<span id="cb54-2"><a href="sampling.html#cb54-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="fl">0.01</span>) <span class="co">#Show on the interval [0, 5]</span></span>
+<span id="cb54-3"><a href="sampling.html#cb54-3" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span><span class="sc">*</span>y)    <span class="co">#Construct the cumulative density </span></span>
+<span id="cb54-4"><a href="sampling.html#cb54-4" tabindex="-1"></a>                        <span class="co">#function (CDF)</span></span>
+<span id="cb54-5"><a href="sampling.html#cb54-5" tabindex="-1"></a><span class="fu">plot</span>(y, f, <span class="at">type =</span><span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">ylab=</span> <span class="st">&quot;CDF&quot;</span>)</span>
+<span id="cb54-6"><a href="sampling.html#cb54-6" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="sampling.html#cb54-7" tabindex="-1"></a><span class="co">#Sample u</span></span>
+<span id="cb54-8"><a href="sampling.html#cb54-8" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb54-9"><a href="sampling.html#cb54-9" tabindex="-1"></a></span>
+<span id="cb54-10"><a href="sampling.html#cb54-10" tabindex="-1"></a><span class="co">#Get the corresponding y value</span></span>
+<span id="cb54-11"><a href="sampling.html#cb54-11" tabindex="-1"></a>f.inv <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u)</span>
+<span id="cb54-12"><a href="sampling.html#cb54-12" tabindex="-1"></a></span>
+<span id="cb54-13"><a href="sampling.html#cb54-13" tabindex="-1"></a><span class="co">#plot </span></span>
+<span id="cb54-14"><a href="sampling.html#cb54-14" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> u, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb54-15"><a href="sampling.html#cb54-15" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> f.inv, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb54-16"><a href="sampling.html#cb54-16" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> f.inv, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.01</span>, <span class="fu">expression</span>(F[<span class="sc">-</span><span class="dv">1</span>](U)), <span class="at">col =</span> <span class="dv">4</span>)</span>
+<span id="cb54-17"><a href="sampling.html#cb54-17" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> <span class="sc">-</span>.<span class="dv">1</span>, <span class="at">y =</span> u, <span class="st">&quot;U&quot;</span>, <span class="at">col =</span> <span class="dv">4</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 </div>
 </div>
@@ -318,7 +319,7 @@ f(y) \propto q(y)\pi(U &lt; k) = q(y)\frac{\pi(u)}{cq(y)} = \frac{\pi(u)}{c}.
 \]</span>
 Therefore, <span class="math inline">\(f = p\)</span>.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-50" class="example"><strong>Example 4.2  </strong></span>Suppose we want to sample from a distribution that has the density
+<p><span id="exm:unlabeled-div-52" class="example"><strong>Example 4.2  </strong></span>Suppose we want to sample from a distribution that has the density
 <span class="math display">\[
 \pi(y) = \begin{cases}
 \frac{3}{4}y(2-y), \qquad y \in [0, 2] \\
@@ -326,25 +327,25 @@ Therefore, <span class="math inline">\(f = p\)</span>.</p>
 \end{cases}.
 \]</span>
 This has a maximum at <span class="math inline">\(\frac{3}{4}\)</span>. We choose <span class="math inline">\(p \sim U[0, 1]\)</span> and <span class="math inline">\(c = \frac{3}{4}\)</span>. The R code below shows a pictorial version of how one sample is generated.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="sampling.html#cb54-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)   <span class="co">#to reproduce</span></span>
-<span id="cb54-2"><a href="sampling.html#cb54-2" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>         <span class="co">#set M</span></span>
-<span id="cb54-3"><a href="sampling.html#cb54-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)    <span class="co">#sample Y ~ Q</span></span>
-<span id="cb54-4"><a href="sampling.html#cb54-4" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) <span class="co">#compute pi(y)</span></span>
-<span id="cb54-5"><a href="sampling.html#cb54-5" tabindex="-1"></a>k <span class="ot">&lt;-</span> p<span class="sc">/</span>(M<span class="sc">*</span><span class="dv">1</span>)     <span class="co">#compute k</span></span>
-<span id="cb54-6"><a href="sampling.html#cb54-6" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)    <span class="co">#sample U ~ U[0, 1]</span></span>
-<span id="cb54-7"><a href="sampling.html#cb54-7" tabindex="-1"></a><span class="fu">ifelse</span>(u <span class="sc">&lt;</span> k, <span class="st">&#39;accept&#39;</span>, <span class="st">&#39;reject&#39;</span>) <span class="co">#Accept if  u &lt; k</span></span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="sampling.html#cb55-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)   <span class="co">#to reproduce</span></span>
+<span id="cb55-2"><a href="sampling.html#cb55-2" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span>         <span class="co">#set M</span></span>
+<span id="cb55-3"><a href="sampling.html#cb55-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)    <span class="co">#sample Y ~ Q</span></span>
+<span id="cb55-4"><a href="sampling.html#cb55-4" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) <span class="co">#compute pi(y)</span></span>
+<span id="cb55-5"><a href="sampling.html#cb55-5" tabindex="-1"></a>k <span class="ot">&lt;-</span> p<span class="sc">/</span>(M<span class="sc">*</span><span class="dv">1</span>)     <span class="co">#compute k</span></span>
+<span id="cb55-6"><a href="sampling.html#cb55-6" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)    <span class="co">#sample U ~ U[0, 1]</span></span>
+<span id="cb55-7"><a href="sampling.html#cb55-7" tabindex="-1"></a><span class="fu">ifelse</span>(u <span class="sc">&lt;</span> k, <span class="st">&#39;accept&#39;</span>, <span class="st">&#39;reject&#39;</span>) <span class="co">#Accept if  u &lt; k</span></span></code></pre></div>
 <pre><code>## [1] &quot;reject&quot;</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="sampling.html#cb56-1" tabindex="-1"></a><span class="co">#Create nice plot</span></span>
-<span id="cb56-2"><a href="sampling.html#cb56-2" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>)</span>
-<span id="cb56-3"><a href="sampling.html#cb56-3" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>a<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>a)</span>
-<span id="cb56-4"><a href="sampling.html#cb56-4" tabindex="-1"></a>c <span class="ot">&lt;-</span> M<span class="sc">*</span><span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(a))</span>
-<span id="cb56-5"><a href="sampling.html#cb56-5" tabindex="-1"></a><span class="fu">plot</span>(a, b, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, M), <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
-<span id="cb56-6"><a href="sampling.html#cb56-6" tabindex="-1"></a><span class="fu">lines</span>(a, c)</span>
-<span id="cb56-7"><a href="sampling.html#cb56-7" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> y,  <span class="at">y1 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) , </span>
-<span id="cb56-8"><a href="sampling.html#cb56-8" tabindex="-1"></a>          <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb56-9"><a href="sampling.html#cb56-9" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y,  <span class="at">y0 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y), <span class="at">x1 =</span> y, <span class="at">y1 =</span> M, <span class="at">lty =</span> <span class="dv">2</span>, </span>
-<span id="cb56-10"><a href="sampling.html#cb56-10" tabindex="-1"></a>          <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb56-11"><a href="sampling.html#cb56-11" tabindex="-1"></a><span class="fu">points</span>(<span class="at">x =</span> y, <span class="at">y =</span> u, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="sampling.html#cb57-1" tabindex="-1"></a><span class="co">#Create nice plot</span></span>
+<span id="cb57-2"><a href="sampling.html#cb57-2" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>)</span>
+<span id="cb57-3"><a href="sampling.html#cb57-3" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>a<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>a)</span>
+<span id="cb57-4"><a href="sampling.html#cb57-4" tabindex="-1"></a>c <span class="ot">&lt;-</span> M<span class="sc">*</span><span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(a))</span>
+<span id="cb57-5"><a href="sampling.html#cb57-5" tabindex="-1"></a><span class="fu">plot</span>(a, b, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, M), <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
+<span id="cb57-6"><a href="sampling.html#cb57-6" tabindex="-1"></a><span class="fu">lines</span>(a, c)</span>
+<span id="cb57-7"><a href="sampling.html#cb57-7" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> y,  <span class="at">y1 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) , </span>
+<span id="cb57-8"><a href="sampling.html#cb57-8" tabindex="-1"></a>          <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb57-9"><a href="sampling.html#cb57-9" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y,  <span class="at">y0 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y), <span class="at">x1 =</span> y, <span class="at">y1 =</span> M, <span class="at">lty =</span> <span class="dv">2</span>, </span>
+<span id="cb57-10"><a href="sampling.html#cb57-10" tabindex="-1"></a>          <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb57-11"><a href="sampling.html#cb57-11" tabindex="-1"></a><span class="fu">points</span>(<span class="at">x =</span> y, <span class="at">y =</span> u, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-25-1.png" width="672" />
 The plot also shows how the choices of <span class="math inline">\(M\)</span> and <span class="math inline">\(q\)</span> can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better <span class="math inline">\(q\)</span> to minimise this space.</p>
 </div>
@@ -352,10 +353,10 @@ The plot also shows how the choices of <span class="math inline">\(M\)</span> an
 <h3><span class="header-section-number">4.3.1</span> Rejection Sampling Efficiency<a href="sampling.html#rejection-sampling-efficiency" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Suppose we are using a rejection sampling algorithm to sample from <span class="math inline">\(f(y)\)</span> using the proposal distribution <span class="math inline">\(g(y)\)</span>. How good is our rejection sampling algorithm? What does it mean to be a ‘good’ rejection sampling algorithm. One measure of the efficiency of a sampler is, on average, how many samples to we need to generate until one is accepted.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-51" class="proposition"><strong>Proposition 4.1  </strong></span>The number of samples proposed in a rejection sampling algorithm before one is accepted is distributed geometrically with mean <span class="math inline">\(\frac{1}{M}\)</span>.</p>
+<p><span id="prp:unlabeled-div-53" class="proposition"><strong>Proposition 4.1  </strong></span>The number of samples proposed in a rejection sampling algorithm before one is accepted is distributed geometrically with mean <span class="math inline">\(\frac{1}{M}\)</span>.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-52" class="proof"><em>Proof</em>. </span>Given a proposed value <span class="math inline">\(y\)</span>, and let <span class="math inline">\(A\)</span> be the event of sample is accepted. The probability a sample is accepted, given it takes the value <span class="math inline">\(y\)</span> is
+<p><span id="unlabeled-div-54" class="proof"><em>Proof</em>. </span>Given a proposed value <span class="math inline">\(y\)</span>, and let <span class="math inline">\(A\)</span> be the event of sample is accepted. The probability a sample is accepted, given it takes the value <span class="math inline">\(y\)</span> is
 <span class="math display">\[
 A \mid y \sim \hbox{Bernoulli}\left(\frac{f(y)}{Mg(y)}\right).
 \]</span></p>
@@ -380,6 +381,10 @@ E(A) &amp; = E(E(A\mid y)) \\
 To generate a sample, we choose a rectangle at random – we might do this by sampling on the y-axis uniformly at random. We then sample uniformly at random within the rectangle. We accept the sample if it is ‘clearly’ in the box. By clearly, we mean that is is also contained in the rectangle above. If it is, not contained in the rectangle above, we generate a new uniform random number to accept or reject the sample.</p>
 Suppose the bottom right corner of the <span class="math inline">\(i^{th}\)</span> rectangle has coordinates <span class="math inline">\((x_i, y_i)\)</span>. The Ziggurat algorithm is
 <p>This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half.</p>
+</div>
+<div id="lab-1" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Lab<a href="sampling.html#lab-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1.</p>
 
 </div>
 </div>

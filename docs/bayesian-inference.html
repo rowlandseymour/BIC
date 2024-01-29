@@ -186,6 +186,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3.1" data-path="sampling.html"><a href="sampling.html#rejection-sampling-efficiency"><i class="fa fa-check"></i><b>4.3.1</b> Rejection Sampling Efficiency</a></li>
 </ul></li>
 <li class="chapter" data-level="4.4" data-path="sampling.html"><a href="sampling.html#ziggurat-sampling"><i class="fa fa-check"></i><b>4.4</b> Ziggurat Sampling</a></li>
+<li class="chapter" data-level="4.5" data-path="sampling.html"><a href="sampling.html#lab-1"><i class="fa fa-check"></i><b>4.5</b> Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>5</b> Markov Chain Monte Carlo</a>
 <ul>
@@ -386,7 +387,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <span id="cb27-12"><a href="bayesian-inference.html#cb27-12" tabindex="-1"></a>mu1       <span class="ot">&lt;-</span> sigma1.sq<span class="sc">*</span>(<span class="fu">sum</span>(y)<span class="sc">/</span>(sigma<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> mu0<span class="sc">/</span>(sigma0<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb27-13"><a href="bayesian-inference.html#cb27-13" tabindex="-1"></a></span>
 <span id="cb27-14"><a href="bayesian-inference.html#cb27-14" tabindex="-1"></a><span class="fu">c</span>(mu1, sigma1.sq) <span class="co">#output mean and variance</span></span></code></pre></div>
-<pre><code>## [1] 5.05375333 0.03333333</code></pre>
+<pre><code>## [1] 4.96957757 0.03333333</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bayesian-inference.html#cb29-1" tabindex="-1"></a><span class="co">#Create plot</span></span>
 <span id="cb29-2"><a href="bayesian-inference.html#cb29-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
 <span id="cb29-3"><a href="bayesian-inference.html#cb29-3" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(mu, <span class="at">mean =</span> mu1, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma1.sq))</span>
@@ -394,7 +395,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>The 95% credible interval for the population’s mean reaction time is</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="bayesian-inference.html#cb30-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), mu1, <span class="fu">sqrt</span>(sigma1.sq))</span></code></pre></div>
-<pre><code>## [1] 4.695915 5.411592</code></pre>
+<pre><code>## [1] 4.611739 5.327416</code></pre>
 </div>
 <p>When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.</p>
 <div class="definition">
@@ -405,7 +406,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <h2><span class="header-section-number">3.5</span> Hierarchical Models<a href="bayesian-inference.html#hierarchical-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In many modelling problems, there will be multiple parameters each related to one another. These parameters may be directly related to the model, or they may be parameters we introduce through prior distributions. We can form a hierarchy of these parameters, from closest to further from the data, to construct our model.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-34" class="example"><strong>Example 3.5  </strong></span>Let’s consider <a href="bayesian-inference.html#exm:exponential">3.3</a> again. We have some data <span class="math inline">\(\boldsymbol{y}\)</span> that are assumed to have been generated from an Exponential distribution with rate parameter <span class="math inline">\(\lambda\)</span>. We placed an Exponential prior distribution with rate <span class="math inline">\(\gamma\)</span> on <span class="math inline">\(\lambda\)</span> and the posterior distribution was <span class="math inline">\(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(10, 95 + \gamma)\)</span>.</p>
+<p><span id="exm:unlabeled-div-34" class="example"><strong>Example 3.5  </strong></span>Let’s consider <a href="bayesian-inference.html#exm:exponential">3.3</a> again. We have some data <span class="math inline">\(\boldsymbol{y}\)</span> that are assumed to have been generated from an Exponential distribution with rate parameter <span class="math inline">\(\lambda\)</span>. We placed an Exponential prior distribution with rate <span class="math inline">\(\gamma\)</span> on <span class="math inline">\(\lambda\)</span> and the posterior distribution was <span class="math inline">\(\lambda \mid \boldsymbol{y} \sim \textrm{Gamma}(11, 95 + \gamma)\)</span>.</p>
 <p>In that example, we discussed how the choice of <span class="math inline">\(\gamma\)</span> can affect the posterior distribution and conclusions presented to the company. One option is to place a prior distribution on <span class="math inline">\(\gamma\)</span> – a hyperprior distribution. The hierachy formed is
 <span class="math display">\[\begin{align*}
 \boldsymbol{y} \mid \lambda &amp;\sim \hbox{Exp}(\lambda) &amp; \textrm{(likelihood)} \\
@@ -415,13 +416,13 @@ The posterior mean is partially defined through the weighted average of the popu
 By Bayes’ theorem, we can write the posterior distribution as
 <span class="math display">\[\begin{align*}
 \pi(\lambda, \gamma \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid \lambda)\pi(\lambda \mid \gamma)\pi(\gamma)\\
-&amp;\propto \lambda^{11}e^{-\lambda(95 + \gamma)}\nu e^{-\nu\gamma}.
+&amp;\propto \lambda^{10}e^{-\lambda(95 + \gamma)}\nu e^{-\nu\gamma}.
 \end{align*}\]</span></p>
 <p>To derive the full conditional distributions, we only consider the terms that depends on the parameters we are interested in. The full conditional distribution for <span class="math inline">\(\lambda\)</span> is
 <span class="math display">\[
-\pi(\lambda \mid \boldsymbol{y}, \,\gamma) \propto \lambda^{11}e^{-\lambda(95 + \gamma)}.
+\pi(\lambda \mid \boldsymbol{y}, \,\gamma) \propto \lambda^{10}e^{-\lambda(95 + \gamma)}.
 \]</span>
-This is unchanged and shows that <span class="math inline">\(\lambda \mid \boldsymbol{y}, \gamma \sim \textrm{Gamma}(10, 95 + \gamma)\)</span>. The full conditional distribution for <span class="math inline">\(\gamma\)</span> is
+This is unchanged and shows that <span class="math inline">\(\lambda \mid \boldsymbol{y}, \gamma \sim \textrm{Gamma}(11, 95 + \gamma)\)</span>. The full conditional distribution for <span class="math inline">\(\gamma\)</span> is
 <span class="math display">\[
 \pi(\gamma \mid \boldsymbol{y}, \,\lambda) \propto e^{-\nu\gamma}.
 \]</span>
@@ -597,8 +598,8 @@ By Bayes’ theorem, the posterior distribution is given by
 \]</span>
 The likelihood function is given by
 <span class="math display">\[\begin{align*}
-\pi(\boldsymbol{y} \mid \lambda) &amp;= \prod_{i=1}^50 \frac{e^{-\lambda}\lambda^{y_i}}{y_i!}\\
-&amp;= \frac{e^{-50\lambda}\lambda^{\sum y_i}}{\prod_{i=1}^50 y_i!}
+\pi(\boldsymbol{y} \mid \lambda) &amp;= \prod_{i=1}^{50} \frac{e^{-\lambda}\lambda^{y_i}}{y_i!}\\
+&amp;= \frac{e^{-50\lambda}\lambda^{\sum y_i}}{\prod_{i=1}^{50} y_i!}
 \end{align*}\]</span></p>
 <p>R has a set of inbuilt functions for working with the Poisson distribution so we can rely on those to write functions for the likelihood and loglikelihood.</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="bayesian-inference.html#cb43-1" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="fl">0.01</span>) <span class="co">#grid of lambda values</span></span>
@@ -634,9 +635,10 @@ The prior distribution can be plotted by</p>
 \]</span>
 There is no closed form for this distribution and it is not that nice to work with. But with R, we can easily evaluate the posterior distribution at a grid of points.</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="bayesian-inference.html#cb47-1" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> prior<span class="sc">*</span>likelihood</span>
-<span id="cb47-2"><a href="bayesian-inference.html#cb47-2" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> posterior<span class="sc">/</span><span class="fu">sum</span>(posterior) <span class="co">#normalise</span></span>
-<span id="cb47-3"><a href="bayesian-inference.html#cb47-3" tabindex="-1"></a><span class="fu">plot</span>(lambda, posterior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(lambda), </span>
-<span id="cb47-4"><a href="bayesian-inference.html#cb47-4" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;posterior density&quot;</span>)</span></code></pre></div>
+<span id="cb47-2"><a href="bayesian-inference.html#cb47-2" tabindex="-1"></a>integrating.factor <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fl">0.01</span><span class="sc">*</span>(posterior[<span class="dv">1</span>] <span class="sc">+</span> posterior[<span class="dv">1001</span>] <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">sum</span>(posterior[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1001</span>)])) <span class="co">#Using trapezium rule</span></span>
+<span id="cb47-3"><a href="bayesian-inference.html#cb47-3" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> posterior<span class="sc">/</span>integrating.factor <span class="co">#normalise</span></span>
+<span id="cb47-4"><a href="bayesian-inference.html#cb47-4" tabindex="-1"></a><span class="fu">plot</span>(lambda, posterior, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(lambda), </span>
+<span id="cb47-5"><a href="bayesian-inference.html#cb47-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;posterior density&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p>We can now visually inspect the posterior distribution and see that it has a strong peak around 4. One important statistic is the <strong>maximum a posteriori estimation</strong> or MAP estimate, this is the mode of the posterior distribution and it is a similar principle to the maximum likelihood estimate.</p>
 <p>We can compute this using the command</p>
@@ -652,7 +654,19 @@ There is no closed form for this distribution and it is not that nice to work wi
 <p>The data is given by</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="bayesian-inference.html#cb50-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.95</span>, <span class="fl">1.46</span>, <span class="fl">4.81</span>, <span class="fl">1.52</span>, <span class="fl">4.24</span>, <span class="fl">3.00</span>, <span class="fl">0.46</span>, <span class="fl">2.27</span>, <span class="fl">1.76</span>, <span class="fl">0.41</span>)</span></code></pre></div>
 </div>
-<p>By writing an R function to evaluate the likelihood function, evaute the posterior distribution for <span class="math inline">\(\lambda\)</span> over a grid of points.</p>
+<p>By writing an R function to evaluate the likelihood function, evaluate the posterior distribution for <span class="math inline">\(\lambda\)</span> over a grid of points.</p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-46" class="exercise"><strong>Exercise 3.3  </strong></span>Suppose you have <span class="math inline">\(X_1, ..., X_N \sim \hbox{Bin}(100, p)\)</span>. Using <span class="math inline">\(p \sim \hbox{Beta}(\alpha, \beta)\)</span> as the prior distribution, derive the posterior distribution and the posterior mean (Wikipedia is a helpful place for properties of distributions).</p>
+<ol style="list-style-type: decimal">
+<li>(Large data scenario) Fix <span class="math inline">\(\alpha = 2\)</span>, <span class="math inline">\(N = 150\)</span> and <span class="math inline">\(\Sigma x_i = 2,971\)</span>. Plot the prior and posterior distributions for different values of <span class="math inline">\(\beta\)</span> on the same figure. Plot the posterior mean against <span class="math inline">\(\beta \in (0, 10)\)</span>. Plot the prior mean against the posterior mean for <span class="math inline">\(\beta \in (0, 10)\)</span>.</li>
+<li>(Small data scenario) Fix <span class="math inline">\(\alpha = 2\)</span>, <span class="math inline">\(N = 10\)</span> and <span class="math inline">\(\Sigma x_i = 101\)</span> Plot the prior and posterior distributions for different values of <span class="math inline">\(\beta\)</span> on the same figure.Plot the posterior distribution for different values of <span class="math inline">\(\beta\)</span>. Plot the posterior mean against <span class="math inline">\(\beta \in (0, 10)\)</span>. Plot the prior mean against the posterior mean for <span class="math inline">\(\beta \in (0, 10)\)</span>.</li>
+</ol>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-47" class="exercise"><strong>Exercise 3.4  </strong></span>Code up the posterior distribution in question 4 of problem sheet 2 (the Pareto distribution). Set <span class="math inline">\(a = 1\)</span>, <span class="math inline">\(b = 2\)</span> and let the data be</p>
+<pre><code>y &lt;- c(0.71966737, 0.01349912, 0.21396869, 0.11983329, 0.23884887, 0.11191048, 0.28225739, 0.49056709, 0.22539346, 0.91335674)</code></pre>
+<p>Find the MAP estimate for <span class="math inline">\(\beta\)</span></p>
+</div>
 
 </div>
 </div>
