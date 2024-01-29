@@ -279,14 +279,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span id="def:Markov" class="definition"><strong>Definition 5.1  </strong></span>A sequence of random variables <span class="math inline">\(\{Y_1, Y_2, \ldots\}\)</span> is a <strong>Markov chain</strong> if <span class="math inline">\(\mathbb{P}(Y_{n+1} \mid Y_{n}, \ldots, Y_1) = \mathbb{P}(Y_{n+1} \mid Y_{n})\)</span>. That is that distribution of the next state <span class="math inline">\(Y_{n+1}\)</span> only depends on the current state <span class="math inline">\(Y_n\)</span> and not any previous states.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-52" class="definition"><strong>Definition 5.2  </strong></span>The probability of transitioning from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span> in a Markov chain is given by <span class="math inline">\(p_{ij}\)</span>. The <strong>transition matrix</strong> for a Markov chain with <span class="math inline">\(N\)</span> states is the <span class="math inline">\(N \times N\)</span> matrix <span class="math inline">\(P\)</span>, where the <span class="math inline">\(\{i, j\}^{th}\)</span> entry denoted by <span class="math inline">\(p_{ij}\)</span> is probability is moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span>.</p>
+<p><span id="def:unlabeled-div-53" class="definition"><strong>Definition 5.2  </strong></span>The probability of transitioning from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span> in a Markov chain is given by <span class="math inline">\(p_{ij}\)</span>. The <strong>transition matrix</strong> for a Markov chain with <span class="math inline">\(N\)</span> states is the <span class="math inline">\(N \times N\)</span> matrix <span class="math inline">\(P\)</span>, where the <span class="math inline">\(\{i, j\}^{th}\)</span> entry denoted by <span class="math inline">\(p_{ij}\)</span> is probability is moving from state <span class="math inline">\(i\)</span> to state <span class="math inline">\(j\)</span>.</p>
 </div>
 <p>These two properties make Markov chains nice to work with, especially the Markov property (Definition <a href="markov-chain-monte-carlo.html#def:Markov">5.1</a>). Two other important definitions are</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-53" class="definition"><strong>Definition 5.3  </strong></span>The <strong>period </strong>of a state <span class="math inline">\(i\)</span> is given by <span class="math inline">\(d_i = \textrm{gcd}\{n &gt; 0; p_{ii} &gt; 0 \}\)</span>. A state is <strong>aperiodic</strong> if <span class="math inline">\(d_i = 1\)</span>. An <strong>aperiodic chain</strong> is a chain where all states are a periodic.</p>
+<p><span id="def:unlabeled-div-54" class="definition"><strong>Definition 5.3  </strong></span>The <strong>period </strong>of a state <span class="math inline">\(i\)</span> is given by <span class="math inline">\(d_i = \textrm{gcd}\{n &gt; 0; p_{ii} &gt; 0 \}\)</span>. A state is <strong>aperiodic</strong> if <span class="math inline">\(d_i = 1\)</span>. An <strong>aperiodic chain</strong> is a chain where all states are a periodic.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-54" class="definition"><strong>Definition 5.4  </strong></span>A Markov chain is <strong>irreducible</strong> if there exists an <span class="math inline">\(n \in \mathbb{N}\)</span> such that <span class="math inline">\(\mathbb{P} (Y_n = i \mid Y_0 = j)\)</span> for all pairs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. In other words, it is possible to move from any state to any other state in a finite number of steps.</p>
+<p><span id="def:unlabeled-div-55" class="definition"><strong>Definition 5.4  </strong></span>A Markov chain is <strong>irreducible</strong> if there exists an <span class="math inline">\(n \in \mathbb{N}\)</span> such that <span class="math inline">\(\mathbb{P} (Y_n = i \mid Y_0 = j)\)</span> for all pairs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. In other words, it is possible to move from any state to any other state in a finite number of steps.</p>
 </div>
 <p>We can use these definitions to start working with distributions. Suppose, the state we start at is drawn from some distribution <span class="math inline">\(Y_1 \sim \boldsymbol{q}\)</span>. Then the distributions of the second state <span class="math inline">\(Y_2\)</span> depends on the distribution of <span class="math inline">\(Y_1\)</span> and the transition probabilities
 <span class="math display">\[
@@ -294,13 +294,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \]</span>
 If we denote the distribution of <span class="math inline">\(Y_2 \sim \boldsymbol{q}^{(2)}\)</span>, then we can write it in terms of the transition matrix <span class="math inline">\(\boldsymbol{q}^\prime = \boldsymbol{q}P\)</span>. Now suppose we would like the distribution of <span class="math inline">\(Y_3 \sim \boldsymbol{q}^{(3)}\)</span>, thanks to the Markov property, this is the distribution for <span class="math inline">\(Y_2\)</span> multiplied by the transition matrix, so <span class="math inline">\(Y_3 \sim qP^2\)</span>. Inductively, <span class="math inline">\(P_k \sim qP^{k-1}\)</span>. To use Markov chains to sample from distributions, we need to identify the Eigenvalues of the transition matrix.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-55" class="proposition"><strong>Proposition 5.1  </strong></span>A transition matrix <span class="math inline">\(P\)</span> always has at least one eigenvalue equal to one.</p>
+<p><span id="prp:unlabeled-div-56" class="proposition"><strong>Proposition 5.1  </strong></span>A transition matrix <span class="math inline">\(P\)</span> always has at least one eigenvalue equal to one.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-56" class="proof"><em>Proof</em>. </span>The columns of <span class="math inline">\(P\)</span> sum to 1 as they are probability distributions. Therefore, <span class="math inline">\(1\)</span> is an eigenvalue.</p>
+<p><span id="unlabeled-div-57" class="proof"><em>Proof</em>. </span>The columns of <span class="math inline">\(P\)</span> sum to 1 as they are probability distributions. Therefore, <span class="math inline">\(1\)</span> is an eigenvalue.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-57" class="definition"><strong>Definition 5.5  </strong></span>If a transition matrix <span class="math inline">\(P\)</span> has a unique Eigenvalue that takes the value 1, there is a unique distribution <span class="math inline">\(\pi\)</span> such that
+<p><span id="def:unlabeled-div-58" class="definition"><strong>Definition 5.5  </strong></span>If a transition matrix <span class="math inline">\(P\)</span> has a unique Eigenvalue that takes the value 1, there is a unique distribution <span class="math inline">\(\pi\)</span> such that
 <span class="math display">\[
 \pi P = \pi.
 \]</span>
@@ -314,20 +314,20 @@ This distribution <span class="math inline">\(\pi\)</span>, is known as the <str
 <li><p>that there exists a unique distribution <span class="math inline">\(\pi\)</span> such that <span class="math inline">\(\pi P = \pi\)</span>.</p></li>
 </ol>
 <div class="example">
-<p><span id="exm:unlabeled-div-58" class="example"><strong>Example 5.2  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:King">5.1</a>, the King wanted to visit the islands according to how large they are. We can think of the islands as the states and the stationary distribution as <span class="math inline">\(p(Y = i) \propto i\)</span>. The eccentric method the King used allowed him to construct a transition matrix for an aperiodic Markov chain. He also never visited islands regularly using this method.</p>
+<p><span id="exm:unlabeled-div-59" class="example"><strong>Example 5.2  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:King">5.1</a>, the King wanted to visit the islands according to how large they are. We can think of the islands as the states and the stationary distribution as <span class="math inline">\(p(Y = i) \propto i\)</span>. The eccentric method the King used allowed him to construct a transition matrix for an aperiodic Markov chain. He also never visited islands regularly using this method.</p>
 </div>
 <p>When designing a Markov chain, it is usually straightforward to design one that meets conditions one and two. Condition three is more difficult to prove, but for some chains it is possible to show they satisfy detailed balance.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-59" class="definition"><strong>Definition 5.6  </strong></span>The Markov chain with transition matrix <span class="math inline">\(P\)</span> satisfies the <strong>detailed balance</strong> equation with respect to the distribution <span class="math inline">\(\pi\)</span> if
+<p><span id="def:unlabeled-div-60" class="definition"><strong>Definition 5.6  </strong></span>The Markov chain with transition matrix <span class="math inline">\(P\)</span> satisfies the <strong>detailed balance</strong> equation with respect to the distribution <span class="math inline">\(\pi\)</span> if
 <span class="math display">\[
 \pi_i p_{ij} = \pi_j p_{ji}.
 \]</span></p>
 </div>
 <div class="theorem">
-<p><span id="thm:unlabeled-div-60" class="theorem"><strong>Theorem 5.1  (Detailed Balance) </strong></span>Let <span class="math inline">\(P\)</span> be a transition matrix that satisfies detailed balance with respect to the distribution <span class="math inline">\(\pi\)</span>. Then <span class="math inline">\(\pi P = \pi\)</span>.</p>
+<p><span id="thm:unlabeled-div-61" class="theorem"><strong>Theorem 5.1  (Detailed Balance) </strong></span>Let <span class="math inline">\(P\)</span> be a transition matrix that satisfies detailed balance with respect to the distribution <span class="math inline">\(\pi\)</span>. Then <span class="math inline">\(\pi P = \pi\)</span>.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-61" class="proof"><em>Proof</em>. </span>The <span class="math inline">\(j^{th}\)</span> row of <span class="math inline">\(\pi P\)</span> is
+<p><span id="unlabeled-div-62" class="proof"><em>Proof</em>. </span>The <span class="math inline">\(j^{th}\)</span> row of <span class="math inline">\(\pi P\)</span> is
 <span class="math display">\[\begin{align*}
 \sum_{i} \pi_i p_{ij} &amp; = \sum_{i} \pi_j p_{ji} \quad \textrm{(detailed balance)} \\
 &amp; = \pi_j \sum_{i} p_{ji} \\
@@ -362,10 +362,10 @@ As the the denominator doesn’t depend on <span class="math inline">\(\theta\)<
 \]</span>
 This is the likelihood ratio multiplied by the prior ratio.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-62" class="proposition"><strong>Proposition 5.2  </strong></span>The Markov chain generated by the Metropolis-Hastings algorithm satisfies detailed balance with respect to the posterior distribution.</p>
+<p><span id="prp:unlabeled-div-63" class="proposition"><strong>Proposition 5.2  </strong></span>The Markov chain generated by the Metropolis-Hastings algorithm satisfies detailed balance with respect to the posterior distribution.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-63" class="proof"><em>Proof</em>. </span>Denote the current state <span class="math inline">\(\theta\)</span> and the proposed state <span class="math inline">\(\theta&#39;\)</span>. We would like to show
+<p><span id="unlabeled-div-64" class="proof"><em>Proof</em>. </span>Denote the current state <span class="math inline">\(\theta\)</span> and the proposed state <span class="math inline">\(\theta&#39;\)</span>. We would like to show
 <span class="math display">\[
 \pi(\theta \mid \boldsymbol{y}) \pi(\theta&#39;\mid\theta) = \pi(\theta&#39; \mid \boldsymbol{y}) \pi(\theta\mid\theta&#39;).
 \]</span>
@@ -485,7 +485,7 @@ for(j in 1:M){
 }</code></pre>
 <p>The sequence <span class="math inline">\(\left\{\theta_0^{(0)},\ldots, \theta_N^{(0)}\right\}, \left\{\theta_0^{(1)},\ldots, \theta_N^{(1)}\right\}, \ldots, \left\{\theta_0^{(M)},\ldots, \theta_N^{(M)}\right\}\)</span> form a Markov chain. They also form a series of samples from the posterior distribution. However it is important to note that by construction, these samples are not independent since each realisation depends on the previous sample and we must take this into account when doing estimation.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-64" class="example"><strong>Example 5.4  </strong></span>Recall the lab in the previous chapter where we derived the posterior distribution for the mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span> for normally distributed data. The marginal posterior distributions are given by
+<p><span id="exm:unlabeled-div-65" class="example"><strong>Example 5.4  </strong></span>Recall the lab in the previous chapter where we derived the posterior distribution for the mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span> for normally distributed data. The marginal posterior distributions are given by
 <span class="math display">\[
 \mu \mid \boldsymbol{y}, \sigma^2 \sim N(\mu_1, \sigma^2_1),
 \]</span></p>
@@ -508,13 +508,13 @@ for(j in 1:M){
 <p>When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well. For our purposes, mixing well means the chain is exploring the space of possible values of <span class="math inline">\(\theta\)</span> effectively and effectively and not getting stuck on the same value for a long time.</p>
 <p>A key way of doing this is by looking at the trace plot, which is a time series of the posterior samples simulated by the algorithm. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn’t look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-65" class="definition"><strong>Definition 5.7  </strong></span>The <strong>burn-in period</strong> is the number of iterations the Markov chain takes to reach the stationary distribution.</p>
+<p><span id="def:unlabeled-div-66" class="definition"><strong>Definition 5.7  </strong></span>The <strong>burn-in period</strong> is the number of iterations the Markov chain takes to reach the stationary distribution.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-66" class="definition"><strong>Definition 5.8  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
+<p><span id="def:unlabeled-div-67" class="definition"><strong>Definition 5.8  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-67" class="example"><strong>Example 5.5  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:norm">5.3</a>, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge.</p>
+<p><span id="exm:unlabeled-div-68" class="example"><strong>Example 5.5  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:norm">5.3</a>, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge.</p>
 <p>In a Metropolis-Hasting random walk algorithm, the proposal distribution often has a large impact on how well the Markov chain mixes. The variance, or step size, of the proposal distribution can be tuned to ensure the chain mixes well.</p>
 <p>The following two examples show poorly mixing Markov chains. The first is where the step size is too big and the chain frequently gets stuck for several hundred iterations.</p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="markov-chain-monte-carlo.html#cb68-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>

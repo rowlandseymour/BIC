@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] -0.689323418  0.824145133 -0.002340148  0.605296652  0.179419230
-##  [6]  0.143255400  0.906923922  0.435683180 -0.245673555 -0.153296436
+##  [1] -0.81459064 -0.53032753 -0.49182386 -0.98476408 -0.58553484  0.79510913
+##  [7] -0.08366620  0.03616259 -0.92604338 -0.37457339
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.90541866 0.03333333
+## [1] 4.85578403 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,14 +1339,16 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.547580 5.263257
+## [1] 4.497945 5.213623
 \end{verbatim}
 
 \end{example}
 
 When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.
 
+\begin{definition}
 If the prior distribution \(\pi(\theta)\) has the same distributional family as the posterior distribution \(\pi(\theta \mid \boldsymbol{y})\), then the prior distribution is a \textbf{conjugate prior distribution}.
+\end{definition}
 
 \hypertarget{hierarchical-models}{%
 \section{Hierarchical Models}\label{hierarchical-models}}
@@ -1735,6 +1737,1052 @@ The data is given by
 \end{exercise}
 
 By writing an R function to evaluate the likelihood function, evaute the posterior distribution for \(\lambda\) over a grid of points.
+
+\hypertarget{sampling}{%
+\chapter{Sampling}\label{sampling}}
+
+\hypertarget{uniform-random-numbers}{%
+\section{Uniform Random Numbers}\label{uniform-random-numbers}}
+
+What we won't be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is because computers aren't good at being random, they require algorithmic instructions. True random number generation often uses physical methods, such as the radioactive decay of atoms, or atmospheric noise.
+
+Throughout this module, we will be using R's built in random number generation. This is a pseudo random number generator that has excellent random properties, but will eventually repeat. A basic random number generation tool that we will repeatedly use in the module involves sampling from a uniform distribution on the unit interval, which can be done in R using
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.3370351
+\end{verbatim}
+
+\hypertarget{inverse-transform-sampling}{%
+\section{Inverse Transform Sampling}\label{inverse-transform-sampling}}
+
+Suppose we want to sample from a non-uniform one-dimensional distribution. The inverse transform theorem allows us to do this using the distribution's inverse function.
+
+\begin{definition}
+Let \(X\) be a real-valued random variable with a distribution function \(F\). Then the \textbf{inverse function} of a distribution function \(F\), denoted \(F^{-1}\), is defined for all \(u \in (0, 1)\) by
+\[
+F^{-1}(u) = \inf\{x \in\mathbb{R} : F(x) > u\}.
+\]
+\end{definition}
+
+\begin{theorem}
+Let \(F :\mathbb{R} \rightarrow [0, 1]\) be a continuous distribution function, \(U \sim U[0, 1]\) and \(Y = F^{-1}(U)\). Then \(Y\) has distribution function \(F\).
+\end{theorem}
+
+\begin{proof}
+We have
+\[
+\mathbb{P}(Y \leq a) = \mathbb{P}(F^{-1}(U) \leq a) = \mathbb{P}(\inf\{x \in\mathbb{R} : F(x) > u\} \leq a). 
+\]
+Since \(\inf\{x \in\mathbb{R} : F(x) > u\} \leq a\) can only hold if \(F(a) \geq U\), we have
+\[
+\mathbb{P}(Y \leq a)  = \mathbb{P}(F(a)\geq U)
+\]
+As \(U \sim U[0, 1]\), we have \(\mathbb{P}(F(a)\geq U) = F(a)\).
+\end{proof}
+
+This theorem says that if we have a random variable \(U \sim U[0, 1]\) and we want to get \(Y \sim F\), then we can use \(F^{-1}(U)\). Viewing this theorem graphically can provide a much more intuitive understanding.
+
+\begin{example}
+We would like to sample from an exponential distribution with rate \(\lambda\), i.e.~\(Y ~ \sim \hbox{Exp}(\lambda)\). The density function is given by
+
+\[
+\pi(y \mid \lambda) = \begin{cases} 
+      \lambda e^{\lambda y} & y \geq 0 \\
+    0  & \text{otherwise.}
+   \end{cases}
+\]
+
+The distribution function can be derived by
+\begin{align*}
+F(y \mid \lambda) &= \int_0^y \lambda e^{\lambda t}\,dt \\
+& =  1 - e^{\lambda y}.
+\end{align*}
+Finally, the inverse function is given by
+\[
+F^{-1}(y \mid \lambda) = -\frac{1}{\lambda}\log(1-y).  
+\]
+Therefore, if \(U \sim U[0, 1]\), then it follows that \(-\frac{1}{\lambda}log(1-U) \sim \hbox{Exp}(\lambda)\).
+
+The R code below generates a plot to show this (with \(\lambda = 0.5\)). We can plot the CDF for most one parameter distributions straightforwardly. We can think of this theorem as allowing us to sample a point on the y-axis and then computing the quantile this corresponds to.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{12345}\NormalTok{) }\CommentTok{\# to reproduce}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.01}\NormalTok{) }\CommentTok{\#Show on the interval [0, 5]}
+\NormalTok{f }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5}\SpecialCharTok{*}\NormalTok{y)    }\CommentTok{\#Construct the cumulative density }
+                        \CommentTok{\#function (CDF)}
+\FunctionTok{plot}\NormalTok{(y, f, }\AttributeTok{type =}\StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"y"}\NormalTok{, }\AttributeTok{ylab=} \StringTok{"CDF"}\NormalTok{)}
+
+\CommentTok{\#Sample u}
+\NormalTok{u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+\CommentTok{\#Get the corresponding y value}
+\NormalTok{f.inv }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{2}\SpecialCharTok{*}\FunctionTok{log}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{u)}
+
+\CommentTok{\#plot }
+\FunctionTok{segments}\NormalTok{(}\AttributeTok{x0 =} \DecValTok{0}\NormalTok{, }\AttributeTok{y0 =}\NormalTok{ u, }\AttributeTok{x1 =}\NormalTok{ f.inv, }\AttributeTok{y1 =}\NormalTok{ u, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\AttributeTok{x0 =}\NormalTok{ f.inv, }\AttributeTok{y0 =} \DecValTok{0}\NormalTok{, }\AttributeTok{x1 =}\NormalTok{ f.inv, }\AttributeTok{y1 =}\NormalTok{ u, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =}\NormalTok{ f.inv, }\AttributeTok{y =} \SpecialCharTok{{-}}\FloatTok{0.01}\NormalTok{, }\FunctionTok{expression}\NormalTok{(F[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{](U)), }\AttributeTok{col =} \DecValTok{4}\NormalTok{)}
+\FunctionTok{text}\NormalTok{(}\AttributeTok{x =} \SpecialCharTok{{-}}\NormalTok{.}\DecValTok{1}\NormalTok{, }\AttributeTok{y =}\NormalTok{ u, }\StringTok{"U"}\NormalTok{, }\AttributeTok{col =} \DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-23-1.pdf}
+\end{example}
+
+\hypertarget{rejection-sampling}{%
+\section{Rejection Sampling}\label{rejection-sampling}}
+
+We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling works by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. The plot below shows an example from this. We would like to generate a sample from the distribution with the curved density function, which is challenging. Instead, we find a distribution whose density function bounds the one we are interested in a sample from that. In this case we can use the uniform distribution. Once we have generated our sample from he uniform distribution, we choose to accept or reject it based on the distribution we are interested in. In this case we reject it.
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-24-1.pdf}
+
+Suppose we want to sample from a density \(\pi\), but can only generate samples from a density \(q\). If there exists some constant \(c > 0\), such that \(\frac{\pi(y)}{q(y)} \leq c\) for all \(y\), then we can generate samples from \(p\) by
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Sampling \(Y \sim Q\)
+\item
+  Sampling \(U \sim U[0, 1]\)
+\item
+  Computing \(k = \frac{\pi(u)}{cq(y)}\)
+\item
+  Accepting \(y\) if \(U < k\) and rejecting otherwise.
+\end{enumerate}
+
+This says draw sample a point \(y\) according to the density \(q\). Draw a vertical line at \(y\) from the \(x\)-axis to \(cq(y)\). Sample uniformly on this line. If the uniformly random sample is below \(q\), then accept it. Otherwise, reject it. The theory behind this is as follows. Suppose we sample some point y according to this algorithm and we want to work out its density \(f\), then
+\[
+f(y) \propto q(y)\pi(U < k) = q(y)\frac{\pi(u)}{cq(y)} = \frac{\pi(u)}{c}.
+\]
+Therefore, \(f = p\).
+
+\begin{example}
+Suppose we want to sample from a distribution that has the density
+\[
+\pi(y) = \begin{cases}
+\frac{3}{4}y(2-y), \qquad y \in [0, 2] \\
+0, \qquad \textrm{otherwise}
+\end{cases}.
+\]
+This has a maximum at \(\frac{3}{4}\). We choose \(p \sim U[0, 1]\) and \(c = \frac{3}{4}\). The R code below shows a pictorial version of how one sample is generated.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1234}\NormalTok{)   }\CommentTok{\#to reproduce}
+\NormalTok{M }\OtherTok{\textless{}{-}} \DecValTok{3}\SpecialCharTok{/}\DecValTok{4}         \CommentTok{\#set M}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)    }\CommentTok{\#sample Y \textasciitilde{} Q}
+\NormalTok{p }\OtherTok{\textless{}{-}} \DecValTok{3}\SpecialCharTok{/}\DecValTok{4}\SpecialCharTok{*}\NormalTok{y}\SpecialCharTok{*}\NormalTok{(}\DecValTok{2}\SpecialCharTok{{-}}\NormalTok{y) }\CommentTok{\#compute pi(y)}
+\NormalTok{k }\OtherTok{\textless{}{-}}\NormalTok{ p}\SpecialCharTok{/}\NormalTok{(M}\SpecialCharTok{*}\DecValTok{1}\NormalTok{)     }\CommentTok{\#compute k}
+\NormalTok{u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)    }\CommentTok{\#sample U \textasciitilde{} U[0, 1]}
+\FunctionTok{ifelse}\NormalTok{(u }\SpecialCharTok{\textless{}}\NormalTok{ k, }\StringTok{\textquotesingle{}accept\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}reject\textquotesingle{}}\NormalTok{) }\CommentTok{\#Accept if  u \textless{} k}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "reject"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Create nice plot}
+\NormalTok{a }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, }\FloatTok{0.01}\NormalTok{)}
+\NormalTok{b }\OtherTok{\textless{}{-}} \DecValTok{3}\SpecialCharTok{/}\DecValTok{4}\SpecialCharTok{*}\NormalTok{a}\SpecialCharTok{*}\NormalTok{(}\DecValTok{2}\SpecialCharTok{{-}}\NormalTok{a)}
+\NormalTok{c }\OtherTok{\textless{}{-}}\NormalTok{ M}\SpecialCharTok{*}\FunctionTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FunctionTok{length}\NormalTok{(a))}
+\FunctionTok{plot}\NormalTok{(a, b, }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, M), }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(a, c)}
+\FunctionTok{segments}\NormalTok{(}\AttributeTok{x0 =}\NormalTok{ y, }\AttributeTok{y0 =} \DecValTok{0}\NormalTok{, }\AttributeTok{x1 =}\NormalTok{ y,  }\AttributeTok{y1 =}\DecValTok{3}\SpecialCharTok{/}\DecValTok{4}\SpecialCharTok{*}\NormalTok{y}\SpecialCharTok{*}\NormalTok{(}\DecValTok{2}\SpecialCharTok{{-}}\NormalTok{y) , }
+          \AttributeTok{lty =} \DecValTok{2}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{segments}\NormalTok{(}\AttributeTok{x0 =}\NormalTok{ y,  }\AttributeTok{y0 =}\DecValTok{3}\SpecialCharTok{/}\DecValTok{4}\SpecialCharTok{*}\NormalTok{y}\SpecialCharTok{*}\NormalTok{(}\DecValTok{2}\SpecialCharTok{{-}}\NormalTok{y), }\AttributeTok{x1 =}\NormalTok{ y, }\AttributeTok{y1 =}\NormalTok{ M, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{, }
+          \AttributeTok{col =} \DecValTok{2}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{points}\NormalTok{(}\AttributeTok{x =}\NormalTok{ y, }\AttributeTok{y =}\NormalTok{ u, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-25-1.pdf}
+The plot also shows how the choices of \(M\) and \(q\) can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better \(q\) to minimise this space.
+\end{example}
+
+\hypertarget{rejection-sampling-efficiency}{%
+\subsection{Rejection Sampling Efficiency}\label{rejection-sampling-efficiency}}
+
+Suppose we are using a rejection sampling algorithm to sample from \(f(y)\) using the proposal distribution \(g(y)\). How good is our rejection sampling algorithm? What does it mean to be a `good' rejection sampling algorithm. One measure of the efficiency of a sampler is, on average, how many samples to we need to generate until one is accepted.
+
+\begin{proposition}
+The number of samples proposed in a rejection sampling algorithm before one is accepted is distributed geometrically with mean \(\frac{1}{M}\).
+\end{proposition}
+
+\begin{proof}
+Given a proposed value \(y\), and let \(A\) be the event of sample is accepted. The probability a sample is accepted, given it takes the value \(y\) is
+\[
+A \mid y \sim \hbox{Bernoulli}\left(\frac{f(y)}{Mg(y)}\right).
+\]
+
+By the tower property
+\begin{align*}
+E(A) & = E(E(A\mid y)) \\
+& = E\left(\frac{f(y)}{Mg(y)}\right) \\
+& = \int \frac{f(y)}{Mg(y)} g(y) dy \\
+& = \frac{1}{M}\int f(y) dy \\
+& = \frac{1}{M}.
+\end{align*}
+
+Therefore, the number of samples proposed before one is accepted is distributed geometrically with mean \(\frac{1}{M}\).
+\end{proof}
+
+\hypertarget{ziggurat-sampling}{%
+\section{Ziggurat Sampling}\label{ziggurat-sampling}}
+
+The final method we are going to look at in this chapter is Ziggurat sampling. It is used to sample from a \(N(0, 1)\) distribution using samples from a \(U(0, 1)\) distribution. A Ziggurat is a kind of stepped pyramid. To start the sampling algorithm, we approximate the normal distribution by a series of horizontal rectangles, each with the same area. An example of this is shown below.
+
+\begin{verbatim}
+## Warning in table$x <- c(2.093446, 2.093446, 1.676493, 1.393368, 1.100918, :
+## Coercing LHS to a list
+\end{verbatim}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-26-1.pdf}
+To generate a sample, we choose a rectangle at random -- we might do this by sampling on the y-axis uniformly at random. We then sample uniformly at random within the rectangle. We accept the sample if it is `clearly' in the box. By clearly, we mean that is is also contained in the rectangle above. If it is, not contained in the rectangle above, we generate a new uniform random number to accept or reject the sample.
+
+Suppose the bottom right corner of the \(i^{th}\) rectangle has coordinates \((x_i, y_i)\). The Ziggurat algorithm is
+
+\begin{enumerate}
+\item Sample a rectangle $i$ uniformly at random
+\item Sample $u_0 \sim U[0, 1]$ and set $x = u_0x_i$
+\item If $x < x_{i+1}$ accept the sample
+\item Sample $u_1 \sim U[0, 1]$ and set $y = y_i + u_1(y_{i+1} − y_i)$
+\item If $y < f(y)$, where $f$ is the density function of a standard normal distribution, then accept the sample.
+\end{enumerate}
+
+This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half.
+
+\hypertarget{markov-chain-monte-carlo}{%
+\chapter{Markov Chain Monte Carlo}\label{markov-chain-monte-carlo}}
+
+Markov Chain Monte Carlo (MCMC) is a class of algorithms that produce samples from a probability distribution. These methods combine the idea of rejection sampling with the theory of Markov chains. Before we set out the theory of Markov chains, we'll go through an example to show how MCMC works.
+
+\begin{example}
+\protect\hypertarget{exm:King}{}\label{exm:King}(\href{https://xcelab.net/rm/statistical-rethinking/}{Adapted from Statistical Rethinking \S 9}) Consider an eccentric King whose kingdom consists of a ring of 10 islands. Directly north is island one, the smallest island. Going clockwise around the archipelago, next is island two, which is twice the size of island one, then island three, which is three times as large as island one. Finally, island 10 is next to island one and ten times as large.
+
+The King wanted to visit all of his islands, but spending time on each one according to its size. That is he should spend the most time on island ten and the least on island one. Being climate conscious, he also decided that flying from one side of the archipelago to the other was not allowed. Instead, he would only sail from one island to either of its neighbors. So from island one, he could reach islands two and ten.
+
+He decided to travel according to these rules:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  At the end of each week, he decides to stay on the same island or move to a neighboring island according to a coin toss. If it's heads he proposes moving clockwise, and tails anti-clockwise. The island he is considering moving to is called the proposal island.
+\item
+  To decided if he is going to move to the proposal island, the King counts out a number of shells equal to the number of size of the island. So if island five is the proposal island, he counts out five shells. He then counts out a number of stones equal to the size of the current island.
+\item
+  If the number of seashells is greater than the number of stones, he moves to the proposed island. If the number of seashells is less than the number of stones, he takes a different strategy. He discards the number of stones equal to the number of seashells. So if there are six stone and five seashells, he ends up with 6-5=1 stones. He then places the stones and seashells into a bag a chooses one at random. If he picks a seashell, he moves to the proposed island, otherwise if he picks a shell, he stays put.
+\end{enumerate}
+
+This is a complex way of moving around, but it produces the required result; the time he spends on each island is proportionate to the size of the island. The code below shows an example of this over 10,000 weeks.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{weeks }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{island }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(weeks)}
+\NormalTok{current }\OtherTok{\textless{}{-}} \DecValTok{10}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{weeks)\{}
+  \DocumentationTok{\#\# record current position}
+\NormalTok{  island[i] }\OtherTok{\textless{}{-}}\NormalTok{ current}
+  
+  \CommentTok{\#Flip a coin to move to a propose a new island}
+\NormalTok{  proposed }\OtherTok{\textless{}{-}}\NormalTok{ current }\SpecialCharTok{+} \FunctionTok{sample}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{), }\AttributeTok{size =} \DecValTok{1}\NormalTok{)}
+  
+  \CommentTok{\#Ensure he loops round the island}
+  \ControlFlowTok{if}\NormalTok{(proposed }\SpecialCharTok{\textless{}} \DecValTok{1}\NormalTok{) }
+\NormalTok{    proposed }\OtherTok{\textless{}{-}} \DecValTok{10}
+  \ControlFlowTok{if}\NormalTok{(proposed }\SpecialCharTok{\textgreater{}} \DecValTok{10}\NormalTok{)}
+\NormalTok{    proposed }\OtherTok{\textless{}{-}} \DecValTok{1}
+  
+  \CommentTok{\#Decide to move}
+\NormalTok{  p }\OtherTok{\textless{}{-}}\NormalTok{ proposed}\SpecialCharTok{/}\NormalTok{current}
+\NormalTok{  u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{(u }\SpecialCharTok{\textless{}}\NormalTok{ p)}
+\NormalTok{    current }\OtherTok{\textless{}{-}}\NormalTok{ proposed}
+\NormalTok{\}}
+
+\CommentTok{\#Plot results}
+\FunctionTok{plot}\NormalTok{(island, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Week"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Island"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-27-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{barplot}\NormalTok{(}\FunctionTok{table}\NormalTok{(island)}\SpecialCharTok{/}\NormalTok{weeks, }\AttributeTok{xlab =} \StringTok{"Island"}\NormalTok{, }
+        \AttributeTok{ylab =} \StringTok{"Proportion of time"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-27-2.pdf}
+\end{example}
+
+We can recognise several different statistical principles in this example. The King decides to move islands dependent on where he is currently, not based on where he has been previously (Markov property). He proposes an island to move to and accepts or rejects this decision based on some distribution (rejection principle). We are now going to describe some of the properties of Markov chains, including the Markov property.
+
+\hypertarget{properties-of-markov-chains}{%
+\section{Properties of Markov Chains}\label{properties-of-markov-chains}}
+
+\begin{definition}
+\protect\hypertarget{def:Markov}{}\label{def:Markov}A sequence of random variables \(\{Y_1, Y_2, \ldots\}\) is a \textbf{Markov chain} if \(\mathbb{P}(Y_{n+1} \mid Y_{n}, \ldots, Y_1) = \mathbb{P}(Y_{n+1} \mid Y_{n})\). That is that distribution of the next state \(Y_{n+1}\) only depends on the current state \(Y_n\) and not any previous states.
+\end{definition}
+
+\begin{definition}
+The probability of transitioning from state \(i\) to state \(j\) in a Markov chain is given by \(p_{ij}\). The \textbf{transition matrix} for a Markov chain with \(N\) states is the \(N \times N\) matrix \(P\), where the \(\{i, j\}^{th}\) entry denoted by \(p_{ij}\) is probability is moving from state \(i\) to state \(j\).
+\end{definition}
+
+These two properties make Markov chains nice to work with, especially the Markov property (Definition \ref{def:Markov}). Two other important definitions are
+
+\begin{definition}
+The \textbf{period }of a state \(i\) is given by \(d_i = \textrm{gcd}\{n > 0; p_{ii} > 0 \}\). A state is \textbf{aperiodic} if \(d_i = 1\). An \textbf{aperiodic chain} is a chain where all states are a periodic.
+\end{definition}
+
+\begin{definition}
+A Markov chain is \textbf{irreducible} if there exists an \(n \in \mathbb{N}\) such that \(\mathbb{P} (Y_n = i \mid Y_0 = j)\) for all pairs \(i\) and \(j\). In other words, it is possible to move from any state to any other state in a finite number of steps.
+\end{definition}
+
+We can use these definitions to start working with distributions. Suppose, the state we start at is drawn from some distribution \(Y_1 \sim \boldsymbol{q}\). Then the distributions of the second state \(Y_2\) depends on the distribution of \(Y_1\) and the transition probabilities
+\[
+\mathbb{P}(Y_2 = j) = \sum_i q_ip_{ij}.
+\]
+If we denote the distribution of \(Y_2 \sim \boldsymbol{q}^{(2)}\), then we can write it in terms of the transition matrix \(\boldsymbol{q}^\prime = \boldsymbol{q}P\). Now suppose we would like the distribution of \(Y_3 \sim \boldsymbol{q}^{(3)}\), thanks to the Markov property, this is the distribution for \(Y_2\) multiplied by the transition matrix, so \(Y_3 \sim qP^2\). Inductively, \(P_k \sim qP^{k-1}\). To use Markov chains to sample from distributions, we need to identify the Eigenvalues of the transition matrix.
+
+\begin{proposition}
+A transition matrix \(P\) always has at least one eigenvalue equal to one.
+\end{proposition}
+
+\begin{proof}
+The columns of \(P\) sum to 1 as they are probability distributions. Therefore, \(1\) is an eigenvalue.
+\end{proof}
+
+\begin{definition}
+If a transition matrix \(P\) has a unique Eigenvalue that takes the value 1, there is a unique distribution \(\pi\) such that
+\[
+\pi P = \pi. 
+\]
+This distribution \(\pi\), is known as the \textbf{stationary distribution}.
+\end{definition}
+
+This important concept underpins MCMC methods. It says that no matter where we start our chain, we'll eventually end up sampling states according to the distribution \(\pi\). It make take a long time to reach the stationary distribution, but it will eventually get there.
+
+In order to check whether our Markov chain will converge to a stationary distribution, we need to check:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  the Markov chain is aperiodic,
+\item
+  the Markov chain is irreducible, and
+\item
+  that there exists a unique distribution \(\pi\) such that \(\pi P = \pi\).
+\end{enumerate}
+
+\begin{example}
+In Example \ref{exm:King}, the King wanted to visit the islands according to how large they are. We can think of the islands as the states and the stationary distribution as \(p(Y = i) \propto i\). The eccentric method the King used allowed him to construct a transition matrix for an aperiodic Markov chain. He also never visited islands regularly using this method.
+\end{example}
+
+When designing a Markov chain, it is usually straightforward to design one that meets conditions one and two. Condition three is more difficult to prove, but for some chains it is possible to show they satisfy detailed balance.
+
+\begin{definition}
+The Markov chain with transition matrix \(P\) satisfies the \textbf{detailed balance} equation with respect to the distribution \(\pi\) if
+\[
+\pi_i p_{ij} = \pi_j p_{ji}. 
+\]
+\end{definition}
+
+\begin{theorem}[Detailed Balance]
+Let \(P\) be a transition matrix that satisfies detailed balance with respect to the distribution \(\pi\). Then \(\pi P = \pi\).
+\end{theorem}
+
+\begin{proof}
+The \(j^{th}\) row of \(\pi P\) is
+\begin{align*}
+\sum_{i} \pi_i p_{ij} & = \sum_{i} \pi_j p_{ji} \quad \textrm{(detailed balance)} \\
+ & = \pi_j \sum_{i} p_{ji} \\
+ & = \pi_j.\qquad \textrm{(probaility sums to 1)}
+\end{align*}
+Hence \(\pi P = \pi\).
+\end{proof}
+
+The section has shown us that we can use a Markov chain theory to simulate from a probability distribution \(\pi\). All we need is for the Markov chain to be irreducible, aperiodic, and for the transition matrix to satisfy \(\pi P = \pi\). This provides the foundation theory for MCMC and allows us to sample from a posterior distribution \(\pi\). What it doesn't tell us is how to design the Markov chain, and that is what the next sections deal with.
+
+\hypertarget{metropolis-hastings}{%
+\section{Metropolis-Hastings}\label{metropolis-hastings}}
+
+We're now going to look at MCMC algorithms. The first algorithm we are going to look at is the Metropolis-Hasting algorithm. This is a useful algorithm if we cannot sample directly from the posterior distribution and if the conditional distributions do not have a closed form. The Metropolis-Hastings algorithm is like the island example we saw earlier. At each iteration, we propose a new sample and then accept or reject it based on the likelihood function, the prior and how likely we are to propose this new sample given the current one.
+
+Suppose we want to sample from the posterior distribution \(\pi(\theta \mid \boldsymbol{y})\). The Metropolis-Hastings works as follows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Set the initial value \(\theta^{(0)}\).
+\item
+  Set \(i = 1\).
+\item
+  Propose a new value of \(\theta'\) from some distribution \(q\)
+\item
+  Accept \(\theta'\) with probability
+  \[
+  p_{\textrm{acc}} = \min\left\{\frac{\pi(\theta' \mid \boldsymbol{y})}{\pi(\theta \mid \boldsymbol{y})}\frac{q(\theta \mid \theta')}{q(\theta' \mid \theta)}, 1\right\}.
+  \]
+\item
+  Repeat steps 3 to 4 for \(i = 2, \ldots, M\).
+\end{enumerate}
+
+There are two parts to the acceptance probability in step 4. The first is the posterior ratio, similar to saying the likelihood of \(\theta'\) given the observed data over the likelihood of \(\theta\) given the data. The second is the proposal ratio. It is similar to saying the likelihood of proposing \(\theta\) given the current value \(\theta'\), over the likelihood of proposing \(\theta'\) given the current value \(\theta\).
+
+In practice, we don't need to evaluate the full posterior distribution. Recall
+\[
+\pi(\theta \mid \boldsymbol{y}) = \frac{\pi(\boldsymbol{y} \mid \theta) \pi(\theta)}{\pi(y)}
+\]
+As the the denominator doesn't depend on \(\theta\), it cancels in the ration. The ratio becomes
+\[
+\frac{\pi(\theta' \mid \boldsymbol{y})}{\pi(\theta \mid \boldsymbol{y})} = \frac{\pi(\boldsymbol{y} \mid \theta') \pi(\theta')}{\pi(\boldsymbol{y} \mid \theta) \pi(\theta)}.
+\]
+This is the likelihood ratio multiplied by the prior ratio.
+
+\begin{proposition}
+The Markov chain generated by the Metropolis-Hastings algorithm satisfies detailed balance with respect to the posterior distribution.
+\end{proposition}
+
+\begin{proof}
+Denote the current state \(\theta\) and the proposed state \(\theta'\). We would like to show
+\[
+\pi(\theta \mid \boldsymbol{y}) \pi(\theta'\mid\theta) = \pi(\theta' \mid \boldsymbol{y}) \pi(\theta\mid\theta').
+\]
+The density of \(\theta'\) given the proposed state \(\theta\) is the proposal density multiplied by the acceptance probability. It is given by
+\begin{align*}
+\pi(\theta' \mid \theta) &= q(\theta' \mid \theta)p_{acc}\\
+&=  q(\theta' \mid \theta)\min\left\{\frac{\pi(\theta' \mid \boldsymbol{y})}{\pi(\theta' \mid \boldsymbol{y})}\frac{q(\theta \mid \theta')}{q(\theta' \mid \theta)}, \, 1\right\} \\
+& = \min\left\{\frac{\pi(\theta' \mid \boldsymbol{y})}{\pi(\theta' \mid \boldsymbol{y})}q(\theta \mid \theta'),\, q(\theta' \mid \theta)\right\}.
+\end{align*}
+
+The left hand side of the detailed balance equation becomes
+\[
+\pi(\theta \mid \boldsymbol{y})\pi(\theta' \mid \theta) = \min\{\pi(\theta' \mid \boldsymbol{y})q(\theta \mid \theta'),\, \pi(\theta \mid \boldsymbol{y})q(\theta' \mid \theta)\}.
+\]
+Analogously, we can show the right hand side is
+
+\[
+\pi(\theta' \mid \boldsymbol{y})\pi(\theta \mid \theta') = \min\{\pi(\theta' \mid \boldsymbol{y})q(\theta \mid \theta'),\, \pi(\theta \mid \boldsymbol{y})q(\theta' \mid \theta)\}.
+\]
+Hence, \(\pi(\theta \mid \boldsymbol{y}) \pi(\theta'\mid\theta) = \pi(\theta' \mid \boldsymbol{y}) \pi(\theta\mid\theta')\) and the Markov chain satisfies detailed balance with respect to the posterior disquisition.
+\end{proof}
+
+\begin{example}
+\protect\hypertarget{exm:norm}{}\label{exm:norm}Lets think again about the reaction time example in the previous chapter.The time until each lorry driver reacts (in milliseconds) is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.34}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.27}\NormalTok{, }\FloatTok{0.74}\NormalTok{, }\FloatTok{0.44}\NormalTok{, }\FloatTok{0.46}\NormalTok{, }\FloatTok{0.65}\NormalTok{, }\FloatTok{0.36}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }\FloatTok{0.55}\NormalTok{, }
+       \FloatTok{0.53}\NormalTok{, }\FloatTok{0.56}\NormalTok{, }\FloatTok{0.54}\NormalTok{, }\FloatTok{0.61}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.52}\NormalTok{, }\FloatTok{0.45}\NormalTok{, }\FloatTok{0.49}\NormalTok{, }\FloatTok{0.32}\NormalTok{, }\FloatTok{0.33}\NormalTok{, }\FloatTok{0.47}\NormalTok{, }\FloatTok{0.58}\NormalTok{, }
+       \FloatTok{0.34}\NormalTok{, }\FloatTok{0.60}\NormalTok{, }\FloatTok{0.59}\NormalTok{, }\FloatTok{0.43}\NormalTok{, }\FloatTok{0.57}\NormalTok{, }\FloatTok{0.34}\NormalTok{)}
+\FunctionTok{hist}\NormalTok{(y, }\AttributeTok{main =} \StringTok{""}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Reaction time (ms)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-28-1.pdf}
+
+Assuming \(Y_i \sim N(\mu, \sigma^2)\) are independent and identically distributed for \(i=1,...,n\), by Bayes' theorem, the posterior distribution is
+
+\[
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \pi(\boldsymbol{y} \mid \mu, \sigma^2) \pi(\mu).
+\]
+One of the issues here is that we have assigned a normal prior distribution to the population mean parameter \(\mu\). The advantage previously was that we could derive a posterior distribution with closed form. The disadvantage however is that the choice of prior distribution assigns some positive probability to impossible values of \(\mu\), i.e.~reaction times less than zero.
+
+Now we have a tool to sample from posterior distributions that don't have a closed form. We can instead assign an exponential prior distribution, a distribution which only has non-negative support. Letting \(\mu \sim \textrm{Exp}(0.01)\) sets a vague prior distribution on \(\mu\). It can be shown that the posterior distribution (exercise) is therefore
+\[
+\pi(\mu \mid \boldsymbol{y}, \sigma^2) \propto \exp\left\{-0.01\mu -\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}\right\} 
+\]
+
+We can use the Metropolis-Hasting algorithm to sample from this posterior distribution. But how should we propose new value of \(\mu\)? A common method is a Metropolis-Hastings Random Walk proposal distribution. The proposal distribution is symmetric and centered on \(\mu\). The two most common methods are \(\mu' \mid \mu \sim U[\mu - \varepsilon, \mu + \varepsilon]\) and \(\mu' \mid \mu \sim N(\mu, \tau^2)\). We choose the uniform proposal distribution, with
+\[
+q(\mu' \mid \mu) = \frac{1}{2\varepsilon}.
+\]
+
+The acceptance probability is therefore
+\[
+p_\textrm{acc} = \min\left\{\frac{\exp\left\{-0.01\mu' -\sum_{i=1}^{30}\frac{(y_i - \mu')^2}{\sigma^2}\right\} }{\exp\left\{-0.01\mu -\sum_{i=1}^{30}\frac{(y_i - \mu)^2}{\sigma^2}\right\} }, 1\right\}
+\]
+
+We can implement a sampler in R as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Set up elements for MCMC}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{) }\CommentTok{\#to reproduce}
+\NormalTok{n.iter   }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{mu.store }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(n.iter)}
+
+\CommentTok{\#Initial values}
+\NormalTok{mu }\OtherTok{\textless{}{-}} \DecValTok{1} 
+\NormalTok{sigma }\OtherTok{\textless{}{-}} \FloatTok{0.1} \CommentTok{\#known}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n.iter)\{}
+  
+  \CommentTok{\#Propose value for mu}
+\NormalTok{  mu.proposed }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{, mu }\SpecialCharTok{{-}} \FloatTok{0.01}\NormalTok{, mu }\SpecialCharTok{+} \FloatTok{0.01}\NormalTok{)}
+  
+  \ControlFlowTok{if}\NormalTok{(mu.proposed }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)\{ }\CommentTok{\#If mu \textless{} 0 we can reject straight away}
+    
+    \CommentTok{\#Compute (log) acceptance probability}
+\NormalTok{    log.numerator   }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu.proposed }\SpecialCharTok{{-}} 
+                      \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu.proposed)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{    log.denominator }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+    
+\NormalTok{    log.p.acc }\OtherTok{\textless{}{-}}\NormalTok{ log.numerator }\SpecialCharTok{{-}}\NormalTok{ log.denominator}
+\NormalTok{    u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+    
+    \CommentTok{\#Accept/Reject step}
+    \ControlFlowTok{if}\NormalTok{(}\FunctionTok{log}\NormalTok{(u) }\SpecialCharTok{\textless{}}\NormalTok{ log.p.acc)\{}
+\NormalTok{      mu }\OtherTok{\textless{}{-}}\NormalTok{ mu.proposed}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  
+  \CommentTok{\#Store mu at each iteration}
+\NormalTok{  mu.store[i] }\OtherTok{\textless{}{-}}\NormalTok{ mu}
+\NormalTok{\}}
+\FunctionTok{plot}\NormalTok{(mu.store, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }
+     \AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-29-1.pdf}
+
+We can see that after about 300 iterations, the Markov chain has converged to its stationary distribution, the posterior distribution. We can see this more clearly by removing the first 300 iterations.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(mu.store[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{300}\NormalTok{)], }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }\AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-30-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(mu.store[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{300}\NormalTok{)], }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(mu), }\AttributeTok{main =} \StringTok{"Posterior distribution"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-30-2.pdf}
+
+The 95\% credible interval for \(\mu\) using this prior distribution is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{quantile}\NormalTok{(mu.store[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{300}\NormalTok{)], }\FunctionTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{, }\FloatTok{0.975}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      2.5%     97.5% 
+## 0.4832146 0.4961484
+\end{verbatim}
+
+Recall that using the normal prior distribution, it was
+
+\begin{verbatim}
+0.486 0.493
+\end{verbatim}
+
+It seems that the posterior distribution is very similar when using these two prior distributions. This is because the data are very informative.
+\end{example}
+
+\hypertarget{gibbs-sampler}{%
+\section{Gibbs Sampler}\label{gibbs-sampler}}
+
+When we can sample directly from conditional posterior distributions, we can use a Gibbs sampler. Suppose we have a distribution with parameters \(\{\theta_1, \ldots, \theta_N\}\), a Gibbs sampler works as follows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Set initial values \(\{\theta_1^{(0)}, \ldots, \theta_N^{(0)}\}\)
+\item
+  Set \(i = 1\).
+\item
+  Draw a value for \(\theta_1^{(i)}\) from \(\pi(\theta_1 \mid \theta_2^{(i-1)}, \ldots, \theta_N^{(i-1)}))\).
+\item
+  Draw a value for \(\theta_2^{(i)}\) from \(\pi(\theta_2 \mid \theta_1^{(i-1)}, \theta_3^{(i-1)}, \ldots, \theta_N^{(i-1)}))\).
+\item
+  Repeat steps 3 and 4 for parameters \(\{\theta_3^{(i)}, \ldots, \theta_N^{(i)}\}\).
+\item
+  Repeat steps 3, 4, and 5, for \(i = 2, \ldots M\).
+\end{enumerate}
+
+In code, this might look like
+
+\begin{verbatim}
+M #number of iterations
+N #number of parameters
+theta.store   <- matrix(NA, N, M)
+theta         <- numeric(N)
+
+for(j in 1:M){
+  for(j in 1:N){
+    theta[i] <- #sample from conditional with theta[-i]
+  }
+  theta.store[, j] <- theta.current #store current values
+}
+\end{verbatim}
+
+The sequence \(\left\{\theta_0^{(0)},\ldots, \theta_N^{(0)}\right\}, \left\{\theta_0^{(1)},\ldots, \theta_N^{(1)}\right\}, \ldots, \left\{\theta_0^{(M)},\ldots, \theta_N^{(M)}\right\}\) form a Markov chain. They also form a series of samples from the posterior distribution. However it is important to note that by construction, these samples are not independent since each realisation depends on the previous sample and we must take this into account when doing estimation.
+
+\begin{example}
+
+Recall the lab in the previous chapter where we derived the posterior distribution for the mean \(\mu\) and variance \(\sigma^2\) for normally distributed data. The marginal posterior distributions are given by
+\[
+\mu \mid \boldsymbol{y}, \sigma^2 \sim N(\mu_1, \sigma^2_1),
+\]
+
+\[
+\sigma^2 \mid \boldsymbol{y}, \mu \sim \textrm{inv-Gamma}\left(\alpha + \frac{N}{2}, \,\beta + \frac{\sum_{i=1}^N (y_i - \mu)^2}{2}\right),
+\]
+
+where \(\mu_1 =\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)\) and \(\sigma^2_1 = \left(\frac{30}{\sigma^2} + \frac{1}{\sigma_0^2}\right)^{-1}\).
+
+We can set up a Metropolis-Hastings algorithm using Gibbs samplers to generate samples for \(\lambda\) and \(\gamma\).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Set initial values \(\{\lambda^{(0)}, \gamma^{(0)}\}\)
+\item
+  Set \(i = 1\).
+\item
+  Draw a value for \(\lambda^{(i)} \mid \boldsymbol{y}, \gamma^{(i-1)} \sim \textrm{Gamma}(10, 95 + \gamma^{(i-1)})\)
+\item
+  Draw a value for \(\gamma^{(i)} \mid \boldsymbol{y}, \,\lambda^{(i)} \sim \hbox{Exp}(\lambda^{(i)} + \nu)\).
+\item
+  Repeat steps 3 and 4 for \(i = 2, \ldots M\).
+\end{enumerate}
+
+\end{example}
+
+\hypertarget{mcmc-diagnostics}{%
+\section{MCMC Diagnostics}\label{mcmc-diagnostics}}
+
+When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well. For our purposes, mixing well means the chain is exploring the space of possible values of \(\theta\) effectively and effectively and not getting stuck on the same value for a long time.
+
+A key way of doing this is by looking at the trace plot, which is a time series of the posterior samples simulated by the algorithm. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn't look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.
+
+\begin{definition}
+The \textbf{burn-in period} is the number of iterations the Markov chain takes to reach the stationary distribution.
+\end{definition}
+
+\begin{definition}
+The \textbf{thinning parameter} is the period of iterations of the Markov chain that are stored.
+\end{definition}
+
+\begin{example}
+In Example \ref{exm:norm}, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge.
+
+In a Metropolis-Hasting random walk algorithm, the proposal distribution often has a large impact on how well the Markov chain mixes. The variance, or step size, of the proposal distribution can be tuned to ensure the chain mixes well.
+
+The following two examples show poorly mixing Markov chains. The first is where the step size is too big and the chain frequently gets stuck for several hundred iterations.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{) }\CommentTok{\#to reproduce}
+\NormalTok{n.iter   }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{mu.store }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(n.iter)}
+
+\CommentTok{\#Initial values}
+\NormalTok{mu }\OtherTok{\textless{}{-}} \DecValTok{1} 
+\NormalTok{sigma }\OtherTok{\textless{}{-}} \FloatTok{0.1} \CommentTok{\#known}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n.iter)\{}
+  
+  \CommentTok{\#Propose value for mu}
+\NormalTok{  mu.proposed }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{, mu }\SpecialCharTok{{-}} \FloatTok{0.1}\NormalTok{, mu }\SpecialCharTok{+} \FloatTok{0.1}\NormalTok{) }\CommentTok{\#Step size too big}
+  
+  \ControlFlowTok{if}\NormalTok{(mu.proposed }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)\{ }\CommentTok{\#If mu \textless{} 0 we can reject straight away}
+    
+    \CommentTok{\#Compute (log) acceptance probability}
+\NormalTok{    log.numerator   }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu.proposed }\SpecialCharTok{{-}} 
+                        \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu.proposed)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{    log.denominator }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+    
+\NormalTok{    log.p.acc }\OtherTok{\textless{}{-}}\NormalTok{ log.numerator }\SpecialCharTok{{-}}\NormalTok{ log.denominator}
+\NormalTok{    u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+    
+    \CommentTok{\#Accept/Reject step}
+    \ControlFlowTok{if}\NormalTok{(}\FunctionTok{log}\NormalTok{(u) }\SpecialCharTok{\textless{}}\NormalTok{ log.p.acc)\{}
+\NormalTok{      mu }\OtherTok{\textless{}{-}}\NormalTok{ mu.proposed}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  
+  \CommentTok{\#Store mu at each iteration}
+\NormalTok{  mu.store[i] }\OtherTok{\textless{}{-}}\NormalTok{ mu}
+\NormalTok{\}}
+\FunctionTok{plot}\NormalTok{(mu.store[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3000}\NormalTok{)], }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }
+     \AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-32-1.pdf}
+
+The next is where the step size is too small. It takes a long time for the chain to converge (\textasciitilde50\% of the run time). When the chain does converge, it is inefficient at exploring the space.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{) }\CommentTok{\#to reproduce}
+\NormalTok{n.iter   }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{mu.store }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(n.iter)}
+
+\CommentTok{\#Initial values}
+\NormalTok{mu }\OtherTok{\textless{}{-}} \DecValTok{1} 
+\NormalTok{sigma }\OtherTok{\textless{}{-}} \FloatTok{0.1} \CommentTok{\#known}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n.iter)\{}
+  
+  \CommentTok{\#Propose value for mu}
+\NormalTok{  mu.proposed }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{, mu }\SpecialCharTok{{-}} \FloatTok{0.0005}\NormalTok{, mu }\SpecialCharTok{+} \FloatTok{0.0005}\NormalTok{) }\CommentTok{\#Step size too small}
+  
+  \ControlFlowTok{if}\NormalTok{(mu.proposed }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)\{ }\CommentTok{\#If mu \textless{} 0 we can reject straight away}
+    
+    \CommentTok{\#Compute (log) acceptance probability}
+\NormalTok{    log.numerator   }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu.proposed }\SpecialCharTok{{-}}
+                        \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu.proposed)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{    log.denominator }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FloatTok{0.01}\SpecialCharTok{*}\NormalTok{mu }\SpecialCharTok{{-}} \FunctionTok{sum}\NormalTok{(y }\SpecialCharTok{{-}}\NormalTok{ mu)}\SpecialCharTok{\^{}}\DecValTok{2}\SpecialCharTok{/}\NormalTok{(}\DecValTok{2}\SpecialCharTok{*}\NormalTok{sigma}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+    
+\NormalTok{    log.p.acc }\OtherTok{\textless{}{-}}\NormalTok{ log.numerator }\SpecialCharTok{{-}}\NormalTok{ log.denominator}
+\NormalTok{    u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+    
+    \CommentTok{\#Accept/Reject step}
+    \ControlFlowTok{if}\NormalTok{(}\FunctionTok{log}\NormalTok{(u) }\SpecialCharTok{\textless{}}\NormalTok{ log.p.acc)\{}
+\NormalTok{      mu }\OtherTok{\textless{}{-}}\NormalTok{ mu.proposed}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  
+  \CommentTok{\#Store mu at each iteration}
+\NormalTok{  mu.store[i] }\OtherTok{\textless{}{-}}\NormalTok{ mu}
+\NormalTok{\}}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(mu.store, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{, }\AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
+\FunctionTok{plot}\NormalTok{(mu.store[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5000}\NormalTok{)], }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"iteration"}\NormalTok{,}
+     \AttributeTok{ylab =} \FunctionTok{expression}\NormalTok{(mu))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-33-1.pdf}
+\end{example}
+
+\hypertarget{advanced-computation}{%
+\chapter{Advanced Computation}\label{advanced-computation}}
+
+Now we have the tools of Bayesian inference and methods to sample from complex posterior distributions, we can start to look at more advanced methods and models. This chapter is split into two distinct parts, each showing a different method in Bayesian inference.
+
+\hypertarget{data-augmentation}{%
+\section{Data Augmentation}\label{data-augmentation}}
+
+Real world data are often messy with data points missing which may mean they are partially or completely unobserved. One common example of this is in clinical trials where people drop out of the trial before their treatment is complete. Another example is crime data, where only a fraction of crimes are reported and many crimes go unobserved. Two common ways to deal with partially or completely unobserved are:
+
+\begin{itemize}
+\tightlist
+\item
+  Remove data points that are not completely observed. This throws away information and is likely to increase the overall uncertainty in the estimates.
+\item
+  Replace data points that are not completely observed with estimates such as the sample mean. This is likely to underestimate the uncertainty as we are treating the observation as completely observed when it is not.
+\end{itemize}
+
+The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data. It allows us to treat the missing data points as random variables and infer the data points alongside the model parameters. This provides us with a method to quantify the uncertainty around our estimates of the missing data points.
+
+In data augmentation, we distinguish between two likelihood functions.
+
+\begin{definition}
+The \textbf{observed data likelihood function} is the likelihood function of the observed data.
+\end{definition}
+
+\begin{definition}
+The \textbf{complete data likelihood function} is the likelihood function of the observed data and any missing or censored data had they been fully observed.
+\end{definition}
+
+The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn't fully observe, we can't compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events \(X\) and \(Y\), where the outcome of \(X\) is observed and \(Y\) unobserved. The complete data likelihood is \(pi(X = x, Y = y)\) because we are considering all the events, observed or not. However, we can only compute \(\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)\) or \(\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)\), since \(y\) is unobserved.
+
+In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function.
+
+\hypertarget{imputing-censored-observations}{%
+\subsection{Imputing censored observations}\label{imputing-censored-observations}}
+
+The first example we will look at is when data is censored. Instead of throwing away these observations, we will instead treat them as random variables and infer their values.
+
+\begin{example}
+A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by \(p\) and the number of suspicious transactions in a batch by \(Y\).
+
+The bank checks five batches and observes \(y_1, \ldots, y_4\) suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6.
+
+The observed data likelihood functions is
+\[
+\pi(y_1, \ldots, y_4, \tilde{y}_5 \mid p) = \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
+\]
+This is known as marginalising over the missing variable, just as we did in the simple probability example earlier. Placing a uniform prior distribution on \(p \sim U[0, 1]\) give the posterior distribution
+\[
+\pi(p, \tilde{y}_5 \mid y_1, \ldots, y_4)= \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
+\]
+Although we could sample from this distribution, it is not easy to work with. Instead, we can write down the complete data likelihood. Suppose that \(y_5\) was observed, then the complete data likelihood may be written as
+\[
+\pi(y_1, \ldots, y_5 \mid p)  = \prod_{i=1}^5\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i},
+\]
+The posterior distribution is therefore
+\[
+p \mid y_1, \ldots, y_5 \sim \hbox{Beta}\left(\sum_{i=1}^5 y_i + 1, 1001 - \sum_{i=1}^5 y_i\right).
+\]
+
+The full conditional distribution of \(y_5\) given \(p\), the other data points an \(y_5 < 6\) is
+\[
+  \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 < 1, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=0}^{1000}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{j}}, \qquad y < 6
+\]
+This is a truncated distribution. We can use a Gibbs sampler alternating between sampling \(p\) and \(y_5\).
+\end{example}
+
+\hypertarget{imputing-latent-variables}{%
+\subsection{Imputing Latent Variables}\label{imputing-latent-variables}}
+
+Often there are variables that are cannot be observed, these may be hidden somehow or introduced to help with the modelling. Instead we can learn about this variable indirectly from the data.
+
+A \textbf{latent variable} is a variable that cannot be observed.
+
+A mixture model is an example of latent variables being useful.
+
+\begin{example}
+
+Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.
+
+Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.
+
+\includegraphics{postcode.jpeg}
+
+We introduce a latent variable \(z_i \sim \hbox{Bernoulli}(p)\) that describes if the characters on the \(i^{th}\) image are B1 or B2. The observation \(y_i\) is the proportion of the \(i^{th}\) image that is taken up by the characters. We observe \(y_i\), but want to estimate \(z_i\). The difficultly is there lack of one-to-one correspondence between the values \(y_i\) can take and the value \(z_i\). Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 (\(Z = 1\)), then \(Y_i \sim N(0.7, 0.05^2)\) and if it is going to B2 (\(Z = 2\)), then \(Y_i \sim N(0.8, 0.02^2)\). The plot below shows the two densities and the overlap between them.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.9}\NormalTok{, }\FloatTok{0.001}\NormalTok{)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(a, }\FloatTok{0.7}\NormalTok{, }\FloatTok{0.05}\NormalTok{)}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(a, }\FloatTok{0.8}\NormalTok{, }\FloatTok{0.02}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(a, x, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{20}\NormalTok{), }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(y),}
+     \AttributeTok{ylab =} \StringTok{"density"}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(a, y, }\AttributeTok{lty =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-35-1.pdf}
+
+As the variables \(\boldsymbol{z}\) are latent, the observed data likelihood function is
+\[
+\pi(\boldsymbol{y} \mid  p) =\prod_{i=1}^N \left[ p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)\right].
+\]
+Instead, it's easier to work with the complete data likelihood function, supposing we had observed the variables \(\boldsymbol{z}\). This is given by
+\begin{align*}
+\pi(\boldsymbol{y}, \boldsymbol{z} \mid  p) &= \begin{pmatrix} N_1 + N_2
+\\ N_1\end{pmatrix}p^{N_1}(1-p)^{N_2} \prod_{i; z_i = 1}\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)  \\
+&\times\prod_{i; z_i = 2}\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2),
+\end{align*}
+where \(N_1\) and \(N_2\) are the number of letters for B1 and B2 respectively. This form makes it much easier to derive the posterior distributions and estimate the parameter values.
+
+We place a uniform prior distribution on the parameter \(p\), which gives the posterior distribution
+\[
+p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
+\]
+
+The distribution of \(z_i\) given the parameter \(p\) and the observation \(y_i\) can be derived using Bayes' theorem
+\[
+p^*_i = \pi(z = 1 \mid p, y_1) = \frac{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)}{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)}.
+\]
+The full conditional distribution is therefore \(z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)\).
+
+An MCMC algorithm for this would repeat the following two steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Sample \(p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1)\).
+\item
+  Sample \(z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)\) for each \(i\).
+\end{enumerate}
+
+\end{example}
+
+\hypertarget{gaussian-processes}{%
+\section{Gaussian Processes}\label{gaussian-processes}}
+
+So far in the module, we have considered prior distribution on parameters. These parameters have taken values (mostly real) or real-valued vectors. In this section, we're going to extend this idea further to place prior distributions on functions. That is, we're going to describe a prior distribution that when sampled gives us functions. The method we're going to use is called a Gaussian Process (GP).
+
+Before, we define a GP, we're going to build an intuitive definition of it. Recall the normal distribution with mean \(\mu\) and variance \(\sigma^2\), \(N(\mu, \sigma^2)\). It assigns probabilities to values on the real line -- when we sample from it, we get real values. The plot below shows the density function for a \(N(0, 1)\) distribution and five samples.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Plot N(0, 1)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\FloatTok{0.01}\NormalTok{)}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{dnorm}\NormalTok{(x)}
+\FunctionTok{plot}\NormalTok{(x, y, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\#Add samples}
+\NormalTok{samples }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+\FunctionTok{rug}\NormalTok{(samples)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-36-1.pdf}
+
+The multivariate normal distribution extends this to a vector space, \(\mathbb{R}^N\). Instead of having a mean and variance value, the distribution is defined through a mean vector and covariance matrix. The mean vector describes the expected value of each component of the vector and the covariance matrix describes the relationship between each pair of components in the vector. When we draw samples, we get vectors. The plot below shows the density of the multivariate normal distribution with \(N = 2\), zero mean, \(\sigma^2_x = \sigma^2_y = 1\) and \(\rho = 0.7\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Create Grid}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{,}\AttributeTok{length.out=}\DecValTok{100}\NormalTok{)}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{,}\AttributeTok{length.out=}\DecValTok{100}\NormalTok{)}
+
+\CommentTok{\#Evaluate density at grid}
+\NormalTok{z }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{,}\AttributeTok{nrow=}\DecValTok{100}\NormalTok{,}\AttributeTok{ncol=}\DecValTok{100}\NormalTok{)}
+\NormalTok{mu }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{sigma }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.7}\NormalTok{, }\FloatTok{0.7}\NormalTok{, }\DecValTok{1}\NormalTok{),}\AttributeTok{nrow=}\DecValTok{2}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{) \{}
+  \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{) \{}
+\NormalTok{    z[i,j] }\OtherTok{\textless{}{-}}\NormalTok{ mvtnorm}\SpecialCharTok{::}\FunctionTok{dmvnorm}\NormalTok{(}\FunctionTok{c}\NormalTok{(x[i],y[j]),}
+                      \AttributeTok{mean=}\NormalTok{mu,}\AttributeTok{sigma=}\NormalTok{sigma)}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\CommentTok{\#Generate contour plot}
+\FunctionTok{contour}\NormalTok{(x, y ,z)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-37-1.pdf}
+
+A GP takes this one step further and puts a prior distribution on a function space. It is specified by a mean function, \(\mu(\cdot)\) and covariance function \(k(\cdot, \cdot)\). The mean function describes the expected value of each point the function can be evaluated at, and the covariance function describes the relationship between each point on the function. The plot below shows three samples from a GP distribution with mean function the zero function \(\mu(x) = 0\, \forall x\) and a covariance function that supports smooth functions.
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-38-1.pdf}
+
+\begin{definition}
+A \textbf{Gaussian Process} is a collection of random variables, any finite number of which have a joint Gaussian distribution.
+\end{definition}
+
+This says that is we think of a function as an infinite collection of points, then if any finite subset of those points following a Gaussian distribution, we have a Gaussian process. In reality, we set up the function so that is meets this definition. More formally,
+
+\begin{definition}
+A \textbf{GP distribution on a function \(f(x)\)} is defined through its mean function \(\mu(x) = \mathbb{E}(x)\) and covariance function \(k(x, x') = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x') - \mu(x'))\right)\). We write it as \(f(x) \sim \mathcal{GP}(\mu(x), k(x, x'))\).
+\end{definition}
+
+Before we go any further, it is worth proceeding with caution. Those with good memories, we recall Bernstein-von-Mises' theorem from Chapter 3.
+
+\begin{theorem}[Bernstein-von-Mises]
+For a well-specified model \(\pi(\boldsymbol{y} \mid \theta)\) with a fixed number of parameters, and for a smooth prior distribution \(\pi(\theta)\) that is non-zero around the MLE \(\hat{\theta}\), then
+\[
+\left|\left| \pi(\theta \mid \boldsymbol{y}) - N\left(\hat{\theta}, \frac{I(\hat{\theta})^{-1}}{n}\right) \right|\right|_{TV} \rightarrow 0.
+\]
+\end{theorem}
+
+Bernstein-von-Mises' theorem only holds when the model has a fixed (i.e.~finite) number of parameters. A GP is defined on an infinite collection of points, and so this theorem does not hold. This is the first time in this module we have encountered a distribution where Bernstein-von-Mises' theorem does not hold. Fortunately, various forms of Bernstein-von-Mises' theorems for GPs exist, with many coming about in the early 2010s. However, this is still an ongoing area of research.
+
+\hypertarget{covariance-functions}{%
+\subsection{Covariance Functions}\label{covariance-functions}}
+
+One issue when using GPs is describing the covariance function. How do we decide how each pair of points (there being an infinite number of them)? There are lots of standard choices of covariance functions that we can choose from, each one making different assumptions about the function we are interested in.
+
+The most common covariance function is the squared exponential functions. It is used to model functions that are `nice', i.e.~they are smooth, continuous and infinitely differentiable.
+
+\begin{definition}
+The \textbf{squared exponential covariance function} takes the form
+\[
+k(x, x') = \alpha^2\exp\left\{-\frac{1}{l}(x-x')^2\right\},
+\]
+where \(\alpha^2\) is the signal variance and \(l>0\) is the length scale parameter.
+\end{definition}
+
+For now, consider \(\alpha = l = 1\). What is the covariance between the function evaluated at 0 and the function evaluated at \(x\)? The plot below shows the covariance.
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-39-1.pdf}
+
+The covariance is highest when the \(x\) is near to 0, i.e.~the points are immediately next to each other. If the value of \(x\) is \(\pm 2\), the covariance is 0. As we are dealing with a joint normal distribution, a covariance of 0 implies independence. So with this covariance function, the value of \(f(x)\) is independent of \(f(0)\) if \(|x|\) is larger than about two. The parameter \(l\) is called the length scale parameter and dictates how quickly the covariance decays. Small values of \(l\) mean that the value of the function at nearby points are independent of each other, resulting in functions that look like white noise. Large values of \(l\) mean that even if points are far away, they are still highly dependent on each other. This gives very flat functions.
+
+The squared exponential covariance function produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don't produce functions that are continuous or differentiable. Two more are given below.
+
+\begin{definition}
+The \textbf{M\textquotesingle atern covariance function} models functions that are differentiable only once:
+\[
+k(x, x') = \left(1 + \frac{\sqrt{3}(x - x')^2}{l} \right)\exp\left\{-\frac{\sqrt{3}(x - x')^2}{l} \right\}.
+\]
+\end{definition}
+
+\begin{definition}
+The periodic covariance function models functions that are periodic and it is given by
+\[
+k(x, x') = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x')^2}{p} \right\},
+\]
+where the period is \(p\).
+\end{definition}
+
+\hypertarget{gaussian-process-regression}{%
+\subsection{Gaussian Process Regression}\label{gaussian-process-regression}}
+
+One of the main applications of GPs in in regression. Suppose we observe the points below \(\boldsymbol{y} = \{y_1, \ldots, y_N\}\) and want to fit a curve through them. One method is to write down a set of functions of the form \(\boldsymbol{y} = X^T\boldsymbol{\beta} + \boldsymbol{\varepsilon}\), where \(X\) is the design matrix and \(\boldsymbol{\beta}\) a vector of parameters. For each design matrix \(X\), construct the posterior distributions for \(\boldsymbol{\beta}\) and use some goodness-of-fit measure to choose the most suitable design matrix.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\DecValTok{5}\SpecialCharTok{:}\DecValTok{5}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{sin}\NormalTok{(x}\SpecialCharTok{/}\DecValTok{2}\NormalTok{)}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{x}\SpecialCharTok{/}\DecValTok{5}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{rnorm}\NormalTok{(}\FunctionTok{length}\NormalTok{(x), }\DecValTok{0}\NormalTok{, }\FloatTok{0.2}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(x, y)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-40-1.pdf}
+
+One difficulty is writing down the design matrices \(X\), it is often not straightforward to propose or justify these forms GPs allow us to take a much less arbitrary approach, simply saying that \(y_i = f(x_i) + \varepsilon_i\) and placing a GP prior distribution on \(f\).
+
+Although we're placing an prior distribution with an infinite dimension on \(f\), we only ever need to work with a finite dimensional object, making this much easier. We only observe the function at finite number of points \(\boldsymbol{f} = \{f(x_1), \ldots, f(x_N)\}\) and we will infer the value of the function at points on a fine grid, \(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\). By the definition of a GP, the distribution of these points is a multivariate normal distribution.
+
+\begin{example}
+Suppose we observe \(\boldsymbol{y} = \{y_1, \ldots, y_N\}\) at \(\boldsymbol{x} = \{x_1, \ldots, x_N\}\). The plot below shows these points.
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-41-1.pdf}
+
+Using the model \(y_i = f(x_i) + \varepsilon_i\), where \(\varepsilon_i \sim N(0, \sigma^2)\), we want to infer the function \(f\) evaluated at a gird of points \(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\). We place a GP prior distribution on \(f \sim \mathcal{GP}(0, k)\), where \(k\) is the squared exponential covariance function. Using the model, the covariance between points \(y_i\) and \(y_j\) is
+\[
+\textrm{cov}(y_i, y_j) = k(x_i, x_j) + \sigma^21_{i=j}.
+\]
+That is the covariance function evaluated at \(x_i\) and \(x_j\) plus \(\sigma^2\) if \(i = j\). We can write this in matrix form as \(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I\) where \(I\) is the identity matrix. The distribution of \(\boldsymbol{y}\) is therefore \(\boldsymbol{y} \sim N(\boldsymbol{0}, \, K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)\). By definition of the GP, the distribution of the function evaluated at the fine grid is \(\boldsymbol{f}^* \sim N(\boldsymbol{0}, K(\boldsymbol{x}^*, \boldsymbol{x}^*))\).
+
+We can now write the joint distribution as
+\[
+\begin{pmatrix}
+\boldsymbol{y} \\
+\boldsymbol{f}^*
+\end{pmatrix} \sim N\left(\boldsymbol{0}, \,
+\begin{pmatrix}
+ K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I &  K(\boldsymbol{x}, \boldsymbol{x}^*)\\
+K(\boldsymbol{x}^*, \boldsymbol{x}) & K(\boldsymbol{x}^*, \boldsymbol{x}^*)
+\end{pmatrix}.
+\right)
+\]
+The off-diagonal terms in the covariance matrix describe the relationship between the observed points \(\boldsymbol{y}\) and the points of interest \(\boldsymbol{f}^*\). We can now write down the distribution of \(\boldsymbol{f}^*\) given the observed points \(\boldsymbol{y}\) and \(\sigma^2\).
+\[
+\boldsymbol{f}^* \mid \boldsymbol{y}, \sigma^2 \sim N(\boldsymbol{\mu}^*, \, K^*),
+\]
+where \(\boldsymbol{\mu}^* = K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2 I)^{-1} \boldsymbol{y}\) and \(K^* = K(\boldsymbol{x}^*, \boldsymbol{x}^*) - K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)^{-1}K(\boldsymbol{x}, \boldsymbol{x}^*)\).
+
+We set the fine gird to be \(\boldsymbol{x}^* = \{-5, -4.99, -4.98, \ldots, 5\}\), the GP parameters \(\alpha = l = 1\) and \(\sigma = 0.2\). The posterior mean and 95\% credible interval are shown below.
+\includegraphics{_main_files/figure-latex/unnamed-chunk-42-1.pdf}
+The posterior mean for \(f\) is a smooth line passing near each point. The 95\% credible interval for \(f\) has the smallest variance near each point, and largest furthest away from the points.
+\end{example}
+
+\hypertarget{lab-data-augmenatation}{%
+\section{Lab: Data Augmenatation}\label{lab-data-augmenatation}}
+
+\hypertarget{lab-gaussian-processes}{%
+\section{Lab: Gaussian Processes}\label{lab-gaussian-processes}}
 
   \bibliography{book.bib,packages.bib}
 
