@@ -242,10 +242,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data. It allows us to treat the missing data points as random variables and infer the data points alongside the model parameters. This provides us with a method to quantify the uncertainty around our estimates of the missing data points.</p>
 <p>In data augmentation, we distinguish between two likelihood functions.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-68" class="definition"><strong>Definition 6.1  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
+<p><span id="def:unlabeled-div-69" class="definition"><strong>Definition 6.1  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-69" class="definition"><strong>Definition 6.2  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
+<p><span id="def:unlabeled-div-70" class="definition"><strong>Definition 6.2  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
 </div>
 <p>The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn’t fully observe, we can’t compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, where the outcome of <span class="math inline">\(X\)</span> is observed and <span class="math inline">\(Y\)</span> unobserved. The complete data likelihood is <span class="math inline">\(pi(X = x, Y = y)\)</span> because we are considering all the events, observed or not. However, we can only compute <span class="math inline">\(\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)\)</span> or <span class="math inline">\(\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)\)</span>, since <span class="math inline">\(y\)</span> is unobserved.</p>
 <p>In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function.</p>
@@ -253,7 +253,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">6.1.1</span> Imputing censored observations<a href="advanced-computation.html#imputing-censored-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first example we will look at is when data is censored. Instead of throwing away these observations, we will instead treat them as random variables and infer their values.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-70" class="example"><strong>Example 6.1  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
+<p><span id="exm:unlabeled-div-71" class="example"><strong>Example 6.1  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
 <p>The bank checks five batches and observes <span class="math inline">\(y_1, \ldots, y_4\)</span> suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6.</p>
 <p>The observed data likelihood functions is
 <span class="math display">\[
@@ -286,7 +286,7 @@ This is a truncated distribution. We can use a Gibbs sampler alternating between
 </div>
 <p>A mixture model is an example of latent variables being useful.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-71" class="example"><strong>Example 6.2  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
+<p><span id="exm:unlabeled-div-72" class="example"><strong>Example 6.2  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
 <p>Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.</p>
 <p><img src="postcode.jpeg" /><!-- --></p>
 <p>We introduce a latent variable <span class="math inline">\(z_i \sim \hbox{Bernoulli}(p)\)</span> that describes if the characters on the <span class="math inline">\(i^{th}\)</span> image are B1 or B2. The observation <span class="math inline">\(y_i\)</span> is the proportion of the <span class="math inline">\(i^{th}\)</span> image that is taken up by the characters. We observe <span class="math inline">\(y_i\)</span>, but want to estimate <span class="math inline">\(z_i\)</span>. The difficultly is there lack of one-to-one correspondence between the values <span class="math inline">\(y_i\)</span> can take and the value <span class="math inline">\(z_i\)</span>. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 (<span class="math inline">\(Z = 1\)</span>), then <span class="math inline">\(Y_i \sim N(0.7, 0.05^2)\)</span> and if it is going to B2 (<span class="math inline">\(Z = 2\)</span>), then <span class="math inline">\(Y_i \sim N(0.8, 0.02^2)\)</span>. The plot below shows the two densities and the overlap between them.</p>
@@ -360,15 +360,15 @@ The full conditional distribution is therefore <span class="math inline">\(z_i \
 <p>A GP takes this one step further and puts a prior distribution on a function space. It is specified by a mean function, <span class="math inline">\(\mu(\cdot)\)</span> and covariance function <span class="math inline">\(k(\cdot, \cdot)\)</span>. The mean function describes the expected value of each point the function can be evaluated at, and the covariance function describes the relationship between each point on the function. The plot below shows three samples from a GP distribution with mean function the zero function <span class="math inline">\(\mu(x) = 0\, \forall x\)</span> and a covariance function that supports smooth functions.</p>
 <p><img src="_main_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 <div class="definition">
-<p><span id="def:unlabeled-div-72" class="definition"><strong>Definition 6.3  </strong></span>A <strong>Gaussian Process</strong> is a collection of random variables, any finite number of which have a joint Gaussian distribution.</p>
+<p><span id="def:unlabeled-div-73" class="definition"><strong>Definition 6.3  </strong></span>A <strong>Gaussian Process</strong> is a collection of random variables, any finite number of which have a joint Gaussian distribution.</p>
 </div>
 <p>This says that is we think of a function as an infinite collection of points, then if any finite subset of those points following a Gaussian distribution, we have a Gaussian process. In reality, we set up the function so that is meets this definition. More formally,</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-73" class="definition"><strong>Definition 6.4  </strong></span>A <strong>GP distribution on a function <span class="math inline">\(f(x)\)</span></strong> is defined through its mean function <span class="math inline">\(\mu(x) = \mathbb{E}(x)\)</span> and covariance function <span class="math inline">\(k(x, x&#39;) = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x&#39;) - \mu(x&#39;))\right)\)</span>. We write it as <span class="math inline">\(f(x) \sim \mathcal{GP}(\mu(x), k(x, x&#39;))\)</span>.</p>
+<p><span id="def:unlabeled-div-74" class="definition"><strong>Definition 6.4  </strong></span>A <strong>GP distribution on a function <span class="math inline">\(f(x)\)</span></strong> is defined through its mean function <span class="math inline">\(\mu(x) = \mathbb{E}(x)\)</span> and covariance function <span class="math inline">\(k(x, x&#39;) = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x&#39;) - \mu(x&#39;))\right)\)</span>. We write it as <span class="math inline">\(f(x) \sim \mathcal{GP}(\mu(x), k(x, x&#39;))\)</span>.</p>
 </div>
 <p>Before we go any further, it is worth proceeding with caution. Those with good memories, we recall Bernstein-von-Mises’ theorem from Chapter 3.</p>
 <div class="theorem">
-<p><span id="thm:unlabeled-div-74" class="theorem"><strong>Theorem 6.1  (Bernstein-von-Mises) </strong></span>For a well-specified model <span class="math inline">\(\pi(\boldsymbol{y} \mid \theta)\)</span> with a fixed number of parameters, and for a smooth prior distribution <span class="math inline">\(\pi(\theta)\)</span> that is non-zero around the MLE <span class="math inline">\(\hat{\theta}\)</span>, then
+<p><span id="thm:unlabeled-div-75" class="theorem"><strong>Theorem 6.1  (Bernstein-von-Mises) </strong></span>For a well-specified model <span class="math inline">\(\pi(\boldsymbol{y} \mid \theta)\)</span> with a fixed number of parameters, and for a smooth prior distribution <span class="math inline">\(\pi(\theta)\)</span> that is non-zero around the MLE <span class="math inline">\(\hat{\theta}\)</span>, then
 <span class="math display">\[
 \left|\left| \pi(\theta \mid \boldsymbol{y}) - N\left(\hat{\theta}, \frac{I(\hat{\theta})^{-1}}{n}\right) \right|\right|_{TV} \rightarrow 0.
 \]</span></p>
@@ -379,7 +379,7 @@ The full conditional distribution is therefore <span class="math inline">\(z_i \
 <p>One issue when using GPs is describing the covariance function. How do we decide how each pair of points (there being an infinite number of them)? There are lots of standard choices of covariance functions that we can choose from, each one making different assumptions about the function we are interested in.</p>
 <p>The most common covariance function is the squared exponential functions. It is used to model functions that are ‘nice’, i.e. they are smooth, continuous and infinitely differentiable.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-75" class="definition"><strong>Definition 6.5  </strong></span>The <strong>squared exponential covariance function</strong> takes the form
+<p><span id="def:unlabeled-div-76" class="definition"><strong>Definition 6.5  </strong></span>The <strong>squared exponential covariance function</strong> takes the form
 <span class="math display">\[
 k(x, x&#39;) = \alpha^2\exp\left\{-\frac{1}{l}(x-x&#39;)^2\right\},
 \]</span>
@@ -390,13 +390,13 @@ where <span class="math inline">\(\alpha^2\)</span> is the signal variance and <
 <p>The covariance is highest when the <span class="math inline">\(x\)</span> is near to 0, i.e. the points are immediately next to each other. If the value of <span class="math inline">\(x\)</span> is <span class="math inline">\(\pm 2\)</span>, the covariance is 0. As we are dealing with a joint normal distribution, a covariance of 0 implies independence. So with this covariance function, the value of <span class="math inline">\(f(x)\)</span> is independent of <span class="math inline">\(f(0)\)</span> if <span class="math inline">\(|x|\)</span> is larger than about two. The parameter <span class="math inline">\(l\)</span> is called the length scale parameter and dictates how quickly the covariance decays. Small values of <span class="math inline">\(l\)</span> mean that the value of the function at nearby points are independent of each other, resulting in functions that look like white noise. Large values of <span class="math inline">\(l\)</span> mean that even if points are far away, they are still highly dependent on each other. This gives very flat functions.</p>
 <p>The squared exponential covariance function produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don’t produce functions that are continuous or differentiable. Two more are given below.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-76" class="definition"><strong>Definition 6.6  </strong></span>The <strong>M'atern covariance function</strong> models functions that are differentiable only once:
+<p><span id="def:unlabeled-div-77" class="definition"><strong>Definition 6.6  </strong></span>The <strong>M'atern covariance function</strong> models functions that are differentiable only once:
 <span class="math display">\[
 k(x, x&#39;) = \left(1 + \frac{\sqrt{3}(x - x&#39;)^2}{l} \right)\exp\left\{-\frac{\sqrt{3}(x - x&#39;)^2}{l} \right\}.
 \]</span></p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-77" class="definition"><strong>Definition 6.7  </strong></span>The periodic covariance function models functions that are periodic and it is given by
+<p><span id="def:unlabeled-div-78" class="definition"><strong>Definition 6.7  </strong></span>The periodic covariance function models functions that are periodic and it is given by
 <span class="math display">\[
 k(x, x&#39;) = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x&#39;)^2}{p} \right\},
 \]</span>
@@ -413,7 +413,7 @@ where the period is <span class="math inline">\(p\)</span>.</p>
 <p>One difficulty is writing down the design matrices <span class="math inline">\(X\)</span>, it is often not straightforward to propose or justify these forms GPs allow us to take a much less arbitrary approach, simply saying that <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span> and placing a GP prior distribution on <span class="math inline">\(f\)</span>.</p>
 <p>Although we’re placing an prior distribution with an infinite dimension on <span class="math inline">\(f\)</span>, we only ever need to work with a finite dimensional object, making this much easier. We only observe the function at finite number of points <span class="math inline">\(\boldsymbol{f} = \{f(x_1), \ldots, f(x_N)\}\)</span> and we will infer the value of the function at points on a fine grid, <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. By the definition of a GP, the distribution of these points is a multivariate normal distribution.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-78" class="example"><strong>Example 6.3  </strong></span>Suppose we observe <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> at <span class="math inline">\(\boldsymbol{x} = \{x_1, \ldots, x_N\}\)</span>. The plot below shows these points.</p>
+<p><span id="exm:unlabeled-div-79" class="example"><strong>Example 6.3  </strong></span>Suppose we observe <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> at <span class="math inline">\(\boldsymbol{x} = \{x_1, \ldots, x_N\}\)</span>. The plot below shows these points.</p>
 <p><img src="_main_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
 <p>Using the model <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span>, where <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>, we want to infer the function <span class="math inline">\(f\)</span> evaluated at a gird of points <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. We place a GP prior distribution on <span class="math inline">\(f \sim \mathcal{GP}(0, k)\)</span>, where <span class="math inline">\(k\)</span> is the squared exponential covariance function. Using the model, the covariance between points <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span> is
 <span class="math display">\[

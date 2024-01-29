@@ -195,7 +195,7 @@ qnorm(c(0.025, 0.975), mu1, sqrt(sigma1.sq))
 
 When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.  
 
-::: {.defintion}
+::: {.definition}
 If the prior distribution $\pi(\theta)$ has the same distributional family as the posterior distribution $\pi(\theta \mid \boldsymbol{y})$, then the prior distribution is a **conjugate prior distribution**. 
 :::
 
