@@ -455,7 +455,7 @@ Adapt the code in the Example above to use an exponential prior distribution wit
 :::
 
 ::: {.exercise}
-You are given the data are exponentially distributed with rate $\lambda,$ i.e. $Y_1, \ldots, Y_N \sim \hbox{Exp}(\lambda)$. Your prior belief is that $\lambda \in (0, 1)$. Show that the posterior distribution $\pi(\lambda \mid \boldsymbol{y})$ has no closed form when the prior distribution for $\lambda \sim \hbox{Beta}(\alpha, \beta)$. 
+You are given that the data are exponentially distributed with rate $\lambda,$ i.e. $Y_1, \ldots, Y_N \sim \hbox{Exp}(\lambda)$. Your prior belief is that $\lambda \in (0, 1)$. Show that the posterior distribution $\pi(\lambda \mid \boldsymbol{y})$ has no closed form when the prior distribution for $\lambda \sim \hbox{Beta}(\alpha, \beta)$. 
 
 The data is given by 
 ```{r}
