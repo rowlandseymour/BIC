@@ -378,7 +378,7 @@ The total number of goals scored in 50 games of a low level football league is s
 y <- c(2, 6, 2, 3, 4, 3, 4, 3, 1, 2, 3, 2, 6, 6, 2, 3, 5, 1, 2, 2, 4, 2, 5, 3,
        6, 4, 1, 2, 7, 8, 4, 3, 7, 3, 3, 5, 2, 6, 1, 3, 7, 4, 2, 6, 8, 8, 4, 5,
        7, 4)
-hist(y, main = "", xlab = "Reaction time (ms)")
+hist(y, main = "", xlab = "Number of goals scored")
 mean(y)
 ```
 We can model the number of goals scored using a Poisson distribution 
@@ -407,9 +407,9 @@ log.likelihood <- sapply(lambda,  log.likelihood.function, y) #evaluate at grid 
 
 #Plot likelihood
 plot(lambda, likelihood, 
-     xlab = expression(mu), ylab = "likelihood", type = 'l')
+     xlab = expression(lambda), ylab = "likelihood", type = 'l')
 plot(lambda, log.likelihood, 
-     xlab = expression(mu), ylab = "loglikelihood", type = 'l')
+     xlab = expression(lambda), ylab = "loglikelihood", type = 'l')
 ```
 When coding posterior distributions, we often work on the log scale because the numbers can be smaller that R can deal with. The denominator with the factorial can get very large very quickly. 
 
