@@ -1,4 +1,4 @@
-#The posterior distribution is proportion to 
+#The posterior distribution is proportion to
 # \lambda^{N + \alpha - 1}*(1-\lambda)^{\beta - 1}*exp{-lambda*sum(y)}
 
 
@@ -25,7 +25,7 @@ plot(lambda, prior, type = 'l', xlab = expression(lambda), ylab = "density")
 
 # Construct Posterior Distribution Computationally ----------------------------------------
 posterior <- prior*likelihood
-integrating.factor <- 0.5*0.01*(posterior[1] + posterior[10] + 2*sum(posterior[-c(1, 10)])) #Using trapezium rule
+integrating.factor <- 0.5*0.01*(posterior[1] + posterior[101] + 2*sum(posterior[-c(1, 101)])) #Using trapezium rule
 posterior <- posterior/integrating.factor #normalise
-plot(lambda, posterior, type = 'l', xlab = expression(lambda), 
+plot(lambda, posterior, type = 'l', xlab = expression(lambda),
      ylab = "posterior density")

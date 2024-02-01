@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.3235084  0.1081377 -0.9608438 -0.7659683 -0.2523210 -0.1910156
-##  [7] -0.2608554  0.4613834  0.3332784  0.1765459
+##  [1]  0.82094365 -0.04318494  0.11523413 -0.34116692  0.94178738 -0.05557686
+##  [7] -0.51921822 -0.64437201 -0.67185372 -0.36275410
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.86843784 0.03333333
+## [1] 4.94530868 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.510599 5.226277
+## [1] 4.587470 5.303148
 \end{verbatim}
 
 \end{example}
@@ -1600,7 +1600,7 @@ The total number of goals scored in 50 games of a low level football league is s
 \NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{3}\NormalTok{,}
        \DecValTok{6}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{,}
        \DecValTok{7}\NormalTok{, }\DecValTok{4}\NormalTok{)}
-\FunctionTok{hist}\NormalTok{(y, }\AttributeTok{main =} \StringTok{""}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Reaction time (ms)"}\NormalTok{)}
+\FunctionTok{hist}\NormalTok{(y, }\AttributeTok{main =} \StringTok{""}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Number of goals scored"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1642,7 +1642,7 @@ R has a set of inbuilt functions for working with the Poisson distribution so we
 
 \CommentTok{\#Plot likelihood}
 \FunctionTok{plot}\NormalTok{(lambda, likelihood, }
-     \AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(mu), }\AttributeTok{ylab =} \StringTok{"likelihood"}\NormalTok{, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
+     \AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(lambda), }\AttributeTok{ylab =} \StringTok{"likelihood"}\NormalTok{, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1651,7 +1651,7 @@ R has a set of inbuilt functions for working with the Poisson distribution so we
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{plot}\NormalTok{(lambda, log.likelihood, }
-     \AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(mu), }\AttributeTok{ylab =} \StringTok{"loglikelihood"}\NormalTok{, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
+     \AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(lambda), }\AttributeTok{ylab =} \StringTok{"loglikelihood"}\NormalTok{, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1725,13 +1725,13 @@ Adapt the code in the Example above to use an exponential prior distribution wit
 
 \begin{exercise}
 
-You are given the data are exponentially distributed with rate \(\lambda,\) i.e.~\(Y_1, \ldots, Y_N \sim \hbox{Exp}(\lambda)\). Your prior belief is that \(\lambda \in (0, 1)\). Show that the posterior distribution \(\pi(\lambda \mid \boldsymbol{y})\) has no closed form when the prior distribution for \(\lambda \sim \hbox{Beta}(\alpha, \beta)\).
+You are given that the data are exponentially distributed with rate \(\lambda,\) i.e.~\(Y_1, \ldots, Y_N \sim \hbox{Exp}(\lambda)\). Your prior belief is that \(\lambda \in (0, 1)\). Show that the posterior distribution \(\pi(\lambda \mid \boldsymbol{y})\) has no closed form when the prior distribution for \(\lambda \sim \hbox{Beta}(\alpha, \beta)\).
 
 The data is given by
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{1.95}\NormalTok{, }\FloatTok{1.46}\NormalTok{, }\FloatTok{4.81}\NormalTok{, }\FloatTok{1.52}\NormalTok{, }\FloatTok{4.24}\NormalTok{, }\FloatTok{3.00}\NormalTok{, }\FloatTok{0.46}\NormalTok{, }\FloatTok{2.27}\NormalTok{, }\FloatTok{1.76}\NormalTok{, }\FloatTok{0.41}\NormalTok{)}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{1.101558}\NormalTok{, }\FloatTok{1.143953}\NormalTok{, }\FloatTok{1.287348}\NormalTok{, }\FloatTok{1.181010}\NormalTok{, }\FloatTok{1.139132}\NormalTok{, }\FloatTok{1.148631}\NormalTok{, }\FloatTok{1.133201}\NormalTok{, }\FloatTok{1.361229}\NormalTok{, }\FloatTok{1.332540}\NormalTok{, }\FloatTok{1.052501}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1781,7 +1781,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.2506406
+## [1] 0.6140189
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
