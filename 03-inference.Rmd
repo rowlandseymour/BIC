@@ -321,7 +321,7 @@ $$
 Transforming the Fisher information for $\psi$ shows
 \begin{align*}
 I_\psi(\boldsymbol{y}) &= - \mathbb{E}\left(\frac{d^2\log \pi(\boldsymbol{y} \mid \psi)}{d\psi^2}\right) \\
-& = \mathbb{E}\left(\frac{d^2 \log \pi(\boldsymbol{y} \mid \theta = h^{-1}(\psi))}{d\theta^2}\right) \left(\frac{d\theta}{d\psi}\right)^2 \\
+& = \mathbb{E}\left(\frac{d^2 \log \pi(\boldsymbol{y} \mid \theta = h^{-1}(\psi))}{d\theta^2}\left(\frac{d\theta}{d\psi}\right)^2\right)  \\
 & = I_\theta(\boldsymbol{y})\left(\frac{d\theta}{d\psi}\right)^2 .
 \end{align*}
 Thus $\sqrt{I_\psi(\boldsymbol{y})} = \sqrt{I_\theta(\boldsymbol{y})} \left|\frac{d\theta}{d\psi}\right|$ and $\sqrt{I_\psi(\boldsymbol{y})}$ and $\sqrt{I_\theta(\boldsymbol{y})}$ are invariant prior distributions. 
