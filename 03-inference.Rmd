@@ -459,7 +459,7 @@ You are given that the data are exponentially distributed with rate $\lambda,$ i
 
 The data is given by 
 ```{r}
-y <- c(1.95, 1.46, 4.81, 1.52, 4.24, 3.00, 0.46, 2.27, 1.76, 0.41)
+y <- c(1.101558, 1.143953, 1.287348, 1.181010, 1.139132, 1.148631, 1.133201, 1.361229, 1.332540, 1.052501)
 ```
 :::
 By writing an R function to evaluate the likelihood function, evaluate the posterior distribution for $\lambda$ over a grid of points. 
