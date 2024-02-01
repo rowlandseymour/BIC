@@ -458,8 +458,8 @@ plot(x = ,y = , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = &#39;
 <p>R has many build in commands and you used these in Computer Lab I. An example is the <code>runif</code> command from the second exercise. This function generates random numbers from an interval. The code chunk below shows it in action:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="programming-in-r.html#cb10-1" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">min =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
 <span id="cb10-2"><a href="programming-in-r.html#cb10-2" tabindex="-1"></a>u</span></code></pre></div>
-<pre><code>##  [1]  0.2222663 -0.6093225 -0.6397767 -0.8873675  0.7807309  0.1971271
-##  [7]  0.3573691 -0.2517537  0.3442510 -0.9842574</code></pre>
+<pre><code>##  [1] -0.435790526  0.001591867 -0.519758450  0.852794476 -0.803386975
+##  [6]  0.508721070 -0.651181570  0.211059211 -0.182798856  0.943210857</code></pre>
 <p>The functions has three <strong>arguments</strong>: <em>n</em> the number of samples to be generated, <em>min</em> the lower limit of the interval, <em>max</em> the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval [-1, 1]. In R, you don’t need to label the arguments, so the following will sample the same number of samples from the same interval:</p>
 <pre><code>u &lt;- runif(10, -1, 1)</code></pre>
 <p>Although in most cases it helps to label the arguments for readability and avoiding undefined behaviour. Note that if you decide to omit the argument names in the function call, the arguments must appear exactly in the order defined by the function prototype (check the documentation ?function for specific cases).</p>

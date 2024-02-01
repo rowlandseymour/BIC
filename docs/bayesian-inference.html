@@ -387,7 +387,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <span id="cb27-12"><a href="bayesian-inference.html#cb27-12" tabindex="-1"></a>mu1       <span class="ot">&lt;-</span> sigma1.sq<span class="sc">*</span>(<span class="fu">sum</span>(y)<span class="sc">/</span>(sigma<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> mu0<span class="sc">/</span>(sigma0<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb27-13"><a href="bayesian-inference.html#cb27-13" tabindex="-1"></a></span>
 <span id="cb27-14"><a href="bayesian-inference.html#cb27-14" tabindex="-1"></a><span class="fu">c</span>(mu1, sigma1.sq) <span class="co">#output mean and variance</span></span></code></pre></div>
-<pre><code>## [1] 5.07621539 0.03333333</code></pre>
+<pre><code>## [1] 4.55763942 0.03333333</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bayesian-inference.html#cb29-1" tabindex="-1"></a><span class="co">#Create plot</span></span>
 <span id="cb29-2"><a href="bayesian-inference.html#cb29-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
 <span id="cb29-3"><a href="bayesian-inference.html#cb29-3" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(mu, <span class="at">mean =</span> mu1, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma1.sq))</span>
@@ -395,7 +395,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>The 95% credible interval for the population’s mean reaction time is</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="bayesian-inference.html#cb30-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), mu1, <span class="fu">sqrt</span>(sigma1.sq))</span></code></pre></div>
-<pre><code>## [1] 4.718377 5.434054</code></pre>
+<pre><code>## [1] 4.199801 4.915478</code></pre>
 </div>
 <p>When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.</p>
 <div class="definition">
@@ -519,7 +519,7 @@ This integral is difficult to evaluate immediately. But by multiplying (and divi
 <div class="example">
 <p><span id="exm:unlabeled-div-38" class="example"><strong>Example 3.7  </strong></span>In Example <a href="bayesian-inference.html#exm:binom">3.1</a>, we assigned a uniform prior distribution to the parameter <span class="math inline">\(\theta\)</span>.</p>
 </div>
-<p>Such a prior distribution can have interesting and perhaps unintended side effects. Suppose we do indeed have some parameter <span class="math inline">\(\theta\)</span> and we place a uniform prior distribution on <span class="math inline">\(\theta\)</span> such that <span class="math inline">\(\theta \sim U[0, 1]\)</span>. This means, for example, our prior beliefs about <span class="math inline">\(\theta\)</span> are that it is equally likely to be in <span class="math inline">\([0, 0.1]\)</span> as it is to lie in <span class="math inline">\([0.8, 0.9]\)</span> or any other interval of size 0.1. However, our prior beliefs about <span class="math inline">\(\theta^2\)</span> are not uniform. Letting <span class="math inline">\(\phi = \theta^2\)</span>, changing variables gives <span class="math inline">\(\pi(\phi) = \frac{1}{2\sqrt{\phi}}\)</span>, something that is not uniform. That raises the question, if we have little to say about <span class="math inline">\(\theta\)</span> , shouldn’t we have little to say about any reasonable transformation of <span class="math inline">\(\theta\)</span>?</p>
+<p>Such a prior distribution can have interesting and perhaps unintended side effects. Suppose we do indeed have some parameter <span class="math inline">\(\theta\)</span> and we place a uniform prior distribution on <span class="math inline">\(\theta\)</span> such that <span class="math inline">\(\theta \sim U[0, 1]\)</span>. This means, for example, our prior beliefs about <span class="math inline">\(\theta\)</span> are that it is equally likely to be in <span class="math inline">\([0, 0.1]\)</span> as it is to lie in <span class="math inline">\([0.8, 0.9]\)</span> or any other interval of size 0.1. However, our prior beliefs about <span class="math inline">\(\theta^2\)</span> are not uniform. Letting <span class="math inline">\(\psi = \theta^2\)</span>, changing variables gives <span class="math inline">\(\pi(\psi) = \frac{1}{2\sqrt{\psi}}\)</span>, something that is not uniform. That raises the question, if we have little to say about <span class="math inline">\(\theta\)</span> , shouldn’t we have little to say about any reasonable transformation of <span class="math inline">\(\theta\)</span>?</p>
 <div class="theorem">
 <p><span id="thm:unlabeled-div-39" class="theorem"><strong>Theorem 3.1  (Jeffrey) </strong></span>Given some observed data <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span>, an invariant prior distribution is
 <span class="math display">\[
@@ -535,11 +535,14 @@ where <span class="math inline">\(I_\theta(\boldsymbol{y})\)</span> is the Fishe
 \]</span>
 Transforming the Fisher information for <span class="math inline">\(\psi\)</span> shows
 <span class="math display">\[\begin{align*}
-I_\psi(\boldsymbol{y}) &amp;= - \mathbb{E}\left(\frac{d^2\log \pi(\boldsymbol{y} \mid \psi)}{d\psi^2}\right) \\
-&amp; = \mathbb{E}\left(\frac{d^2 \log \pi(\boldsymbol{y} \mid \theta = h^{-1}(\psi))}{d\theta^2}\left(\frac{d\theta}{d\psi}\right)^2\right)  \\
-&amp; = I_\theta(\boldsymbol{y})\left(\frac{d\theta}{d\psi}\right)^2 .
+I_\psi({y}) &amp;= - \mathbb{E}\left(\frac{d^2\log \pi({y} \mid \psi)}{d\psi^2}\right) \\
+&amp;= -\mathbb{E}\left(\frac{d}{d\psi} \left( \frac{d \log \pi(y|\theta(\psi))}{d \theta} \frac{d\theta}{d\psi} \right) \right) \tag{chain rule}\\
+&amp;= -\mathbb{E}\left(\left(\frac{d^2 \log \pi(y|\theta(\psi))}{d \theta d\psi}\right)\left( \frac{d\theta}{d\psi}\right) + \left(\frac{d \log \pi(y|\theta(\psi))}{d \theta}\right) \left( \frac{d^2\theta}{d\psi^2}\right) \right)\tag{prod. rule} \\
+&amp;= -\mathbb{E}\left(\left(\frac{d^2 \log \pi(y|\theta(\psi))}{d \theta^2 }\right)\left( \frac{d\theta}{d\psi}\right)^2 + \left(\frac{d \log \pi(y|\theta(\psi))}{d \theta}\right) \left( \frac{d^2\theta}{d\psi^2}\right) \right)\tag{chain rule} \\
+&amp; = -\mathbb{E}\left(\left(\frac{d^2 \log \pi({y} \mid \theta)}{d\theta^2}\left(\frac{d\theta}{d\psi}\right)^2\right)\right)  \\
+&amp; = I_\theta({y})\left(\frac{d\theta}{d\psi}\right)^2 .
 \end{align*}\]</span>
-Thus <span class="math inline">\(\sqrt{I_\psi(\boldsymbol{y})} = \sqrt{I_\theta(\boldsymbol{y})} \left|\frac{d\theta}{d\psi}\right|\)</span> and <span class="math inline">\(\sqrt{I_\psi(\boldsymbol{y})}\)</span> and <span class="math inline">\(\sqrt{I_\theta(\boldsymbol{y})}\)</span> are invariant prior distributions.</p>
+Thus <span class="math inline">\(\sqrt{I_\psi({y})} = \sqrt{I_\theta({y})} \left|\frac{d\theta}{d\psi}\right|\)</span> and <span class="math inline">\(\sqrt{I_\psi({y})}\)</span> and <span class="math inline">\(\sqrt{I_\theta({y})}\)</span> are invariant prior distributions.</p>
 </div>
 <div class="example">
 <p><span id="exm:unlabeled-div-41" class="example"><strong>Example 3.8  </strong></span>In Example <a href="bayesian-inference.html#exm:binom">3.1</a>, we modelled the number of bot accounts on a social media website by <span class="math inline">\(Y \sim \textrm{Bin}(n, \theta)\)</span>. To construct Jeffrey’s prior distribution for <span class="math inline">\(\theta\)</span>, we must first derive the Fisher information.<br />

@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] -0.27127958 -0.46448305  0.02901066  0.69897950 -0.05001416  0.31750255
-##  [7] -0.51699272 -0.10418978 -0.74640963  0.91564667
+##  [1] -0.2766734 -0.9301468 -0.5790949  0.5710528  0.6115522 -0.5845747
+##  [7]  0.6443700  0.6417527 -0.4012579  0.7586958
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 5.16774206 0.03333333
+## [1] 5.09716387 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.809903 5.525581
+## [1] 4.739325 5.455003
 \end{verbatim}
 
 \end{example}
@@ -1522,7 +1522,7 @@ A \textbf{non-informative prior distribution} is a prior distribution that place
 In Example \ref{exm:binom}, we assigned a uniform prior distribution to the parameter \(\theta\).
 \end{example}
 
-Such a prior distribution can have interesting and perhaps unintended side effects. Suppose we do indeed have some parameter \(\theta\) and we place a uniform prior distribution on \(\theta\) such that \(\theta \sim U[0, 1]\). This means, for example, our prior beliefs about \(\theta\) are that it is equally likely to be in \([0, 0.1]\) as it is to lie in \([0.8, 0.9]\) or any other interval of size 0.1. However, our prior beliefs about \(\theta^2\) are not uniform. Letting \(\phi = \theta^2\), changing variables gives \(\pi(\phi) = \frac{1}{2\sqrt{\phi}}\), something that is not uniform. That raises the question, if we have little to say about \(\theta\) \textit{a priori}, shouldn't we have little to say about any reasonable transformation of \(\theta\)?
+Such a prior distribution can have interesting and perhaps unintended side effects. Suppose we do indeed have some parameter \(\theta\) and we place a uniform prior distribution on \(\theta\) such that \(\theta \sim U[0, 1]\). This means, for example, our prior beliefs about \(\theta\) are that it is equally likely to be in \([0, 0.1]\) as it is to lie in \([0.8, 0.9]\) or any other interval of size 0.1. However, our prior beliefs about \(\theta^2\) are not uniform. Letting \(\psi = \theta^2\), changing variables gives \(\pi(\psi) = \frac{1}{2\sqrt{\psi}}\), something that is not uniform. That raises the question, if we have little to say about \(\theta\) \textit{a priori}, shouldn't we have little to say about any reasonable transformation of \(\theta\)?
 
 \begin{theorem}[Jeffrey]
 Given some observed data \(\boldsymbol{y} = \{y_1, \ldots, y_N\}\), an invariant prior distribution is
@@ -1541,11 +1541,14 @@ Recall that the distribution of \(\psi = h(\theta)\), for some one-to-one functi
 \]
 Transforming the Fisher information for \(\psi\) shows
 \begin{align*}
-I_\psi(\boldsymbol{y}) &= - \mathbb{E}\left(\frac{d^2\log \pi(\boldsymbol{y} \mid \psi)}{d\psi^2}\right) \\
-& = \mathbb{E}\left(\frac{d^2 \log \pi(\boldsymbol{y} \mid \theta = h^{-1}(\psi))}{d\theta^2}\left(\frac{d\theta}{d\psi}\right)^2\right)  \\
-& = I_\theta(\boldsymbol{y})\left(\frac{d\theta}{d\psi}\right)^2 .
+I_\psi({y}) &= - \mathbb{E}\left(\frac{d^2\log \pi({y} \mid \psi)}{d\psi^2}\right) \\
+&= -\mathbb{E}\left(\frac{d}{d\psi} \left( \frac{d \log \pi(y|\theta(\psi))}{d \theta} \frac{d\theta}{d\psi} \right) \right) \tag{chain rule}\\
+&= -\mathbb{E}\left(\left(\frac{d^2 \log \pi(y|\theta(\psi))}{d \theta d\psi}\right)\left( \frac{d\theta}{d\psi}\right) + \left(\frac{d \log \pi(y|\theta(\psi))}{d \theta}\right) \left( \frac{d^2\theta}{d\psi^2}\right) \right)\tag{prod. rule} \\
+&= -\mathbb{E}\left(\left(\frac{d^2 \log \pi(y|\theta(\psi))}{d \theta^2 }\right)\left( \frac{d\theta}{d\psi}\right)^2 + \left(\frac{d \log \pi(y|\theta(\psi))}{d \theta}\right) \left( \frac{d^2\theta}{d\psi^2}\right) \right)\tag{chain rule} \\
+& = -\mathbb{E}\left(\left(\frac{d^2 \log \pi({y} \mid \theta)}{d\theta^2}\left(\frac{d\theta}{d\psi}\right)^2\right)\right)  \\
+& = I_\theta({y})\left(\frac{d\theta}{d\psi}\right)^2 .
 \end{align*}
-Thus \(\sqrt{I_\psi(\boldsymbol{y})} = \sqrt{I_\theta(\boldsymbol{y})} \left|\frac{d\theta}{d\psi}\right|\) and \(\sqrt{I_\psi(\boldsymbol{y})}\) and \(\sqrt{I_\theta(\boldsymbol{y})}\) are invariant prior distributions.
+Thus \(\sqrt{I_\psi({y})} = \sqrt{I_\theta({y})} \left|\frac{d\theta}{d\psi}\right|\) and \(\sqrt{I_\psi({y})}\) and \(\sqrt{I_\theta({y})}\) are invariant prior distributions.
 \end{proof}
 
 \begin{example}
@@ -1781,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.4785423
+## [1] 0.05126698
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%

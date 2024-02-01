@@ -301,7 +301,7 @@ A **non-informative prior distribution** is a prior distribution that places equ
 In Example \@ref(exm:binom), we assigned a uniform prior distribution to the parameter $\theta$. 
 :::
 
-Such a prior distribution can have interesting and perhaps unintended side effects. Suppose we do indeed have some parameter $\theta$ and we place a uniform prior distribution on $\theta$ such that $\theta \sim U[0, 1]$. This means, for example, our prior beliefs about $\theta$ are that it is equally likely to be in $[0, 0.1]$ as it is to lie in $[0.8, 0.9]$ or any other interval of size 0.1. However, our prior beliefs about $\theta^2$ are not uniform. Letting $\phi = \theta^2$, changing variables gives $\pi(\phi) = \frac{1}{2\sqrt{\phi}}$, something that is not uniform. That raises the question, if we have little to say about $\theta$ \textit{a priori}, shouldn't we have little to say about any reasonable transformation of $\theta$?
+Such a prior distribution can have interesting and perhaps unintended side effects. Suppose we do indeed have some parameter $\theta$ and we place a uniform prior distribution on $\theta$ such that $\theta \sim U[0, 1]$. This means, for example, our prior beliefs about $\theta$ are that it is equally likely to be in $[0, 0.1]$ as it is to lie in $[0.8, 0.9]$ or any other interval of size 0.1. However, our prior beliefs about $\theta^2$ are not uniform. Letting $\psi = \theta^2$, changing variables gives $\pi(\psi) = \frac{1}{2\sqrt{\psi}}$, something that is not uniform. That raises the question, if we have little to say about $\theta$ \textit{a priori}, shouldn't we have little to say about any reasonable transformation of $\theta$?
 
 ::: {.theorem name="Jeffrey"}
 Given some observed data $\boldsymbol{y} = \{y_1, \ldots, y_N\}$, an invariant prior distribution is
@@ -320,11 +320,14 @@ $$
 $$
 Transforming the Fisher information for $\psi$ shows
 \begin{align*}
-I_\psi(\boldsymbol{y}) &= - \mathbb{E}\left(\frac{d^2\log \pi(\boldsymbol{y} \mid \psi)}{d\psi^2}\right) \\
-& = \mathbb{E}\left(\frac{d^2 \log \pi(\boldsymbol{y} \mid \theta = h^{-1}(\psi))}{d\theta^2}\left(\frac{d\theta}{d\psi}\right)^2\right)  \\
-& = I_\theta(\boldsymbol{y})\left(\frac{d\theta}{d\psi}\right)^2 .
+I_\psi({y}) &= - \mathbb{E}\left(\frac{d^2\log \pi({y} \mid \psi)}{d\psi^2}\right) \\
+&= -\mathbb{E}\left(\frac{d}{d\psi} \left( \frac{d \log \pi(y|\theta(\psi))}{d \theta} \frac{d\theta}{d\psi} \right) \right) \tag{chain rule}\\
+&= -\mathbb{E}\left(\left(\frac{d^2 \log \pi(y|\theta(\psi))}{d \theta d\psi}\right)\left( \frac{d\theta}{d\psi}\right) + \left(\frac{d \log \pi(y|\theta(\psi))}{d \theta}\right) \left( \frac{d^2\theta}{d\psi^2}\right) \right)\tag{prod. rule} \\
+&= -\mathbb{E}\left(\left(\frac{d^2 \log \pi(y|\theta(\psi))}{d \theta^2 }\right)\left( \frac{d\theta}{d\psi}\right)^2 + \left(\frac{d \log \pi(y|\theta(\psi))}{d \theta}\right) \left( \frac{d^2\theta}{d\psi^2}\right) \right)\tag{chain rule} \\
+& = -\mathbb{E}\left(\left(\frac{d^2 \log \pi({y} \mid \theta)}{d\theta^2}\left(\frac{d\theta}{d\psi}\right)^2\right)\right)  \\
+& = I_\theta({y})\left(\frac{d\theta}{d\psi}\right)^2 .
 \end{align*}
-Thus $\sqrt{I_\psi(\boldsymbol{y})} = \sqrt{I_\theta(\boldsymbol{y})} \left|\frac{d\theta}{d\psi}\right|$ and $\sqrt{I_\psi(\boldsymbol{y})}$ and $\sqrt{I_\theta(\boldsymbol{y})}$ are invariant prior distributions. 
+Thus $\sqrt{I_\psi({y})} = \sqrt{I_\theta({y})} \left|\frac{d\theta}{d\psi}\right|$ and $\sqrt{I_\psi({y})}$ and $\sqrt{I_\theta({y})}$ are invariant prior distributions. 
 :::
 
 
