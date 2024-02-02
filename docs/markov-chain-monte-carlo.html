@@ -194,6 +194,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#metropolis-hastings"><i class="fa fa-check"></i><b>5.2</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="5.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#gibbs-sampler"><i class="fa fa-check"></i><b>5.3</b> Gibbs Sampler</a></li>
 <li class="chapter" data-level="5.4" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>5.4</b> MCMC Diagnostics</a></li>
+<li class="chapter" data-level="5.5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.5</b> Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
 <ul>
@@ -591,6 +592,41 @@ for(j in 1:M){
 <span id="cb69-35"><a href="markov-chain-monte-carlo.html#cb69-35" tabindex="-1"></a><span class="fu">plot</span>(mu.store[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>)], <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>,</span>
 <span id="cb69-36"><a href="markov-chain-monte-carlo.html#cb69-36" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+</div>
+</div>
+<div id="lab-2" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Lab<a href="markov-chain-monte-carlo.html#lab-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-76" class="exercise"><strong>Exercise 5.1  </strong></span>In Lab 3.9, we computed the MAP estimate for a parameter from the Pareto distribution. The density function of this distribution is
+<span class="math display">\[
+\pi(x \mid \beta) = \frac{\beta}{x^{\beta + 1}}, \quad x &gt; 1.
+\]</span>
+Place a Gamma prior distribution on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim \Gamma(a, b)\)</span>. Derive the posterior distribution for <span class="math inline">\(\beta\)</span> given the data <span class="math inline">\(\boldsymbol{x} = \{x_1, ..., x_N\}\)</span>.</p>
+<p>Write down a Metropolis-Hastings algorithm to generate samples from the posterior distribution using a normal proposal distribution.</p>
+<p>Write a function to evaluate the loglikelihood function. Code your MCMC algorithm and generate samples from the posterior distribution with prior parameters <span class="math inline">\(a=1\)</span> and <span class="math inline">\(b=0.01\)</span> and data:</p>
+<pre><code>x &lt;- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)</code></pre>
+<p>Find the posterior mean and 95% credible interval
+(Hint: The value I used to generate the data was <span class="math inline">\(\beta = 4\)</span>)</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-77" class="exercise"><strong>Exercise 5.2  </strong></span>You observe the following draws from a Binomial distribution with 25 trials and probability of success <span class="math inline">\(p\)</span>.</p>
+<pre><code>y &lt;- c(20, 16, 20, 17, 18, 19, 19, 18, 21, 20, 19, 22, 23, 19, 20, 19, 21, 20, 25, 15)</code></pre>
+<p>Use a normal prior distribution with mean 0.5 and variance <span class="math inline">\(0.1^2\)</span>. Write a Metropolis-Hastings Random Walk algorithm to obtain samples from the posterior distribution (you can use R’s built in function for the likelihood function and prior distribution, but if you don’t take logs you will run into small number errors).</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-78" class="exercise"><strong>Exercise 5.3  </strong></span>In a medical trial, to investigate the proportion <span class="math inline">\(p\)</span> of the population who have a particular disease a random sample of 20 individuals is taken. Ten of these are subject to a diagnostic test (Test A) which detects the disease when it is present with 100% certainty. The remaining 10 are given a test (test B) which only detects the disease with probability 0.8 when it is present. Neither test can give a false positive result. before collecting the data your prior belief about <span class="math inline">\(p\)</span> is represented by a U(0,1) distribution. Suppose that, for Test A, 5 out of 10 test positive while for test B, 3 out of 10 test positive. Use an MCMC algorithm to investigate the posterior density of <span class="math inline">\(p\)</span> and estimate its posterior mean and variance.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-79" class="exercise"><strong>Exercise 5.4  </strong></span>Code up an MCMC algorithm for Example 3.5 using Gibbs samplers.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-80" class="exercise"><strong>Exercise 5.5  </strong></span>The density function for the inverse-gamma distribution is
+<span class="math display">\[
+\pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta/x}
+\]</span>
+Using independent Gamma prior distributions on the model parameters, <span class="math inline">\(\alpha \sim \Gamma(a, b)\)</span> and <span class="math inline">\(\beta \sim Gamma(c, d)\)</span>, write down the posterior distribution for the model parameters. Only one will have a closed form.</p>
+<p>Develop a code an MCMC algorithm to sample from the posterior distribution by alternating between sampling <span class="math inline">\(\alpha\)</span> and then <span class="math inline">\(\beta\)</span>.</p>
+<p>Simulate some data from the inverse-gamma distribution and see if you can recover the parameters used to simulate the data. Is there any correlation between the samples for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>.</p>
 </div>
 
 </div>

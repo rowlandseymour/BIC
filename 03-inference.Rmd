@@ -477,7 +477,7 @@ Suppose you have $X_1, ..., X_N \sim \hbox{Bin}(100, p)$. Using $p \sim \hbox{Be
 ::: {.exercise}
 Code up the posterior distribution in question 4 of problem sheet 2 (the Pareto distribution). Set $a = 1$, $b = 2$ and let the data be
 ```
-y <- c(0.71966737, 0.01349912, 0.21396869, 0.11983329, 0.23884887, 0.11191048, 0.28225739, 0.49056709, 0.22539346, 0.91335674)
+y <- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)
 ```
 Find the MAP estimate for $\beta$
 :::

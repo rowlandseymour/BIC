@@ -194,6 +194,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#metropolis-hastings"><i class="fa fa-check"></i><b>5.2</b> Metropolis-Hastings</a></li>
 <li class="chapter" data-level="5.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#gibbs-sampler"><i class="fa fa-check"></i><b>5.3</b> Gibbs Sampler</a></li>
 <li class="chapter" data-level="5.4" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>5.4</b> MCMC Diagnostics</a></li>
+<li class="chapter" data-level="5.5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.5</b> Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
 <ul>
@@ -387,7 +388,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <span id="cb27-12"><a href="bayesian-inference.html#cb27-12" tabindex="-1"></a>mu1       <span class="ot">&lt;-</span> sigma1.sq<span class="sc">*</span>(<span class="fu">sum</span>(y)<span class="sc">/</span>(sigma<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> mu0<span class="sc">/</span>(sigma0<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb27-13"><a href="bayesian-inference.html#cb27-13" tabindex="-1"></a></span>
 <span id="cb27-14"><a href="bayesian-inference.html#cb27-14" tabindex="-1"></a><span class="fu">c</span>(mu1, sigma1.sq) <span class="co">#output mean and variance</span></span></code></pre></div>
-<pre><code>## [1] 4.55763942 0.03333333</code></pre>
+<pre><code>## [1] 5.36662587 0.03333333</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bayesian-inference.html#cb29-1" tabindex="-1"></a><span class="co">#Create plot</span></span>
 <span id="cb29-2"><a href="bayesian-inference.html#cb29-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
 <span id="cb29-3"><a href="bayesian-inference.html#cb29-3" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(mu, <span class="at">mean =</span> mu1, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma1.sq))</span>
@@ -395,7 +396,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>The 95% credible interval for the population’s mean reaction time is</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="bayesian-inference.html#cb30-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), mu1, <span class="fu">sqrt</span>(sigma1.sq))</span></code></pre></div>
-<pre><code>## [1] 4.199801 4.915478</code></pre>
+<pre><code>## [1] 5.008787 5.724465</code></pre>
 </div>
 <p>When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.</p>
 <div class="definition">
@@ -667,7 +668,7 @@ There is no closed form for this distribution and it is not that nice to work wi
 </div>
 <div class="exercise">
 <p><span id="exr:unlabeled-div-47" class="exercise"><strong>Exercise 3.4  </strong></span>Code up the posterior distribution in question 4 of problem sheet 2 (the Pareto distribution). Set <span class="math inline">\(a = 1\)</span>, <span class="math inline">\(b = 2\)</span> and let the data be</p>
-<pre><code>y &lt;- c(0.71966737, 0.01349912, 0.21396869, 0.11983329, 0.23884887, 0.11191048, 0.28225739, 0.49056709, 0.22539346, 0.91335674)</code></pre>
+<pre><code>y &lt;- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)</code></pre>
 <p>Find the MAP estimate for <span class="math inline">\(\beta\)</span></p>
 </div>
 
