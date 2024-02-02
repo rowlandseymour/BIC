@@ -440,3 +440,55 @@ plot(mu.store[-c(1:5000)], type = 'l', xlab = "iteration",
 ```
 :::
 
+## Lab
+
+::: {.exercise}
+In Lab 3.9, we computed the MAP estimate for a parameter from the Pareto distribution. The density function of this distribution is 
+$$
+\pi(x \mid \beta) = \frac{\beta}{x^{\beta + 1}}, \quad x > 1. 
+$$
+Place a Gamma prior distribution on $\beta$ such that $\beta \sim \Gamma(a, b)$. Derive the posterior distribution for $\beta$ given the data $\boldsymbol{x} = \{x_1, ..., x_N\}$.
+
+Write down a Metropolis-Hastings algorithm to generate samples from the posterior distribution using a normal proposal distribution. 
+
+Write a function to evaluate the loglikelihood function. Code your MCMC algorithm and generate samples from the posterior distribution with prior parameters $a=1$ and $b=0.01$ and data:
+```
+x <- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)
+```
+Find the posterior mean and 95\% credible interval
+(Hint: The value I used to generate the data was $\beta = 4$)
+:::
+
+
+::: {.exercise}
+You observe the following draws from a Binomial distribution with 25 trials and probability of success $p$. 
+```
+y <- c(20, 16, 20, 17, 18, 19, 19, 18, 21, 20, 19, 22, 23, 19, 20, 19, 21, 20, 25, 15)
+```
+
+Use a normal prior distribution with mean 0.5 and variance $0.1^2$. Write a Metropolis-Hastings Random Walk algorithm to obtain samples from the posterior distribution (you can use R's built in function for the likelihood function and prior distribution, but if you don't take logs you will run into small number errors). 
+:::
+
+::: {.exercise}
+In a medical trial, to investigate the proportion $p$ of the population who have a particular disease a random sample of 20 individuals is taken. Ten of these are subject to a diagnostic test (Test A) which detects the disease when it is present with 100% certainty. The remaining 10 are given a test (test B) which only detects the disease with probability 0.8 when it is present. Neither test can give a false positive result. before collecting the data your prior belief about $p$ is represented by a U(0,1) distribution. Suppose that, for Test A, 5 out of 10 test positive while for test B, 3 out of 10 test positive. Use an MCMC algorithm to investigate the posterior density of $p$ and estimate its posterior mean and variance.
+
+:::
+
+::: {.exercise}
+Code up an MCMC algorithm for Example 3.5 using Gibbs samplers.
+:::
+
+
+::: {.exercise}
+The density function for the inverse-gamma distribution is
+$$
+\pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta/x}
+$$
+Using independent Gamma prior distributions on the model parameters, $\alpha \sim \Gamma(a, b)$ and $\beta \sim Gamma(c, d)$, write down the posterior distribution for the model parameters. Only one will have a closed form. 
+
+Develop a code an MCMC algorithm to sample from the posterior distribution by alternating between sampling $\alpha$ and then $\beta$. 
+
+Simulate some data from the inverse-gamma distribution and see if you can recover the parameters used to simulate the data. Is there any correlation between the samples for $\alpha$ and $\beta$. 
+:::
+
+
