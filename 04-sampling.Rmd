@@ -105,7 +105,7 @@ points(x = y, y = u, pch = 19)
 ```
 
 
-Suppose we want to sample from a density $\pi$, but can only generate samples from a density $q$. If there exists some constant $c > 0$, such that $\frac{\pi(y)}{q(y)} \leq c$ for all $y$, then we can generate samples from $p$ by
+Suppose we want to sample from a density $\pi$, but can only generate samples from a density $q$. If there exists some constant $c > 0$, such that $\frac{\pi(y)}{q(y)} \leq c$ for all $y$, then we can generate samples from $\pi$ by
 
 1. Sampling $Y \sim Q$
 
