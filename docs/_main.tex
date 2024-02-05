@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] -0.6576852 -0.5430917  0.3237650 -0.9291963 -0.5960087  0.7548983
-##  [7]  0.7919160  0.8857790  0.1229487 -0.8321279
+##  [1]  0.23215316 -0.31146459 -0.09780948 -0.88287744  0.96547047  0.01945560
+##  [7] -0.98073355  0.03057497  0.18853938  0.10301408
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.80438296 0.03333333
+## [1] 5.14236986 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.446544 5.162222
+## [1] 4.784531 5.500209
 \end{verbatim}
 
 \end{example}
@@ -1784,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.808242
+## [1] 0.4588903
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -1872,7 +1872,7 @@ We now have a way of sampling realisations from distributions where we can analy
 
 \includegraphics{_main_files/figure-latex/unnamed-chunk-24-1.pdf}
 
-Suppose we want to sample from a density \(\pi\), but can only generate samples from a density \(q\). If there exists some constant \(c > 0\), such that \(\frac{\pi(y)}{q(y)} \leq c\) for all \(y\), then we can generate samples from \(p\) by
+Suppose we want to sample from a density \(\pi\), but can only generate samples from a density \(q\). If there exists some constant \(c > 0\), such that \(\frac{\pi(y)}{q(y)} \leq c\) for all \(y\), then we can generate samples from \(\pi\) by
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
