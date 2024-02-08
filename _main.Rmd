@@ -1403,13 +1403,13 @@ $$
 0, \qquad \textrm{otherwise}
 \end{cases}.
 $$
-This has a maximum at $\frac{3}{4}$. We choose $p \sim U[0, 1]$ and $c = \frac{3}{4}$. The R code below shows a pictorial version of how one sample is generated. 
+This has a maximum at $\frac{3}{4}$. We choose $p \sim U[0, 1]$ and $c = \frac{3}{2}$. The R code below shows a pictorial version of how one sample is generated. 
 ```{r}
 set.seed(1234)   #to reproduce
-M <- 3/4         #set M
-y <- runif(1)    #sample Y ~ Q
+scaling.c <- 3/2         #set c
+y <- runif(1, 0, 2)    #sample Y ~ Q
 p <- 3/4*y*(2-y) #compute pi(y)
-k <- p/(M*1)     #compute k
+k <- p/(scaling.c*1/2)     #compute k
 u <- runif(1)    #sample U ~ U[0, 1]
 ifelse(u < k, 'accept', 'reject') #Accept if  u < k
 
@@ -1417,17 +1417,72 @@ ifelse(u < k, 'accept', 'reject') #Accept if  u < k
 #Create nice plot
 a <- seq(0, 2, 0.01)
 b <- 3/4*a*(2-a)
-c <- M*rep(1, length(a))
-plot(a, b, ylim = c(0, M), type = 'l')
-lines(a, c)
+scaling.c  <- scaling.c*rep(1, length(a))
+plot(a, b, ylim = c(0, 3/2), type = 'l')
+lines(a, scaling.c)
 segments(x0 = y, y0 = 0, x1 = y,  y1 =3/4*y*(2-y) , 
           lty = 2, lwd = 2)
-segments(x0 = y,  y0 =3/4*y*(2-y), x1 = y, y1 = M, lty = 2, 
+segments(x0 = y,  y0 =3/4*y*(2-y), x1 = y, y1 = 3/2, lty = 2, 
           col = 2, lwd = 2)
 points(x = y, y = u, pch = 19)
 
 ```
-The plot also shows how the choices of $M$ and $q$ can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better $q$ to minimise this space. 
+The plot also shows how the choices of $c$ and $q$ can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better $q$ to minimise this space. 
+:::
+
+::: {.example}
+Suppose we want to sample from a Beta(4, 8) distribution. This distribution looks like
+```{r}
+x <- seq(0, 1, 0.001)
+y <- dbeta(x, 4, 8)
+```
+A uniform distribution on [0, 1] will cover the Beta distribution and we can then use a rejection sampling algorithm. First, we need to find $c$, the maximum of the Beta distribution. We can find this by differentiating the pdf and setting it equal to 0:
+$$
+\pi(x) = \frac{1}{B(4, 8)}x^3(1-x)^7 \\
+\implies \frac{d \pi(x)}{d x} = 3x^2(1-x)^7 - 7x^3(1-x)^6 \\
+\implies \frac{d \pi(x)}{d x} = x^2(1-x)^7(3-10x).
+$$
+Setting this equal to 0 gives us the maximum at $x = \frac{3}{10}$. This means we can set $c = \frac{3}{10}$. The value of $k$ can be simplified to $k = \frac{10}{3B(4, 8)}u^3(1-u)^7$. Our rejection sampling algorithm is therefore
+
+1. Sample $u \sim U[0, 1]$
+2. Compute $k = \frac{10}{3B(4, 8)}u^3(1-u)^7$
+3. Accept $u$ with probability $k$. 
+:::
+
+
+::: {.example}
+In this example, we want to sample from a Gamma(3, 2) distribution. The density function is shown below.
+```{r}
+x <- seq(0, 6, 0.01)
+y <- dgamma(x, 3, 2)
+```
+
+We will use an Exp(1) distribution as our proposal distribution. To find the value of $c$, consider $R(x) = \frac{\pi(x)}{q(x)}$
+$$
+R(x) = \frac{\frac{2^3}{\Gamma(3)}x^2\exp(-2x)}{\exp(-x)} \\
+ =  \frac{2^3}{\Gamma(3)}x^2 \exp(-x)
+$$
+To find the maximum of this ratio, we differentiate and set the result equal to 0. 
+$$
+\frac{dR}{dx} = 2x\exp(-x) - x^2\exp(-x)\\
+= x\exp(-x)(2 - x)
+$$
+The maximum is therefore at 2. The value of the ratio at $x = 2$ is $R(2) = \frac{2^3}{\Gamma(3)}4\exp(-2)$. This is therefore our value of c. We can see how $\pi(x)$ and $cq(x)$ look of the graph below. 
+```{r}
+x <- seq(0, 6, 0.01)
+y <- dgamma(x, 3, 2)
+scaling.c <- 2^3/gamma(3)*4*exp(-2)
+q <- dexp(x, 1)
+
+plot(x, y, type = 'l')
+lines(x, q*scaling.c, col = 2, lty = 2)
+```
+
+The exponential distribution completely encloses the gamma distribution using this value of $c$, wiht the two densities just touching at $x=2$. Our rejection sampling algorithm is therefore
+
+1. Sample $u \sim \hbox{exp}(1)$
+2. Compute $k = \frac{\pi(u)}{cq(u)}$
+3. Accept $u$ with probability $k$. 
 :::
 
 ### Rejection Sampling Efficiency
