@@ -1355,6 +1355,38 @@ text(x = -.1, y = u, "U", col = 4)
 ```
 :::
 
+::: {.example}
+Suppose we want to generate samples from the Cauchy distribution with location 0 and scale 1. This has density function 
+$$
+\pi(x) = \frac{1}{\pi(1+x^2)}, \quad x \in \mathbb{R}.
+$$
+A plot of this function is shown below. 
+```{r}
+x <- seq(-5, 5, 0.01)
+y <- 1/(pi*(1 + x^2))
+plot(x, y, type = 'l')
+```
+To use the inverse transform method, we first need to find the CDF:
+$$
+F(x) = \int_{-\infty}^x \frac{1}{\pi(1+t^2)}dt
+$$
+Letting $t = \tan \theta$, we can write $dt = \sec^2(\theta)$. The integral becomes
+$$
+F(x) = \int_{-\frac{\pi}{2}}^{\arctan(x)} \frac{\sec^2(\theta)}{\pi(1+\tan^2(\theta))} d\theta
+$$
+As $1 + \tan^2(\theta) = \sec^2(\theta)$, we can write the integral as
+$$
+F(x) = \int_{-\frac{\pi}{2}}^{\arctan(x)} \frac{1}{\pi}du\\
+= \left[\frac{\theta}{\pi}\right]_{-\frac{\pi}{2}}^{\arctan(x)}\\
+= \arctan(x) + \frac{1}{2}.
+$$
+The inverse of the distribution function is 
+$$
+F^{-1}(x) = \tan\left(\pi\left(x - \frac{1}{2}\right)\right).
+$$
+Hence, if $U \sim U[0, 1]$, then $\tan\left(\pi\left(x - \frac{1}{2}\right)\right) \sim \hbox{Cauchy}(0, 1)$.
+:::
+
 ## Rejection Sampling
 We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling works by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. The plot below shows an example from this. We would like to generate a sample from the distribution with the curved density function, which is challenging. Instead, we find a distribution whose density function bounds the one we are interested in a sample from that. In this case we can use the uniform distribution. Once we have generated our sample from he uniform distribution, we choose to accept or reject it based on the distribution we are interested in. In this case we reject it. 
 
