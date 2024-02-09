@@ -238,7 +238,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>What we won’t be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is because computers aren’t good at being random, they require algorithmic instructions. True random number generation often uses physical methods, such as the radioactive decay of atoms, or atmospheric noise.</p>
 <p>Throughout this module, we will be using R’s built in random number generation. This is a pseudo random number generator that has excellent random properties, but will eventually repeat. A basic random number generation tool that we will repeatedly use in the module involves sampling from a uniform distribution on the unit interval, which can be done in R using</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="sampling.html#cb52-1" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.3487749</code></pre>
+<pre><code>## [1] 0.4443824</code></pre>
 </div>
 <div id="inverse-transform-sampling" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Inverse Transform Sampling<a href="sampling.html#inverse-transform-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -316,7 +316,7 @@ To use the inverse transform method, we first need to find the CDF:
 <span class="math display">\[
 F(x) = \int_{-\infty}^x \frac{1}{\pi(1+t^2)}dt
 \]</span>
-Letting <span class="math inline">\(t = \tan \theta\)</span>, we can write <span class="math inline">\(dt = \sec^2(\theta)\)</span>. The integral becomes
+Letting <span class="math inline">\(t = \tan \theta\)</span>, we can write <span class="math inline">\(dt = \sec^2(\theta)d\theta\)</span>. The integral becomes
 <span class="math display">\[
 F(x) = \int_{-\frac{\pi}{2}}^{\arctan(x)} \frac{\sec^2(\theta)}{\pi(1+\tan^2(\theta))} d\theta
 \]</span>
@@ -324,13 +324,13 @@ As <span class="math inline">\(1 + \tan^2(\theta) = \sec^2(\theta)\)</span>, we 
 <span class="math display">\[
 F(x) = \int_{-\frac{\pi}{2}}^{\arctan(x)} \frac{1}{\pi}du\\
 = \left[\frac{\theta}{\pi}\right]_{-\frac{\pi}{2}}^{\arctan(x)}\\
-= \arctan(x) + \frac{1}{2}.
+= \frac{\arctan(x)}{\pi} + \frac{1}{2}.
 \]</span>
 The inverse of the distribution function is
 <span class="math display">\[
 F^{-1}(x) = \tan\left(\pi\left(x - \frac{1}{2}\right)\right).
 \]</span>
-Hence, if <span class="math inline">\(U \sim U[0, 1]\)</span>, then <span class="math inline">\(\tan\left(\pi\left(x - \frac{1}{2}\right)\right) \sim \hbox{Cauchy}(0, 1)\)</span>.</p>
+Hence, if <span class="math inline">\(U \sim U[0, 1]\)</span>, then <span class="math inline">\(\tan\left(\pi\left(U - \frac{1}{2}\right)\right) \sim \hbox{Cauchy}(0, 1)\)</span>.</p>
 </div>
 </div>
 <div id="rejection-sampling" class="section level2 hasAnchor" number="4.3">
@@ -387,13 +387,13 @@ The plot also shows how the choices of <span class="math inline">\(c\)</span> an
 <p>A uniform distribution on [0, 1] will cover the Beta distribution and we can then use a rejection sampling algorithm. First, we need to find <span class="math inline">\(c\)</span>, the maximum of the Beta distribution. We can find this by differentiating the pdf and setting it equal to 0:
 <span class="math display">\[
 \pi(x) = \frac{1}{B(4, 8)}x^3(1-x)^7 \\
-\implies \frac{d \pi(x)}{d x} = 3x^2(1-x)^7 - 7x^3(1-x)^6 \\
-\implies \frac{d \pi(x)}{d x} = x^2(1-x)^7(3-10x).
+\implies \frac{d \pi(x)}{d x} = \frac{1}{B(4, 8)}(3x^2(1-x)^7 - 7x^3(1-x)^6) \\
+\implies \frac{d \pi(x)}{d x} = \frac{1}{B(4, 8)}(x^2(1-x)^7(3-10x)).
 \]</span>
-Setting this equal to 0 gives us the maximum at <span class="math inline">\(x = \frac{3}{10}\)</span>. This means we can set <span class="math inline">\(c = \frac{3}{10}\)</span>. The value of <span class="math inline">\(k\)</span> can be simplified to <span class="math inline">\(k = \frac{10}{3B(4, 8)}u^3(1-u)^7\)</span>. Our rejection sampling algorithm is therefore</p>
+Setting this equal to 0 gives us the maximum at <span class="math inline">\(x = \frac{3}{10}\)</span>. This means we can set <span class="math inline">\(\pi(3/10) = \frac{1}{B(4, 8)} \frac{3^7 7^{10}}{10^{10}}\)</span>. Our rejection sampling algorithm is therefore</p>
 <ol style="list-style-type: decimal">
 <li>Sample <span class="math inline">\(u \sim U[0, 1]\)</span></li>
-<li>Compute <span class="math inline">\(k = \frac{10}{3B(4, 8)}u^3(1-u)^7\)</span></li>
+<li>Compute <span class="math inline">\(k = \pi(u)/cq(u)\)</span>.</li>
 <li>Accept <span class="math inline">\(u\)</span> with probability <span class="math inline">\(k\)</span>.</li>
 </ol>
 </div>

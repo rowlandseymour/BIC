@@ -96,7 +96,7 @@ To use the inverse transform method, we first need to find the CDF:
 $$
 F(x) = \int_{-\infty}^x \frac{1}{\pi(1+t^2)}dt
 $$
-Letting $t = \tan \theta$, we can write $dt = \sec^2(\theta)$. The integral becomes
+Letting $t = \tan \theta$, we can write $dt = \sec^2(\theta)d\theta$. The integral becomes
 $$
 F(x) = \int_{-\frac{\pi}{2}}^{\arctan(x)} \frac{\sec^2(\theta)}{\pi(1+\tan^2(\theta))} d\theta
 $$
@@ -104,13 +104,13 @@ As $1 + \tan^2(\theta) = \sec^2(\theta)$, we can write the integral as
 $$
 F(x) = \int_{-\frac{\pi}{2}}^{\arctan(x)} \frac{1}{\pi}du\\
 = \left[\frac{\theta}{\pi}\right]_{-\frac{\pi}{2}}^{\arctan(x)}\\
-= \arctan(x) + \frac{1}{2}.
+= \frac{\arctan(x)}{\pi} + \frac{1}{2}.
 $$
 The inverse of the distribution function is 
 $$
 F^{-1}(x) = \tan\left(\pi\left(x - \frac{1}{2}\right)\right).
 $$
-Hence, if $U \sim U[0, 1]$, then $\tan\left(\pi\left(x - \frac{1}{2}\right)\right) \sim \hbox{Cauchy}(0, 1)$.
+Hence, if $U \sim U[0, 1]$, then $\tan\left(\pi\left(U - \frac{1}{2}\right)\right) \sim \hbox{Cauchy}(0, 1)$.
 :::
 
 ## Rejection Sampling
@@ -197,13 +197,13 @@ y <- dbeta(x, 4, 8)
 A uniform distribution on [0, 1] will cover the Beta distribution and we can then use a rejection sampling algorithm. First, we need to find $c$, the maximum of the Beta distribution. We can find this by differentiating the pdf and setting it equal to 0:
 $$
 \pi(x) = \frac{1}{B(4, 8)}x^3(1-x)^7 \\
-\implies \frac{d \pi(x)}{d x} = 3x^2(1-x)^7 - 7x^3(1-x)^6 \\
-\implies \frac{d \pi(x)}{d x} = x^2(1-x)^7(3-10x).
+\implies \frac{d \pi(x)}{d x} = \frac{1}{B(4, 8)}(3x^2(1-x)^7 - 7x^3(1-x)^6) \\
+\implies \frac{d \pi(x)}{d x} = \frac{1}{B(4, 8)}(x^2(1-x)^7(3-10x)).
 $$
-Setting this equal to 0 gives us the maximum at $x = \frac{3}{10}$. This means we can set $c = \frac{3}{10}$. The value of $k$ can be simplified to $k = \frac{10}{3B(4, 8)}u^3(1-u)^7$. Our rejection sampling algorithm is therefore
+Setting this equal to 0 gives us the maximum at $x = \frac{3}{10}$. This means we can set $\pi(3/10) = \frac{1}{B(4, 8)} \frac{3^7 7^{10}}{10^{10}}$. Our rejection sampling algorithm is therefore
 
 1. Sample $u \sim U[0, 1]$
-2. Compute $k = \frac{10}{3B(4, 8)}u^3(1-u)^7$
+2. Compute $k = \pi(u)/cq(u)$. 
 3. Accept $u$ with probability $k$. 
 :::
 
