@@ -192,8 +192,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="5.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#properties-of-markov-chains"><i class="fa fa-check"></i><b>5.1</b> Properties of Markov Chains</a></li>
 <li class="chapter" data-level="5.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#metropolis-hastings"><i class="fa fa-check"></i><b>5.2</b> Metropolis-Hastings</a></li>
-<li class="chapter" data-level="5.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#gibbs-sampler"><i class="fa fa-check"></i><b>5.3</b> Gibbs Sampler</a></li>
-<li class="chapter" data-level="5.4" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>5.4</b> MCMC Diagnostics</a></li>
 <li class="chapter" data-level="5.5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.5</b> Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
@@ -535,12 +533,12 @@ p_\textrm{acc} = \min\left\{\frac{\exp\left\{-0.01\mu&#39; -\sum_{i=1}^{30}\frac
 <pre><code>0.486 0.493</code></pre>
 <p>It seems that the posterior distribution is very similar when using these two prior distributions. This is because the data are very informative.</p>
 </div>
-<p>::: {.example}
-In Lab 3.9, we computed the MAP estimate for a parameter from the Pareto distribution. The density function of this distribution is
+<div class="example">
+<p><span id="exm:unlabeled-div-79" class="example"><strong>Example 5.4  </strong></span>In Lab 3.9, we computed the MAP estimate for a parameter from the Pareto distribution. The density function of this distribution is
 <span class="math display">\[
 \pi(x \mid \beta) = \frac{\beta}{x^{\beta + 1}}, \quad x &gt; 1.
 \]</span>
-Placing a Gamma prior distribution on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim \Gamma(a, b)\)</span>. The posterior distribution given the data <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N}\)</span> is
+Placing a Gamma prior distribution on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim \Gamma(a, b)\)</span>. The posterior distribution given the data <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> is
 <span class="math display">\[
 \pi(\beta \mid \boldsymbol{y}) \propto \frac{\beta^{N + a - 1}e^{-b\beta}}{\prod y_i^{\beta + 1}}.
 \]</span>
@@ -610,7 +608,6 @@ The MCMC algorithm will be
 <div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="markov-chain-monte-carlo.html#cb80-1" tabindex="-1"></a><span class="fu">quantile</span>(beta.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
 <pre><code>##     2.5%    97.5% 
 ## 2.102268 7.027826</code></pre>
-</div>
 <div id="gibbs-sampler" class="section level2 hasAnchor" number="5.3">
 <h2><span class="header-section-number">5.3</span> Gibbs Sampler<a href="markov-chain-monte-carlo.html#gibbs-sampler" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>When we can sample directly from conditional posterior distributions, we can use a Gibbs sampler. Suppose we have a distribution with parameters <span class="math inline">\(\{\theta_1, \ldots, \theta_N\}\)</span>, a Gibbs sampler works as follows:</p>
@@ -635,7 +632,7 @@ for(j in 1:M){
   theta.store[, j] &lt;- theta.current #store current values
 }</code></pre>
 <div class="example">
-<p><span id="exm:unlabeled-div-75" class="example"><strong>Example 5.4  </strong></span>In Example 3.5, we had a hierarchical model with<br />
+<p><span id="exm:unlabeled-div-75" class="example"><strong>Example 5.5  </strong></span>In Example 3.5, we had a hierarchical model with<br />
 <span class="math display">\[\begin{align*}
 \boldsymbol{y} \mid \lambda &amp;\sim \hbox{Exp}(\lambda) &amp; \textrm{(likelihood)} \\
 \lambda \mid \gamma &amp;\sim \hbox{Exp}(\gamma) &amp; \textrm{(prior distribution)} \\
@@ -712,7 +709,7 @@ Therefore the full conditional distribution of <span class="math inline">\(\gamm
 <p><span id="def:unlabeled-div-77" class="definition"><strong>Definition 5.8  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-78" class="example"><strong>Example 5.5  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:norm">5.3</a>, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge. Although the posterior distribution is invariant to the choice of the proposal distribution, it still has a large effect of the efficiency of the algorithm and how well the chain mixes. The ideal trace plot looks like white noise, or a hairy caterpillar.</p>
+<p><span id="exm:unlabeled-div-78" class="example"><strong>Example 5.6  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:norm">5.3</a>, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge. Although the posterior distribution is invariant to the choice of the proposal distribution, it still has a large effect of the efficiency of the algorithm and how well the chain mixes. The ideal trace plot looks like white noise, or a hairy caterpillar.</p>
 <p>In a Metropolis-Hasting random walk algorithm, the proposal distribution often has a large impact on how well the Markov chain mixes. The variance, or step size, of the proposal distribution can be tuned to ensure the chain mixes well.</p>
 <p>The following two examples show poorly mixing Markov chains. The first is where the step size is too big and the chain frequently gets stuck for several hundred iterations.</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="markov-chain-monte-carlo.html#cb96-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
@@ -789,22 +786,40 @@ Therefore the full conditional distribution of <span class="math inline">\(\gamm
 <span id="cb97-36"><a href="markov-chain-monte-carlo.html#cb97-36" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">expression</span>(mu))</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
 </div>
+<p>The final diagnostic issue we are going to think about is the <strong>curse of dimensionality</strong>. In general, the more parameters we try and update, the less likely we are to accept them. This makes exploring the proposal distribution hard if we are trying to update lots of parameters simultaneously. We can see this if we consider a hypersphere
+:::{.example}
+Suppose we have a density function that is uniformly distributed over the area of a sphere in <span class="math inline">\(N\)</span> dimensions with radius <span class="math inline">\(r\)</span>. The sphere has volume
+<span class="math display">\[
+V = \frac{\pi^{N/2}}{\Gamma(\frac{N}{2} + 1)}r^N.
+\]</span>
+Now consider a smaller sphere inside of our original sphere. This still has dimension <span class="math inline">\(N\)</span> but has radius <span class="math inline">\(r_1 &lt; r\)</span>. This small sphere has volume
+<span class="math display">\[
+V_1 = \frac{\pi^{N/2}}{\Gamma(\frac{N}{2} + 1)}r_1^N.
+\]</span>
+The difference between these two volumes is
+<span class="math display">\[
+V - V_1 = \frac{\pi^{N/2}}{\Gamma(\frac{N}{2} + 1)}(r^N - r_1^N).
+\]</span>
+For large <span class="math inline">\(N\)</span>, even when <span class="math inline">\(r - r_1\)</span> is small, <span class="math inline">\((r^N - r_1^N)\)</span> is large. This means that lots of the probability mass is concentrated away from the mode into the outer shell of the sphere.</p>
+</div>
+</div>
+<p>The hypersphere example shows that in large dimensions we need our Markov chain to spend lots of time away from the posterior mode and in the tails of the distribution, but this is where the proposal distribution has lowest mass. We can avoid this by updating each parameter individually, but this means we need to use the full conditional distributions, which have highest mass near the mode. This ‘curse’ makes MCMC algorithms inefficient for large dimensions.</p>
 </div>
 <div id="lab-2" class="section level2 hasAnchor" number="5.5">
 <h2><span class="header-section-number">5.5</span> Lab<a href="markov-chain-monte-carlo.html#lab-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-79" class="exercise"><strong>Exercise 5.1  </strong></span>You observe the following draws from a Binomial distribution with 25 trials and probability of success <span class="math inline">\(p\)</span>.</p>
+<p><span id="exr:unlabeled-div-80" class="exercise"><strong>Exercise 5.1  </strong></span>You observe the following draws from a Binomial distribution with 25 trials and probability of success <span class="math inline">\(p\)</span>.</p>
 <pre><code>y &lt;- c(20, 16, 20, 17, 18, 19, 19, 18, 21, 20, 19, 22, 23, 19, 20, 19, 21, 20, 25, 15)</code></pre>
 <p>Use a normal prior distribution with mean 0.5 and variance <span class="math inline">\(0.1^2\)</span>. Write a Metropolis-Hastings Random Walk algorithm to obtain samples from the posterior distribution (you can use R’s built in function for the likelihood function and prior distribution, but if you don’t take logs you will run into small number errors).</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-80" class="exercise"><strong>Exercise 5.2  </strong></span>In a medical trial, to investigate the proportion <span class="math inline">\(p\)</span> of the population who have a particular disease a random sample of 20 individuals is taken. Ten of these are subject to a diagnostic test (Test A) which detects the disease when it is present with 100% certainty. The remaining 10 are given a test (test B) which only detects the disease with probability 0.8 when it is present. Neither test can give a false positive result. before collecting the data your prior belief about <span class="math inline">\(p\)</span> is represented by a U(0,1) distribution. Suppose that, for Test A, 5 out of 10 test positive while for test B, 3 out of 10 test positive. Use an MCMC algorithm to investigate the posterior density of <span class="math inline">\(p\)</span> and estimate its posterior mean and variance.</p>
+<p><span id="exr:unlabeled-div-81" class="exercise"><strong>Exercise 5.2  </strong></span>In a medical trial, to investigate the proportion <span class="math inline">\(p\)</span> of the population who have a particular disease a random sample of 20 individuals is taken. Ten of these are subject to a diagnostic test (Test A) which detects the disease when it is present with 100% certainty. The remaining 10 are given a test (test B) which only detects the disease with probability 0.8 when it is present. Neither test can give a false positive result. before collecting the data your prior belief about <span class="math inline">\(p\)</span> is represented by a U(0,1) distribution. Suppose that, for Test A, 5 out of 10 test positive while for test B, 3 out of 10 test positive. Use an MCMC algorithm to investigate the posterior density of <span class="math inline">\(p\)</span> and estimate its posterior mean and variance.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-81" class="exercise"><strong>Exercise 5.3  </strong></span>Code up an MCMC algorithm for Example 3.5 using Gibbs samplers.</p>
+<p><span id="exr:unlabeled-div-82" class="exercise"><strong>Exercise 5.3  </strong></span>Code up an MCMC algorithm for Example 3.5 using Gibbs samplers.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-82" class="exercise"><strong>Exercise 5.4  </strong></span>The density function for the inverse-gamma distribution is
+<p><span id="exr:unlabeled-div-83" class="exercise"><strong>Exercise 5.4  </strong></span>The density function for the inverse-gamma distribution is
 <span class="math display">\[
 \pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta/x}
 \]</span>
