@@ -193,8 +193,85 @@ $$
 Hence, $\pi(\theta \mid \boldsymbol{y}) \pi(\theta'\mid\theta) = \pi(\theta' \mid \boldsymbol{y}) \pi(\theta\mid\theta')$ and the Markov chain satisfies detailed balance with respect to the posterior disquisition. 
 ::: 
 
+
 :::{.example #norm}
-Lets think again about the reaction time example in the previous chapter.The time until each lorry driver reacts (in milliseconds) is 
+A counter monitors the time until atoms decays. It collects the data $X_1, \ldots, X_N$ and we assume $X_i \sim \hbox{Exp}(\lambda)$. The time until these atom decays is short, less than 1 second, so we assume $\lambda \sim \hbox{Beta}(\alpha, \beta)$. 
+
+The prior distribution is given by 
+$$
+\pi(\lambda \mid \boldsymbol{x}) \propto \lambda^{N + \alpha - 1} (1 - \lambda)^{\beta - 1}\exp\left(-\lambda \sum x_i\right)
+$$
+This doesn't have a closed form, so we need to use a Metropolis-Hastings algorithm to generate samples from this distribution. A suitable algorithm is
+
+1. Decide on an starting value the Markov chain and denote it $\lambda^{(1)}$. Set $i = 1$. 
+2. Propose a new value for the parameter and denote it $\lambda'$. In this example, we are going to propose values using a random walk method where $\lambda' \sim N(\lambda^{(i)}, \sigma^2)$. 
+3. Accept $\lambda'$ as the value $\lambda^{(i+1)}$ with probability $p_{\textrm{acc}}$. Otherwise reject this value and set $\lambda^{(i+1)} = \lambda^{(i)}$.  
+4. Set $i = i + 1$. 
+5. Repeat steps 2, 3, 4, for $i = 2, \ldots, M$. 
+
+The value $p_{\textrm{acc}}$ is given by
+$$
+p_{\textrm{acc}} = \min \left\{1, \, \frac{\lambda'^{N + \alpha - 1} (1 - \lambda')^{\beta - 1}\exp\left(-\lambda' \sum x_i\right)}{\lambda^{N + \alpha - 1} (1 - \lambda)^{\beta - 1}\exp\left(-\lambda \sum x_i\right)}\right\} \\
+= \min \left\{1, \, \left(\frac{\lambda'}{\lambda}\right)^{N + \alpha - 1} \left(\frac{1-\lambda'}{1-\lambda}\right)^{\beta -1} \exp\left((\lambda- \lambda')\sum x\right)\right\} 
+$$
+As we our proposal distribution is symmetric, $q(\lambda \mid \lambda') = q(\lambda' \mid \lambda)$ and this term cancels. 
+
+The code below shows this algorithm in action 
+```{r}
+# Set Up MCMC Algorithm ---------------------------------------------------
+
+n.iter <- 10000
+lambda.store <- numeric(n.iter) #Store value of Markov chain at end of every iteration
+
+#Initialise Prior Parameters and Data
+lambda <- 0.5
+sum.x <- 67.6
+N <- 20
+alpha <- 1
+beta <- 1
+
+
+# Run MCMC Algorithm ------------------------------------------------------
+for(i in 1:n.iter){
+  
+  #Propose new value of lambda
+  lambda.prop <- rnorm(1, lambda, 0.1)
+  
+  #Check lambda \in [0, 1]
+  if(lambda.prop > 0 & lambda.prop < 1){
+    
+    #Compute p_acc
+    log.p.acc <- (N + alpha - 1)*log(lambda.prop/lambda) + 
+      (beta - 1)*log((1-lambda.prop)/(1-lambda)) +
+      (lambda - lambda.prop)*sum.x
+    
+    #Accept/Reject step
+    if(log(runif(1)) < log.p.acc)
+      lambda <- lambda.prop
+    
+  }
+  
+  #Store current value of Markov Chain
+  lambda.store[i] <- lambda
+  
+}
+
+#Plot trace plot (Markov chain values)
+plot(lambda.store, type = 'l', xlab = "iteration", ylab = expression(lambda))
+abline(h=0.3, col = 2) #the value I used to simulate the data
+
+#Plot posterior density
+hist(lambda.store, prob = TRUE, xlab = expression(lambda), main = "Posterior density")
+abline(v=0.3, col = 2) #the value I used to simulate the data
+mean(lambda.store) #posterior mean
+quantile(lambda.store, c(0.025, 0.975)) #95% CI
+```
+
+
+:::
+
+:::{.example #norm}
+The time until lorry drivers react (in milliseconds) to an obsticle in the road is 
 ```{r}
 y <- c(0.34, 0.47, 0.58, 0.27, 0.74, 0.44, 0.46, 0.65, 0.36, 0.55, 0.58, 0.55, 
        0.53, 0.56, 0.54, 0.61, 0.43, 0.52, 0.45, 0.49, 0.32, 0.33, 0.47, 0.58, 
@@ -274,12 +351,91 @@ The 95% credible interval for $\mu$ using this prior distribution is
 ```{r}
 quantile(mu.store[-c(1:300)], c(0.025, 0.975))
 ```
-Recall that using the normal prior distribution, it was
+Using a normal prior distribution, it was
 ```
 0.486 0.493
 ```
 It seems that the posterior distribution is very similar when using these two prior distributions. This is because the data are very informative. 
 :::
+
+::: {.example}
+In Lab 3.9, we computed the MAP estimate for a parameter from the Pareto distribution. The density function of this distribution is 
+$$
+\pi(x \mid \beta) = \frac{\beta}{x^{\beta + 1}}, \quad x > 1. 
+$$
+Placing a Gamma prior distribution on $\beta$ such that $\beta \sim \Gamma(a, b)$. The posterior distribution given the data $\boldsymbol{y} = \{y_1, \ldots, y_N}$ is
+$$
+\pi(\beta \mid \boldsymbol{y}) \propto \frac{\beta^{N + a - 1}e^{-b\beta}}{\prod y_i^{\beta + 1}}.
+$$
+We can't sample from this directly, so wee need to use a Metropolis-Hastings algorithm to generate samples from the posterior distribution. We will use a normal proposal distribution.  
+
+The acceptance probability is 
+$$
+p_{acc} = \min \left\{1, \frac{\beta'^{N + a - 1}e^{-b\beta'}}{\prod y_i^{\beta' + 1}}\frac{\prod y_i^{\beta + 1}}{\beta^{N + a - 1}e^{-b\beta}} \right\} \\
+= \min \left\{1, \left(\frac{\beta'}{\beta}\right)^{N + a - 1}{\prod y_i^{\beta - \beta'}}\exp((\beta - \beta')b) \right\}. 
+$$
+The MCMC algorithm will be 
+1. Set an initial value for $\beta_1$ and set $i =1$.
+2. Propose a new value $\beta' \sim N(\beta_i, \sigma^2)$
+3. Accept $\beta'$ with probability $p_{acc}$ and set $\beta{i+1}= \beta'$, otherwise reject and set$\beta{i+1}= \beta_i$.
+4. Repeat steps 2, 3, and 4 for $ i = 2, \ldots, M$.  
+
+We fix $b=0.01$ and use the data
+```
+x <- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)
+```
+to code up our algorithm. 
+```{r}
+#Function that evaluates Pareto loglikelihood
+log.likelihood <- function(x, beta){
+
+  log.value <- length(x)*log(beta) - (beta + 1)*sum(log(x))
+
+  return(log.value)
+
+}
+
+# MCMC Sampler ------------------------------------------------------------
+
+#Initialise Values
+x <- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)
+n.iter <- 10000 #number of iterations
+beta.current <- 2 #initial value for beta
+beta.store <- numeric(n.iter) #empty vecotr to store beta at each iteration
+
+#Run MCMC For Loop
+for(i in 1:n.iter){
+
+  #Propose prop value for beta
+  beta.prop <- rnorm(1, beta.current, 0.5)
+
+  #Compute current and prop loglikelihood
+  loglike.prop     <- log.likelihood(x, beta.prop)
+  loglike.current <- log.likelihood(x, beta.current)
+
+  #Compute Log acceptance probability
+  log.p.acc <- loglike.prop - loglike.current +
+    dgamma(beta.prop, 1, 0.01, log = TRUE) - dgamma(beta.current, 1, 0.01, log = TRUE)
+
+  #Accept/Reject
+  u <- runif(1)
+  if(log(u) < log.p.acc){
+    beta.current <- beta.prop
+  }
+
+  #Store Current Value
+  beta.store[i] <- beta.current
+
+
+}
+
+#Plot trace plots
+plot(beta.store, type = 'l')
+
+#Investigate posterior
+hist(beta.store, freq = FALSE, main = "", xlab = expression(beta))
+quantile(beta.store, c(0.025, 0.975))
+```
 
 
 ## Gibbs Sampler
@@ -312,19 +468,23 @@ for(j in 1:M){
 }
 ```
 
-The sequence $\left\{\theta_0^{(0)},\ldots, \theta_N^{(0)}\right\}, \left\{\theta_0^{(1)},\ldots, \theta_N^{(1)}\right\}, \ldots, \left\{\theta_0^{(M)},\ldots, \theta_N^{(M)}\right\}$ form a Markov chain. They also form a series of samples from the posterior distribution. However it is important to note that by construction, these samples are not independent since each realisation depends on the previous sample and we must take this into account when doing estimation.
 
 ::: {.example}
-Recall the lab in the previous chapter where we derived the posterior distribution for the mean $\mu$ and variance $\sigma^2$ for normally distributed data. The marginal posterior distributions are given by
+In Example 3.5, we had a hierarchical model with  
+\begin{align*}
+\boldsymbol{y} \mid \lambda &\sim \hbox{Exp}(\lambda) & \textrm{(likelihood)} \\
+\lambda \mid \gamma &\sim \hbox{Exp}(\gamma) & \textrm{(prior distribution)} \\
+\gamma \mid \nu &\sim \hbox{Exp}(\nu) & \textrm{(hyperprior distribution)}  \\
+\end{align*}.
+To derive the full conditional distributions, we only consider the terms in the posterior distributions that depends on the parameters we are interested in. The full conditional distribution for $\lambda$ is
 $$
-\mu \mid \boldsymbol{y}, \sigma^2 \sim N(\mu_1, \sigma^2_1),
+\pi(\lambda \mid \boldsymbol{y}, \,\gamma) \propto \lambda^{10}e^{-\lambda(95 + \gamma)}.
 $$
-
+This is unchanged and shows that $\lambda \mid \boldsymbol{y}, \gamma \sim \textrm{Gamma}(11, 95 + \gamma)$. The full conditional distribution for $\gamma$ is
 $$
-\sigma^2 \mid \boldsymbol{y}, \mu \sim \textrm{inv-Gamma}\left(\alpha + \frac{N}{2}, \,\beta + \frac{\sum_{i=1}^N (y_i - \mu)^2}{2}\right),
+\pi(\gamma \mid \boldsymbol{y}, \,\lambda) \propto e^{-\nu\gamma}.
 $$
-
-where $\mu_1 =\left(\frac{\sum_{i=1}^{30}y_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)$ and $\sigma^2_1 = \left(\frac{30}{\sigma^2}  + \frac{1}{\sigma_0^2}\right)^{-1}$.
+Therefore the full conditional distribution of $\gamma$ is $\gamma \mid \boldsymbol{y}, \,\lambda \sim \hbox{Exp}(\lambda + \nu)$.
 
 We can set up a Metropolis-Hastings algorithm using Gibbs samplers to generate samples for $\lambda$ and $\gamma$. 
 
@@ -338,6 +498,42 @@ We can set up a Metropolis-Hastings algorithm using Gibbs samplers to generate s
 4. Draw a value for $\gamma^{(i)} \mid \boldsymbol{y}, \,\lambda^{(i)} \sim \hbox{Exp}(\lambda^{(i)} + \nu)$.
 
 6. Repeat steps 3 and 4 for $i = 2, \ldots M$. 
+
+We can now code this up and run the algorithm. 
+```{r}
+# Set Up MCMC Algorithm ---------------------------------------------------
+
+n.iter <- 10000
+lambda.store <- numeric(n.iter) #Store value of Markov chain at end of every iteration
+gamma.store <- numeric(n.iter) #Store value of Markov chain at end of every iteration
+
+
+
+# Run MCMC Algorithm ------------------------------------------------------
+for(i in 2:n.iter){
+  
+  #Store current value of Markov Chain
+  lambda.store[i] <- rgamma(1, 10, 95 + gamma.store[i-1])
+  gamma.store[i]  <- rexp(1, 0.01 + lambda.store[i])
+  
+}
+
+#Plot trace plot (Markov chain values)
+plot(lambda.store, type = 'l', xlab = "iteration", ylab = expression(lambda))
+plot(gamma.store, type = 'l', xlab = "iteration", ylab = expression(gamma))
+
+#Plot posterior density
+hist(lambda.store, prob = TRUE, xlab = expression(lambda), main = "Posterior density")
+mean(lambda.store) #posterior mean
+quantile(lambda.store, c(0.025, 0.975)) #95% CI
+
+hist(gamma.store, prob = TRUE, xlab = expression(lambda), main = "Posterior density")
+mean(gamma.store) #posterior mean
+quantile(gamma.store, c(0.025, 0.975)) #95% CI
+
+#Investogate correlation between parameters
+plot(lambda.store, gamma.store)
+```
 
 :::
 
@@ -356,7 +552,7 @@ The **thinning parameter** is the period of iterations of the Markov chain that 
 :::
 
 ::: {.example}
-In Example \@ref(exm:norm), we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge. 
+In Example \@ref(exm:norm), we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge. Although the posterior distribution is invariant to the choice of the proposal distribution, it still has a large effect of the efficiency of the algorithm and how well the chain mixes. The ideal trace plot looks like white noise, or a hairy caterpillar. 
 
 In a Metropolis-Hasting random walk algorithm, the proposal distribution often has a large impact on how well the Markov chain mixes. The variance, or step size, of the proposal distribution can be tuned to ensure the chain mixes well. 
 
@@ -441,24 +637,6 @@ plot(mu.store[-c(1:5000)], type = 'l', xlab = "iteration",
 :::
 
 ## Lab
-
-::: {.exercise}
-In Lab 3.9, we computed the MAP estimate for a parameter from the Pareto distribution. The density function of this distribution is 
-$$
-\pi(x \mid \beta) = \frac{\beta}{x^{\beta + 1}}, \quad x > 1. 
-$$
-Place a Gamma prior distribution on $\beta$ such that $\beta \sim \Gamma(a, b)$. Derive the posterior distribution for $\beta$ given the data $\boldsymbol{x} = \{x_1, ..., x_N\}$.
-
-Write down a Metropolis-Hastings algorithm to generate samples from the posterior distribution using a normal proposal distribution. 
-
-Write a function to evaluate the loglikelihood function. Code your MCMC algorithm and generate samples from the posterior distribution with prior parameters $a=1$ and $b=0.01$ and data:
-```
-x <- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)
-```
-Find the posterior mean and 95\% credible interval
-(Hint: The value I used to generate the data was $\beta = 4$)
-:::
-
 
 ::: {.exercise}
 You observe the following draws from a Binomial distribution with 25 trials and probability of success $p$. 

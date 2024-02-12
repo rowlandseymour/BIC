@@ -244,10 +244,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data. It allows us to treat the missing data points as random variables and infer the data points alongside the model parameters. This provides us with a method to quantify the uncertainty around our estimates of the missing data points.</p>
 <p>In data augmentation, we distinguish between two likelihood functions.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-84" class="definition"><strong>Definition 6.1  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
+<p><span id="def:unlabeled-div-83" class="definition"><strong>Definition 6.1  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-85" class="definition"><strong>Definition 6.2  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
+<p><span id="def:unlabeled-div-84" class="definition"><strong>Definition 6.2  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
 </div>
 <p>The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn’t fully observe, we can’t compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, where the outcome of <span class="math inline">\(X\)</span> is observed and <span class="math inline">\(Y\)</span> unobserved. The complete data likelihood is <span class="math inline">\(pi(X = x, Y = y)\)</span> because we are considering all the events, observed or not. However, we can only compute <span class="math inline">\(\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)\)</span> or <span class="math inline">\(\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)\)</span>, since <span class="math inline">\(y\)</span> is unobserved.</p>
 <p>In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function.</p>
@@ -255,7 +255,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">6.1.1</span> Imputing censored observations<a href="advanced-computation.html#imputing-censored-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first example we will look at is when data is censored. Instead of throwing away these observations, we will instead treat them as random variables and infer their values.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-86" class="example"><strong>Example 6.1  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
+<p><span id="exm:unlabeled-div-85" class="example"><strong>Example 6.1  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
 <p>The bank checks five batches and observes <span class="math inline">\(y_1, \ldots, y_4\)</span> suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6.</p>
 <p>The observed data likelihood functions is
 <span class="math display">\[
@@ -288,17 +288,17 @@ This is a truncated distribution. We can use a Gibbs sampler alternating between
 </div>
 <p>A mixture model is an example of latent variables being useful.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-87" class="example"><strong>Example 6.2  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
+<p><span id="exm:unlabeled-div-86" class="example"><strong>Example 6.2  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
 <p>Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.</p>
 <p><img src="postcode.jpeg" /><!-- --></p>
 <p>We introduce a latent variable <span class="math inline">\(z_i \sim \hbox{Bernoulli}(p)\)</span> that describes if the characters on the <span class="math inline">\(i^{th}\)</span> image are B1 or B2. The observation <span class="math inline">\(y_i\)</span> is the proportion of the <span class="math inline">\(i^{th}\)</span> image that is taken up by the characters. We observe <span class="math inline">\(y_i\)</span>, but want to estimate <span class="math inline">\(z_i\)</span>. The difficultly is there lack of one-to-one correspondence between the values <span class="math inline">\(y_i\)</span> can take and the value <span class="math inline">\(z_i\)</span>. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 (<span class="math inline">\(Z = 1\)</span>), then <span class="math inline">\(Y_i \sim N(0.7, 0.05^2)\)</span> and if it is going to B2 (<span class="math inline">\(Z = 2\)</span>), then <span class="math inline">\(Y_i \sim N(0.8, 0.02^2)\)</span>. The plot below shows the two densities and the overlap between them.</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="advanced-computation.html#cb76-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.001</span>)</span>
-<span id="cb76-2"><a href="advanced-computation.html#cb76-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.7</span>, <span class="fl">0.05</span>)</span>
-<span id="cb76-3"><a href="advanced-computation.html#cb76-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.8</span>, <span class="fl">0.02</span>)</span>
-<span id="cb76-4"><a href="advanced-computation.html#cb76-4" tabindex="-1"></a><span class="fu">plot</span>(a, x, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">xlab =</span> <span class="fu">expression</span>(y),</span>
-<span id="cb76-5"><a href="advanced-computation.html#cb76-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;density&quot;</span>)</span>
-<span id="cb76-6"><a href="advanced-computation.html#cb76-6" tabindex="-1"></a><span class="fu">lines</span>(a, y, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="advanced-computation.html#cb99-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.001</span>)</span>
+<span id="cb99-2"><a href="advanced-computation.html#cb99-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.7</span>, <span class="fl">0.05</span>)</span>
+<span id="cb99-3"><a href="advanced-computation.html#cb99-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.8</span>, <span class="fl">0.02</span>)</span>
+<span id="cb99-4"><a href="advanced-computation.html#cb99-4" tabindex="-1"></a><span class="fu">plot</span>(a, x, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">xlab =</span> <span class="fu">expression</span>(y),</span>
+<span id="cb99-5"><a href="advanced-computation.html#cb99-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;density&quot;</span>)</span>
+<span id="cb99-6"><a href="advanced-computation.html#cb99-6" tabindex="-1"></a><span class="fu">lines</span>(a, y, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
 <p>As the variables <span class="math inline">\(\boldsymbol{z}\)</span> are latent, the observed data likelihood function is
 <span class="math display">\[
 \pi(\boldsymbol{y} \mid  p) =\prod_{i=1}^N \left[ p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)\right].
@@ -331,46 +331,46 @@ The full conditional distribution is therefore <span class="math inline">\(z_i \
 <h2><span class="header-section-number">6.2</span> Gaussian Processes<a href="advanced-computation.html#gaussian-processes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>So far in the module, we have considered prior distribution on parameters. These parameters have taken values (mostly real) or real-valued vectors. In this section, we’re going to extend this idea further to place prior distributions on functions. That is, we’re going to describe a prior distribution that when sampled gives us functions. The method we’re going to use is called a Gaussian Process (GP).</p>
 <p>Before, we define a GP, we’re going to build an intuitive definition of it. Recall the normal distribution with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(N(\mu, \sigma^2)\)</span>. It assigns probabilities to values on the real line – when we sample from it, we get real values. The plot below shows the density function for a <span class="math inline">\(N(0, 1)\)</span> distribution and five samples.</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="advanced-computation.html#cb77-1" tabindex="-1"></a><span class="co">#Plot N(0, 1)</span></span>
-<span id="cb77-2"><a href="advanced-computation.html#cb77-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>)</span>
-<span id="cb77-3"><a href="advanced-computation.html#cb77-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x)</span>
-<span id="cb77-4"><a href="advanced-computation.html#cb77-4" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
-<span id="cb77-5"><a href="advanced-computation.html#cb77-5" tabindex="-1"></a></span>
-<span id="cb77-6"><a href="advanced-computation.html#cb77-6" tabindex="-1"></a><span class="co">#Add samples</span></span>
-<span id="cb77-7"><a href="advanced-computation.html#cb77-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
-<span id="cb77-8"><a href="advanced-computation.html#cb77-8" tabindex="-1"></a><span class="fu">rug</span>(samples)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="advanced-computation.html#cb100-1" tabindex="-1"></a><span class="co">#Plot N(0, 1)</span></span>
+<span id="cb100-2"><a href="advanced-computation.html#cb100-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>)</span>
+<span id="cb100-3"><a href="advanced-computation.html#cb100-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x)</span>
+<span id="cb100-4"><a href="advanced-computation.html#cb100-4" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
+<span id="cb100-5"><a href="advanced-computation.html#cb100-5" tabindex="-1"></a></span>
+<span id="cb100-6"><a href="advanced-computation.html#cb100-6" tabindex="-1"></a><span class="co">#Add samples</span></span>
+<span id="cb100-7"><a href="advanced-computation.html#cb100-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
+<span id="cb100-8"><a href="advanced-computation.html#cb100-8" tabindex="-1"></a><span class="fu">rug</span>(samples)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
 <p>The multivariate normal distribution extends this to a vector space, <span class="math inline">\(\mathbb{R}^N\)</span>. Instead of having a mean and variance value, the distribution is defined through a mean vector and covariance matrix. The mean vector describes the expected value of each component of the vector and the covariance matrix describes the relationship between each pair of components in the vector. When we draw samples, we get vectors. The plot below shows the density of the multivariate normal distribution with <span class="math inline">\(N = 2\)</span>, zero mean, <span class="math inline">\(\sigma^2_x = \sigma^2_y = 1\)</span> and <span class="math inline">\(\rho = 0.7\)</span>.</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="advanced-computation.html#cb78-1" tabindex="-1"></a><span class="co">#Create Grid</span></span>
-<span id="cb78-2"><a href="advanced-computation.html#cb78-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="at">length.out=</span><span class="dv">100</span>)</span>
-<span id="cb78-3"><a href="advanced-computation.html#cb78-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="at">length.out=</span><span class="dv">100</span>)</span>
-<span id="cb78-4"><a href="advanced-computation.html#cb78-4" tabindex="-1"></a></span>
-<span id="cb78-5"><a href="advanced-computation.html#cb78-5" tabindex="-1"></a><span class="co">#Evaluate density at grid</span></span>
-<span id="cb78-6"><a href="advanced-computation.html#cb78-6" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow=</span><span class="dv">100</span>,<span class="at">ncol=</span><span class="dv">100</span>)</span>
-<span id="cb78-7"><a href="advanced-computation.html#cb78-7" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)</span>
-<span id="cb78-8"><a href="advanced-computation.html#cb78-8" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="dv">1</span>),<span class="at">nrow=</span><span class="dv">2</span>)</span>
-<span id="cb78-9"><a href="advanced-computation.html#cb78-9" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
-<span id="cb78-10"><a href="advanced-computation.html#cb78-10" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
-<span id="cb78-11"><a href="advanced-computation.html#cb78-11" tabindex="-1"></a>    z[i,j] <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">dmvnorm</span>(<span class="fu">c</span>(x[i],y[j]),</span>
-<span id="cb78-12"><a href="advanced-computation.html#cb78-12" tabindex="-1"></a>                      <span class="at">mean=</span>mu,<span class="at">sigma=</span>sigma)</span>
-<span id="cb78-13"><a href="advanced-computation.html#cb78-13" tabindex="-1"></a>  }</span>
-<span id="cb78-14"><a href="advanced-computation.html#cb78-14" tabindex="-1"></a>}</span>
-<span id="cb78-15"><a href="advanced-computation.html#cb78-15" tabindex="-1"></a></span>
-<span id="cb78-16"><a href="advanced-computation.html#cb78-16" tabindex="-1"></a><span class="co">#Generate contour plot</span></span>
-<span id="cb78-17"><a href="advanced-computation.html#cb78-17" tabindex="-1"></a><span class="fu">contour</span>(x, y ,z)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="advanced-computation.html#cb101-1" tabindex="-1"></a><span class="co">#Create Grid</span></span>
+<span id="cb101-2"><a href="advanced-computation.html#cb101-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="at">length.out=</span><span class="dv">100</span>)</span>
+<span id="cb101-3"><a href="advanced-computation.html#cb101-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="at">length.out=</span><span class="dv">100</span>)</span>
+<span id="cb101-4"><a href="advanced-computation.html#cb101-4" tabindex="-1"></a></span>
+<span id="cb101-5"><a href="advanced-computation.html#cb101-5" tabindex="-1"></a><span class="co">#Evaluate density at grid</span></span>
+<span id="cb101-6"><a href="advanced-computation.html#cb101-6" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow=</span><span class="dv">100</span>,<span class="at">ncol=</span><span class="dv">100</span>)</span>
+<span id="cb101-7"><a href="advanced-computation.html#cb101-7" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb101-8"><a href="advanced-computation.html#cb101-8" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="dv">1</span>),<span class="at">nrow=</span><span class="dv">2</span>)</span>
+<span id="cb101-9"><a href="advanced-computation.html#cb101-9" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb101-10"><a href="advanced-computation.html#cb101-10" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb101-11"><a href="advanced-computation.html#cb101-11" tabindex="-1"></a>    z[i,j] <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">dmvnorm</span>(<span class="fu">c</span>(x[i],y[j]),</span>
+<span id="cb101-12"><a href="advanced-computation.html#cb101-12" tabindex="-1"></a>                      <span class="at">mean=</span>mu,<span class="at">sigma=</span>sigma)</span>
+<span id="cb101-13"><a href="advanced-computation.html#cb101-13" tabindex="-1"></a>  }</span>
+<span id="cb101-14"><a href="advanced-computation.html#cb101-14" tabindex="-1"></a>}</span>
+<span id="cb101-15"><a href="advanced-computation.html#cb101-15" tabindex="-1"></a></span>
+<span id="cb101-16"><a href="advanced-computation.html#cb101-16" tabindex="-1"></a><span class="co">#Generate contour plot</span></span>
+<span id="cb101-17"><a href="advanced-computation.html#cb101-17" tabindex="-1"></a><span class="fu">contour</span>(x, y ,z)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
 <p>A GP takes this one step further and puts a prior distribution on a function space. It is specified by a mean function, <span class="math inline">\(\mu(\cdot)\)</span> and covariance function <span class="math inline">\(k(\cdot, \cdot)\)</span>. The mean function describes the expected value of each point the function can be evaluated at, and the covariance function describes the relationship between each point on the function. The plot below shows three samples from a GP distribution with mean function the zero function <span class="math inline">\(\mu(x) = 0\, \forall x\)</span> and a covariance function that supports smooth functions.</p>
-<p><img src="_main_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
 <div class="definition">
-<p><span id="def:unlabeled-div-88" class="definition"><strong>Definition 6.3  </strong></span>A <strong>Gaussian Process</strong> is a collection of random variables, any finite number of which have a joint Gaussian distribution.</p>
+<p><span id="def:unlabeled-div-87" class="definition"><strong>Definition 6.3  </strong></span>A <strong>Gaussian Process</strong> is a collection of random variables, any finite number of which have a joint Gaussian distribution.</p>
 </div>
 <p>This says that is we think of a function as an infinite collection of points, then if any finite subset of those points following a Gaussian distribution, we have a Gaussian process. In reality, we set up the function so that is meets this definition. More formally,</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-89" class="definition"><strong>Definition 6.4  </strong></span>A <strong>GP distribution on a function <span class="math inline">\(f(x)\)</span></strong> is defined through its mean function <span class="math inline">\(\mu(x) = \mathbb{E}(x)\)</span> and covariance function <span class="math inline">\(k(x, x&#39;) = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x&#39;) - \mu(x&#39;))\right)\)</span>. We write it as <span class="math inline">\(f(x) \sim \mathcal{GP}(\mu(x), k(x, x&#39;))\)</span>.</p>
+<p><span id="def:unlabeled-div-88" class="definition"><strong>Definition 6.4  </strong></span>A <strong>GP distribution on a function <span class="math inline">\(f(x)\)</span></strong> is defined through its mean function <span class="math inline">\(\mu(x) = \mathbb{E}(x)\)</span> and covariance function <span class="math inline">\(k(x, x&#39;) = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x&#39;) - \mu(x&#39;))\right)\)</span>. We write it as <span class="math inline">\(f(x) \sim \mathcal{GP}(\mu(x), k(x, x&#39;))\)</span>.</p>
 </div>
 <p>Before we go any further, it is worth proceeding with caution. Those with good memories, we recall Bernstein-von-Mises’ theorem from Chapter 3.</p>
 <div class="theorem">
-<p><span id="thm:unlabeled-div-90" class="theorem"><strong>Theorem 6.1  (Bernstein-von-Mises) </strong></span>For a well-specified model <span class="math inline">\(\pi(\boldsymbol{y} \mid \theta)\)</span> with a fixed number of parameters, and for a smooth prior distribution <span class="math inline">\(\pi(\theta)\)</span> that is non-zero around the MLE <span class="math inline">\(\hat{\theta}\)</span>, then
+<p><span id="thm:unlabeled-div-89" class="theorem"><strong>Theorem 6.1  (Bernstein-von-Mises) </strong></span>For a well-specified model <span class="math inline">\(\pi(\boldsymbol{y} \mid \theta)\)</span> with a fixed number of parameters, and for a smooth prior distribution <span class="math inline">\(\pi(\theta)\)</span> that is non-zero around the MLE <span class="math inline">\(\hat{\theta}\)</span>, then
 <span class="math display">\[
 \left|\left| \pi(\theta \mid \boldsymbol{y}) - N\left(\hat{\theta}, \frac{I(\hat{\theta})^{-1}}{n}\right) \right|\right|_{TV} \rightarrow 0.
 \]</span></p>
@@ -381,24 +381,24 @@ The full conditional distribution is therefore <span class="math inline">\(z_i \
 <p>One issue when using GPs is describing the covariance function. How do we decide how each pair of points (there being an infinite number of them)? There are lots of standard choices of covariance functions that we can choose from, each one making different assumptions about the function we are interested in.</p>
 <p>The most common covariance function is the squared exponential functions. It is used to model functions that are ‘nice’, i.e. they are smooth, continuous and infinitely differentiable.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-91" class="definition"><strong>Definition 6.5  </strong></span>The <strong>squared exponential covariance function</strong> takes the form
+<p><span id="def:unlabeled-div-90" class="definition"><strong>Definition 6.5  </strong></span>The <strong>squared exponential covariance function</strong> takes the form
 <span class="math display">\[
 k(x, x&#39;) = \alpha^2\exp\left\{-\frac{1}{l}(x-x&#39;)^2\right\},
 \]</span>
 where <span class="math inline">\(\alpha^2\)</span> is the signal variance and <span class="math inline">\(l&gt;0\)</span> is the length scale parameter.</p>
 </div>
 <p>For now, consider <span class="math inline">\(\alpha = l = 1\)</span>. What is the covariance between the function evaluated at 0 and the function evaluated at <span class="math inline">\(x\)</span>? The plot below shows the covariance.</p>
-<p><img src="_main_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
 <p>The covariance is highest when the <span class="math inline">\(x\)</span> is near to 0, i.e. the points are immediately next to each other. If the value of <span class="math inline">\(x\)</span> is <span class="math inline">\(\pm 2\)</span>, the covariance is 0. As we are dealing with a joint normal distribution, a covariance of 0 implies independence. So with this covariance function, the value of <span class="math inline">\(f(x)\)</span> is independent of <span class="math inline">\(f(0)\)</span> if <span class="math inline">\(|x|\)</span> is larger than about two. The parameter <span class="math inline">\(l\)</span> is called the length scale parameter and dictates how quickly the covariance decays. Small values of <span class="math inline">\(l\)</span> mean that the value of the function at nearby points are independent of each other, resulting in functions that look like white noise. Large values of <span class="math inline">\(l\)</span> mean that even if points are far away, they are still highly dependent on each other. This gives very flat functions.</p>
 <p>The squared exponential covariance function produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don’t produce functions that are continuous or differentiable. Two more are given below.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-92" class="definition"><strong>Definition 6.6  </strong></span>The <strong>M'atern covariance function</strong> models functions that are differentiable only once:
+<p><span id="def:unlabeled-div-91" class="definition"><strong>Definition 6.6  </strong></span>The <strong>M'atern covariance function</strong> models functions that are differentiable only once:
 <span class="math display">\[
 k(x, x&#39;) = \left(1 + \frac{\sqrt{3}(x - x&#39;)^2}{l} \right)\exp\left\{-\frac{\sqrt{3}(x - x&#39;)^2}{l} \right\}.
 \]</span></p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-93" class="definition"><strong>Definition 6.7  </strong></span>The periodic covariance function models functions that are periodic and it is given by
+<p><span id="def:unlabeled-div-92" class="definition"><strong>Definition 6.7  </strong></span>The periodic covariance function models functions that are periodic and it is given by
 <span class="math display">\[
 k(x, x&#39;) = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x&#39;)^2}{p} \right\},
 \]</span>
@@ -408,15 +408,15 @@ where the period is <span class="math inline">\(p\)</span>.</p>
 <div id="gaussian-process-regression" class="section level3 hasAnchor" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> Gaussian Process Regression<a href="advanced-computation.html#gaussian-process-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>One of the main applications of GPs in in regression. Suppose we observe the points below <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> and want to fit a curve through them. One method is to write down a set of functions of the form <span class="math inline">\(\boldsymbol{y} = X^T\boldsymbol{\beta} + \boldsymbol{\varepsilon}\)</span>, where <span class="math inline">\(X\)</span> is the design matrix and <span class="math inline">\(\boldsymbol{\beta}\)</span> a vector of parameters. For each design matrix <span class="math inline">\(X\)</span>, construct the posterior distributions for <span class="math inline">\(\boldsymbol{\beta}\)</span> and use some goodness-of-fit measure to choose the most suitable design matrix.</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="advanced-computation.html#cb79-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
-<span id="cb79-2"><a href="advanced-computation.html#cb79-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x<span class="sc">/</span><span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">/</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(x), <span class="dv">0</span>, <span class="fl">0.2</span>)</span>
-<span id="cb79-3"><a href="advanced-computation.html#cb79-3" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="advanced-computation.html#cb102-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb102-2"><a href="advanced-computation.html#cb102-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x<span class="sc">/</span><span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">/</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(x), <span class="dv">0</span>, <span class="fl">0.2</span>)</span>
+<span id="cb102-3"><a href="advanced-computation.html#cb102-3" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
 <p>One difficulty is writing down the design matrices <span class="math inline">\(X\)</span>, it is often not straightforward to propose or justify these forms GPs allow us to take a much less arbitrary approach, simply saying that <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span> and placing a GP prior distribution on <span class="math inline">\(f\)</span>.</p>
 <p>Although we’re placing an prior distribution with an infinite dimension on <span class="math inline">\(f\)</span>, we only ever need to work with a finite dimensional object, making this much easier. We only observe the function at finite number of points <span class="math inline">\(\boldsymbol{f} = \{f(x_1), \ldots, f(x_N)\}\)</span> and we will infer the value of the function at points on a fine grid, <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. By the definition of a GP, the distribution of these points is a multivariate normal distribution.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-94" class="example"><strong>Example 6.3  </strong></span>Suppose we observe <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> at <span class="math inline">\(\boldsymbol{x} = \{x_1, \ldots, x_N\}\)</span>. The plot below shows these points.</p>
-<p><img src="_main_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<p><span id="exm:unlabeled-div-93" class="example"><strong>Example 6.3  </strong></span>Suppose we observe <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> at <span class="math inline">\(\boldsymbol{x} = \{x_1, \ldots, x_N\}\)</span>. The plot below shows these points.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
 <p>Using the model <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span>, where <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>, we want to infer the function <span class="math inline">\(f\)</span> evaluated at a gird of points <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. We place a GP prior distribution on <span class="math inline">\(f \sim \mathcal{GP}(0, k)\)</span>, where <span class="math inline">\(k\)</span> is the squared exponential covariance function. Using the model, the covariance between points <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span> is
 <span class="math display">\[
 \textrm{cov}(y_i, y_j) = k(x_i, x_j) + \sigma^21_{i=j}.
@@ -440,7 +440,7 @@ The off-diagonal terms in the covariance matrix describe the relationship betwee
 \]</span>
 where <span class="math inline">\(\boldsymbol{\mu}^* = K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2 I)^{-1} \boldsymbol{y}\)</span> and <span class="math inline">\(K^* = K(\boldsymbol{x}^*, \boldsymbol{x}^*) - K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)^{-1}K(\boldsymbol{x}, \boldsymbol{x}^*)\)</span>.</p>
 <p>We set the fine gird to be <span class="math inline">\(\boldsymbol{x}^* = \{-5, -4.99, -4.98, \ldots, 5\}\)</span>, the GP parameters <span class="math inline">\(\alpha = l = 1\)</span> and <span class="math inline">\(\sigma = 0.2\)</span>. The posterior mean and 95% credible interval are shown below.
-<img src="_main_files/figure-html/unnamed-chunk-46-1.png" width="672" />
+<img src="_main_files/figure-html/unnamed-chunk-49-1.png" width="672" />
 The posterior mean for <span class="math inline">\(f\)</span> is a smooth line passing near each point. The 95% credible interval for <span class="math inline">\(f\)</span> has the smallest variance near each point, and largest furthest away from the points.</p>
 </div>
 </div>

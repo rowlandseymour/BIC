@@ -388,7 +388,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <span id="cb27-12"><a href="bayesian-inference.html#cb27-12" tabindex="-1"></a>mu1       <span class="ot">&lt;-</span> sigma1.sq<span class="sc">*</span>(<span class="fu">sum</span>(y)<span class="sc">/</span>(sigma<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> mu0<span class="sc">/</span>(sigma0<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb27-13"><a href="bayesian-inference.html#cb27-13" tabindex="-1"></a></span>
 <span id="cb27-14"><a href="bayesian-inference.html#cb27-14" tabindex="-1"></a><span class="fu">c</span>(mu1, sigma1.sq) <span class="co">#output mean and variance</span></span></code></pre></div>
-<pre><code>## [1] 5.00127136 0.03333333</code></pre>
+<pre><code>## [1] 5.33240296 0.03333333</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bayesian-inference.html#cb29-1" tabindex="-1"></a><span class="co">#Create plot</span></span>
 <span id="cb29-2"><a href="bayesian-inference.html#cb29-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
 <span id="cb29-3"><a href="bayesian-inference.html#cb29-3" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(mu, <span class="at">mean =</span> mu1, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma1.sq))</span>
@@ -396,7 +396,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>The 95% credible interval for the population’s mean reaction time is</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="bayesian-inference.html#cb30-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), mu1, <span class="fu">sqrt</span>(sigma1.sq))</span></code></pre></div>
-<pre><code>## [1] 4.643433 5.359110</code></pre>
+<pre><code>## [1] 4.974564 5.690242</code></pre>
 </div>
 <p>When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.</p>
 <div class="definition">
