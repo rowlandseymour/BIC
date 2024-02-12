@@ -358,12 +358,12 @@ Using a normal prior distribution, it was
 It seems that the posterior distribution is very similar when using these two prior distributions. This is because the data are very informative. 
 :::
 
-::: {.example}
+:::{.example}
 In Lab 3.9, we computed the MAP estimate for a parameter from the Pareto distribution. The density function of this distribution is 
 $$
 \pi(x \mid \beta) = \frac{\beta}{x^{\beta + 1}}, \quad x > 1. 
 $$
-Placing a Gamma prior distribution on $\beta$ such that $\beta \sim \Gamma(a, b)$. The posterior distribution given the data $\boldsymbol{y} = \{y_1, \ldots, y_N}$ is
+Placing a Gamma prior distribution on $\beta$ such that $\beta \sim \Gamma(a, b)$. The posterior distribution given the data $\boldsymbol{y} = \{y_1, \ldots, y_N\}$ is
 $$
 \pi(\beta \mid \boldsymbol{y}) \propto \frac{\beta^{N + a - 1}e^{-b\beta}}{\prod y_i^{\beta + 1}}.
 $$
@@ -635,6 +635,27 @@ plot(mu.store[-c(1:5000)], type = 'l', xlab = "iteration",
      ylab = expression(mu))
 ```
 :::
+
+
+The final diagnostic issue we are going to think about is the **curse of dimensionality**. In general, the more parameters we try and update, the less likely we are to accept them. This makes exploring the proposal distribution hard if we are trying to update lots of parameters simultaneously. We can see this if we consider a hypersphere
+:::{.example}
+Suppose we have a density function that is uniformly distributed over the area of a sphere in $N$ dimensions with radius $r$. The sphere has volume
+$$
+V = \frac{\pi^{N/2}}{\Gamma(\frac{N}{2} + 1)}r^N.
+$$
+Now consider a smaller sphere inside of our original sphere. This still has dimension $N$ but has radius $r_1 < r$. This small sphere has volume
+$$
+V_1 = \frac{\pi^{N/2}}{\Gamma(\frac{N}{2} + 1)}r_1^N.
+$$
+The difference between these two volumes is
+$$
+V - V_1 = \frac{\pi^{N/2}}{\Gamma(\frac{N}{2} + 1)}(r^N - r_1^N).
+$$
+For large $N$, even when $r - r_1$ is small, $(r^N - r_1^N)$ is large. This means that lots of the probability mass is concentrated away from the mode into the outer shell of the sphere. 
+:::
+
+The hypersphere example shows that in large dimensions we need our Markov chain to spend lots of time away from the posterior mode and in the tails of the distribution, but this is where the proposal distribution has lowest mass. We can avoid this by updating each parameter individually, but this means we need to use the full conditional distributions, which have highest mass near the mode. This 'curse' makes MCMC algorithms inefficient for large dimensions. 
+
 
 ## Lab
 
