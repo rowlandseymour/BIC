@@ -196,18 +196,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>6.1</b> Data Augmentation</a>
+<li class="chapter" data-level="6.1" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>6.1</b> Gaussian Processes</a>
 <ul>
-<li class="chapter" data-level="6.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>6.1.1</b> Imputing censored observations</a></li>
-<li class="chapter" data-level="6.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>6.1.2</b> Imputing Latent Variables</a></li>
+<li class="chapter" data-level="6.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>6.1.1</b> Covariance Functions</a></li>
+<li class="chapter" data-level="6.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>6.1.2</b> Gaussian Process Regression</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>6.2</b> Gaussian Processes</a>
+<li class="chapter" data-level="6.2" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>6.2</b> Data Augmentation</a>
 <ul>
-<li class="chapter" data-level="6.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>6.2.1</b> Covariance Functions</a></li>
-<li class="chapter" data-level="6.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>6.2.2</b> Gaussian Process Regression</a></li>
+<li class="chapter" data-level="6.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>6.2.1</b> Imputing censored observations</a></li>
+<li class="chapter" data-level="6.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>6.2.2</b> Imputing Latent Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-data-augmenatation"><i class="fa fa-check"></i><b>6.3</b> Lab: Data Augmenatation</a></li>
-<li class="chapter" data-level="6.4" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-gaussian-processes"><i class="fa fa-check"></i><b>6.4</b> Lab: Gaussian Processes</a></li>
+<li class="chapter" data-level="6.3" data-path="advanced-computation.html"><a href="advanced-computation.html#approximate-bayesian-computation"><i class="fa fa-check"></i><b>6.3</b> Approximate Bayesian Computation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="advanced-computation.html"><a href="advanced-computation.html#abc-with-rejection"><i class="fa fa-check"></i><b>6.3.1</b> ABC with Rejection</a></li>
+<li class="chapter" data-level="6.3.2" data-path="advanced-computation.html"><a href="advanced-computation.html#summary-abc-with-rejection"><i class="fa fa-check"></i><b>6.3.2</b> Summary ABC with Rejection</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-3"><i class="fa fa-check"></i><b>6.4</b> Lab</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes-1"><i class="fa fa-check"></i><b>6.4.1</b> Gaussian Processes</a></li>
+<li class="chapter" data-level="6.4.2" data-path="advanced-computation.html"><a href="advanced-computation.html#missing-data"><i class="fa fa-check"></i><b>6.4.2</b> Missing Data</a></li>
+<li class="chapter" data-level="6.4.3" data-path="advanced-computation.html"><a href="advanced-computation.html#approximate-bayesian-computation-1"><i class="fa fa-check"></i><b>6.4.3</b> Approximate Bayesian Computation</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -386,7 +395,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <span id="cb27-12"><a href="bayesian-inference.html#cb27-12" tabindex="-1"></a>mu1       <span class="ot">&lt;-</span> sigma1.sq<span class="sc">*</span>(<span class="fu">sum</span>(y)<span class="sc">/</span>(sigma<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> mu0<span class="sc">/</span>(sigma0<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb27-13"><a href="bayesian-inference.html#cb27-13" tabindex="-1"></a></span>
 <span id="cb27-14"><a href="bayesian-inference.html#cb27-14" tabindex="-1"></a><span class="fu">c</span>(mu1, sigma1.sq) <span class="co">#output mean and variance</span></span></code></pre></div>
-<pre><code>## [1] 4.96584302 0.03333333</code></pre>
+<pre><code>## [1] 4.89055130 0.03333333</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bayesian-inference.html#cb29-1" tabindex="-1"></a><span class="co">#Create plot</span></span>
 <span id="cb29-2"><a href="bayesian-inference.html#cb29-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
 <span id="cb29-3"><a href="bayesian-inference.html#cb29-3" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(mu, <span class="at">mean =</span> mu1, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma1.sq))</span>
@@ -394,7 +403,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>The 95% credible interval for the population’s mean reaction time is</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="bayesian-inference.html#cb30-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), mu1, <span class="fu">sqrt</span>(sigma1.sq))</span></code></pre></div>
-<pre><code>## [1] 4.608004 5.323682</code></pre>
+<pre><code>## [1] 4.532712 5.248390</code></pre>
 </div>
 <p>When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.</p>
 <div class="definition">

@@ -196,18 +196,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>6.1</b> Data Augmentation</a>
+<li class="chapter" data-level="6.1" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>6.1</b> Gaussian Processes</a>
 <ul>
-<li class="chapter" data-level="6.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>6.1.1</b> Imputing censored observations</a></li>
-<li class="chapter" data-level="6.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>6.1.2</b> Imputing Latent Variables</a></li>
+<li class="chapter" data-level="6.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>6.1.1</b> Covariance Functions</a></li>
+<li class="chapter" data-level="6.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>6.1.2</b> Gaussian Process Regression</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>6.2</b> Gaussian Processes</a>
+<li class="chapter" data-level="6.2" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>6.2</b> Data Augmentation</a>
 <ul>
-<li class="chapter" data-level="6.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>6.2.1</b> Covariance Functions</a></li>
-<li class="chapter" data-level="6.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>6.2.2</b> Gaussian Process Regression</a></li>
+<li class="chapter" data-level="6.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>6.2.1</b> Imputing censored observations</a></li>
+<li class="chapter" data-level="6.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>6.2.2</b> Imputing Latent Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-data-augmenatation"><i class="fa fa-check"></i><b>6.3</b> Lab: Data Augmenatation</a></li>
-<li class="chapter" data-level="6.4" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-gaussian-processes"><i class="fa fa-check"></i><b>6.4</b> Lab: Gaussian Processes</a></li>
+<li class="chapter" data-level="6.3" data-path="advanced-computation.html"><a href="advanced-computation.html#approximate-bayesian-computation"><i class="fa fa-check"></i><b>6.3</b> Approximate Bayesian Computation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="advanced-computation.html"><a href="advanced-computation.html#abc-with-rejection"><i class="fa fa-check"></i><b>6.3.1</b> ABC with Rejection</a></li>
+<li class="chapter" data-level="6.3.2" data-path="advanced-computation.html"><a href="advanced-computation.html#summary-abc-with-rejection"><i class="fa fa-check"></i><b>6.3.2</b> Summary ABC with Rejection</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-3"><i class="fa fa-check"></i><b>6.4</b> Lab</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes-1"><i class="fa fa-check"></i><b>6.4.1</b> Gaussian Processes</a></li>
+<li class="chapter" data-level="6.4.2" data-path="advanced-computation.html"><a href="advanced-computation.html#missing-data"><i class="fa fa-check"></i><b>6.4.2</b> Missing Data</a></li>
+<li class="chapter" data-level="6.4.3" data-path="advanced-computation.html"><a href="advanced-computation.html#approximate-bayesian-computation-1"><i class="fa fa-check"></i><b>6.4.3</b> Approximate Bayesian Computation</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -457,8 +466,8 @@ plot(x = ,y = , xlab = expression(Z[i-1]), ylab = expression(Z[i]), type = &#39;
 <p>R has many build in commands and you used these in Computer Lab I. An example is the <code>runif</code> command from the second exercise. This function generates random numbers from an interval. The code chunk below shows it in action:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="programming-in-r.html#cb10-1" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">min =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
 <span id="cb10-2"><a href="programming-in-r.html#cb10-2" tabindex="-1"></a>u</span></code></pre></div>
-<pre><code>##  [1]  0.98389306 -0.66970832  0.77487288 -0.60274977  0.80856801  0.06631798
-##  [7]  0.91930836  0.98505121 -0.07083582  0.88787926</code></pre>
+<pre><code>##  [1] -0.5585954 -0.4665618 -0.1547148 -0.8711346  0.6215048 -0.9581347
+##  [7]  0.5362888  0.2968106  0.3761783  0.7046128</code></pre>
 <p>The functions has three <strong>arguments</strong>: <em>n</em> the number of samples to be generated, <em>min</em> the lower limit of the interval, <em>max</em> the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval [-1, 1]. In R, you don’t need to label the arguments, so the following will sample the same number of samples from the same interval:</p>
 <pre><code>u &lt;- runif(10, -1, 1)</code></pre>
 <p>Although in most cases it helps to label the arguments for readability and avoiding undefined behaviour. Note that if you decide to omit the argument names in the function call, the arguments must appear exactly in the order defined by the function prototype (check the documentation ?function for specific cases).</p>

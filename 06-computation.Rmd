@@ -1,120 +1,6 @@
 # Advanced Computation
 
-Now we have the tools of Bayesian inference and methods to sample from complex posterior distributions, we can start to look at more advanced methods and models. This chapter is split into two distinct parts, each showing a different method in Bayesian inference.
-
-## Data Augmentation
-Real world data are often messy with data points missing which may mean they are partially or completely unobserved. One common example of this is in clinical trials where people drop out of the trial before their treatment is complete. Another example is crime data, where only a fraction of crimes are reported and many crimes go unobserved. Two common ways to deal with partially or completely unobserved are:
-
-* Remove data points that are not completely observed. This throws away information and is likely to increase the overall uncertainty in the estimates. 
-* Replace data points that are not completely observed with estimates such as the sample mean. This is likely to underestimate the uncertainty as we are treating the observation as completely observed when it is not. 
-
-The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data. It allows us to treat the missing data points as random variables and infer the data points alongside the model parameters. This provides us with a method to quantify the uncertainty around our estimates of the missing data points.
-
-In data augmentation, we distinguish between two likelihood functions.
-
-::: {.definition}
-The **observed data likelihood function** is the likelihood function of the observed data. 
-:::
-
-:::{.definition}
-The **complete data likelihood function** is the likelihood function of the observed data and any missing or censored data had they been fully observed. 
-:::
-
-The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn't fully observe, we can't compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events $X$ and $Y$, where the outcome of $X$ is observed and $Y$ unobserved. The complete data likelihood is $pi(X = x, Y = y)$ because we are considering all the events, observed or not. However, we can only compute $\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)$ or $\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)$, since $y$ is unobserved. 
-
-In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function. 
-
-
-### Imputing censored observations
-The first example we will look at is when data is censored. Instead of throwing away these observations, we will instead treat them as random variables and infer their values. 
-
-::: {.example}
-A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by $p$ and the number of suspicious transactions in a batch by $Y$.
-
-The bank checks five batches and observes $y_1, \ldots, y_4$ suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6. 
-
-
-The observed data likelihood functions is 
-$$
-\pi(y_1, \ldots, y_4, \tilde{y}_5 \mid p) = \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
-$$
-This is known as marginalising over the missing variable, just as we did in the simple probability example earlier. Placing a uniform prior distribution on $p \sim U[0, 1]$ give the posterior distribution
-$$
-\pi(p, \tilde{y}_5 \mid y_1, \ldots, y_4)= \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
-$$
-Although we could sample from this distribution, it is not easy to work with. Instead, we can write down the complete data likelihood. Suppose that $y_5$ was observed, then the complete data likelihood may be written as 
-$$
-\pi(y_1, \ldots, y_5 \mid p)  = \prod_{i=1}^5\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i},
-$$
-The posterior distribution is therefore 
-$$
-p \mid y_1, \ldots, y_5 \sim \hbox{Beta}\left(\sum_{i=1}^5 y_i + 1, 1001 - \sum_{i=1}^5 y_i\right).
-$$
-
-The full conditional distribution of $y_5$ given $p$, the other data points an $y_5 < 6$ is
-$$
-  \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 < 1, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=0}^{1000}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{j}}, \qquad y < 6
-$$
-This is a truncated distribution. We can use a Gibbs sampler alternating between sampling $p$ and $y_5$. 
-:::
-
-### Imputing Latent Variables
-Often there are variables that are cannot be observed, these may be hidden somehow or introduced to help with the modelling. Instead we can learn about this variable indirectly from the data.
-
-::: {.defintion}
-A **latent variable** is a variable that cannot be observed. 
-:::
-
-A mixture model is an example of latent variables being useful. 
-
-::: {.example}
-Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.   
-
-Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.
-
-```{r echo = FALSE}
-knitr::include_graphics("postcode.jpeg")
-```
-
-We introduce a latent variable $z_i \sim \hbox{Bernoulli}(p)$ that describes if the characters on the $i^{th}$ image are B1 or B2. The observation $y_i$ is the proportion of the $i^{th}$ image that is taken up by the characters. We observe $y_i$, but want to estimate $z_i$. The difficultly is there lack of one-to-one correspondence between the values $y_i$ can take and the value $z_i$. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 ($Z = 1$), then $Y_i \sim N(0.7, 0.05^2)$ and if it is going to B2 ($Z = 2$), then $Y_i \sim N(0.8, 0.02^2)$. The plot below shows the two densities and the overlap between them.
-
-```{r echp = FALSE}
-a <- seq(0.5, 0.9, 0.001)
-x <- dnorm(a, 0.7, 0.05)
-y <- dnorm(a, 0.8, 0.02)
-plot(a, x, type = 'l', ylim = c(0, 20), xlab = expression(y),
-     ylab = "density")
-lines(a, y, lty = 2)
-```
-
-As the variables $\boldsymbol{z}$ are latent, the observed data likelihood function is 
-$$
-\pi(\boldsymbol{y} \mid  p) =\prod_{i=1}^N \left[ p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)\right].
-$$
-Instead, it's easier to work with the complete data likelihood function, supposing we had observed the variables $\boldsymbol{z}$. This is given by
-\begin{align*}
-\pi(\boldsymbol{y}, \boldsymbol{z} \mid  p) &= \begin{pmatrix} N_1 + N_2
-\\ N_1\end{pmatrix}p^{N_1}(1-p)^{N_2} \prod_{i; z_i = 1}\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)  \\
-&\times\prod_{i; z_i = 2}\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2),
-\end{align*}
-where $N_1$ and $N_2$ are the number of letters for B1 and B2 respectively. This form makes it much easier to derive the posterior distributions and estimate the parameter values. 
-
-We place a uniform prior distribution on the parameter $p$, which gives the posterior distribution
-$$
-p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
-$$
-
-The distribution of $z_i$ given the parameter $p$ and the observation $y_i$ can be derived using Bayes' theorem
-$$
-p^*_i = \pi(z = 1 \mid p, y_1) = \frac{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)}{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)}.
-$$
-The full conditional distribution is therefore $z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)$.
-
-An MCMC algorithm for this would repeat the following two steps:
-
-1. Sample $p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1)$.
-2. Sample $z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)$ for each $i$.
-:::
+Now we have the tools of Bayesian inference and methods to sample from complex posterior distributions, we can start to look at more advanced methods and models. This chapter is split into three distinct parts, each showing a different method in Bayesian inference.
 
 ## Gaussian Processes
 
@@ -206,7 +92,7 @@ This says that is we think of a function as an infinite collection of points, th
 A **GP distribution on a function $f(x)$** is defined through its mean function $\mu(x) = \mathbb{E}(x)$ and covariance function $k(x, x') = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x') - \mu(x'))\right)$. We write it as $f(x) \sim \mathcal{GP}(\mu(x), k(x, x'))$.
 :::
 
-Before we go any further, it is worth proceeding with caution. Those with good memories, we recall Bernstein-von-Mises' theorem from Chapter 3.
+Before we go any further, it is worth proceeding with caution. Those with good memories will recall Bernstein-von-Mises' theorem from Chapter 3.
 
 ::: {.theorem name="Bernstein-von-Mises"}
 For a well-specified model $\pi(\boldsymbol{y} \mid \theta)$ with a fixed number of parameters, and for a smooth prior distribution $\pi(\theta)$ that is non-zero around the MLE $\hat{\theta}$, then
@@ -240,7 +126,30 @@ plot(x, k, type = 'l')
 The covariance is highest when the $x$ is near to 0, i.e. the points are immediately next to each other. If the value of $x$ is $\pm 2$, the covariance is 0. As we are dealing with a joint normal distribution, a covariance of 0 implies independence. So with this covariance function, the value of $f(x)$ is independent of $f(0)$ if $|x|$ is larger than about two. The parameter $l$ is called the length scale parameter and dictates how quickly the covariance decays. Small values of $l$ mean that the value of the function at nearby points are independent of each other, resulting in functions that look like white noise. Large values of $l$ mean that even if points are far away, they are still highly dependent on each other. This gives very flat functions. 
 
 
-The squared exponential covariance function produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don't produce functions that are continuous or differentiable. Two more are given below. 
+The choice of covariance function is a modelling choice -- it depends completely on the data generating process you are trying to model. The following properties are useful when deciding which covariance function to use. 
+
+:::{.definition}
+A **stationary** covariance function is a function of $\boldsymbol{x} - \boldsymbol{x}'$. That means it is invariant to translations in space.
+:::
+
+:::{.definition}
+An **isotropic** covariance function is a function only of $|\boldsymbol{x} - \boldsymbol{x}'|$. That means it is invariant to rigid translations in space.
+:::
+
+:::{.definition}
+An **dot product** covariance function is a function only of $\boldsymbol{x}\cdot\boldsymbol{x}'$. That means it is invariant to rigid rotations in space, but not translations.
+:::
+
+What is most important is that the matrix resulting from a covariance function is positive semi-definite. This is because covariance matrices must be positive semi-definite. 
+
+:::{.definition}
+An $N \times N$ matrix $\Sigma$ is positive semi-definite if it is symmetric and 
+$$
+\boldsymbol{x}^T\Sigma\boldsymbol{x} \geq 0 \quad \hbox{for all } \boldsymbol{x} \in \mathbb{R}^N.
+$$
+:::
+
+The squared exponential covariance function is isotropic and produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don't produce functions that are continuous or differentiable. Two more are given below. 
 
 :::{.definition}
 The **M\'atern covariance function** models functions that are differentiable only once:
@@ -256,6 +165,32 @@ k(x, x') = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x')^2}{p} \right\},
 $$
 where the period is $p$.
 :::
+
+:::{.definition}
+The dot product covariance function models functions that are rotationally invariant and it is given by
+$$
+k(x, x') = \alpha^2 + x\cdot x'.
+$$
+:::
+
+These are just some covariance functions. In addition to the covariance functions defined, we can make new covariance funcitons by combining existing ones. 
+
+:::{.proposition}
+If $k_1$ and $k_2$ are covariance functions, then so is $k_1 + k_2$.
+:::
+
+:::{.proof}
+Let $f_1$ be a function with covariance function $k_1$ and $f_2$ be a function with covariance function $k_2$, then $f = f_1 + f_2$ has covariance function $k_1 + k_2$.
+:::
+
+:::{.proposition}
+If $k_1$ and $k_2$ are covariance functions, then so is $k_1k_2$.
+:::
+
+:::{.proof}
+See problem sheet.
+:::
+
 
 ### Gaussian Process Regression
 One of the main applications of GPs in in regression. Suppose we observe the points below $\boldsymbol{y} = \{y_1, \ldots, y_N\}$ and want to fit a curve through them. One method is to write down a set of functions of the form $\boldsymbol{y} =  X^T\boldsymbol{\beta} + \boldsymbol{\varepsilon}$, where $X$ is the design matrix and $\boldsymbol{\beta}$ a vector of parameters. For each design matrix $X$, construct the posterior distributions for $\boldsymbol{\beta}$ and use some goodness-of-fit measure to choose the most suitable design matrix.
@@ -358,11 +293,564 @@ polygon(c(x.star, rev(x.star)), c(f.lower, rev(f.upper)), col = rgb(0,0, 1, 0.25
 The posterior mean for $f$ is a smooth line passing near each point. The 95\% credible interval for $f$ has the smallest variance near each point, and largest furthest away from the points. 
 :::
 
+## Data Augmentation
+Real world data are often messy with data points missing which may mean they are partially or completely unobserved. One common example of this is in clinical trials where people drop out of the trial before their treatment is complete. Another example is crime data, where only a fraction of crimes are reported and many crimes go unobserved. Two common ways to deal with partially or completely unobserved are:
+
+* Remove data points that are not completely observed. This throws away information and is likely to increase the overall uncertainty in the estimates. 
+* Replace data points that are not completely observed with estimates such as the sample mean. This is likely to underestimate the uncertainty as we are treating the observation as completely observed when it is not. 
+
+The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data. It allows us to treat the missing data points as random variables and infer the data points alongside the model parameters. This provides us with a method to quantify the uncertainty around our estimates of the missing data points.
+
+In data augmentation, we distinguish between two likelihood functions.
+
+::: {.definition}
+The **observed data likelihood function** is the likelihood function of the observed data. 
+:::
+
+:::{.definition}
+The **complete data likelihood function** is the likelihood function of the observed data and any missing or censored data had they been fully observed. 
+:::
+
+The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn't fully observe, we can't compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events $X$ and $Y$, where the outcome of $X$ is observed and $Y$ unobserved. The complete data likelihood is $pi(X = x, Y = y)$ because we are considering all the events, observed or not. However, we can only compute $\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)$ or $\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)$, since $y$ is unobserved. 
+
+In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function. 
 
 
-## Lab: Data Augmenatation
+### Imputing censored observations
+The first example we will look at is when data is censored. Instead of throwing away these observations, we will instead treat them as random variables and infer their values. 
 
-## Lab: Gaussian Processes
+::: {.example}
+A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by $p$ and the number of suspicious transactions in a batch by $Y$.
+
+The bank checks five batches and observes $y_1, \ldots, y_4$ suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6. 
 
 
+The observed data likelihood functions is 
+$$
+\pi(y_1, \ldots, y_4, \tilde{y}_5 \mid p) = \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
+$$
+This is known as marginalising over the missing variable, just as we did in the simple probability example earlier. Placing a uniform prior distribution on $p \sim U[0, 1]$ give the posterior distribution
+$$
+\pi(p \mid y_1, \ldots, y_4, \tilde{y}_5)= \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
+$$
+Although we could sample from this distribution, it is not easy to work with. Instead, we can write down the complete data likelihood. Suppose that $y_5$ was observed, then the complete data likelihood may be written as 
+$$
+\pi(y_1, \ldots, y_5 \mid p)  = \prod_{i=1}^5\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i},
+$$
+The posterior distribution is therefore 
+$$
+p \mid y_1, \ldots, y_5 \sim \hbox{Beta}\left(\sum_{i=1}^5 y_i + 1, 5000 + 1 - \sum_{i=1}^5 y_i\right).
+$$
+
+The full conditional distribution of $y_5$ given $p$, the other data points an $y_5 < 6$ is
+$$
+  \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 < 6, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=0}^{5}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000-j}}, \qquad y < 6
+$$
+We can use a Gibbs sampler alternating between sampling $p$ and $y_5$. 
+:::
+
+### Imputing Latent Variables
+Often there are variables that are cannot be observed, these may be hidden somehow or introduced to help with the modelling. Instead we can learn about this variable indirectly from the data.
+
+::: {.defintion}
+A **latent variable** is a variable that cannot be observed. 
+:::
+
+A mixture model is an example of latent variables being useful. 
+
+::: {.example}
+Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.   
+
+Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.
+
+```{r echo = FALSE}
+knitr::include_graphics("postcode.jpeg")
+```
+
+We introduce a latent variable $z_i \sim \hbox{Bernoulli}(p)$ that describes if the characters on the $i^{th}$ image are B1 or B2. The observation $y_i$ is the proportion of the $i^{th}$ image that is taken up by the characters. We observe $y_i$, but want to estimate $z_i$. The difficultly is there lack of one-to-one correspondence between the values $y_i$ can take and the value $z_i$. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 ($Z = 1$), then $Y_i \sim N(0.7, 0.05^2)$ and if it is going to B2 ($Z = 2$), then $Y_i \sim N(0.8, 0.02^2)$. The plot below shows the two densities and the overlap between them.
+
+```{r echp = FALSE}
+a <- seq(0.5, 0.9, 0.001)
+x <- dnorm(a, 0.7, 0.05)
+y <- dnorm(a, 0.8, 0.02)
+plot(a, x, type = 'l', ylim = c(0, 20), xlab = expression(y),
+     ylab = "density")
+lines(a, y, lty = 2)
+```
+
+As the variables $\boldsymbol{z}$ are latent, the observed data likelihood function is 
+$$
+\pi(\boldsymbol{y} \mid  p) =\prod_{i=1}^N \left[ p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)\right].
+$$
+Instead, it's easier to work with the complete data likelihood function, supposing we had observed the variables $\boldsymbol{z}$. This is given by
+\begin{align*}
+\pi(\boldsymbol{y}, \boldsymbol{z} \mid  p) &= \begin{pmatrix} N_1 + N_2
+\\ N_1\end{pmatrix}p^{N_1}(1-p)^{N_2} \prod_{i; z_i = 1}\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)  \\
+&\times\prod_{i; z_i = 2}\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2),
+\end{align*}
+where $N_1$ and $N_2$ are the number of letters for B1 and B2 respectively. This form makes it much easier to derive the posterior distributions and estimate the parameter values. 
+
+We place a uniform prior distribution on the parameter $p$, which gives the posterior distribution
+$$
+p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
+$$
+
+The distribution of $z_i$ given the parameter $p$ and the observation $y_i$ can be derived using Bayes' theorem
+$$
+p^*_i = \pi(z = 1 \mid p, y_1) = \frac{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)}{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)}.
+$$
+The full conditional distribution is therefore $z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)$.
+
+An MCMC algorithm for this would repeat the following two steps:
+
+1. Sample $p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1)$.
+2. Sample $z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)$ for each $i$.
+:::
+
+
+## Approximate Bayesian Computation
+So far, we have always considered models where the likelihood function is easy to work with. By easy, we mean that we can evaluate the likelihood function for lots of different values, and we can evaluate it cheaply. In some cases, it might not be possible to write down the likelihood function, or it might not be possible to evaluate it. In these cases, we refer to methods call **likelihood free inference**. 
+
+:::{.example}
+Models to predict the weather are notoriously complex. They contain a huge number of parameters, and sometimes it is not possible to write this model down exactly. In cases where the likelihood function for the weather model can be written down, we would have to start the MCMC algorithm from scratch every time we collected new data.
+:::
+
+Approximate Bayesian Computation (ABC) is a likelihood free algorithm that relies on reject sampling from the prior distribution. When constructing an ABC algorithm, we only need to be able to generate data given a parameter value and not evaluate the likelihood of seeing specific data given a parameter value.
+
+We are going to look at two types of ABC. The first is ABC with rejection
+
+### ABC with Rejection
+
+:::{.definition}
+To carry out inference for a parameter $\theta$ using an Approximate Bayesian Computation algorithm with rejection
+
+1. Sample a value for the parameter $\theta^*$ from the prior distribution $\pi(\theta)$. 
+2. Generate some data $y*$ from the data generating process using the parameter value $\theta^*$.
+3. Accept $\theta^*$ as a value from the posterior distribution if $||y - y^*|| < \varepsilon$ for some $\varepsilon > 0$. Otherwise reject $\theta^*$
+4. Repeat steps 1 - 3.
+:::
+
+:::{.proposition}
+The approximate posterior distribution using ABC with rejection is
+$$
+\pi_\varepsilon(\theta \mid y) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
+$$
+where ${A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||< \varepsilon\}$. 
+:::
+
+::: {.example}
+This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe $Y_1, \ldots, y_510\sim Beta(3, \beta)$. We place a uniform prior on $\beta$ such that $\beta \sim U[0, 5]$. The ABC algorithm with rejection works as follows:
+
+1. Sample a value $\beta^* \sim U[0, 5]$. 
+2. Simulate $y^*_1, \ldots, y^*_10 \sim Beta(3,\beta^*)$
+3. Compute $D = \sum_{i=1}^{10}(y_i -y^*_i)^2$. If $D < 0.75$, accept $\beta^*$ as a sample from the posterior distribution. Otherwise, reject $\beta^*$.
+4. Repeat steps 1, 2, and 3. 
+
+The code below carries out this algorithm. 
+
+```{r}
+#Set Up Example
+set.seed(1234)
+n <- 10
+y <- rbeta(n, 3, 2)
+y
+
+#Set Up ABC
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 0.75
+
+#Run ABC
+for(i in 1:n.iter){
+  
+  #Propose new beta
+  b <- runif(1, 0, 5)
+  
+  #Simualate data
+  y.star <- rbeta(n, 3, b)
+  
+  #Compute statistic
+  d <- sum((y-y.star)^2)
+  
+  #Accept/Reject
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+:::
+
+
+One important question is how to choose the value for $\varepsilon$? It turns out this is an incredibly hard question that is specific to each application. Often the approximate posterior distribution $\pi_\varepsilon(\theta \mid y)$ is very sensitive to the choice of $\varepsilon$. 
+
+:::{.example}
+Let's repeat the example, first with $\varepsilon = 0.12$. In this case, almost all of the proposals are rejected. 
+```{r}
+#Set Up Example
+set.seed(1234)
+n <- 10
+y <- rbeta(n, 3, 2)
+y
+
+#Set Up ABC
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 0.12
+
+#Run ABC
+for(i in 1:n.iter){
+  
+  #Propose new beta
+  b <- runif(1, 0, 5)
+  
+  #Simualate data
+  y.star <- rbeta(n, 3, b)
+  
+  #Compute statistic
+  d <- sum((y-y.star)^2)
+  
+  #Accept/Reject
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+:::
+
+:::{.example}
+And now again with $\varepsilon = 2$. In this case, almost all of the proposals are accepted.  
+```{r}
+#Set Up Example
+set.seed(1234)
+n <- 10
+y <- rbeta(n, 3, 2)
+y
+
+#Set Up ABC
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 2
+
+#Run ABC
+for(i in 1:n.iter){
+  
+  #Propose new beta
+  b <- runif(1, 0, 5)
+  
+  #Simualate data
+  y.star <- rbeta(n, 3, b)
+  
+  #Compute statistic
+  d <- sum((y-y.star)^2)
+  
+  #Accept/Reject
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+When $\varepsilon = 0.12$, almost all the proposals are rejected. Although the approximate posterior mean is close to the true value, given we only have 7 samples we cannot say much about the posterior distribution.  When $\varepsilon = 2$, almost all the proposals are accepted. This histogram shows that we are really just sampling from the prior distribution, i.e. $\pi_2(\beta \mid y) \approx \pi(\beta)$. 
+:::
+
+:::{.proposition}
+Using an ABC rejection algorithm
+$$
+\lim_{\varepsilon \rightarrow \infty} \pi_\varepsilon(\theta \mid y) \overset{D}= \pi(\theta),
+$$
+and 
+$$
+\lim_{\varepsilon \rightarrow 0} \pi_\varepsilon(\theta \mid y) \overset{D}= \pi(\theta \mid y). 
+$$
+:::
+
+This example and the proposition show that if we set $\varepsilon$ too large, we don't learn anything about $\theta$, we just recover the data. The smaller the value of $\varepsilon$, the better. But very small values may require very long run times, or have such few samples that the noise from the sampling generator is larger than the signal in the accepted samples. The only diagnostic tools we have are the proportion of samples accepted and the histograms of the approximate posterior and prior distributions.
+
+:::{.example}
+An example of where this is useful is epidemic modelling. Suppose we have a population of 100 individuals and at each time point an individual is Susceptible to a disease, Infected with the disease, or Recovered and therefore immune. Once infected with the disease, an individual infects people according to a Poisson process with rate $\beta$. Each infected person is infected from a time period drawn from an Exponential distribution with rate $1$. We observe the total number of people infected with the disease at the end of the outbreak. To carry out inference for the infection rate $\beta$, we need to use the augmented likelihood function 	The augmented likelihood function for this model is given by
+
+$$
+\pi(\textbf{i}, \textbf{r}| \beta) \propto \underbrace{\exp\Big(- \sum\limits_{j=1}^n\sum\limits_{k=1}^N \beta\big((r_j \wedge i_k) - (i_j \wedge i_k)\big)\Big)}_\text{Avoiding infection} \\
+ \times\hspace{1.8cm} \underbrace{\prod\limits_{\substack{j=1 \\ j \neq \kappa}}^n\Big(\sum\limits_{k \in \mathcal{Y}_j} \beta\Big)}_\text{Becoming infectious}  \\
+\times \hspace{1.8cm}\underbrace{\prod\limits_{j=1}^n\pi(r_j -i_j | \gamma = 1)}_\text{Remaining infected}.
+$$
+This likelihood function cannot be evaluated as we do not observe the infection time $i$ or recovery time $r$. Instead we can use ABC sampling with rejection. Each iteration, sample a value for $\beta$, simulate an outbreak and compare the observed and simulated number of people infected. If they are 'close' we accept the value for $\beta$ as a sample from our posterior distribution. This means all we have to do is simulate outbreaks.  
+
+
+```{r}
+#This function simualtes an outbreak of a disease in a population of size N, with infection rate beta and recovery rate gamma.
+simSIR.Markov <- function(N, beta, gamma) {
+  
+  # initial number of infectives and susceptibles;
+  I <- 1
+  S <- N-1;
+  
+  # recording time;
+  t <- 0;
+  times <- c(t);
+  
+  # a vector which records the type of event (1=infection, 2=removal)
+  type <- c(1);
+  
+  while (I > 0) {
+    
+    # time to next event;
+    t <- t + rexp(1, (beta/N)*I*S + gamma*I);
+    times <- append(times, t);
+    
+    if (runif(1) < beta*S/(beta*S + N*gamma)) {
+      # infection
+      I <- I+1;
+      S <- S-1;
+      type <- append(type, 1);
+    }
+    else {
+      #removal
+      I <- I-1
+      type <- append(type, 2);
+    }
+  }
+  
+  
+  # record the times of events (infections/removals), the type of the event, the final size (including
+  # the initial infective) and the duration. 
+  
+  res <- list("t" = times, "type" = type, "final.size" = sum(type==1), "duration" = t, "N" = N);
+  return(res)
+}
+
+#Set Up Example
+set.seed(1234)
+n <- 200
+y <- simSIR.Markov(100, 2, 1)$final.size
+
+
+#Set Up ABC
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 250
+
+#Run ABC
+for(i in 1:n.iter){
+  
+  #Propose an infection rate
+  b <- runif(1, 0, 5)
+  
+  #Simualte an outbreak
+  y.star <- simSIR.Markov(100, b, 1)$final.size
+  
+  #Compute difference
+  d <- sum((y-y.star)^2)
+  
+  #Accept/Reject
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+:::
+
+### Summary ABC with Rejection
+ABC with rejection suffers from the curse of dimensionality (see Chapter 5). As the number of data points increases, the probability we get a 'close' match decreases. This means we have to increase $\varepsilon$ and degrade the quality of our approximation. 
+
+:::{.example}
+Let's repeat the Beta example with $n = 200$ observed data points. We need $\varepsilon > 15$ for any proposals to be accepted. 
+:::
+
+
+We can avoid the curse of dimensionality by comparing summary statistics instead. This leads us to the Summary ABC algorithm. 
+
+:::{.definition}
+To carry out inference for a parameter $\theta$ using an Summary Approximate Bayesian Computation algorithm with rejection
+
+1. Sample a value for the parameter $\theta^*$ from the prior distribution $\pi(\theta)$. 
+2. Generate some data $y*$ from the data generating process using the parameter value $\theta^*$.
+3. Accept $\theta^*$ as a value from the posterior distribution if $||S(y) - S(y^*)|| < \varepsilon$ for some $\varepsilon > 0$ and summary summary statistic $S$. Otherwise reject $\theta^*$
+4. Repeat steps 1 - 3.
+:::
+
+
+
+Similar to the ABC algorithm with rejection, we also have the following proposition. 
+
+:::{.proposition}
+The approximate posterior distribution using ABC with rejection is
+$$
+\pi_\varepsilon(\theta \mid S(y)) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
+$$
+where ${A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (y)||< \varepsilon\}$. 
+:::
+
+Using summary statistics only increases the approximation however, as we are approximating the data using a summary of it. The only case when we are not approximating further is when the statistic  contains all the information about the underlying sample it is summarising. This is known as a sufficient statistic. 
+
+:::{.definition}
+A statistic $S$ is a sufficient statistic for the parameter $\theta$ if the conditional distribution $\pi(y | S(y))$ does not depend on $\theta$. 
+:::
+
+:::{.proposition}
+Using a Summary ABC rejection algorithm with a sufficient statistic $S$
+$$
+\lim_{\varepsilon \rightarrow 0} \pi_\varepsilon(\theta \mid S(y)) \overset{D}= \pi(\theta \mid y).
+$$
+:::
+
+The difficulty with sufficient statistics is that they only exist for 'nice' distributions, like the Gamma, Beta and Poisson distributions. In these cases, we can work with the posterior distribution directly or use and MCMC algorithm. 
+
+:::{.example}
+Let's repeat the beta distribution example using the mean as the summary statistic. We can set $\varepsilon = 0.001$. 
+
+```{r}
+set.seed(1234)
+n <- 200
+y <- rbeta(n, 3, 2)
+
+
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 0.001
+for(i in 1:n.iter){
+  
+  b <- runif(1, 0, 5)
+  
+  y.star <- rbeta(n, 3, b)
+  
+  d <- sum((mean(y)-mean(y.star))^2)
+  
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+:::
+
+## Lab
+
+### Gaussian Processes
+
+:::{.exercise}
+Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use 
+```{r}
+x <- -5:5
+y <-  c(3.0942822, 3.0727920, 2.6137341, 1.8818820, 1.2746738, 1.2532116, 1.4620830, 1.4194647, 1.6786969, 1.1057042, 0.4118125)
+```
+with $\sigma^2 = 0.2$.To draw samples from the multivariate normal distribution with mean vector $\boldsymbol{\mu}$ and covariance matrix $\Sigma$
+
+```{r}
+mvnorm.chol <- function(mu, Sigma){
+  #Multivariate Normal Sampler with Cholesky Input
+  #Inputs: mu -- mean, chol -- covariance matrix
+  Sigma.chol <- chol(Sigma + 0.0001*dim(Sigma)[1])
+  return(mu + t(Sigma.chol)%*%rnorm(length(mu)))  
+}
+```
+:::
+
+
+:::{.exercise}
+Repeat Exercise 6.1, but this time set the fine grid to be $\boldsymbol{x}^* = \{-5, -4.9, -4.8, \ldots, 9.8, 9.9, 10\}$. What happens to the posterior distribution after $x^* = 5$?
+:::
+
+
+::: {.exercise}
+You observe the following data 
+```{r}
+x <- -5:5
+y <- cos(0.5*x) + log(x + 6)
+y
+plot(x, y, xlab = "x", ylab = "f(x)", ylim = c(0, 4))
+```
+
+Fit a function to the data using a GP prior distribution. Note that this time there is no noise. 
+:::
+
+### Missing Data
+
+:::{.exercise}
+In Example 6.2, suppose the observed data is $\{y_1, y_2, y_3, y_4\} = \{4, 4, 5 ,2\}$. Design and code an MCMC algorithm to generate samples from the posterior distribution for $p$ and $y_5$. 
+:::
+
+:::{.exercise}
+Suppose you manage a clinical trial. You administer a new drug to patients and record how many days until their symptoms are alleviated. You observe the times for the first 9 patients
+```{r}
+x <- c(33,  17, 218,   3,  39,   3,  43,  14,  20)
+```
+Patient 10 drops out of the trial on day 50 and at this point, their symptoms have not changed. They send an email on day 200 to say they no longer have any symptoms (i.e. $x_i \in [50, \ldots, 200]$. Write down a model for this problem and derive the posterior distribution. Design and code an MCMC algorithm to generate samples from the posterior distribution for any model parameters and $x_{10}$. 
+:::
+
+### Approximate Bayesian Computation
+:::{.exercise}
+You observe the following data from an $N(5, \sigma^2)$ distribution. 
+```
+-5.93,  33.12, -21.41, -12.42, -17.64,  -5.47, -27.95, -22.25, -20.40, -26.28, -24.57,  
+3.06,  44.28, 6.02, -21.14,  14.79, -15.10, 53.18,  38.61,   5.71
+```
+Use an Exp(0.1) prior distribution on $\sigma^2$ and develop a summary statistic ABC algorithm to draw samples from the approximate posterior distribution. 
+:::
+
+:::{.exercise}
+You observe the following data from an $Exp(\lambda)$ distribution. 
+```
+2.6863422, 8.8468112, 8.8781831, 0.2712696, 1.8902442
+```
+Use an $Beta(1, 3)$ prior distribution on $\lambda$ and develop an ABC algorithm to draw samples from the approximate posterior distribution. Write the ABC algorithm as a function so you can run it for different values of $\varepsilon$. Run your algorithm for $\varepsilon = \{20, \ldots, 100\}$ and record the approximate posterior median. Plot the relative error in your estimate against the true value of lambda, which is 0.2. 
+:::
 
