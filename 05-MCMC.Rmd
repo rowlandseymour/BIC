@@ -65,12 +65,12 @@ The probability of transitioning from state $i$ to state $j$ in a Markov chain i
 These two properties make Markov chains nice to work with, especially the Markov property (Definition \@ref(def:Markov)). Two other important definitions are
 
 ::: {.definition}
-The **period **of a state $i$ is given by $d_i = \textrm{gcd}\{n  > 0; p_{ii} > 0 \}$. A state is **aperiodic** if $d_i = 1$. An **aperiodic chain** is a chain where all states are a periodic. 
+The **period **of a state $i$ is given by $d_i = \textrm{gcd}\{n  > 0; p_{ii} > 0 \}$. A state is **aperiodic** if $d_i = 1$. An **aperiodic chain** is a chain where all states are aperiodic. 
 :::
 
 
 ::: {.definition}
-A Markov chain is **irreducible** if there exists an $n \in \mathbb{N}$ such that $\mathbb{P} (Y_n = i \mid Y_0 = j)$ for all pairs $i$ and $j$. In other words, it is possible to move from any state to any other state in a finite number of steps. 
+A Markov chain is **irreducible** if there exists an $n \in \mathbb{N}$ such that $\mathbb{P} (Y_n = i \mid Y_0 = j) > 0$ for all pairs $i$ and $j$. In other words, it is possible to move from any state to any other state in a finite number of steps. 
 :::
 
 We can use these definitions to start working with distributions. Suppose, the state we start at is drawn from some distribution $Y_1 \sim \boldsymbol{q}$. Then the distributions of the  second state $Y_2$ depends on the distribution of $Y_1$ and the transition probabilities
@@ -146,11 +146,11 @@ Suppose we want to sample from the posterior distribution $\pi(\theta \mid \bold
 
 3. Propose a new value of $\theta'$ from some distribution $q$
 
-4. Accept $\theta'$ with probability
+4. Accept $\theta' = \theta^{(i)}$ with probability
 $$
 p_{\textrm{acc}} = \min\left\{\frac{\pi(\theta' \mid \boldsymbol{y})}{\pi(\theta \mid \boldsymbol{y})}\frac{q(\theta \mid \theta')}{q(\theta' \mid \theta)}, 1\right\}.
 $$
-5. Repeat steps 3 to 4 for $i = 2, \ldots, M$. 
+5. Set $i = i+1$ and repeat steps 3 to 4 for $i = 2, \ldots, M$. 
 
 There are two parts to the acceptance probability in step 4. The first is the posterior ratio, similar to saying the likelihood of $\theta'$ given the observed data over the likelihood of $\theta$ given the data. The second is the proposal ratio. It is similar to saying the likelihood of proposing $\theta$ given the current value $\theta'$, over the likelihood of proposing $\theta'$ given the current value $\theta$.
 

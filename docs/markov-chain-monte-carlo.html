@@ -292,10 +292,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>These two properties make Markov chains nice to work with, especially the Markov property (Definition <a href="markov-chain-monte-carlo.html#def:Markov">5.1</a>). Two other important definitions are</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-64" class="definition"><strong>Definition 5.3  </strong></span>The <strong>period </strong>of a state <span class="math inline">\(i\)</span> is given by <span class="math inline">\(d_i = \textrm{gcd}\{n &gt; 0; p_{ii} &gt; 0 \}\)</span>. A state is <strong>aperiodic</strong> if <span class="math inline">\(d_i = 1\)</span>. An <strong>aperiodic chain</strong> is a chain where all states are a periodic.</p>
+<p><span id="def:unlabeled-div-64" class="definition"><strong>Definition 5.3  </strong></span>The <strong>period </strong>of a state <span class="math inline">\(i\)</span> is given by <span class="math inline">\(d_i = \textrm{gcd}\{n &gt; 0; p_{ii} &gt; 0 \}\)</span>. A state is <strong>aperiodic</strong> if <span class="math inline">\(d_i = 1\)</span>. An <strong>aperiodic chain</strong> is a chain where all states are aperiodic.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-65" class="definition"><strong>Definition 5.4  </strong></span>A Markov chain is <strong>irreducible</strong> if there exists an <span class="math inline">\(n \in \mathbb{N}\)</span> such that <span class="math inline">\(\mathbb{P} (Y_n = i \mid Y_0 = j)\)</span> for all pairs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. In other words, it is possible to move from any state to any other state in a finite number of steps.</p>
+<p><span id="def:unlabeled-div-65" class="definition"><strong>Definition 5.4  </strong></span>A Markov chain is <strong>irreducible</strong> if there exists an <span class="math inline">\(n \in \mathbb{N}\)</span> such that <span class="math inline">\(\mathbb{P} (Y_n = i \mid Y_0 = j) &gt; 0\)</span> for all pairs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. In other words, it is possible to move from any state to any other state in a finite number of steps.</p>
 </div>
 <p>We can use these definitions to start working with distributions. Suppose, the state we start at is drawn from some distribution <span class="math inline">\(Y_1 \sim \boldsymbol{q}\)</span>. Then the distributions of the second state <span class="math inline">\(Y_2\)</span> depends on the distribution of <span class="math inline">\(Y_1\)</span> and the transition probabilities
 <span class="math display">\[
@@ -354,11 +354,11 @@ Hence <span class="math inline">\(\pi P = \pi\)</span>.</p>
 <li><p>Set the initial value <span class="math inline">\(\theta^{(0)}\)</span>.</p></li>
 <li><p>Set <span class="math inline">\(i = 1\)</span>.</p></li>
 <li><p>Propose a new value of <span class="math inline">\(\theta&#39;\)</span> from some distribution <span class="math inline">\(q\)</span></p></li>
-<li><p>Accept <span class="math inline">\(\theta&#39;\)</span> with probability
+<li><p>Accept <span class="math inline">\(\theta&#39; = \theta^{(i)}\)</span> with probability
 <span class="math display">\[
 p_{\textrm{acc}} = \min\left\{\frac{\pi(\theta&#39; \mid \boldsymbol{y})}{\pi(\theta \mid \boldsymbol{y})}\frac{q(\theta \mid \theta&#39;)}{q(\theta&#39; \mid \theta)}, 1\right\}.
 \]</span></p></li>
-<li><p>Repeat steps 3 to 4 for <span class="math inline">\(i = 2, \ldots, M\)</span>.</p></li>
+<li><p>Set <span class="math inline">\(i = i+1\)</span> and repeat steps 3 to 4 for <span class="math inline">\(i = 2, \ldots, M\)</span>.</p></li>
 </ol>
 <p>There are two parts to the acceptance probability in step 4. The first is the posterior ratio, similar to saying the likelihood of <span class="math inline">\(\theta&#39;\)</span> given the observed data over the likelihood of <span class="math inline">\(\theta\)</span> given the data. The second is the proposal ratio. It is similar to saying the likelihood of proposing <span class="math inline">\(\theta\)</span> given the current value <span class="math inline">\(\theta&#39;\)</span>, over the likelihood of proposing <span class="math inline">\(\theta&#39;\)</span> given the current value <span class="math inline">\(\theta\)</span>.</p>
 <p>In practice, we don’t need to evaluate the full posterior distribution. Recall

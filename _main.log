@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  15 FEB 2024 08:12
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  15 FEB 2024 13:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1009,8 +1009,8 @@ Underfull \vbox (badness 3547) has occurred while \output is active []
 
 [23]
 Overfull \hbox (69.75pt too wide) in paragraph at lines 937--937
-[]\TU/lmtt/m/n/10 ##  [1] -0.87157252 -0.14145068  0.08933733 -0.90894291  0.99
-791288  0.62516311[] 
+[]\TU/lmtt/m/n/10 ##  [1] -0.01309194 -0.53279305  0.61646876 -0.20228508  0.05
+904734  0.44800352[] 
  []
 
 [24] [25]
@@ -1383,12 +1383,12 @@ Overfull \hbox (59.25pt too wide) in paragraph at lines 3657--3657
 File: _main_files/figure-latex/unnamed-chunk-52-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-52-1.pdf>
 [102]
-Overfull \hbox (154.77533pt too wide) detected at line 3751
+Overfull \hbox (154.77533pt too wide) detected at line 3755
 [][][][] [][][][] [] [] []  []  [] []  []  [] []
  []
 
 [103]
-Underfull \vbox (badness 10000) detected at line 3832
+Underfull \vbox (badness 10000) detected at line 3836
  []
 
 
@@ -1404,7 +1404,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: _main_files/figure-latex/unnamed-chunk-54-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-54-1.pdf>
 [108]
-Overfull \hbox (38.25pt too wide) in paragraph at lines 4048--4048
+Overfull \hbox (38.25pt too wide) in paragraph at lines 4052--4052
 []\TU/lmtt/m/n/10 ##  [1] -0.8011436  0.2770003  1.1693495  1.9265967  2.487020
 5  2.7917595[] 
  []
@@ -1412,7 +1412,7 @@ Overfull \hbox (38.25pt too wide) in paragraph at lines 4048--4048
 File: _main_files/figure-latex/unnamed-chunk-57-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-57-1.pdf>
 [109]
-Overfull \hbox (106.5pt too wide) in paragraph at lines 4089--4089
+Overfull \hbox (106.5pt too wide) in paragraph at lines 4093--4093
 []\TU/lmtt/m/n/10 -5.93,  33.12, -21.41, -12.42, -17.64,  -5.47, -27.95, -22.25
 , -20.40, -26.28, -24.57,[] 
  []

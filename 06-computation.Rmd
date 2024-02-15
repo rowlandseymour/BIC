@@ -599,6 +599,11 @@ $$
 $$
 :::
 
+
+:::{.proof}
+See problem sheet.
+:::
+
 This example and the proposition show that if we set $\varepsilon$ too large, we don't learn anything about $\theta$, we just recover the data. The smaller the value of $\varepsilon$, the better. But very small values may require very long run times, or have such few samples that the noise from the sampling generator is larger than the signal in the accepted samples. The only diagnostic tools we have are the proportion of samples accepted and the histograms of the approximate posterior and prior distributions.
 
 :::{.example}
