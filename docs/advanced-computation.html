@@ -196,18 +196,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>6.1</b> Data Augmentation</a>
+<li class="chapter" data-level="6.1" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>6.1</b> Gaussian Processes</a>
 <ul>
-<li class="chapter" data-level="6.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>6.1.1</b> Imputing censored observations</a></li>
-<li class="chapter" data-level="6.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>6.1.2</b> Imputing Latent Variables</a></li>
+<li class="chapter" data-level="6.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>6.1.1</b> Covariance Functions</a></li>
+<li class="chapter" data-level="6.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>6.1.2</b> Gaussian Process Regression</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>6.2</b> Gaussian Processes</a>
+<li class="chapter" data-level="6.2" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>6.2</b> Data Augmentation</a>
 <ul>
-<li class="chapter" data-level="6.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>6.2.1</b> Covariance Functions</a></li>
-<li class="chapter" data-level="6.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>6.2.2</b> Gaussian Process Regression</a></li>
+<li class="chapter" data-level="6.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-censored-observations"><i class="fa fa-check"></i><b>6.2.1</b> Imputing censored observations</a></li>
+<li class="chapter" data-level="6.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#imputing-latent-variables"><i class="fa fa-check"></i><b>6.2.2</b> Imputing Latent Variables</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-data-augmenatation"><i class="fa fa-check"></i><b>6.3</b> Lab: Data Augmenatation</a></li>
-<li class="chapter" data-level="6.4" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-gaussian-processes"><i class="fa fa-check"></i><b>6.4</b> Lab: Gaussian Processes</a></li>
+<li class="chapter" data-level="6.3" data-path="advanced-computation.html"><a href="advanced-computation.html#approximate-bayesian-computation"><i class="fa fa-check"></i><b>6.3</b> Approximate Bayesian Computation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="advanced-computation.html"><a href="advanced-computation.html#abc-with-rejection"><i class="fa fa-check"></i><b>6.3.1</b> ABC with Rejection</a></li>
+<li class="chapter" data-level="6.3.2" data-path="advanced-computation.html"><a href="advanced-computation.html#summary-abc-with-rejection"><i class="fa fa-check"></i><b>6.3.2</b> Summary ABC with Rejection</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-3"><i class="fa fa-check"></i><b>6.4</b> Lab</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes-1"><i class="fa fa-check"></i><b>6.4.1</b> Gaussian Processes</a></li>
+<li class="chapter" data-level="6.4.2" data-path="advanced-computation.html"><a href="advanced-computation.html#missing-data"><i class="fa fa-check"></i><b>6.4.2</b> Missing Data</a></li>
+<li class="chapter" data-level="6.4.3" data-path="advanced-computation.html"><a href="advanced-computation.html#approximate-bayesian-computation-1"><i class="fa fa-check"></i><b>6.4.3</b> Approximate Bayesian Computation</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -231,9 +240,163 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="advanced-computation" class="section level1 hasAnchor" number="6">
 <h1><span class="header-section-number">Chapter 6</span> Advanced Computation<a href="advanced-computation.html#advanced-computation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Now we have the tools of Bayesian inference and methods to sample from complex posterior distributions, we can start to look at more advanced methods and models. This chapter is split into two distinct parts, each showing a different method in Bayesian inference.</p>
-<div id="data-augmentation" class="section level2 hasAnchor" number="6.1">
-<h2><span class="header-section-number">6.1</span> Data Augmentation<a href="advanced-computation.html#data-augmentation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now we have the tools of Bayesian inference and methods to sample from complex posterior distributions, we can start to look at more advanced methods and models. This chapter is split into three distinct parts, each showing a different method in Bayesian inference.</p>
+<div id="gaussian-processes" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Gaussian Processes<a href="advanced-computation.html#gaussian-processes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far in the module, we have considered prior distribution on parameters. These parameters have taken values (mostly real) or real-valued vectors. In this section, we’re going to extend this idea further to place prior distributions on functions. That is, we’re going to describe a prior distribution that when sampled gives us functions. The method we’re going to use is called a Gaussian Process (GP).</p>
+<p>Before, we define a GP, we’re going to build an intuitive definition of it. Recall the normal distribution with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(N(\mu, \sigma^2)\)</span>. It assigns probabilities to values on the real line – when we sample from it, we get real values. The plot below shows the density function for a <span class="math inline">\(N(0, 1)\)</span> distribution and five samples.</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="advanced-computation.html#cb99-1" tabindex="-1"></a><span class="co">#Plot N(0, 1)</span></span>
+<span id="cb99-2"><a href="advanced-computation.html#cb99-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>)</span>
+<span id="cb99-3"><a href="advanced-computation.html#cb99-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x)</span>
+<span id="cb99-4"><a href="advanced-computation.html#cb99-4" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
+<span id="cb99-5"><a href="advanced-computation.html#cb99-5" tabindex="-1"></a></span>
+<span id="cb99-6"><a href="advanced-computation.html#cb99-6" tabindex="-1"></a><span class="co">#Add samples</span></span>
+<span id="cb99-7"><a href="advanced-computation.html#cb99-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
+<span id="cb99-8"><a href="advanced-computation.html#cb99-8" tabindex="-1"></a><span class="fu">rug</span>(samples)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p>The multivariate normal distribution extends this to a vector space, <span class="math inline">\(\mathbb{R}^N\)</span>. Instead of having a mean and variance value, the distribution is defined through a mean vector and covariance matrix. The mean vector describes the expected value of each component of the vector and the covariance matrix describes the relationship between each pair of components in the vector. When we draw samples, we get vectors. The plot below shows the density of the multivariate normal distribution with <span class="math inline">\(N = 2\)</span>, zero mean, <span class="math inline">\(\sigma^2_x = \sigma^2_y = 1\)</span> and <span class="math inline">\(\rho = 0.7\)</span>.</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="advanced-computation.html#cb100-1" tabindex="-1"></a><span class="co">#Create Grid</span></span>
+<span id="cb100-2"><a href="advanced-computation.html#cb100-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="at">length.out=</span><span class="dv">100</span>)</span>
+<span id="cb100-3"><a href="advanced-computation.html#cb100-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="at">length.out=</span><span class="dv">100</span>)</span>
+<span id="cb100-4"><a href="advanced-computation.html#cb100-4" tabindex="-1"></a></span>
+<span id="cb100-5"><a href="advanced-computation.html#cb100-5" tabindex="-1"></a><span class="co">#Evaluate density at grid</span></span>
+<span id="cb100-6"><a href="advanced-computation.html#cb100-6" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow=</span><span class="dv">100</span>,<span class="at">ncol=</span><span class="dv">100</span>)</span>
+<span id="cb100-7"><a href="advanced-computation.html#cb100-7" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb100-8"><a href="advanced-computation.html#cb100-8" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="dv">1</span>),<span class="at">nrow=</span><span class="dv">2</span>)</span>
+<span id="cb100-9"><a href="advanced-computation.html#cb100-9" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb100-10"><a href="advanced-computation.html#cb100-10" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb100-11"><a href="advanced-computation.html#cb100-11" tabindex="-1"></a>    z[i,j] <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">dmvnorm</span>(<span class="fu">c</span>(x[i],y[j]),</span>
+<span id="cb100-12"><a href="advanced-computation.html#cb100-12" tabindex="-1"></a>                      <span class="at">mean=</span>mu,<span class="at">sigma=</span>sigma)</span>
+<span id="cb100-13"><a href="advanced-computation.html#cb100-13" tabindex="-1"></a>  }</span>
+<span id="cb100-14"><a href="advanced-computation.html#cb100-14" tabindex="-1"></a>}</span>
+<span id="cb100-15"><a href="advanced-computation.html#cb100-15" tabindex="-1"></a></span>
+<span id="cb100-16"><a href="advanced-computation.html#cb100-16" tabindex="-1"></a><span class="co">#Generate contour plot</span></span>
+<span id="cb100-17"><a href="advanced-computation.html#cb100-17" tabindex="-1"></a><span class="fu">contour</span>(x, y ,z)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<p>A GP takes this one step further and puts a prior distribution on a function space. It is specified by a mean function, <span class="math inline">\(\mu(\cdot)\)</span> and covariance function <span class="math inline">\(k(\cdot, \cdot)\)</span>. The mean function describes the expected value of each point the function can be evaluated at, and the covariance function describes the relationship between each point on the function. The plot below shows three samples from a GP distribution with mean function the zero function <span class="math inline">\(\mu(x) = 0\, \forall x\)</span> and a covariance function that supports smooth functions.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<div class="definition">
+<p><span id="def:unlabeled-div-84" class="definition"><strong>Definition 6.1  </strong></span>A <strong>Gaussian Process</strong> is a collection of random variables, any finite number of which have a joint Gaussian distribution.</p>
+</div>
+<p>This says that is we think of a function as an infinite collection of points, then if any finite subset of those points following a Gaussian distribution, we have a Gaussian process. In reality, we set up the function so that is meets this definition. More formally,</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-85" class="definition"><strong>Definition 6.2  </strong></span>A <strong>GP distribution on a function <span class="math inline">\(f(x)\)</span></strong> is defined through its mean function <span class="math inline">\(\mu(x) = \mathbb{E}(x)\)</span> and covariance function <span class="math inline">\(k(x, x&#39;) = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x&#39;) - \mu(x&#39;))\right)\)</span>. We write it as <span class="math inline">\(f(x) \sim \mathcal{GP}(\mu(x), k(x, x&#39;))\)</span>.</p>
+</div>
+<p>Before we go any further, it is worth proceeding with caution. Those with good memories will recall Bernstein-von-Mises’ theorem from Chapter 3.</p>
+<div class="theorem">
+<p><span id="thm:unlabeled-div-86" class="theorem"><strong>Theorem 6.1  (Bernstein-von-Mises) </strong></span>For a well-specified model <span class="math inline">\(\pi(\boldsymbol{y} \mid \theta)\)</span> with a fixed number of parameters, and for a smooth prior distribution <span class="math inline">\(\pi(\theta)\)</span> that is non-zero around the MLE <span class="math inline">\(\hat{\theta}\)</span>, then
+<span class="math display">\[
+\left|\left| \pi(\theta \mid \boldsymbol{y}) - N\left(\hat{\theta}, \frac{I(\hat{\theta})^{-1}}{n}\right) \right|\right|_{TV} \rightarrow 0.
+\]</span></p>
+</div>
+<p>Bernstein-von-Mises’ theorem only holds when the model has a fixed (i.e. finite) number of parameters. A GP is defined on an infinite collection of points, and so this theorem does not hold. This is the first time in this module we have encountered a distribution where Bernstein-von-Mises’ theorem does not hold. Fortunately, various forms of Bernstein-von-Mises’ theorems for GPs exist, with many coming about in the early 2010s. However, this is still an ongoing area of research.</p>
+<div id="covariance-functions" class="section level3 hasAnchor" number="6.1.1">
+<h3><span class="header-section-number">6.1.1</span> Covariance Functions<a href="advanced-computation.html#covariance-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One issue when using GPs is describing the covariance function. How do we decide how each pair of points (there being an infinite number of them)? There are lots of standard choices of covariance functions that we can choose from, each one making different assumptions about the function we are interested in.</p>
+<p>The most common covariance function is the squared exponential functions. It is used to model functions that are ‘nice’, i.e. they are smooth, continuous and infinitely differentiable.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-87" class="definition"><strong>Definition 6.3  </strong></span>The <strong>squared exponential covariance function</strong> takes the form
+<span class="math display">\[
+k(x, x&#39;) = \alpha^2\exp\left\{-\frac{1}{l}(x-x&#39;)^2\right\},
+\]</span>
+where <span class="math inline">\(\alpha^2\)</span> is the signal variance and <span class="math inline">\(l&gt;0\)</span> is the length scale parameter.</p>
+</div>
+<p>For now, consider <span class="math inline">\(\alpha = l = 1\)</span>. What is the covariance between the function evaluated at 0 and the function evaluated at <span class="math inline">\(x\)</span>? The plot below shows the covariance.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<p>The covariance is highest when the <span class="math inline">\(x\)</span> is near to 0, i.e. the points are immediately next to each other. If the value of <span class="math inline">\(x\)</span> is <span class="math inline">\(\pm 2\)</span>, the covariance is 0. As we are dealing with a joint normal distribution, a covariance of 0 implies independence. So with this covariance function, the value of <span class="math inline">\(f(x)\)</span> is independent of <span class="math inline">\(f(0)\)</span> if <span class="math inline">\(|x|\)</span> is larger than about two. The parameter <span class="math inline">\(l\)</span> is called the length scale parameter and dictates how quickly the covariance decays. Small values of <span class="math inline">\(l\)</span> mean that the value of the function at nearby points are independent of each other, resulting in functions that look like white noise. Large values of <span class="math inline">\(l\)</span> mean that even if points are far away, they are still highly dependent on each other. This gives very flat functions.</p>
+<p>The choice of covariance function is a modelling choice – it depends completely on the data generating process you are trying to model. The following properties are useful when deciding which covariance function to use.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-88" class="definition"><strong>Definition 6.4  </strong></span>A <strong>stationary</strong> covariance function is a function of <span class="math inline">\(\boldsymbol{x} - \boldsymbol{x}&#39;\)</span>. That means it is invariant to translations in space.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-89" class="definition"><strong>Definition 6.5  </strong></span>An <strong>isotropic</strong> covariance function is a function only of <span class="math inline">\(|\boldsymbol{x} - \boldsymbol{x}&#39;|\)</span>. That means it is invariant to rigid translations in space.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-90" class="definition"><strong>Definition 6.6  </strong></span>An <strong>dot product</strong> covariance function is a function only of <span class="math inline">\(\boldsymbol{x}\cdot\boldsymbol{x}&#39;\)</span>. That means it is invariant to rigid rotations in space, but not translations.</p>
+</div>
+<p>What is most important is that the matrix resulting from a covariance function is positive semi-definite. This is because covariance matrices must be positive semi-definite.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-91" class="definition"><strong>Definition 6.7  </strong></span>An <span class="math inline">\(N \times N\)</span> matrix <span class="math inline">\(\Sigma\)</span> is positive semi-definite if it is symmetric and
+<span class="math display">\[
+\boldsymbol{x}^T\Sigma\boldsymbol{x} \geq 0 \quad \hbox{for all } \boldsymbol{x} \in \mathbb{R}^N.
+\]</span></p>
+</div>
+<p>The squared exponential covariance function is isotropic and produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don’t produce functions that are continuous or differentiable. Two more are given below.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-92" class="definition"><strong>Definition 6.8  </strong></span>The <strong>M'atern covariance function</strong> models functions that are differentiable only once:
+<span class="math display">\[
+k(x, x&#39;) = \left(1 + \frac{\sqrt{3}(x - x&#39;)^2}{l} \right)\exp\left\{-\frac{\sqrt{3}(x - x&#39;)^2}{l} \right\}.
+\]</span></p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-93" class="definition"><strong>Definition 6.9  </strong></span>The periodic covariance function models functions that are periodic and it is given by
+<span class="math display">\[
+k(x, x&#39;) = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x&#39;)^2}{p} \right\},
+\]</span>
+where the period is <span class="math inline">\(p\)</span>.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-94" class="definition"><strong>Definition 6.10  </strong></span>The dot product covariance function models functions that are rotationally invariant and it is given by
+<span class="math display">\[
+k(x, x&#39;) = \alpha^2 + x\cdot x&#39;.
+\]</span></p>
+</div>
+<p>These are just some covariance functions. In addition to the covariance functions defined, we can make new covariance funcitons by combining existing ones.</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-95" class="proposition"><strong>Proposition 6.1  </strong></span>If <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> are covariance functions, then so is <span class="math inline">\(k_1 + k_2\)</span>.</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-96" class="proof"><em>Proof</em>. </span>Let <span class="math inline">\(f_1\)</span> be a function with covariance function <span class="math inline">\(k_1\)</span> and <span class="math inline">\(f_2\)</span> be a function with covariance function <span class="math inline">\(k_2\)</span>, then <span class="math inline">\(f = f_1 + f_2\)</span> has covariance function <span class="math inline">\(k_1 + k_2\)</span>.</p>
+</div>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-97" class="proposition"><strong>Proposition 6.2  </strong></span>If <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> are covariance functions, then so is <span class="math inline">\(k_1k_2\)</span>.</p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-98" class="proof"><em>Proof</em>. </span>See problem sheet.</p>
+</div>
+</div>
+<div id="gaussian-process-regression" class="section level3 hasAnchor" number="6.1.2">
+<h3><span class="header-section-number">6.1.2</span> Gaussian Process Regression<a href="advanced-computation.html#gaussian-process-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One of the main applications of GPs in in regression. Suppose we observe the points below <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> and want to fit a curve through them. One method is to write down a set of functions of the form <span class="math inline">\(\boldsymbol{y} = X^T\boldsymbol{\beta} + \boldsymbol{\varepsilon}\)</span>, where <span class="math inline">\(X\)</span> is the design matrix and <span class="math inline">\(\boldsymbol{\beta}\)</span> a vector of parameters. For each design matrix <span class="math inline">\(X\)</span>, construct the posterior distributions for <span class="math inline">\(\boldsymbol{\beta}\)</span> and use some goodness-of-fit measure to choose the most suitable design matrix.</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="advanced-computation.html#cb101-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb101-2"><a href="advanced-computation.html#cb101-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x<span class="sc">/</span><span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">/</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(x), <span class="dv">0</span>, <span class="fl">0.2</span>)</span>
+<span id="cb101-3"><a href="advanced-computation.html#cb101-3" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<p>One difficulty is writing down the design matrices <span class="math inline">\(X\)</span>, it is often not straightforward to propose or justify these forms GPs allow us to take a much less arbitrary approach, simply saying that <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span> and placing a GP prior distribution on <span class="math inline">\(f\)</span>.</p>
+<p>Although we’re placing an prior distribution with an infinite dimension on <span class="math inline">\(f\)</span>, we only ever need to work with a finite dimensional object, making this much easier. We only observe the function at finite number of points <span class="math inline">\(\boldsymbol{f} = \{f(x_1), \ldots, f(x_N)\}\)</span> and we will infer the value of the function at points on a fine grid, <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. By the definition of a GP, the distribution of these points is a multivariate normal distribution.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-99" class="example"><strong>Example 6.1  </strong></span>Suppose we observe <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> at <span class="math inline">\(\boldsymbol{x} = \{x_1, \ldots, x_N\}\)</span>. The plot below shows these points.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<p>Using the model <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span>, where <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>, we want to infer the function <span class="math inline">\(f\)</span> evaluated at a gird of points <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. We place a GP prior distribution on <span class="math inline">\(f \sim \mathcal{GP}(0, k)\)</span>, where <span class="math inline">\(k\)</span> is the squared exponential covariance function. Using the model, the covariance between points <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span> is
+<span class="math display">\[
+\textrm{cov}(y_i, y_j) = k(x_i, x_j) + \sigma^21_{i=j}.
+\]</span>
+That is the covariance function evaluated at <span class="math inline">\(x_i\)</span> and <span class="math inline">\(x_j\)</span> plus <span class="math inline">\(\sigma^2\)</span> if <span class="math inline">\(i = j\)</span>. We can write this in matrix form as <span class="math inline">\(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I\)</span> where <span class="math inline">\(I\)</span> is the identity matrix. The distribution of <span class="math inline">\(\boldsymbol{y}\)</span> is therefore <span class="math inline">\(\boldsymbol{y} \sim N(\boldsymbol{0}, \, K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)\)</span>. By definition of the GP, the distribution of the function evaluated at the fine grid is <span class="math inline">\(\boldsymbol{f}^* \sim N(\boldsymbol{0}, K(\boldsymbol{x}^*, \boldsymbol{x}^*))\)</span>.</p>
+<p>We can now write the joint distribution as
+<span class="math display">\[
+\begin{pmatrix}
+\boldsymbol{y} \\
+\boldsymbol{f}^*
+\end{pmatrix} \sim N\left(\boldsymbol{0}, \,
+\begin{pmatrix}
+K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I &amp;  K(\boldsymbol{x}, \boldsymbol{x}^*)\\
+K(\boldsymbol{x}^*, \boldsymbol{x}) &amp; K(\boldsymbol{x}^*, \boldsymbol{x}^*)
+\end{pmatrix}.
+\right)
+\]</span>
+The off-diagonal terms in the covariance matrix describe the relationship between the observed points <span class="math inline">\(\boldsymbol{y}\)</span> and the points of interest <span class="math inline">\(\boldsymbol{f}^*\)</span>. We can now write down the distribution of <span class="math inline">\(\boldsymbol{f}^*\)</span> given the observed points <span class="math inline">\(\boldsymbol{y}\)</span> and <span class="math inline">\(\sigma^2\)</span>.
+<span class="math display">\[
+\boldsymbol{f}^* \mid \boldsymbol{y}, \sigma^2 \sim N(\boldsymbol{\mu}^*, \, K^*),
+\]</span>
+where <span class="math inline">\(\boldsymbol{\mu}^* = K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2 I)^{-1} \boldsymbol{y}\)</span> and <span class="math inline">\(K^* = K(\boldsymbol{x}^*, \boldsymbol{x}^*) - K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)^{-1}K(\boldsymbol{x}, \boldsymbol{x}^*)\)</span>.</p>
+<p>We set the fine gird to be <span class="math inline">\(\boldsymbol{x}^* = \{-5, -4.99, -4.98, \ldots, 5\}\)</span>, the GP parameters <span class="math inline">\(\alpha = l = 1\)</span> and <span class="math inline">\(\sigma = 0.2\)</span>. The posterior mean and 95% credible interval are shown below.
+<img src="_main_files/figure-html/unnamed-chunk-47-1.png" width="672" />
+The posterior mean for <span class="math inline">\(f\)</span> is a smooth line passing near each point. The 95% credible interval for <span class="math inline">\(f\)</span> has the smallest variance near each point, and largest furthest away from the points.</p>
+</div>
+</div>
+</div>
+<div id="data-augmentation" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Data Augmentation<a href="advanced-computation.html#data-augmentation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Real world data are often messy with data points missing which may mean they are partially or completely unobserved. One common example of this is in clinical trials where people drop out of the trial before their treatment is complete. Another example is crime data, where only a fraction of crimes are reported and many crimes go unobserved. Two common ways to deal with partially or completely unobserved are:</p>
 <ul>
 <li>Remove data points that are not completely observed. This throws away information and is likely to increase the overall uncertainty in the estimates.</li>
@@ -242,18 +405,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data. It allows us to treat the missing data points as random variables and infer the data points alongside the model parameters. This provides us with a method to quantify the uncertainty around our estimates of the missing data points.</p>
 <p>In data augmentation, we distinguish between two likelihood functions.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-84" class="definition"><strong>Definition 6.1  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
+<p><span id="def:unlabeled-div-100" class="definition"><strong>Definition 6.11  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-85" class="definition"><strong>Definition 6.2  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
+<p><span id="def:unlabeled-div-101" class="definition"><strong>Definition 6.12  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
 </div>
 <p>The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn’t fully observe, we can’t compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, where the outcome of <span class="math inline">\(X\)</span> is observed and <span class="math inline">\(Y\)</span> unobserved. The complete data likelihood is <span class="math inline">\(pi(X = x, Y = y)\)</span> because we are considering all the events, observed or not. However, we can only compute <span class="math inline">\(\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)\)</span> or <span class="math inline">\(\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)\)</span>, since <span class="math inline">\(y\)</span> is unobserved.</p>
 <p>In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function.</p>
-<div id="imputing-censored-observations" class="section level3 hasAnchor" number="6.1.1">
-<h3><span class="header-section-number">6.1.1</span> Imputing censored observations<a href="advanced-computation.html#imputing-censored-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="imputing-censored-observations" class="section level3 hasAnchor" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> Imputing censored observations<a href="advanced-computation.html#imputing-censored-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first example we will look at is when data is censored. Instead of throwing away these observations, we will instead treat them as random variables and infer their values.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-86" class="example"><strong>Example 6.1  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
+<p><span id="exm:unlabeled-div-102" class="example"><strong>Example 6.2  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
 <p>The bank checks five batches and observes <span class="math inline">\(y_1, \ldots, y_4\)</span> suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6.</p>
 <p>The observed data likelihood functions is
 <span class="math display">\[
@@ -261,7 +424,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \]</span>
 This is known as marginalising over the missing variable, just as we did in the simple probability example earlier. Placing a uniform prior distribution on <span class="math inline">\(p \sim U[0, 1]\)</span> give the posterior distribution
 <span class="math display">\[
-\pi(p, \tilde{y}_5 \mid y_1, \ldots, y_4)= \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
+\pi(p \mid y_1, \ldots, y_4, \tilde{y}_5)= \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
 \]</span>
 Although we could sample from this distribution, it is not easy to work with. Instead, we can write down the complete data likelihood. Suppose that <span class="math inline">\(y_5\)</span> was observed, then the complete data likelihood may be written as
 <span class="math display">\[
@@ -269,34 +432,34 @@ Although we could sample from this distribution, it is not easy to work with. In
 \]</span>
 The posterior distribution is therefore
 <span class="math display">\[
-p \mid y_1, \ldots, y_5 \sim \hbox{Beta}\left(\sum_{i=1}^5 y_i + 1, 1001 - \sum_{i=1}^5 y_i\right).
+p \mid y_1, \ldots, y_5 \sim \hbox{Beta}\left(\sum_{i=1}^5 y_i + 1, 5000 + 1 - \sum_{i=1}^5 y_i\right).
 \]</span></p>
 <p>The full conditional distribution of <span class="math inline">\(y_5\)</span> given <span class="math inline">\(p\)</span>, the other data points an <span class="math inline">\(y_5 &lt; 6\)</span> is
 <span class="math display">\[
-  \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 &lt; 1, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=0}^{1000}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{j}}, \qquad y &lt; 6
+  \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 &lt; 6, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=0}^{5}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000-j}}, \qquad y &lt; 6
 \]</span>
-This is a truncated distribution. We can use a Gibbs sampler alternating between sampling <span class="math inline">\(p\)</span> and <span class="math inline">\(y_5\)</span>.</p>
+We can use a Gibbs sampler alternating between sampling <span class="math inline">\(p\)</span> and <span class="math inline">\(y_5\)</span>.</p>
 </div>
 </div>
-<div id="imputing-latent-variables" class="section level3 hasAnchor" number="6.1.2">
-<h3><span class="header-section-number">6.1.2</span> Imputing Latent Variables<a href="advanced-computation.html#imputing-latent-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="imputing-latent-variables" class="section level3 hasAnchor" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> Imputing Latent Variables<a href="advanced-computation.html#imputing-latent-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Often there are variables that are cannot be observed, these may be hidden somehow or introduced to help with the modelling. Instead we can learn about this variable indirectly from the data.</p>
 <div class="defintion">
 <p>A <strong>latent variable</strong> is a variable that cannot be observed.</p>
 </div>
 <p>A mixture model is an example of latent variables being useful.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-87" class="example"><strong>Example 6.2  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
+<p><span id="exm:unlabeled-div-103" class="example"><strong>Example 6.3  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
 <p>Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.</p>
 <p><img src="postcode.jpeg" /><!-- --></p>
 <p>We introduce a latent variable <span class="math inline">\(z_i \sim \hbox{Bernoulli}(p)\)</span> that describes if the characters on the <span class="math inline">\(i^{th}\)</span> image are B1 or B2. The observation <span class="math inline">\(y_i\)</span> is the proportion of the <span class="math inline">\(i^{th}\)</span> image that is taken up by the characters. We observe <span class="math inline">\(y_i\)</span>, but want to estimate <span class="math inline">\(z_i\)</span>. The difficultly is there lack of one-to-one correspondence between the values <span class="math inline">\(y_i\)</span> can take and the value <span class="math inline">\(z_i\)</span>. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 (<span class="math inline">\(Z = 1\)</span>), then <span class="math inline">\(Y_i \sim N(0.7, 0.05^2)\)</span> and if it is going to B2 (<span class="math inline">\(Z = 2\)</span>), then <span class="math inline">\(Y_i \sim N(0.8, 0.02^2)\)</span>. The plot below shows the two densities and the overlap between them.</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="advanced-computation.html#cb99-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.001</span>)</span>
-<span id="cb99-2"><a href="advanced-computation.html#cb99-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.7</span>, <span class="fl">0.05</span>)</span>
-<span id="cb99-3"><a href="advanced-computation.html#cb99-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.8</span>, <span class="fl">0.02</span>)</span>
-<span id="cb99-4"><a href="advanced-computation.html#cb99-4" tabindex="-1"></a><span class="fu">plot</span>(a, x, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">xlab =</span> <span class="fu">expression</span>(y),</span>
-<span id="cb99-5"><a href="advanced-computation.html#cb99-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;density&quot;</span>)</span>
-<span id="cb99-6"><a href="advanced-computation.html#cb99-6" tabindex="-1"></a><span class="fu">lines</span>(a, y, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="advanced-computation.html#cb102-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.001</span>)</span>
+<span id="cb102-2"><a href="advanced-computation.html#cb102-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.7</span>, <span class="fl">0.05</span>)</span>
+<span id="cb102-3"><a href="advanced-computation.html#cb102-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.8</span>, <span class="fl">0.02</span>)</span>
+<span id="cb102-4"><a href="advanced-computation.html#cb102-4" tabindex="-1"></a><span class="fu">plot</span>(a, x, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">xlab =</span> <span class="fu">expression</span>(y),</span>
+<span id="cb102-5"><a href="advanced-computation.html#cb102-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;density&quot;</span>)</span>
+<span id="cb102-6"><a href="advanced-computation.html#cb102-6" tabindex="-1"></a><span class="fu">lines</span>(a, y, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
 <p>As the variables <span class="math inline">\(\boldsymbol{z}\)</span> are latent, the observed data likelihood function is
 <span class="math display">\[
 \pi(\boldsymbol{y} \mid  p) =\prod_{i=1}^N \left[ p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)\right].
@@ -325,130 +488,424 @@ The full conditional distribution is therefore <span class="math inline">\(z_i \
 </div>
 </div>
 </div>
-<div id="gaussian-processes" class="section level2 hasAnchor" number="6.2">
-<h2><span class="header-section-number">6.2</span> Gaussian Processes<a href="advanced-computation.html#gaussian-processes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>So far in the module, we have considered prior distribution on parameters. These parameters have taken values (mostly real) or real-valued vectors. In this section, we’re going to extend this idea further to place prior distributions on functions. That is, we’re going to describe a prior distribution that when sampled gives us functions. The method we’re going to use is called a Gaussian Process (GP).</p>
-<p>Before, we define a GP, we’re going to build an intuitive definition of it. Recall the normal distribution with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(N(\mu, \sigma^2)\)</span>. It assigns probabilities to values on the real line – when we sample from it, we get real values. The plot below shows the density function for a <span class="math inline">\(N(0, 1)\)</span> distribution and five samples.</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="advanced-computation.html#cb100-1" tabindex="-1"></a><span class="co">#Plot N(0, 1)</span></span>
-<span id="cb100-2"><a href="advanced-computation.html#cb100-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>)</span>
-<span id="cb100-3"><a href="advanced-computation.html#cb100-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x)</span>
-<span id="cb100-4"><a href="advanced-computation.html#cb100-4" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
-<span id="cb100-5"><a href="advanced-computation.html#cb100-5" tabindex="-1"></a></span>
-<span id="cb100-6"><a href="advanced-computation.html#cb100-6" tabindex="-1"></a><span class="co">#Add samples</span></span>
-<span id="cb100-7"><a href="advanced-computation.html#cb100-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
-<span id="cb100-8"><a href="advanced-computation.html#cb100-8" tabindex="-1"></a><span class="fu">rug</span>(samples)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
-<p>The multivariate normal distribution extends this to a vector space, <span class="math inline">\(\mathbb{R}^N\)</span>. Instead of having a mean and variance value, the distribution is defined through a mean vector and covariance matrix. The mean vector describes the expected value of each component of the vector and the covariance matrix describes the relationship between each pair of components in the vector. When we draw samples, we get vectors. The plot below shows the density of the multivariate normal distribution with <span class="math inline">\(N = 2\)</span>, zero mean, <span class="math inline">\(\sigma^2_x = \sigma^2_y = 1\)</span> and <span class="math inline">\(\rho = 0.7\)</span>.</p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="advanced-computation.html#cb101-1" tabindex="-1"></a><span class="co">#Create Grid</span></span>
-<span id="cb101-2"><a href="advanced-computation.html#cb101-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="at">length.out=</span><span class="dv">100</span>)</span>
-<span id="cb101-3"><a href="advanced-computation.html#cb101-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="at">length.out=</span><span class="dv">100</span>)</span>
-<span id="cb101-4"><a href="advanced-computation.html#cb101-4" tabindex="-1"></a></span>
-<span id="cb101-5"><a href="advanced-computation.html#cb101-5" tabindex="-1"></a><span class="co">#Evaluate density at grid</span></span>
-<span id="cb101-6"><a href="advanced-computation.html#cb101-6" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>,<span class="at">nrow=</span><span class="dv">100</span>,<span class="at">ncol=</span><span class="dv">100</span>)</span>
-<span id="cb101-7"><a href="advanced-computation.html#cb101-7" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)</span>
-<span id="cb101-8"><a href="advanced-computation.html#cb101-8" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="dv">1</span>),<span class="at">nrow=</span><span class="dv">2</span>)</span>
-<span id="cb101-9"><a href="advanced-computation.html#cb101-9" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
-<span id="cb101-10"><a href="advanced-computation.html#cb101-10" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
-<span id="cb101-11"><a href="advanced-computation.html#cb101-11" tabindex="-1"></a>    z[i,j] <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">dmvnorm</span>(<span class="fu">c</span>(x[i],y[j]),</span>
-<span id="cb101-12"><a href="advanced-computation.html#cb101-12" tabindex="-1"></a>                      <span class="at">mean=</span>mu,<span class="at">sigma=</span>sigma)</span>
-<span id="cb101-13"><a href="advanced-computation.html#cb101-13" tabindex="-1"></a>  }</span>
-<span id="cb101-14"><a href="advanced-computation.html#cb101-14" tabindex="-1"></a>}</span>
-<span id="cb101-15"><a href="advanced-computation.html#cb101-15" tabindex="-1"></a></span>
-<span id="cb101-16"><a href="advanced-computation.html#cb101-16" tabindex="-1"></a><span class="co">#Generate contour plot</span></span>
-<span id="cb101-17"><a href="advanced-computation.html#cb101-17" tabindex="-1"></a><span class="fu">contour</span>(x, y ,z)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
-<p>A GP takes this one step further and puts a prior distribution on a function space. It is specified by a mean function, <span class="math inline">\(\mu(\cdot)\)</span> and covariance function <span class="math inline">\(k(\cdot, \cdot)\)</span>. The mean function describes the expected value of each point the function can be evaluated at, and the covariance function describes the relationship between each point on the function. The plot below shows three samples from a GP distribution with mean function the zero function <span class="math inline">\(\mu(x) = 0\, \forall x\)</span> and a covariance function that supports smooth functions.</p>
-<p><img src="_main_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
-<div class="definition">
-<p><span id="def:unlabeled-div-88" class="definition"><strong>Definition 6.3  </strong></span>A <strong>Gaussian Process</strong> is a collection of random variables, any finite number of which have a joint Gaussian distribution.</p>
-</div>
-<p>This says that is we think of a function as an infinite collection of points, then if any finite subset of those points following a Gaussian distribution, we have a Gaussian process. In reality, we set up the function so that is meets this definition. More formally,</p>
-<div class="definition">
-<p><span id="def:unlabeled-div-89" class="definition"><strong>Definition 6.4  </strong></span>A <strong>GP distribution on a function <span class="math inline">\(f(x)\)</span></strong> is defined through its mean function <span class="math inline">\(\mu(x) = \mathbb{E}(x)\)</span> and covariance function <span class="math inline">\(k(x, x&#39;) = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x&#39;) - \mu(x&#39;))\right)\)</span>. We write it as <span class="math inline">\(f(x) \sim \mathcal{GP}(\mu(x), k(x, x&#39;))\)</span>.</p>
-</div>
-<p>Before we go any further, it is worth proceeding with caution. Those with good memories, we recall Bernstein-von-Mises’ theorem from Chapter 3.</p>
-<div class="theorem">
-<p><span id="thm:unlabeled-div-90" class="theorem"><strong>Theorem 6.1  (Bernstein-von-Mises) </strong></span>For a well-specified model <span class="math inline">\(\pi(\boldsymbol{y} \mid \theta)\)</span> with a fixed number of parameters, and for a smooth prior distribution <span class="math inline">\(\pi(\theta)\)</span> that is non-zero around the MLE <span class="math inline">\(\hat{\theta}\)</span>, then
-<span class="math display">\[
-\left|\left| \pi(\theta \mid \boldsymbol{y}) - N\left(\hat{\theta}, \frac{I(\hat{\theta})^{-1}}{n}\right) \right|\right|_{TV} \rightarrow 0.
-\]</span></p>
-</div>
-<p>Bernstein-von-Mises’ theorem only holds when the model has a fixed (i.e. finite) number of parameters. A GP is defined on an infinite collection of points, and so this theorem does not hold. This is the first time in this module we have encountered a distribution where Bernstein-von-Mises’ theorem does not hold. Fortunately, various forms of Bernstein-von-Mises’ theorems for GPs exist, with many coming about in the early 2010s. However, this is still an ongoing area of research.</p>
-<div id="covariance-functions" class="section level3 hasAnchor" number="6.2.1">
-<h3><span class="header-section-number">6.2.1</span> Covariance Functions<a href="advanced-computation.html#covariance-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>One issue when using GPs is describing the covariance function. How do we decide how each pair of points (there being an infinite number of them)? There are lots of standard choices of covariance functions that we can choose from, each one making different assumptions about the function we are interested in.</p>
-<p>The most common covariance function is the squared exponential functions. It is used to model functions that are ‘nice’, i.e. they are smooth, continuous and infinitely differentiable.</p>
-<div class="definition">
-<p><span id="def:unlabeled-div-91" class="definition"><strong>Definition 6.5  </strong></span>The <strong>squared exponential covariance function</strong> takes the form
-<span class="math display">\[
-k(x, x&#39;) = \alpha^2\exp\left\{-\frac{1}{l}(x-x&#39;)^2\right\},
-\]</span>
-where <span class="math inline">\(\alpha^2\)</span> is the signal variance and <span class="math inline">\(l&gt;0\)</span> is the length scale parameter.</p>
-</div>
-<p>For now, consider <span class="math inline">\(\alpha = l = 1\)</span>. What is the covariance between the function evaluated at 0 and the function evaluated at <span class="math inline">\(x\)</span>? The plot below shows the covariance.</p>
-<p><img src="_main_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
-<p>The covariance is highest when the <span class="math inline">\(x\)</span> is near to 0, i.e. the points are immediately next to each other. If the value of <span class="math inline">\(x\)</span> is <span class="math inline">\(\pm 2\)</span>, the covariance is 0. As we are dealing with a joint normal distribution, a covariance of 0 implies independence. So with this covariance function, the value of <span class="math inline">\(f(x)\)</span> is independent of <span class="math inline">\(f(0)\)</span> if <span class="math inline">\(|x|\)</span> is larger than about two. The parameter <span class="math inline">\(l\)</span> is called the length scale parameter and dictates how quickly the covariance decays. Small values of <span class="math inline">\(l\)</span> mean that the value of the function at nearby points are independent of each other, resulting in functions that look like white noise. Large values of <span class="math inline">\(l\)</span> mean that even if points are far away, they are still highly dependent on each other. This gives very flat functions.</p>
-<p>The squared exponential covariance function produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don’t produce functions that are continuous or differentiable. Two more are given below.</p>
-<div class="definition">
-<p><span id="def:unlabeled-div-92" class="definition"><strong>Definition 6.6  </strong></span>The <strong>M'atern covariance function</strong> models functions that are differentiable only once:
-<span class="math display">\[
-k(x, x&#39;) = \left(1 + \frac{\sqrt{3}(x - x&#39;)^2}{l} \right)\exp\left\{-\frac{\sqrt{3}(x - x&#39;)^2}{l} \right\}.
-\]</span></p>
-</div>
-<div class="definition">
-<p><span id="def:unlabeled-div-93" class="definition"><strong>Definition 6.7  </strong></span>The periodic covariance function models functions that are periodic and it is given by
-<span class="math display">\[
-k(x, x&#39;) = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x&#39;)^2}{p} \right\},
-\]</span>
-where the period is <span class="math inline">\(p\)</span>.</p>
-</div>
-</div>
-<div id="gaussian-process-regression" class="section level3 hasAnchor" number="6.2.2">
-<h3><span class="header-section-number">6.2.2</span> Gaussian Process Regression<a href="advanced-computation.html#gaussian-process-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>One of the main applications of GPs in in regression. Suppose we observe the points below <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> and want to fit a curve through them. One method is to write down a set of functions of the form <span class="math inline">\(\boldsymbol{y} = X^T\boldsymbol{\beta} + \boldsymbol{\varepsilon}\)</span>, where <span class="math inline">\(X\)</span> is the design matrix and <span class="math inline">\(\boldsymbol{\beta}\)</span> a vector of parameters. For each design matrix <span class="math inline">\(X\)</span>, construct the posterior distributions for <span class="math inline">\(\boldsymbol{\beta}\)</span> and use some goodness-of-fit measure to choose the most suitable design matrix.</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="advanced-computation.html#cb102-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
-<span id="cb102-2"><a href="advanced-computation.html#cb102-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x<span class="sc">/</span><span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">/</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(x), <span class="dv">0</span>, <span class="fl">0.2</span>)</span>
-<span id="cb102-3"><a href="advanced-computation.html#cb102-3" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
-<p>One difficulty is writing down the design matrices <span class="math inline">\(X\)</span>, it is often not straightforward to propose or justify these forms GPs allow us to take a much less arbitrary approach, simply saying that <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span> and placing a GP prior distribution on <span class="math inline">\(f\)</span>.</p>
-<p>Although we’re placing an prior distribution with an infinite dimension on <span class="math inline">\(f\)</span>, we only ever need to work with a finite dimensional object, making this much easier. We only observe the function at finite number of points <span class="math inline">\(\boldsymbol{f} = \{f(x_1), \ldots, f(x_N)\}\)</span> and we will infer the value of the function at points on a fine grid, <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. By the definition of a GP, the distribution of these points is a multivariate normal distribution.</p>
+<div id="approximate-bayesian-computation" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Approximate Bayesian Computation<a href="advanced-computation.html#approximate-bayesian-computation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far, we have always considered models where the likelihood function is easy to work with. By easy, we mean that we can evaluate the likelihood function for lots of different values, and we can evaluate it cheaply. In some cases, it might not be possible to write down the likelihood function, or it might not be possible to evaluate it. In these cases, we refer to methods call <strong>likelihood free inference</strong>.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-94" class="example"><strong>Example 6.3  </strong></span>Suppose we observe <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> at <span class="math inline">\(\boldsymbol{x} = \{x_1, \ldots, x_N\}\)</span>. The plot below shows these points.</p>
-<p><img src="_main_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
-<p>Using the model <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span>, where <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>, we want to infer the function <span class="math inline">\(f\)</span> evaluated at a gird of points <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. We place a GP prior distribution on <span class="math inline">\(f \sim \mathcal{GP}(0, k)\)</span>, where <span class="math inline">\(k\)</span> is the squared exponential covariance function. Using the model, the covariance between points <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span> is
+<p><span id="exm:unlabeled-div-104" class="example"><strong>Example 6.4  </strong></span>Models to predict the weather are notoriously complex. They contain a huge number of parameters, and sometimes it is not possible to write this model down exactly. In cases where the likelihood function for the weather model can be written down, we would have to start the MCMC algorithm from scratch every time we collected new data.</p>
+</div>
+<p>Approximate Bayesian Computation (ABC) is a likelihood free algorithm that relies on reject sampling from the prior distribution. When constructing an ABC algorithm, we only need to be able to generate data given a parameter value and not evaluate the likelihood of seeing specific data given a parameter value.</p>
+<p>We are going to look at two types of ABC. The first is ABC with rejection</p>
+<div id="abc-with-rejection" class="section level3 hasAnchor" number="6.3.1">
+<h3><span class="header-section-number">6.3.1</span> ABC with Rejection<a href="advanced-computation.html#abc-with-rejection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition">
+<p><span id="def:unlabeled-div-105" class="definition"><strong>Definition 6.13  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Approximate Bayesian Computation algorithm with rejection</p>
+<ol style="list-style-type: decimal">
+<li>Sample a value for the parameter <span class="math inline">\(\theta^*\)</span> from the prior distribution <span class="math inline">\(\pi(\theta)\)</span>.</li>
+<li>Generate some data <span class="math inline">\(y*\)</span> from the data generating process using the parameter value <span class="math inline">\(\theta^*\)</span>.</li>
+<li>Accept <span class="math inline">\(\theta^*\)</span> as a value from the posterior distribution if <span class="math inline">\(||y - y^*|| &lt; \varepsilon\)</span> for some <span class="math inline">\(\varepsilon &gt; 0\)</span>. Otherwise reject <span class="math inline">\(\theta^*\)</span></li>
+<li>Repeat steps 1 - 3.</li>
+</ol>
+</div>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-106" class="proposition"><strong>Proposition 6.3  </strong></span>The approximate posterior distribution using ABC with rejection is
 <span class="math display">\[
-\textrm{cov}(y_i, y_j) = k(x_i, x_j) + \sigma^21_{i=j}.
+\pi_\varepsilon(\theta \mid y) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
 \]</span>
-That is the covariance function evaluated at <span class="math inline">\(x_i\)</span> and <span class="math inline">\(x_j\)</span> plus <span class="math inline">\(\sigma^2\)</span> if <span class="math inline">\(i = j\)</span>. We can write this in matrix form as <span class="math inline">\(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I\)</span> where <span class="math inline">\(I\)</span> is the identity matrix. The distribution of <span class="math inline">\(\boldsymbol{y}\)</span> is therefore <span class="math inline">\(\boldsymbol{y} \sim N(\boldsymbol{0}, \, K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)\)</span>. By definition of the GP, the distribution of the function evaluated at the fine grid is <span class="math inline">\(\boldsymbol{f}^* \sim N(\boldsymbol{0}, K(\boldsymbol{x}^*, \boldsymbol{x}^*))\)</span>.</p>
-<p>We can now write the joint distribution as
+where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&lt; \varepsilon\}\)</span>.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-107" class="example"><strong>Example 6.5  </strong></span>This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe <span class="math inline">\(Y_1, \ldots, y_510\sim Beta(3, \beta)\)</span>. We place a uniform prior on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim U[0, 5]\)</span>. The ABC algorithm with rejection works as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Sample a value <span class="math inline">\(\beta^* \sim U[0, 5]\)</span>.</li>
+<li>Simulate <span class="math inline">\(y^*_1, \ldots, y^*_10 \sim Beta(3,\beta^*)\)</span></li>
+<li>Compute <span class="math inline">\(D = \sum_{i=1}^{10}(y_i -y^*_i)^2\)</span>. If <span class="math inline">\(D &lt; 0.75\)</span>, accept <span class="math inline">\(\beta^*\)</span> as a sample from the posterior distribution. Otherwise, reject <span class="math inline">\(\beta^*\)</span>.</li>
+<li>Repeat steps 1, 2, and 3.</li>
+</ol>
+<p>The code below carries out this algorithm.</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="advanced-computation.html#cb103-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
+<span id="cb103-2"><a href="advanced-computation.html#cb103-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb103-3"><a href="advanced-computation.html#cb103-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb103-4"><a href="advanced-computation.html#cb103-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb103-5"><a href="advanced-computation.html#cb103-5" tabindex="-1"></a>y</span></code></pre></div>
+<pre><code>##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4677043 0.7339799
+##  [8] 0.7279578 0.7317827 0.7971786</code></pre>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="advanced-computation.html#cb105-1" tabindex="-1"></a><span class="co">#Set Up ABC</span></span>
+<span id="cb105-2"><a href="advanced-computation.html#cb105-2" tabindex="-1"></a>n.iter <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
+<span id="cb105-3"><a href="advanced-computation.html#cb105-3" tabindex="-1"></a>b.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb105-4"><a href="advanced-computation.html#cb105-4" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.75</span></span>
+<span id="cb105-5"><a href="advanced-computation.html#cb105-5" tabindex="-1"></a></span>
+<span id="cb105-6"><a href="advanced-computation.html#cb105-6" tabindex="-1"></a><span class="co">#Run ABC</span></span>
+<span id="cb105-7"><a href="advanced-computation.html#cb105-7" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb105-8"><a href="advanced-computation.html#cb105-8" tabindex="-1"></a>  </span>
+<span id="cb105-9"><a href="advanced-computation.html#cb105-9" tabindex="-1"></a>  <span class="co">#Propose new beta</span></span>
+<span id="cb105-10"><a href="advanced-computation.html#cb105-10" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb105-11"><a href="advanced-computation.html#cb105-11" tabindex="-1"></a>  </span>
+<span id="cb105-12"><a href="advanced-computation.html#cb105-12" tabindex="-1"></a>  <span class="co">#Simualate data</span></span>
+<span id="cb105-13"><a href="advanced-computation.html#cb105-13" tabindex="-1"></a>  y.star <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, b)</span>
+<span id="cb105-14"><a href="advanced-computation.html#cb105-14" tabindex="-1"></a>  </span>
+<span id="cb105-15"><a href="advanced-computation.html#cb105-15" tabindex="-1"></a>  <span class="co">#Compute statistic</span></span>
+<span id="cb105-16"><a href="advanced-computation.html#cb105-16" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>((y<span class="sc">-</span>y.star)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb105-17"><a href="advanced-computation.html#cb105-17" tabindex="-1"></a>  </span>
+<span id="cb105-18"><a href="advanced-computation.html#cb105-18" tabindex="-1"></a>  <span class="co">#Accept/Reject</span></span>
+<span id="cb105-19"><a href="advanced-computation.html#cb105-19" tabindex="-1"></a>  <span class="cf">if</span>(d <span class="sc">&lt;</span> epsilon){</span>
+<span id="cb105-20"><a href="advanced-computation.html#cb105-20" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> b</span>
+<span id="cb105-21"><a href="advanced-computation.html#cb105-21" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb105-22"><a href="advanced-computation.html#cb105-22" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb105-23"><a href="advanced-computation.html#cb105-23" tabindex="-1"></a>  }</span>
+<span id="cb105-24"><a href="advanced-computation.html#cb105-24" tabindex="-1"></a>  </span>
+<span id="cb105-25"><a href="advanced-computation.html#cb105-25" tabindex="-1"></a>}</span>
+<span id="cb105-26"><a href="advanced-computation.html#cb105-26" tabindex="-1"></a></span>
+<span id="cb105-27"><a href="advanced-computation.html#cb105-27" tabindex="-1"></a><span class="co">#Get number of reject samples</span></span>
+<span id="cb105-28"><a href="advanced-computation.html#cb105-28" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(b.store))</span></code></pre></div>
+<pre><code>## [1] 37886</code></pre>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="advanced-computation.html#cb107-1" tabindex="-1"></a><span class="co">#Plot Approximate Posterior</span></span>
+<span id="cb107-2"><a href="advanced-computation.html#cb107-2" tabindex="-1"></a><span class="fu">hist</span>(b.store, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb107-3"><a href="advanced-computation.html#cb107-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="advanced-computation.html#cb108-1" tabindex="-1"></a><span class="fu">mean</span>(b.store, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 2.03304</code></pre>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="advanced-computation.html#cb110-1" tabindex="-1"></a><span class="fu">quantile</span>(b.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>##      2.5%     97.5% 
+## 0.5843792 4.1369339</code></pre>
+</div>
+<p>One important question is how to choose the value for <span class="math inline">\(\varepsilon\)</span>? It turns out this is an incredibly hard question that is specific to each application. Often the approximate posterior distribution <span class="math inline">\(\pi_\varepsilon(\theta \mid y)\)</span> is very sensitive to the choice of <span class="math inline">\(\varepsilon\)</span>.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-108" class="example"><strong>Example 6.6  </strong></span>Let’s repeat the example, first with <span class="math inline">\(\varepsilon = 0.12\)</span>. In this case, almost all of the proposals are rejected.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="advanced-computation.html#cb112-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
+<span id="cb112-2"><a href="advanced-computation.html#cb112-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb112-3"><a href="advanced-computation.html#cb112-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb112-4"><a href="advanced-computation.html#cb112-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb112-5"><a href="advanced-computation.html#cb112-5" tabindex="-1"></a>y</span></code></pre></div>
+<pre><code>##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4677043 0.7339799
+##  [8] 0.7279578 0.7317827 0.7971786</code></pre>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="advanced-computation.html#cb114-1" tabindex="-1"></a><span class="co">#Set Up ABC</span></span>
+<span id="cb114-2"><a href="advanced-computation.html#cb114-2" tabindex="-1"></a>n.iter <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
+<span id="cb114-3"><a href="advanced-computation.html#cb114-3" tabindex="-1"></a>b.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb114-4"><a href="advanced-computation.html#cb114-4" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.12</span></span>
+<span id="cb114-5"><a href="advanced-computation.html#cb114-5" tabindex="-1"></a></span>
+<span id="cb114-6"><a href="advanced-computation.html#cb114-6" tabindex="-1"></a><span class="co">#Run ABC</span></span>
+<span id="cb114-7"><a href="advanced-computation.html#cb114-7" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb114-8"><a href="advanced-computation.html#cb114-8" tabindex="-1"></a>  </span>
+<span id="cb114-9"><a href="advanced-computation.html#cb114-9" tabindex="-1"></a>  <span class="co">#Propose new beta</span></span>
+<span id="cb114-10"><a href="advanced-computation.html#cb114-10" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb114-11"><a href="advanced-computation.html#cb114-11" tabindex="-1"></a>  </span>
+<span id="cb114-12"><a href="advanced-computation.html#cb114-12" tabindex="-1"></a>  <span class="co">#Simualate data</span></span>
+<span id="cb114-13"><a href="advanced-computation.html#cb114-13" tabindex="-1"></a>  y.star <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, b)</span>
+<span id="cb114-14"><a href="advanced-computation.html#cb114-14" tabindex="-1"></a>  </span>
+<span id="cb114-15"><a href="advanced-computation.html#cb114-15" tabindex="-1"></a>  <span class="co">#Compute statistic</span></span>
+<span id="cb114-16"><a href="advanced-computation.html#cb114-16" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>((y<span class="sc">-</span>y.star)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb114-17"><a href="advanced-computation.html#cb114-17" tabindex="-1"></a>  </span>
+<span id="cb114-18"><a href="advanced-computation.html#cb114-18" tabindex="-1"></a>  <span class="co">#Accept/Reject</span></span>
+<span id="cb114-19"><a href="advanced-computation.html#cb114-19" tabindex="-1"></a>  <span class="cf">if</span>(d <span class="sc">&lt;</span> epsilon){</span>
+<span id="cb114-20"><a href="advanced-computation.html#cb114-20" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> b</span>
+<span id="cb114-21"><a href="advanced-computation.html#cb114-21" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb114-22"><a href="advanced-computation.html#cb114-22" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb114-23"><a href="advanced-computation.html#cb114-23" tabindex="-1"></a>  }</span>
+<span id="cb114-24"><a href="advanced-computation.html#cb114-24" tabindex="-1"></a>  </span>
+<span id="cb114-25"><a href="advanced-computation.html#cb114-25" tabindex="-1"></a>}</span>
+<span id="cb114-26"><a href="advanced-computation.html#cb114-26" tabindex="-1"></a></span>
+<span id="cb114-27"><a href="advanced-computation.html#cb114-27" tabindex="-1"></a><span class="co">#Get number of reject samples</span></span>
+<span id="cb114-28"><a href="advanced-computation.html#cb114-28" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(b.store))</span></code></pre></div>
+<pre><code>## [1] 49993</code></pre>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="advanced-computation.html#cb116-1" tabindex="-1"></a><span class="co">#Plot Approximate Posterior</span></span>
+<span id="cb116-2"><a href="advanced-computation.html#cb116-2" tabindex="-1"></a><span class="fu">hist</span>(b.store, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb116-3"><a href="advanced-computation.html#cb116-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="advanced-computation.html#cb117-1" tabindex="-1"></a><span class="fu">mean</span>(b.store, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 1.831118</code></pre>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="advanced-computation.html#cb119-1" tabindex="-1"></a><span class="fu">quantile</span>(b.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>##     2.5%    97.5% 
+## 1.181349 2.587056</code></pre>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-109" class="example"><strong>Example 6.7  </strong></span>And now again with <span class="math inline">\(\varepsilon = 2\)</span>. In this case, almost all of the proposals are accepted.</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="advanced-computation.html#cb121-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
+<span id="cb121-2"><a href="advanced-computation.html#cb121-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb121-3"><a href="advanced-computation.html#cb121-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb121-4"><a href="advanced-computation.html#cb121-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb121-5"><a href="advanced-computation.html#cb121-5" tabindex="-1"></a>y</span></code></pre></div>
+<pre><code>##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4677043 0.7339799
+##  [8] 0.7279578 0.7317827 0.7971786</code></pre>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="advanced-computation.html#cb123-1" tabindex="-1"></a><span class="co">#Set Up ABC</span></span>
+<span id="cb123-2"><a href="advanced-computation.html#cb123-2" tabindex="-1"></a>n.iter <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
+<span id="cb123-3"><a href="advanced-computation.html#cb123-3" tabindex="-1"></a>b.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb123-4"><a href="advanced-computation.html#cb123-4" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb123-5"><a href="advanced-computation.html#cb123-5" tabindex="-1"></a></span>
+<span id="cb123-6"><a href="advanced-computation.html#cb123-6" tabindex="-1"></a><span class="co">#Run ABC</span></span>
+<span id="cb123-7"><a href="advanced-computation.html#cb123-7" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb123-8"><a href="advanced-computation.html#cb123-8" tabindex="-1"></a>  </span>
+<span id="cb123-9"><a href="advanced-computation.html#cb123-9" tabindex="-1"></a>  <span class="co">#Propose new beta</span></span>
+<span id="cb123-10"><a href="advanced-computation.html#cb123-10" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb123-11"><a href="advanced-computation.html#cb123-11" tabindex="-1"></a>  </span>
+<span id="cb123-12"><a href="advanced-computation.html#cb123-12" tabindex="-1"></a>  <span class="co">#Simualate data</span></span>
+<span id="cb123-13"><a href="advanced-computation.html#cb123-13" tabindex="-1"></a>  y.star <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, b)</span>
+<span id="cb123-14"><a href="advanced-computation.html#cb123-14" tabindex="-1"></a>  </span>
+<span id="cb123-15"><a href="advanced-computation.html#cb123-15" tabindex="-1"></a>  <span class="co">#Compute statistic</span></span>
+<span id="cb123-16"><a href="advanced-computation.html#cb123-16" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>((y<span class="sc">-</span>y.star)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb123-17"><a href="advanced-computation.html#cb123-17" tabindex="-1"></a>  </span>
+<span id="cb123-18"><a href="advanced-computation.html#cb123-18" tabindex="-1"></a>  <span class="co">#Accept/Reject</span></span>
+<span id="cb123-19"><a href="advanced-computation.html#cb123-19" tabindex="-1"></a>  <span class="cf">if</span>(d <span class="sc">&lt;</span> epsilon){</span>
+<span id="cb123-20"><a href="advanced-computation.html#cb123-20" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> b</span>
+<span id="cb123-21"><a href="advanced-computation.html#cb123-21" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb123-22"><a href="advanced-computation.html#cb123-22" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb123-23"><a href="advanced-computation.html#cb123-23" tabindex="-1"></a>  }</span>
+<span id="cb123-24"><a href="advanced-computation.html#cb123-24" tabindex="-1"></a>  </span>
+<span id="cb123-25"><a href="advanced-computation.html#cb123-25" tabindex="-1"></a>}</span>
+<span id="cb123-26"><a href="advanced-computation.html#cb123-26" tabindex="-1"></a></span>
+<span id="cb123-27"><a href="advanced-computation.html#cb123-27" tabindex="-1"></a><span class="co">#Get number of reject samples</span></span>
+<span id="cb123-28"><a href="advanced-computation.html#cb123-28" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(b.store))</span></code></pre></div>
+<pre><code>## [1] 471</code></pre>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="advanced-computation.html#cb125-1" tabindex="-1"></a><span class="co">#Plot Approximate Posterior</span></span>
+<span id="cb125-2"><a href="advanced-computation.html#cb125-2" tabindex="-1"></a><span class="fu">hist</span>(b.store, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb125-3"><a href="advanced-computation.html#cb125-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="advanced-computation.html#cb126-1" tabindex="-1"></a><span class="fu">mean</span>(b.store, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 2.488073</code></pre>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="advanced-computation.html#cb128-1" tabindex="-1"></a><span class="fu">quantile</span>(b.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>##      2.5%     97.5% 
+## 0.1281937 4.8666030</code></pre>
+<p>When <span class="math inline">\(\varepsilon = 0.12\)</span>, almost all the proposals are rejected. Although the approximate posterior mean is close to the true value, given we only have 7 samples we cannot say much about the posterior distribution. When <span class="math inline">\(\varepsilon = 2\)</span>, almost all the proposals are accepted. This histogram shows that we are really just sampling from the prior distribution, i.e. <span class="math inline">\(\pi_2(\beta \mid y) \approx \pi(\beta)\)</span>.</p>
+</div>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-110" class="proposition"><strong>Proposition 6.4  </strong></span>Using an ABC rejection algorithm
 <span class="math display">\[
-\begin{pmatrix}
-\boldsymbol{y} \\
-\boldsymbol{f}^*
-\end{pmatrix} \sim N\left(\boldsymbol{0}, \,
-\begin{pmatrix}
-K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I &amp;  K(\boldsymbol{x}, \boldsymbol{x}^*)\\
-K(\boldsymbol{x}^*, \boldsymbol{x}) &amp; K(\boldsymbol{x}^*, \boldsymbol{x}^*)
-\end{pmatrix}.
-\right)
+\lim_{\varepsilon \rightarrow \infty} \pi_\varepsilon(\theta \mid y) \overset{D}= \pi(\theta),
 \]</span>
-The off-diagonal terms in the covariance matrix describe the relationship between the observed points <span class="math inline">\(\boldsymbol{y}\)</span> and the points of interest <span class="math inline">\(\boldsymbol{f}^*\)</span>. We can now write down the distribution of <span class="math inline">\(\boldsymbol{f}^*\)</span> given the observed points <span class="math inline">\(\boldsymbol{y}\)</span> and <span class="math inline">\(\sigma^2\)</span>.
+and
 <span class="math display">\[
-\boldsymbol{f}^* \mid \boldsymbol{y}, \sigma^2 \sim N(\boldsymbol{\mu}^*, \, K^*),
+\lim_{\varepsilon \rightarrow 0} \pi_\varepsilon(\theta \mid y) \overset{D}= \pi(\theta \mid y).
+\]</span></p>
+</div>
+<p>This example and the proposition show that if we set <span class="math inline">\(\varepsilon\)</span> too large, we don’t learn anything about <span class="math inline">\(\theta\)</span>, we just recover the data. The smaller the value of <span class="math inline">\(\varepsilon\)</span>, the better. But very small values may require very long run times, or have such few samples that the noise from the sampling generator is larger than the signal in the accepted samples. The only diagnostic tools we have are the proportion of samples accepted and the histograms of the approximate posterior and prior distributions.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-111" class="example"><strong>Example 6.8  </strong></span>An example of where this is useful is epidemic modelling. Suppose we have a population of 100 individuals and at each time point an individual is Susceptible to a disease, Infected with the disease, or Recovered and therefore immune. Once infected with the disease, an individual infects people according to a Poisson process with rate <span class="math inline">\(\beta\)</span>. Each infected person is infected from a time period drawn from an Exponential distribution with rate <span class="math inline">\(1\)</span>. We observe the total number of people infected with the disease at the end of the outbreak. To carry out inference for the infection rate <span class="math inline">\(\beta\)</span>, we need to use the augmented likelihood function The augmented likelihood function for this model is given by</p>
+<p><span class="math display">\[
+\pi(\textbf{i}, \textbf{r}| \beta) \propto \underbrace{\exp\Big(- \sum\limits_{j=1}^n\sum\limits_{k=1}^N \beta\big((r_j \wedge i_k) - (i_j \wedge i_k)\big)\Big)}_\text{Avoiding infection} \\
+\times\hspace{1.8cm} \underbrace{\prod\limits_{\substack{j=1 \\ j \neq \kappa}}^n\Big(\sum\limits_{k \in \mathcal{Y}_j} \beta\Big)}_\text{Becoming infectious}  \\
+\times \hspace{1.8cm}\underbrace{\prod\limits_{j=1}^n\pi(r_j -i_j | \gamma = 1)}_\text{Remaining infected}.
 \]</span>
-where <span class="math inline">\(\boldsymbol{\mu}^* = K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2 I)^{-1} \boldsymbol{y}\)</span> and <span class="math inline">\(K^* = K(\boldsymbol{x}^*, \boldsymbol{x}^*) - K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)^{-1}K(\boldsymbol{x}, \boldsymbol{x}^*)\)</span>.</p>
-<p>We set the fine gird to be <span class="math inline">\(\boldsymbol{x}^* = \{-5, -4.99, -4.98, \ldots, 5\}\)</span>, the GP parameters <span class="math inline">\(\alpha = l = 1\)</span> and <span class="math inline">\(\sigma = 0.2\)</span>. The posterior mean and 95% credible interval are shown below.
-<img src="_main_files/figure-html/unnamed-chunk-49-1.png" width="672" />
-The posterior mean for <span class="math inline">\(f\)</span> is a smooth line passing near each point. The 95% credible interval for <span class="math inline">\(f\)</span> has the smallest variance near each point, and largest furthest away from the points.</p>
+This likelihood function cannot be evaluated as we do not observe the infection time <span class="math inline">\(i\)</span> or recovery time <span class="math inline">\(r\)</span>. Instead we can use ABC sampling with rejection. Each iteration, sample a value for <span class="math inline">\(\beta\)</span>, simulate an outbreak and compare the observed and simulated number of people infected. If they are ‘close’ we accept the value for <span class="math inline">\(\beta\)</span> as a sample from our posterior distribution. This means all we have to do is simulate outbreaks.</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="advanced-computation.html#cb130-1" tabindex="-1"></a><span class="co">#This function simualtes an outbreak of a disease in a population of size N, with infection rate beta and recovery rate gamma.</span></span>
+<span id="cb130-2"><a href="advanced-computation.html#cb130-2" tabindex="-1"></a>simSIR.Markov <span class="ot">&lt;-</span> <span class="cf">function</span>(N, beta, gamma) {</span>
+<span id="cb130-3"><a href="advanced-computation.html#cb130-3" tabindex="-1"></a>  </span>
+<span id="cb130-4"><a href="advanced-computation.html#cb130-4" tabindex="-1"></a>  <span class="co"># initial number of infectives and susceptibles;</span></span>
+<span id="cb130-5"><a href="advanced-computation.html#cb130-5" tabindex="-1"></a>  I <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb130-6"><a href="advanced-computation.html#cb130-6" tabindex="-1"></a>  S <span class="ot">&lt;-</span> N<span class="dv">-1</span>;</span>
+<span id="cb130-7"><a href="advanced-computation.html#cb130-7" tabindex="-1"></a>  </span>
+<span id="cb130-8"><a href="advanced-computation.html#cb130-8" tabindex="-1"></a>  <span class="co"># recording time;</span></span>
+<span id="cb130-9"><a href="advanced-computation.html#cb130-9" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="dv">0</span>;</span>
+<span id="cb130-10"><a href="advanced-computation.html#cb130-10" tabindex="-1"></a>  times <span class="ot">&lt;-</span> <span class="fu">c</span>(t);</span>
+<span id="cb130-11"><a href="advanced-computation.html#cb130-11" tabindex="-1"></a>  </span>
+<span id="cb130-12"><a href="advanced-computation.html#cb130-12" tabindex="-1"></a>  <span class="co"># a vector which records the type of event (1=infection, 2=removal)</span></span>
+<span id="cb130-13"><a href="advanced-computation.html#cb130-13" tabindex="-1"></a>  type <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>);</span>
+<span id="cb130-14"><a href="advanced-computation.html#cb130-14" tabindex="-1"></a>  </span>
+<span id="cb130-15"><a href="advanced-computation.html#cb130-15" tabindex="-1"></a>  <span class="cf">while</span> (I <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb130-16"><a href="advanced-computation.html#cb130-16" tabindex="-1"></a>    </span>
+<span id="cb130-17"><a href="advanced-computation.html#cb130-17" tabindex="-1"></a>    <span class="co"># time to next event;</span></span>
+<span id="cb130-18"><a href="advanced-computation.html#cb130-18" tabindex="-1"></a>    t <span class="ot">&lt;-</span> t <span class="sc">+</span> <span class="fu">rexp</span>(<span class="dv">1</span>, (beta<span class="sc">/</span>N)<span class="sc">*</span>I<span class="sc">*</span>S <span class="sc">+</span> gamma<span class="sc">*</span>I);</span>
+<span id="cb130-19"><a href="advanced-computation.html#cb130-19" tabindex="-1"></a>    times <span class="ot">&lt;-</span> <span class="fu">append</span>(times, t);</span>
+<span id="cb130-20"><a href="advanced-computation.html#cb130-20" tabindex="-1"></a>    </span>
+<span id="cb130-21"><a href="advanced-computation.html#cb130-21" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> beta<span class="sc">*</span>S<span class="sc">/</span>(beta<span class="sc">*</span>S <span class="sc">+</span> N<span class="sc">*</span>gamma)) {</span>
+<span id="cb130-22"><a href="advanced-computation.html#cb130-22" tabindex="-1"></a>      <span class="co"># infection</span></span>
+<span id="cb130-23"><a href="advanced-computation.html#cb130-23" tabindex="-1"></a>      I <span class="ot">&lt;-</span> I<span class="sc">+</span><span class="dv">1</span>;</span>
+<span id="cb130-24"><a href="advanced-computation.html#cb130-24" tabindex="-1"></a>      S <span class="ot">&lt;-</span> S<span class="dv">-1</span>;</span>
+<span id="cb130-25"><a href="advanced-computation.html#cb130-25" tabindex="-1"></a>      type <span class="ot">&lt;-</span> <span class="fu">append</span>(type, <span class="dv">1</span>);</span>
+<span id="cb130-26"><a href="advanced-computation.html#cb130-26" tabindex="-1"></a>    }</span>
+<span id="cb130-27"><a href="advanced-computation.html#cb130-27" tabindex="-1"></a>    <span class="cf">else</span> {</span>
+<span id="cb130-28"><a href="advanced-computation.html#cb130-28" tabindex="-1"></a>      <span class="co">#removal</span></span>
+<span id="cb130-29"><a href="advanced-computation.html#cb130-29" tabindex="-1"></a>      I <span class="ot">&lt;-</span> I<span class="dv">-1</span></span>
+<span id="cb130-30"><a href="advanced-computation.html#cb130-30" tabindex="-1"></a>      type <span class="ot">&lt;-</span> <span class="fu">append</span>(type, <span class="dv">2</span>);</span>
+<span id="cb130-31"><a href="advanced-computation.html#cb130-31" tabindex="-1"></a>    }</span>
+<span id="cb130-32"><a href="advanced-computation.html#cb130-32" tabindex="-1"></a>  }</span>
+<span id="cb130-33"><a href="advanced-computation.html#cb130-33" tabindex="-1"></a>  </span>
+<span id="cb130-34"><a href="advanced-computation.html#cb130-34" tabindex="-1"></a>  </span>
+<span id="cb130-35"><a href="advanced-computation.html#cb130-35" tabindex="-1"></a>  <span class="co"># record the times of events (infections/removals), the type of the event, the final size (including</span></span>
+<span id="cb130-36"><a href="advanced-computation.html#cb130-36" tabindex="-1"></a>  <span class="co"># the initial infective) and the duration. </span></span>
+<span id="cb130-37"><a href="advanced-computation.html#cb130-37" tabindex="-1"></a>  </span>
+<span id="cb130-38"><a href="advanced-computation.html#cb130-38" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;t&quot;</span> <span class="ot">=</span> times, <span class="st">&quot;type&quot;</span> <span class="ot">=</span> type, <span class="st">&quot;final.size&quot;</span> <span class="ot">=</span> <span class="fu">sum</span>(type<span class="sc">==</span><span class="dv">1</span>), <span class="st">&quot;duration&quot;</span> <span class="ot">=</span> t, <span class="st">&quot;N&quot;</span> <span class="ot">=</span> N);</span>
+<span id="cb130-39"><a href="advanced-computation.html#cb130-39" tabindex="-1"></a>  <span class="fu">return</span>(res)</span>
+<span id="cb130-40"><a href="advanced-computation.html#cb130-40" tabindex="-1"></a>}</span>
+<span id="cb130-41"><a href="advanced-computation.html#cb130-41" tabindex="-1"></a></span>
+<span id="cb130-42"><a href="advanced-computation.html#cb130-42" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
+<span id="cb130-43"><a href="advanced-computation.html#cb130-43" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb130-44"><a href="advanced-computation.html#cb130-44" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb130-45"><a href="advanced-computation.html#cb130-45" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">simSIR.Markov</span>(<span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">1</span>)<span class="sc">$</span>final.size</span>
+<span id="cb130-46"><a href="advanced-computation.html#cb130-46" tabindex="-1"></a></span>
+<span id="cb130-47"><a href="advanced-computation.html#cb130-47" tabindex="-1"></a></span>
+<span id="cb130-48"><a href="advanced-computation.html#cb130-48" tabindex="-1"></a><span class="co">#Set Up ABC</span></span>
+<span id="cb130-49"><a href="advanced-computation.html#cb130-49" tabindex="-1"></a>n.iter <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
+<span id="cb130-50"><a href="advanced-computation.html#cb130-50" tabindex="-1"></a>b.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb130-51"><a href="advanced-computation.html#cb130-51" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="dv">250</span></span>
+<span id="cb130-52"><a href="advanced-computation.html#cb130-52" tabindex="-1"></a></span>
+<span id="cb130-53"><a href="advanced-computation.html#cb130-53" tabindex="-1"></a><span class="co">#Run ABC</span></span>
+<span id="cb130-54"><a href="advanced-computation.html#cb130-54" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb130-55"><a href="advanced-computation.html#cb130-55" tabindex="-1"></a>  </span>
+<span id="cb130-56"><a href="advanced-computation.html#cb130-56" tabindex="-1"></a>  <span class="co">#Propose an infection rate</span></span>
+<span id="cb130-57"><a href="advanced-computation.html#cb130-57" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb130-58"><a href="advanced-computation.html#cb130-58" tabindex="-1"></a>  </span>
+<span id="cb130-59"><a href="advanced-computation.html#cb130-59" tabindex="-1"></a>  <span class="co">#Simualte an outbreak</span></span>
+<span id="cb130-60"><a href="advanced-computation.html#cb130-60" tabindex="-1"></a>  y.star <span class="ot">&lt;-</span> <span class="fu">simSIR.Markov</span>(<span class="dv">100</span>, b, <span class="dv">1</span>)<span class="sc">$</span>final.size</span>
+<span id="cb130-61"><a href="advanced-computation.html#cb130-61" tabindex="-1"></a>  </span>
+<span id="cb130-62"><a href="advanced-computation.html#cb130-62" tabindex="-1"></a>  <span class="co">#Compute difference</span></span>
+<span id="cb130-63"><a href="advanced-computation.html#cb130-63" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>((y<span class="sc">-</span>y.star)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb130-64"><a href="advanced-computation.html#cb130-64" tabindex="-1"></a>  </span>
+<span id="cb130-65"><a href="advanced-computation.html#cb130-65" tabindex="-1"></a>  <span class="co">#Accept/Reject</span></span>
+<span id="cb130-66"><a href="advanced-computation.html#cb130-66" tabindex="-1"></a>  <span class="cf">if</span>(d <span class="sc">&lt;</span> epsilon){</span>
+<span id="cb130-67"><a href="advanced-computation.html#cb130-67" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> b</span>
+<span id="cb130-68"><a href="advanced-computation.html#cb130-68" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb130-69"><a href="advanced-computation.html#cb130-69" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb130-70"><a href="advanced-computation.html#cb130-70" tabindex="-1"></a>  }</span>
+<span id="cb130-71"><a href="advanced-computation.html#cb130-71" tabindex="-1"></a>  </span>
+<span id="cb130-72"><a href="advanced-computation.html#cb130-72" tabindex="-1"></a>}</span>
+<span id="cb130-73"><a href="advanced-computation.html#cb130-73" tabindex="-1"></a></span>
+<span id="cb130-74"><a href="advanced-computation.html#cb130-74" tabindex="-1"></a><span class="co">#Get number of reject samples</span></span>
+<span id="cb130-75"><a href="advanced-computation.html#cb130-75" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(b.store))</span></code></pre></div>
+<pre><code>## [1] 39166</code></pre>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="advanced-computation.html#cb132-1" tabindex="-1"></a><span class="co">#Plot Approximate Posterior</span></span>
+<span id="cb132-2"><a href="advanced-computation.html#cb132-2" tabindex="-1"></a><span class="fu">hist</span>(b.store, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb132-3"><a href="advanced-computation.html#cb132-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="advanced-computation.html#cb133-1" tabindex="-1"></a><span class="fu">mean</span>(b.store, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 2.811462</code></pre>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="advanced-computation.html#cb135-1" tabindex="-1"></a><span class="fu">quantile</span>(b.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>##     2.5%    97.5% 
+## 1.589679 4.367686</code></pre>
+</div>
+</div>
+<div id="summary-abc-with-rejection" class="section level3 hasAnchor" number="6.3.2">
+<h3><span class="header-section-number">6.3.2</span> Summary ABC with Rejection<a href="advanced-computation.html#summary-abc-with-rejection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>ABC with rejection suffers from the curse of dimensionality (see Chapter 5). As the number of data points increases, the probability we get a ‘close’ match decreases. This means we have to increase <span class="math inline">\(\varepsilon\)</span> and degrade the quality of our approximation.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-112" class="example"><strong>Example 6.9  </strong></span>Let’s repeat the Beta example with <span class="math inline">\(n = 200\)</span> observed data points. We need <span class="math inline">\(\varepsilon &gt; 15\)</span> for any proposals to be accepted.</p>
+</div>
+<p>We can avoid the curse of dimensionality by comparing summary statistics instead. This leads us to the Summary ABC algorithm.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-113" class="definition"><strong>Definition 6.14  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Summary Approximate Bayesian Computation algorithm with rejection</p>
+<ol style="list-style-type: decimal">
+<li>Sample a value for the parameter <span class="math inline">\(\theta^*\)</span> from the prior distribution <span class="math inline">\(\pi(\theta)\)</span>.</li>
+<li>Generate some data <span class="math inline">\(y*\)</span> from the data generating process using the parameter value <span class="math inline">\(\theta^*\)</span>.</li>
+<li>Accept <span class="math inline">\(\theta^*\)</span> as a value from the posterior distribution if <span class="math inline">\(||S(y) - S(y^*)|| &lt; \varepsilon\)</span> for some <span class="math inline">\(\varepsilon &gt; 0\)</span> and summary summary statistic <span class="math inline">\(S\)</span>. Otherwise reject <span class="math inline">\(\theta^*\)</span></li>
+<li>Repeat steps 1 - 3.</li>
+</ol>
+</div>
+<p>Similar to the ABC algorithm with rejection, we also have the following proposition.</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-114" class="proposition"><strong>Proposition 6.5  </strong></span>The approximate posterior distribution using ABC with rejection is
+<span class="math display">\[
+\pi_\varepsilon(\theta \mid S(y)) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
+\]</span>
+where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (y)||&lt; \varepsilon\}\)</span>.</p>
+</div>
+<p>Using summary statistics only increases the approximation however, as we are approximating the data using a summary of it. The only case when we are not approximating further is when the statistic contains all the information about the underlying sample it is summarising. This is known as a sufficient statistic.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-115" class="definition"><strong>Definition 6.15  </strong></span>A statistic <span class="math inline">\(S\)</span> is a sufficient statistic for the parameter <span class="math inline">\(\theta\)</span> if the conditional distribution <span class="math inline">\(\pi(y | S(y))\)</span> does not depend on <span class="math inline">\(\theta\)</span>.</p>
+</div>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-116" class="proposition"><strong>Proposition 6.6  </strong></span>Using a Summary ABC rejection algorithm with a sufficient statistic <span class="math inline">\(S\)</span>
+<span class="math display">\[
+\lim_{\varepsilon \rightarrow 0} \pi_\varepsilon(\theta \mid S(y)) \overset{D}= \pi(\theta \mid y).
+\]</span></p>
+</div>
+<p>The difficulty with sufficient statistics is that they only exist for ‘nice’ distributions, like the Gamma, Beta and Poisson distributions. In these cases, we can work with the posterior distribution directly or use and MCMC algorithm.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-117" class="example"><strong>Example 6.10  </strong></span>Let’s repeat the beta distribution example using the mean as the summary statistic. We can set <span class="math inline">\(\varepsilon = 0.001\)</span>.</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="advanced-computation.html#cb137-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb137-2"><a href="advanced-computation.html#cb137-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb137-3"><a href="advanced-computation.html#cb137-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb137-4"><a href="advanced-computation.html#cb137-4" tabindex="-1"></a></span>
+<span id="cb137-5"><a href="advanced-computation.html#cb137-5" tabindex="-1"></a></span>
+<span id="cb137-6"><a href="advanced-computation.html#cb137-6" tabindex="-1"></a>n.iter <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
+<span id="cb137-7"><a href="advanced-computation.html#cb137-7" tabindex="-1"></a>b.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
+<span id="cb137-8"><a href="advanced-computation.html#cb137-8" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.001</span></span>
+<span id="cb137-9"><a href="advanced-computation.html#cb137-9" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
+<span id="cb137-10"><a href="advanced-computation.html#cb137-10" tabindex="-1"></a>  </span>
+<span id="cb137-11"><a href="advanced-computation.html#cb137-11" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb137-12"><a href="advanced-computation.html#cb137-12" tabindex="-1"></a>  </span>
+<span id="cb137-13"><a href="advanced-computation.html#cb137-13" tabindex="-1"></a>  y.star <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, b)</span>
+<span id="cb137-14"><a href="advanced-computation.html#cb137-14" tabindex="-1"></a>  </span>
+<span id="cb137-15"><a href="advanced-computation.html#cb137-15" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>((<span class="fu">mean</span>(y)<span class="sc">-</span><span class="fu">mean</span>(y.star))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb137-16"><a href="advanced-computation.html#cb137-16" tabindex="-1"></a>  </span>
+<span id="cb137-17"><a href="advanced-computation.html#cb137-17" tabindex="-1"></a>  <span class="cf">if</span>(d <span class="sc">&lt;</span> epsilon){</span>
+<span id="cb137-18"><a href="advanced-computation.html#cb137-18" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> b</span>
+<span id="cb137-19"><a href="advanced-computation.html#cb137-19" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb137-20"><a href="advanced-computation.html#cb137-20" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb137-21"><a href="advanced-computation.html#cb137-21" tabindex="-1"></a>  }</span>
+<span id="cb137-22"><a href="advanced-computation.html#cb137-22" tabindex="-1"></a>  </span>
+<span id="cb137-23"><a href="advanced-computation.html#cb137-23" tabindex="-1"></a>}</span>
+<span id="cb137-24"><a href="advanced-computation.html#cb137-24" tabindex="-1"></a></span>
+<span id="cb137-25"><a href="advanced-computation.html#cb137-25" tabindex="-1"></a><span class="co">#Get number of reject samples</span></span>
+<span id="cb137-26"><a href="advanced-computation.html#cb137-26" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(b.store))</span></code></pre></div>
+<pre><code>## [1] 45028</code></pre>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="advanced-computation.html#cb139-1" tabindex="-1"></a><span class="co">#Plot Approximate Posterior</span></span>
+<span id="cb139-2"><a href="advanced-computation.html#cb139-2" tabindex="-1"></a><span class="fu">hist</span>(b.store, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb139-3"><a href="advanced-computation.html#cb139-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="advanced-computation.html#cb140-1" tabindex="-1"></a><span class="fu">mean</span>(b.store, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 1.930908</code></pre>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="advanced-computation.html#cb142-1" tabindex="-1"></a><span class="fu">quantile</span>(b.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>##     2.5%    97.5% 
+## 1.593348 2.302256</code></pre>
 </div>
 </div>
 </div>
-<div id="lab-data-augmenatation" class="section level2 hasAnchor" number="6.3">
-<h2><span class="header-section-number">6.3</span> Lab: Data Augmenatation<a href="advanced-computation.html#lab-data-augmenatation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="lab-3" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Lab<a href="advanced-computation.html#lab-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="gaussian-processes-1" class="section level3 hasAnchor" number="6.4.1">
+<h3><span class="header-section-number">6.4.1</span> Gaussian Processes<a href="advanced-computation.html#gaussian-processes-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-118" class="exercise"><strong>Exercise 6.1  </strong></span>Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use</p>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="advanced-computation.html#cb144-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb144-2"><a href="advanced-computation.html#cb144-2" tabindex="-1"></a>y <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="fl">3.0942822</span>, <span class="fl">3.0727920</span>, <span class="fl">2.6137341</span>, <span class="fl">1.8818820</span>, <span class="fl">1.2746738</span>, <span class="fl">1.2532116</span>, <span class="fl">1.4620830</span>, <span class="fl">1.4194647</span>, <span class="fl">1.6786969</span>, <span class="fl">1.1057042</span>, <span class="fl">0.4118125</span>)</span></code></pre></div>
+<p>with <span class="math inline">\(\sigma^2 = 0.2\)</span>.To draw samples from the multivariate normal distribution with mean vector <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance matrix <span class="math inline">\(\Sigma\)</span></p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="advanced-computation.html#cb145-1" tabindex="-1"></a>mvnorm.chol <span class="ot">&lt;-</span> <span class="cf">function</span>(mu, Sigma){</span>
+<span id="cb145-2"><a href="advanced-computation.html#cb145-2" tabindex="-1"></a>  <span class="co">#Multivariate Normal Sampler with Cholesky Input</span></span>
+<span id="cb145-3"><a href="advanced-computation.html#cb145-3" tabindex="-1"></a>  <span class="co">#Inputs: mu -- mean, chol -- covariance matrix</span></span>
+<span id="cb145-4"><a href="advanced-computation.html#cb145-4" tabindex="-1"></a>  Sigma.chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(Sigma <span class="sc">+</span> <span class="fl">0.0001</span><span class="sc">*</span><span class="fu">dim</span>(Sigma)[<span class="dv">1</span>])</span>
+<span id="cb145-5"><a href="advanced-computation.html#cb145-5" tabindex="-1"></a>  <span class="fu">return</span>(mu <span class="sc">+</span> <span class="fu">t</span>(Sigma.chol)<span class="sc">%*%</span><span class="fu">rnorm</span>(<span class="fu">length</span>(mu)))  </span>
+<span id="cb145-6"><a href="advanced-computation.html#cb145-6" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="lab-gaussian-processes" class="section level2 hasAnchor" number="6.4">
-<h2><span class="header-section-number">6.4</span> Lab: Gaussian Processes<a href="advanced-computation.html#lab-gaussian-processes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-119" class="exercise"><strong>Exercise 6.2  </strong></span>Repeat Exercise 6.1, but this time set the fine grid to be <span class="math inline">\(\boldsymbol{x}^* = \{-5, -4.9, -4.8, \ldots, 9.8, 9.9, 10\}\)</span>. What happens to the posterior distribution after <span class="math inline">\(x^* = 5\)</span>?</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-120" class="exercise"><strong>Exercise 6.3  </strong></span>You observe the following data</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="advanced-computation.html#cb146-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb146-2"><a href="advanced-computation.html#cb146-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="fl">0.5</span><span class="sc">*</span>x) <span class="sc">+</span> <span class="fu">log</span>(x <span class="sc">+</span> <span class="dv">6</span>)</span>
+<span id="cb146-3"><a href="advanced-computation.html#cb146-3" tabindex="-1"></a>y</span></code></pre></div>
+<pre><code>##  [1] -0.8011436  0.2770003  1.1693495  1.9265967  2.4870205  2.7917595
+##  [7]  2.8234927  2.6197438  2.2679618  1.8864383  1.5967517</code></pre>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="advanced-computation.html#cb148-1" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;f(x)&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">4</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
+<p>Fit a function to the data using a GP prior distribution. Note that this time there is no noise.</p>
+</div>
+</div>
+<div id="missing-data" class="section level3 hasAnchor" number="6.4.2">
+<h3><span class="header-section-number">6.4.2</span> Missing Data<a href="advanced-computation.html#missing-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-121" class="exercise"><strong>Exercise 6.4  </strong></span>In Example 6.2, suppose the observed data is <span class="math inline">\(\{y_1, y_2, y_3, y_4\} = \{4, 4, 5 ,2\}\)</span>. Design and code an MCMC algorithm to generate samples from the posterior distribution for <span class="math inline">\(p\)</span> and <span class="math inline">\(y_5\)</span>.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-122" class="exercise"><strong>Exercise 6.5  </strong></span>Suppose you manage a clinical trial. You administer a new drug to patients and record how many days until their symptoms are alleviated. You observe the times for the first 9 patients</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="advanced-computation.html#cb149-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">33</span>,  <span class="dv">17</span>, <span class="dv">218</span>,   <span class="dv">3</span>,  <span class="dv">39</span>,   <span class="dv">3</span>,  <span class="dv">43</span>,  <span class="dv">14</span>,  <span class="dv">20</span>)</span></code></pre></div>
+<p>Patient 10 drops out of the trial on day 50 and at this point, their symptoms have not changed. They send an email on day 200 to say they no longer have any symptoms (i.e. <span class="math inline">\(x_i \in [50, \ldots, 200]\)</span>. Write down a model for this problem and derive the posterior distribution. Design and code an MCMC algorithm to generate samples from the posterior distribution for any model parameters and <span class="math inline">\(x_{10}\)</span>.</p>
+</div>
+</div>
+<div id="approximate-bayesian-computation-1" class="section level3 hasAnchor" number="6.4.3">
+<h3><span class="header-section-number">6.4.3</span> Approximate Bayesian Computation<a href="advanced-computation.html#approximate-bayesian-computation-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-123" class="exercise"><strong>Exercise 6.6  </strong></span>You observe the following data from an <span class="math inline">\(N(5, \sigma^2)\)</span> distribution.</p>
+<pre><code>-5.93,  33.12, -21.41, -12.42, -17.64,  -5.47, -27.95, -22.25, -20.40, -26.28, -24.57,  
+3.06,  44.28, 6.02, -21.14,  14.79, -15.10, 53.18,  38.61,   5.71</code></pre>
+<p>Use an Exp(0.1) prior distribution on <span class="math inline">\(\sigma^2\)</span> and develop a summary statistic ABC algorithm to draw samples from the approximate posterior distribution.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-124" class="exercise"><strong>Exercise 6.7  </strong></span>You observe the following data from an <span class="math inline">\(Exp(\lambda)\)</span> distribution.</p>
+<pre><code>2.6863422, 8.8468112, 8.8781831, 0.2712696, 1.8902442</code></pre>
+<p>Use an <span class="math inline">\(Beta(1, 3)\)</span> prior distribution on <span class="math inline">\(\lambda\)</span> and develop an ABC algorithm to draw samples from the approximate posterior distribution. Write the ABC algorithm as a function so you can run it for different values of <span class="math inline">\(\varepsilon\)</span>. Run your algorithm for <span class="math inline">\(\varepsilon = \{20, \ldots, 100\}\)</span> and record the approximate posterior median. Plot the relative error in your estimate against the true value of lambda, which is 0.2.</p>
+</div>
 
+</div>
 </div>
 </div>
             </section>
