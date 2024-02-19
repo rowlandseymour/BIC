@@ -655,7 +655,7 @@ For large $N$, even when $r - r_1$ is small, $(r^N - r_1^N)$ is large. This mean
 
 The hypersphere example shows that in large dimensions we need our Markov chain to spend lots of time away from the posterior mode and in the tails of the distribution, but this is where the proposal distribution has lowest mass. We can avoid this by updating each parameter individually, but this means we need to use the full conditional distributions, which have highest mass near the mode. This 'curse' makes MCMC algorithms inefficient for large dimensions. 
 
-##Beyond MCMC
+## Beyond MCMC
 MCMC is not the only method available to generate samples from the posterior distribution. MCMC is often slow and inefficient. Much of the work in computational statistics research is about developing fast and efficient methods for sampling from posterior distributions. We are going to look at another method, called approximate Bayesian computation, in the next chapter. Two other methods, beyound the scope of this module, are Sequential Monte Carlo and Hamiltonian Monte Carlo. 
 
 
