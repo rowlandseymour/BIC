@@ -2269,7 +2269,7 @@ For large $N$, even when $r - r_1$ is small, $(r^N - r_1^N)$ is large. This mean
 
 The hypersphere example shows that in large dimensions we need our Markov chain to spend lots of time away from the posterior mode and in the tails of the distribution, but this is where the proposal distribution has lowest mass. We can avoid this by updating each parameter individually, but this means we need to use the full conditional distributions, which have highest mass near the mode. This 'curse' makes MCMC algorithms inefficient for large dimensions. 
 
-##Beyond MCMC
+## Beyond MCMC
 MCMC is not the only method available to generate samples from the posterior distribution. MCMC is often slow and inefficient. Much of the work in computational statistics research is about developing fast and efficient methods for sampling from posterior distributions. We are going to look at another method, called approximate Bayesian computation, in the next chapter. Two other methods, beyound the scope of this module, are Sequential Monte Carlo and Hamiltonian Monte Carlo. 
 
 
@@ -2467,17 +2467,17 @@ $$
 $$
 :::
 
-The squared exponential covariance function is isotropic and produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don't produce functions that are continuous or differentiable. Two more are given below. 
+The squared exponential covariance function is isotropic and produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don't produce functions that are continuous or differentiable. Three4 more are given below. 
 
 :::{.definition}
-The **M\'atern covariance function** models functions that are differentiable only once:
+The **M\'atern** covariance function models functions that are differentiable only once:
 $$
 k(x, x') = \left(1 + \frac{\sqrt{3}(x - x')^2}{l} \right)\exp\left\{-\frac{\sqrt{3}(x - x')^2}{l} \right\}.
 $$
 :::
 
 :::{.definition}
-The periodic covariance function models functions that are periodic and it is given by
+The **periodic** covariance function models functions that are periodic and it is given by
 $$
 k(x, x') = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x')^2}{p} \right\},
 $$
@@ -2485,7 +2485,7 @@ where the period is $p$.
 :::
 
 :::{.definition}
-The dot product covariance function models functions that are rotationally invariant and it is given by
+The **dot product** covariance function models functions that are rotationally invariant and it is given by
 $$
 k(x, x') = \alpha^2 + x\cdot x'.
 $$
@@ -2684,45 +2684,71 @@ Suppose the machine is processing a bag of letters addressed to people in either
 ```{r echo = FALSE}
 knitr::include_graphics("postcode.jpeg")
 ```
-
-We introduce a latent variable $z_i \sim \hbox{Bernoulli}(p)$ that describes if the characters on the $i^{th}$ image are B1 or B2. The observation $y_i$ is the proportion of the $i^{th}$ image that is taken up by the characters. We observe $y_i$, but want to estimate $z_i$. The difficultly is there lack of one-to-one correspondence between the values $y_i$ can take and the value $z_i$. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 ($Z = 1$), then $Y_i \sim N(0.7, 0.05^2)$ and if it is going to B2 ($Z = 2$), then $Y_i \sim N(0.8, 0.02^2)$. The plot below shows the two densities and the overlap between them.
+The scanned image is a 10 by 10 grid of pixels, where the number of pixels coloured black of the $i^{th}$ image is $Y_i \sim \hbox{Bin}(100, \theta)$. However, $\theta$ depends on if the letter is going to B1 or B2. To allow for this, we introduce a latent variable $z_i \sim \hbox{Bernoulli}(p)$ that describes if the characters on the $i^{th}$ image are B1 or B2. The observation $y_i$ is the number of pixels of the $i^{th}$ image that is taken up by the characters. We observe $y_i$, but want to estimate $z_i$. The difficultly is there lack of one-to-one correspondence between the values $y_i$ can take and the value $z_i$. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 ($Z = 1$), then $Y_i \sim \hbox{Bin}(100, \theta_1)$ and if it is going to B2 ($Z = 2$), then $Y_i \sim \hbox{Bin}(100, \theta_2)$.   The plot below shows the two densities and the overlap between them for $p_1 = 0.9$ and $p_2 = 0.85$.
 
 ```{r echp = FALSE}
-a <- seq(0.5, 0.9, 0.001)
-x <- dnorm(a, 0.7, 0.05)
-y <- dnorm(a, 0.8, 0.02)
-plot(a, x, type = 'l', ylim = c(0, 20), xlab = expression(y),
-     ylab = "density")
+a <- 1:100
+x <- dbinom(a, 100, 0.9)
+y <-  dbinom(a, 100, 0.85)
+plot(a, x, type = 'l', xlab = expression(y),
+     ylab = "density", xlim = c(70, 100))
 lines(a, y, lty = 2)
 ```
 
 As the variables $\boldsymbol{z}$ are latent, the observed data likelihood function is 
 $$
-\pi(\boldsymbol{y} \mid  p) =\prod_{i=1}^N \left[ p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)\right].
+\pi(\boldsymbol{y} \mid  p, \theta_1, \theta_2) =\prod_{i=1}^N \left[ p\pi(y_i \mid p = \theta_1) + (1-p)\pi(y_i \mid \theta_2)\right].
 $$
 Instead, it's easier to work with the complete data likelihood function, supposing we had observed the variables $\boldsymbol{z}$. This is given by
 \begin{align*}
-\pi(\boldsymbol{y}, \boldsymbol{z} \mid  p) &= \begin{pmatrix} N_1 + N_2
-\\ N_1\end{pmatrix}p^{N_1}(1-p)^{N_2} \prod_{i; z_i = 1}\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)  \\
-&\times\prod_{i; z_i = 2}\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2),
+\pi(\boldsymbol{y}, \boldsymbol{z} \mid  p, \theta_1, \theta_2) &= \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\boldsymbol{z} \mid p)
+\propto p^{N_1}(1-p)^{N_2} \prod_{i; z_i = 1}\pi(y_i \mid \theta_1)\prod_{i; z_i = 2}\pi(y_i \mid \theta_2)
 \end{align*}
-where $N_1$ and $N_2$ are the number of letters for B1 and B2 respectively. This form makes it much easier to derive the posterior distributions and estimate the parameter values. 
+where $N_1$ and $N_2$ are the number of letters for B1 and B2 respectively. This form makes it much easier to derive the posterior distribution, full conditional distributions and estimate the parameter values. By Bayes' theorem, the posterior distribution is
+$$
+\pi(\boldsymbol{z}, p, \theta_1, \theta_2 \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\boldsymbol{z} \mid p)\pi(p)\pi(\theta_1)\pi(\theta_2). 
+$$
+Note that we do not put a prior distribution on the latent variables $\boldsymbol{z}$. Instead, we learn about these variables in the terms $\pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\boldsymbol{z} \mid p)$. 
 
-We place a uniform prior distribution on the parameter $p$, which gives the posterior distribution
+We suppose we are ignorant about the value of $p$ and place a uniform prior distribution on the parameter $p$. The full conditional distribution is 
+\begin{align*}
+\pi(p\mid \boldsymbol{z}, \boldsymbol{y}, \theta_1, \theta_2) &\propto \pi(\boldsymbol{z} \mid p)\pi(p)\\
+& = p^{N_1}(1-p)^{N_2}.
+\end{align*}
+Hence,
 $$
 p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
 $$
+If we use a Beta($\alpha_1, \beta_1$) distribution for our prior distribution on $\theta_1$, the full conditional distribution of $\theta_1$ is
+\begin{align*}
+\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2) \propto pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\theta_1) \\
+&\propto \theta_1^{\sum_{i; z_i = 1}y_i}(1-\theta_1)^{100N_1 - \sum_{i; z_i = 1}y_i}\theta^{\alpha_1 - 1}(1-\theta^{\beta_1 - 1}) \\
+& \propto \theta_1^{\sum_{i; z_i = 1}y_i + \alpha_1 -1 }(1-\theta_1)^{100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i - 1}
+\end{align*}
+Hence $\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2 \sim \hbox{Beta}(\sum_{i; z_i = 1}y_i + \alpha_1 , 100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i)$. Similarly,  $\theta_2 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_1 \sim \hbox{Beta}(\sum_{i; z_i = 2}y_i + \alpha_2 , 100N_2 + \beta_2 - \sum_{i; z_i = 2}y_i)$. 
 
-The distribution of $z_i$ given the parameter $p$ and the observation $y_i$ can be derived using Bayes' theorem
-$$
-p^*_i = \pi(z = 1 \mid p, y_1) = \frac{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)}{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)}.
-$$
+The distribution of $z_i$ given the parameters $p$, $\theta_1$ and $\theta_2$, and the observation $y_i$ is 
+\begin{align*}
+p^*_i & = \pi(z = 1 \mid p, y_1) \\
+&= \frac{p\pi(y_i \mid \theta_1)}{p\pi(y_i \mid \theta_1) + (1-p)\pi(y_i \mid \theta_2)}.
+\end{align*}
+Similarly, 
+\begin{align*}
+\pi(z = 2 \mid p, y_1) \\
+&= \frac{(1-p)\pi(y_i \mid \theta_2)}{p\pi(y_i \mid \theta_1) + (1-p)\pi(y_i \mid \theta_2)}.
+\end{align*}
 The full conditional distribution is therefore $z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)$.
 
 An MCMC algorithm for this would repeat the following two steps:
 
-1. Sample $p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1)$.
-2. Sample $z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)$ for each $i$.
+1. Initialise values for $p, \theta_1, \theta_2$ and $\boldsymbol{z}$ 
+2. Sample $p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1)$.
+3. Sample $\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2 \sim\hbox{Beta}(\sum_{i; z_i = 1}y_i + \alpha_1 , 100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i)$.
+4. Sample $\theta_2 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_1 \sim \hbox{Beta}(\sum_{i; z_i = 2}y_i + \alpha_2 , 100N_2 + \beta_2 - \sum_{i; z_i = 2}y_i)$. 
+5. Sample $z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)$ for each $i$.
+6. Repeat Steps 3-5.
+
+This algorithm may be very slow to converge and explore the posterior distribution. This is because it has so many parameters. There is 3 model parameters ($p$, $\beta_1$ and $\beta_2$) and $N$ latent variables. Exploring a posterior distribution with this many dimensions may take a lot of time. Royal Mail delivered ~20,000,000 letters a day in 2023. 
 :::
 
 
@@ -2748,7 +2774,7 @@ To carry out inference for a parameter $\theta$ using an Approximate Bayesian Co
 4. Repeat steps 1 - 3.
 :::
 
-:::{.proposition}
+:::{.definition}
 The approximate posterior distribution using ABC with rejection is
 $$
 \pi_\varepsilon(\theta \mid y) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
@@ -3115,7 +3141,7 @@ Code up example 6.1. How does your choice of length scale affect the posterior d
 x <- -5:5
 y <-  c(3.0942822, 3.0727920, 2.6137341, 1.8818820, 1.2746738, 1.2532116, 1.4620830, 1.4194647, 1.6786969, 1.1057042, 0.4118125)
 ```
-with $\sigma^2 = 0.2$.To draw samples from the multivariate normal distribution with mean vector $\boldsymbol{\mu}$ and covariance matrix $\Sigma$
+with $\sigma^2 = 0.2$.To draw samples from the multivariate normal distribution with mean vector $\boldsymbol{\mu}$ and covariance matrix $\Sigma$ use
 
 ```{r}
 mvnorm.chol <- function(mu, Sigma){

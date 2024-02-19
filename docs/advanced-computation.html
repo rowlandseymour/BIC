@@ -192,7 +192,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="5.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#properties-of-markov-chains"><i class="fa fa-check"></i><b>5.1</b> Properties of Markov Chains</a></li>
 <li class="chapter" data-level="5.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#metropolis-hastings"><i class="fa fa-check"></i><b>5.2</b> Metropolis-Hastings</a></li>
-<li class="chapter" data-level="5.5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.5</b> Lab</a></li>
+<li class="chapter" data-level="5.5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#beyond-mcmc"><i class="fa fa-check"></i><b>5.5</b> Beyond MCMC</a></li>
+<li class="chapter" data-level="5.6" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.6</b> Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
 <ul>
@@ -321,22 +322,22 @@ where <span class="math inline">\(\alpha^2\)</span> is the signal variance and <
 \boldsymbol{x}^T\Sigma\boldsymbol{x} \geq 0 \quad \hbox{for all } \boldsymbol{x} \in \mathbb{R}^N.
 \]</span></p>
 </div>
-<p>The squared exponential covariance function is isotropic and produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don’t produce functions that are continuous or differentiable. Two more are given below.</p>
+<p>The squared exponential covariance function is isotropic and produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don’t produce functions that are continuous or differentiable. Three4 more are given below.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-92" class="definition"><strong>Definition 6.8  </strong></span>The <strong>M'atern covariance function</strong> models functions that are differentiable only once:
+<p><span id="def:unlabeled-div-92" class="definition"><strong>Definition 6.8  </strong></span>The <strong>M'atern</strong> covariance function models functions that are differentiable only once:
 <span class="math display">\[
 k(x, x&#39;) = \left(1 + \frac{\sqrt{3}(x - x&#39;)^2}{l} \right)\exp\left\{-\frac{\sqrt{3}(x - x&#39;)^2}{l} \right\}.
 \]</span></p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-93" class="definition"><strong>Definition 6.9  </strong></span>The periodic covariance function models functions that are periodic and it is given by
+<p><span id="def:unlabeled-div-93" class="definition"><strong>Definition 6.9  </strong></span>The <strong>periodic</strong> covariance function models functions that are periodic and it is given by
 <span class="math display">\[
 k(x, x&#39;) = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x&#39;)^2}{p} \right\},
 \]</span>
 where the period is <span class="math inline">\(p\)</span>.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-94" class="definition"><strong>Definition 6.10  </strong></span>The dot product covariance function models functions that are rotationally invariant and it is given by
+<p><span id="def:unlabeled-div-94" class="definition"><strong>Definition 6.10  </strong></span>The <strong>dot product</strong> covariance function models functions that are rotationally invariant and it is given by
 <span class="math display">\[
 k(x, x&#39;) = \alpha^2 + x\cdot x&#39;.
 \]</span></p>
@@ -451,40 +452,66 @@ We can use a Gibbs sampler alternating between sampling <span class="math inline
 <div class="example">
 <p><span id="exm:unlabeled-div-103" class="example"><strong>Example 6.3  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
 <p>Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.</p>
-<p><img src="postcode.jpeg" /><!-- --></p>
-<p>We introduce a latent variable <span class="math inline">\(z_i \sim \hbox{Bernoulli}(p)\)</span> that describes if the characters on the <span class="math inline">\(i^{th}\)</span> image are B1 or B2. The observation <span class="math inline">\(y_i\)</span> is the proportion of the <span class="math inline">\(i^{th}\)</span> image that is taken up by the characters. We observe <span class="math inline">\(y_i\)</span>, but want to estimate <span class="math inline">\(z_i\)</span>. The difficultly is there lack of one-to-one correspondence between the values <span class="math inline">\(y_i\)</span> can take and the value <span class="math inline">\(z_i\)</span>. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 (<span class="math inline">\(Z = 1\)</span>), then <span class="math inline">\(Y_i \sim N(0.7, 0.05^2)\)</span> and if it is going to B2 (<span class="math inline">\(Z = 2\)</span>), then <span class="math inline">\(Y_i \sim N(0.8, 0.02^2)\)</span>. The plot below shows the two densities and the overlap between them.</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="advanced-computation.html#cb102-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.001</span>)</span>
-<span id="cb102-2"><a href="advanced-computation.html#cb102-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.7</span>, <span class="fl">0.05</span>)</span>
-<span id="cb102-3"><a href="advanced-computation.html#cb102-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(a, <span class="fl">0.8</span>, <span class="fl">0.02</span>)</span>
-<span id="cb102-4"><a href="advanced-computation.html#cb102-4" tabindex="-1"></a><span class="fu">plot</span>(a, x, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>), <span class="at">xlab =</span> <span class="fu">expression</span>(y),</span>
-<span id="cb102-5"><a href="advanced-computation.html#cb102-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;density&quot;</span>)</span>
+<p><img src="postcode.jpeg" /><!-- -->
+The scanned image is a 10 by 10 grid of pixels, where the number of pixels coloured black of the <span class="math inline">\(i^{th}\)</span> image is <span class="math inline">\(Y_i \sim \hbox{Bin}(100, \theta)\)</span>. However, <span class="math inline">\(\theta\)</span> depends on if the letter is going to B1 or B2. To allow for this, we introduce a latent variable <span class="math inline">\(z_i \sim \hbox{Bernoulli}(p)\)</span> that describes if the characters on the <span class="math inline">\(i^{th}\)</span> image are B1 or B2. The observation <span class="math inline">\(y_i\)</span> is the number of pixels of the <span class="math inline">\(i^{th}\)</span> image that is taken up by the characters. We observe <span class="math inline">\(y_i\)</span>, but want to estimate <span class="math inline">\(z_i\)</span>. The difficultly is there lack of one-to-one correspondence between the values <span class="math inline">\(y_i\)</span> can take and the value <span class="math inline">\(z_i\)</span>. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 (<span class="math inline">\(Z = 1\)</span>), then <span class="math inline">\(Y_i \sim \hbox{Bin}(100, \theta_1)\)</span> and if it is going to B2 (<span class="math inline">\(Z = 2\)</span>), then <span class="math inline">\(Y_i \sim \hbox{Bin}(100, \theta_2)\)</span>. The plot below shows the two densities and the overlap between them for <span class="math inline">\(p_1 = 0.9\)</span> and <span class="math inline">\(p_2 = 0.85\)</span>.</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="advanced-computation.html#cb102-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb102-2"><a href="advanced-computation.html#cb102-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(a, <span class="dv">100</span>, <span class="fl">0.9</span>)</span>
+<span id="cb102-3"><a href="advanced-computation.html#cb102-3" tabindex="-1"></a>y <span class="ot">&lt;-</span>  <span class="fu">dbinom</span>(a, <span class="dv">100</span>, <span class="fl">0.85</span>)</span>
+<span id="cb102-4"><a href="advanced-computation.html#cb102-4" tabindex="-1"></a><span class="fu">plot</span>(a, x, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(y),</span>
+<span id="cb102-5"><a href="advanced-computation.html#cb102-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;density&quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">70</span>, <span class="dv">100</span>))</span>
 <span id="cb102-6"><a href="advanced-computation.html#cb102-6" tabindex="-1"></a><span class="fu">lines</span>(a, y, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
 <p>As the variables <span class="math inline">\(\boldsymbol{z}\)</span> are latent, the observed data likelihood function is
 <span class="math display">\[
-\pi(\boldsymbol{y} \mid  p) =\prod_{i=1}^N \left[ p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)\right].
+\pi(\boldsymbol{y} \mid  p, \theta_1, \theta_2) =\prod_{i=1}^N \left[ p\pi(y_i \mid p = \theta_1) + (1-p)\pi(y_i \mid \theta_2)\right].
 \]</span>
 Instead, it’s easier to work with the complete data likelihood function, supposing we had observed the variables <span class="math inline">\(\boldsymbol{z}\)</span>. This is given by
 <span class="math display">\[\begin{align*}
-\pi(\boldsymbol{y}, \boldsymbol{z} \mid  p) &amp;= \begin{pmatrix} N_1 + N_2
-\\ N_1\end{pmatrix}p^{N_1}(1-p)^{N_2} \prod_{i; z_i = 1}\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)  \\
-&amp;\times\prod_{i; z_i = 2}\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2),
+\pi(\boldsymbol{y}, \boldsymbol{z} \mid  p, \theta_1, \theta_2) &amp;= \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\boldsymbol{z} \mid p)
+\propto p^{N_1}(1-p)^{N_2} \prod_{i; z_i = 1}\pi(y_i \mid \theta_1)\prod_{i; z_i = 2}\pi(y_i \mid \theta_2)
 \end{align*}\]</span>
-where <span class="math inline">\(N_1\)</span> and <span class="math inline">\(N_2\)</span> are the number of letters for B1 and B2 respectively. This form makes it much easier to derive the posterior distributions and estimate the parameter values.</p>
-<p>We place a uniform prior distribution on the parameter <span class="math inline">\(p\)</span>, which gives the posterior distribution
+where <span class="math inline">\(N_1\)</span> and <span class="math inline">\(N_2\)</span> are the number of letters for B1 and B2 respectively. This form makes it much easier to derive the posterior distribution, full conditional distributions and estimate the parameter values. By Bayes’ theorem, the posterior distribution is
+<span class="math display">\[
+\pi(\boldsymbol{z}, p, \theta_1, \theta_2 \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\boldsymbol{z} \mid p)\pi(p)\pi(\theta_1)\pi(\theta_2).
+\]</span>
+Note that we do not put a prior distribution on the latent variables <span class="math inline">\(\boldsymbol{z}\)</span>. Instead, we learn about these variables in the terms <span class="math inline">\(\pi(\boldsymbol{y} \mid \boldsymbol{z}, \theta_1, \theta_2)\pi(\boldsymbol{z} \mid p)\)</span>.</p>
+<p>We suppose we are ignorant about the value of <span class="math inline">\(p\)</span> and place a uniform prior distribution on the parameter <span class="math inline">\(p\)</span>. The full conditional distribution is
+<span class="math display">\[\begin{align*}
+\pi(p\mid \boldsymbol{z}, \boldsymbol{y}, \theta_1, \theta_2) &amp;\propto \pi(\boldsymbol{z} \mid p)\pi(p)\\
+&amp; = p^{N_1}(1-p)^{N_2}.
+\end{align*}\]</span>
+Hence,
 <span class="math display">\[
 p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
-\]</span></p>
-<p>The distribution of <span class="math inline">\(z_i\)</span> given the parameter <span class="math inline">\(p\)</span> and the observation <span class="math inline">\(y_i\)</span> can be derived using Bayes’ theorem
-<span class="math display">\[
-p^*_i = \pi(z = 1 \mid p, y_1) = \frac{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2)}{p\pi(y_i \mid \mu = 0.7, \sigma^2 = 0.05^2) + (1-p)\pi(y_i \mid \mu = 0.8, \sigma^2 = 0.02^2)}.
 \]</span>
+If we use a Beta(<span class="math inline">\(\alpha_1, \beta_1\)</span>) distribution for our prior distribution on <span class="math inline">\(\theta_1\)</span>, the full conditional distribution of <span class="math inline">\(\theta_1\)</span> is
+<span class="math display">\[\begin{align*}
+\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2) \propto pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\theta_1) \\
+&amp;\propto \theta_1^{\sum_{i; z_i = 1}y_i}(1-\theta_1)^{100N_1 - \sum_{i; z_i = 1}y_i}\theta^{\alpha_1 - 1}(1-\theta^{\beta_1 - 1}) \\
+&amp; \propto \theta_1^{\sum_{i; z_i = 1}y_i + \alpha_1 -1 }(1-\theta_1)^{100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i - 1}
+\end{align*}\]</span>
+Hence <span class="math inline">\(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2 \sim \hbox{Beta}(\sum_{i; z_i = 1}y_i + \alpha_1 , 100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i)\)</span>. Similarly, <span class="math inline">\(\theta_2 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_1 \sim \hbox{Beta}(\sum_{i; z_i = 2}y_i + \alpha_2 , 100N_2 + \beta_2 - \sum_{i; z_i = 2}y_i)\)</span>.</p>
+<p>The distribution of <span class="math inline">\(z_i\)</span> given the parameters <span class="math inline">\(p\)</span>, <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>, and the observation <span class="math inline">\(y_i\)</span> is
+<span class="math display">\[\begin{align*}
+p^*_i &amp; = \pi(z = 1 \mid p, y_1) \\
+&amp;= \frac{p\pi(y_i \mid \theta_1)}{p\pi(y_i \mid \theta_1) + (1-p)\pi(y_i \mid \theta_2)}.
+\end{align*}\]</span>
+Similarly,
+<span class="math display">\[\begin{align*}
+\pi(z = 2 \mid p, y_1) \\
+&amp;= \frac{(1-p)\pi(y_i \mid \theta_2)}{p\pi(y_i \mid \theta_1) + (1-p)\pi(y_i \mid \theta_2)}.
+\end{align*}\]</span>
 The full conditional distribution is therefore <span class="math inline">\(z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)\)</span>.</p>
 <p>An MCMC algorithm for this would repeat the following two steps:</p>
 <ol style="list-style-type: decimal">
+<li>Initialise values for <span class="math inline">\(p, \theta_1, \theta_2\)</span> and <span class="math inline">\(\boldsymbol{z}\)</span></li>
 <li>Sample <span class="math inline">\(p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1)\)</span>.</li>
+<li>Sample <span class="math inline">\(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2 \sim\hbox{Beta}(\sum_{i; z_i = 1}y_i + \alpha_1 , 100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i)\)</span>.</li>
+<li>Sample <span class="math inline">\(\theta_2 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_1 \sim \hbox{Beta}(\sum_{i; z_i = 2}y_i + \alpha_2 , 100N_2 + \beta_2 - \sum_{i; z_i = 2}y_i)\)</span>.</li>
 <li>Sample <span class="math inline">\(z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)\)</span> for each <span class="math inline">\(i\)</span>.</li>
+<li>Repeat Steps 3-5.</li>
 </ol>
+<p>This algorithm may be very slow to converge and explore the posterior distribution. This is because it has so many parameters. There is 3 model parameters (<span class="math inline">\(p\)</span>, <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>) and <span class="math inline">\(N\)</span> latent variables. Exploring a posterior distribution with this many dimensions may take a lot of time. Royal Mail delivered ~20,000,000 letters a day in 2023.</p>
 </div>
 </div>
 </div>
@@ -507,8 +534,8 @@ The full conditional distribution is therefore <span class="math inline">\(z_i \
 <li>Repeat steps 1 - 3.</li>
 </ol>
 </div>
-<div class="proposition">
-<p><span id="prp:unlabeled-div-106" class="proposition"><strong>Proposition 6.3  </strong></span>The approximate posterior distribution using ABC with rejection is
+<div class="definition">
+<p><span id="def:unlabeled-div-106" class="definition"><strong>Definition 6.14  </strong></span>The approximate posterior distribution using ABC with rejection is
 <span class="math display">\[
 \pi_\varepsilon(\theta \mid y) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
 \]</span>
@@ -668,7 +695,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&
 <p>When <span class="math inline">\(\varepsilon = 0.12\)</span>, almost all the proposals are rejected. Although the approximate posterior mean is close to the true value, given we only have 7 samples we cannot say much about the posterior distribution. When <span class="math inline">\(\varepsilon = 2\)</span>, almost all the proposals are accepted. This histogram shows that we are really just sampling from the prior distribution, i.e. <span class="math inline">\(\pi_2(\beta \mid y) \approx \pi(\beta)\)</span>.</p>
 </div>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-110" class="proposition"><strong>Proposition 6.4  </strong></span>Using an ABC rejection algorithm
+<p><span id="prp:unlabeled-div-110" class="proposition"><strong>Proposition 6.3  </strong></span>Using an ABC rejection algorithm
 <span class="math display">\[
 \lim_{\varepsilon \rightarrow \infty} \pi_\varepsilon(\theta \mid y) \overset{D}= \pi(\theta),
 \]</span>
@@ -784,7 +811,7 @@ This likelihood function cannot be evaluated as we do not observe the infection 
 </div>
 <p>We can avoid the curse of dimensionality by comparing summary statistics instead. This leads us to the Summary ABC algorithm.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-114" class="definition"><strong>Definition 6.14  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Summary Approximate Bayesian Computation algorithm with rejection</p>
+<p><span id="def:unlabeled-div-114" class="definition"><strong>Definition 6.15  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Summary Approximate Bayesian Computation algorithm with rejection</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value for the parameter <span class="math inline">\(\theta^*\)</span> from the prior distribution <span class="math inline">\(\pi(\theta)\)</span>.</li>
 <li>Generate some data <span class="math inline">\(y*\)</span> from the data generating process using the parameter value <span class="math inline">\(\theta^*\)</span>.</li>
@@ -794,7 +821,7 @@ This likelihood function cannot be evaluated as we do not observe the infection 
 </div>
 <p>Similar to the ABC algorithm with rejection, we also have the following proposition.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-115" class="proposition"><strong>Proposition 6.5  </strong></span>The approximate posterior distribution using ABC with rejection is
+<p><span id="prp:unlabeled-div-115" class="proposition"><strong>Proposition 6.4  </strong></span>The approximate posterior distribution using ABC with rejection is
 <span class="math display">\[
 \pi_\varepsilon(\theta \mid S(y)) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
 \]</span>
@@ -802,10 +829,10 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (
 </div>
 <p>Using summary statistics only increases the approximation however, as we are approximating the data using a summary of it. The only case when we are not approximating further is when the statistic contains all the information about the underlying sample it is summarising. This is known as a sufficient statistic.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-116" class="definition"><strong>Definition 6.15  </strong></span>A statistic <span class="math inline">\(S\)</span> is a sufficient statistic for the parameter <span class="math inline">\(\theta\)</span> if the conditional distribution <span class="math inline">\(\pi(y | S(y))\)</span> does not depend on <span class="math inline">\(\theta\)</span>.</p>
+<p><span id="def:unlabeled-div-116" class="definition"><strong>Definition 6.16  </strong></span>A statistic <span class="math inline">\(S\)</span> is a sufficient statistic for the parameter <span class="math inline">\(\theta\)</span> if the conditional distribution <span class="math inline">\(\pi(y | S(y))\)</span> does not depend on <span class="math inline">\(\theta\)</span>.</p>
 </div>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-117" class="proposition"><strong>Proposition 6.6  </strong></span>Using a Summary ABC rejection algorithm with a sufficient statistic <span class="math inline">\(S\)</span>
+<p><span id="prp:unlabeled-div-117" class="proposition"><strong>Proposition 6.5  </strong></span>Using a Summary ABC rejection algorithm with a sufficient statistic <span class="math inline">\(S\)</span>
 <span class="math display">\[
 \lim_{\varepsilon \rightarrow 0} \pi_\varepsilon(\theta \mid S(y)) \overset{D}= \pi(\theta \mid y).
 \]</span></p>
@@ -860,7 +887,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (
 <p><span id="exr:unlabeled-div-119" class="exercise"><strong>Exercise 6.1  </strong></span>Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use</p>
 <div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="advanced-computation.html#cb144-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb144-2"><a href="advanced-computation.html#cb144-2" tabindex="-1"></a>y <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="fl">3.0942822</span>, <span class="fl">3.0727920</span>, <span class="fl">2.6137341</span>, <span class="fl">1.8818820</span>, <span class="fl">1.2746738</span>, <span class="fl">1.2532116</span>, <span class="fl">1.4620830</span>, <span class="fl">1.4194647</span>, <span class="fl">1.6786969</span>, <span class="fl">1.1057042</span>, <span class="fl">0.4118125</span>)</span></code></pre></div>
-<p>with <span class="math inline">\(\sigma^2 = 0.2\)</span>.To draw samples from the multivariate normal distribution with mean vector <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance matrix <span class="math inline">\(\Sigma\)</span></p>
+<p>with <span class="math inline">\(\sigma^2 = 0.2\)</span>.To draw samples from the multivariate normal distribution with mean vector <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance matrix <span class="math inline">\(\Sigma\)</span> use</p>
 <div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="advanced-computation.html#cb145-1" tabindex="-1"></a>mvnorm.chol <span class="ot">&lt;-</span> <span class="cf">function</span>(mu, Sigma){</span>
 <span id="cb145-2"><a href="advanced-computation.html#cb145-2" tabindex="-1"></a>  <span class="co">#Multivariate Normal Sampler with Cholesky Input</span></span>
 <span id="cb145-3"><a href="advanced-computation.html#cb145-3" tabindex="-1"></a>  <span class="co">#Inputs: mu -- mean, chol -- covariance matrix</span></span>
