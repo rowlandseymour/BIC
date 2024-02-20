@@ -1989,6 +1989,7 @@ p_{acc} = \min \left\{1, \frac{\beta'^{N + a - 1}e^{-b\beta'}}{\prod y_i^{\beta'
 = \min \left\{1, \left(\frac{\beta'}{\beta}\right)^{N + a - 1}{\prod y_i^{\beta - \beta'}}\exp((\beta - \beta')b) \right\}. 
 $$
 The MCMC algorithm will be 
+
 1. Set an initial value for $\beta_1$ and set $i =1$.
 2. Propose a new value $\beta' \sim N(\beta_i, \sigma^2)$
 3. Accept $\beta'$ with probability $p_{acc}$ and set $\beta{i+1}= \beta'$, otherwise reject and set$\beta{i+1}= \beta_i$.
@@ -2053,7 +2054,7 @@ quantile(beta.store, c(0.025, 0.975))
 
 
 ## Gibbs Sampler
-When we can sample directly from conditional posterior distributions, we can use a Gibbs sampler. Suppose we have a distribution with parameters $\{\theta_1, \ldots, \theta_N\}$, a Gibbs sampler works as follows: 
+When we can sample directly from full conditional distributions, we can use a Gibbs sampler. Suppose we have a distribution with parameters $\{\theta_1, \ldots, \theta_N\}$, a Gibbs sampler works as follows: 
 
 1. Set initial values $\{\theta_1^{(0)}, \ldots, \theta_N^{(0)}\}$
 
@@ -2148,7 +2149,48 @@ quantile(gamma.store, c(0.025, 0.975)) #95% CI
 #Investogate correlation between parameters
 plot(lambda.store, gamma.store)
 ```
+:::
 
+
+## Metropolis-within-Gibbs
+Now we have both the Metropolis-Hastings algorithm and Gibbs sampler, we can combine them to create a generic MCMC algorithm for essentially any posterior distribution with any number of parameters. To create our MCMC algorithm, we update any parameters where the full conditional distribution has closed form with a Gibbs sampler. For parameters where the full conditional distribution does not have a closed form, we use a Metropolis-Hastings algorithm to update the parameters. 
+
+:::{.example}
+Suppose $X_1, \ldots, X_N \sim \hbox{Weibull}(\beta, \theta)$, where
+$$
+\pi(x \mid\beta,\theta) = \frac{\beta}{\theta}x^{\beta - 1}\exp\left(-\frac{x^\beta}{\theta}\right), \qquad x, \beta, \theta > 0. 
+$$
+We use an Exponential prior distribution with rate $\lambda$ on $\beta$ and an inverse gamma prior distribution on $\theta$ such that
+$$
+\pi(\theta) = \frac{1}{\theta^{a - 1}}\exp\left(-\frac{b}{\theta}\right).
+$$
+The posterior distribution is therefore
+\begin{align*}
+\pi(\beta, \theta \mid \boldsymbol{x}) &\propto \pi(\boldsymbol{x} \mid \beta, \theta)\pi(\beta)\pi(\theta) \\
+&\propto \frac{\beta^N}{\theta^N}\prod x_i^{\beta - 1}\exp\left(-\frac{1}{\theta}\sum x_i^\beta\right)
+\\
+&\times\exp(-\lambda\beta) \frac{1}{\theta^{a - 1}}\exp\left(-\frac{b}{\theta}\right)
+\end{align*}
+
+The full conditional distributions are therefore
+\begin{align*}
+\pi(\beta, \mid \theta \boldsymbol{x}) &\propto\beta^N\prod x_i^{\beta - 1}\exp\left(-\frac{1}{\theta}\sum x_i^\beta\right)\exp(-\lambda\beta) \\
+\pi(\theta, \mid \beta \boldsymbol{x}) & \frac{1}{\theta^{N + a -1}}\exp\left(-\frac{1}{\theta}(b + \sum x_i^\beta)\right)
+\end{align*}
+
+There is no closed form for the full conditional distribution for $\beta$, so we will need to use a Metropolis-Hastings algorithm to update this parameter in our MCMC algorithm. The full conditional distribution for $\theta$ is closed as it is proportional to an inverse Gamma distribution with shape $N + a$ and scale $b + \sum x_i^\beta$. We can use a Gibbs sampler to update value for $\theta$. A suitable MCMC algorithm will look like
+
+1. Set initial values for $\beta^{(0)}$ and $\theta^{(0)}$ and $i = 1$. 
+2. Propose a new value for $\beta$, $\beta' \sim U[\beta^{(i-1)} + \varepsilon, \beta^{(i-1)} - \varepsilon]$ 
+3. Accept $\beta' = \beta^{(i)}$ with probability
+$$
+p_{\textrm{acc}} = \min\left\{\frac{\pi(\beta', \theta^{(i-1)} \mid \boldsymbol{x})}{\pi(\beta, \theta^{(i-1)} \mid \boldsymbol{x})}\frac{q(\beta^{(i-1)} \mid \beta')}{q(\beta' \mid \beta^{(i-1)})} , 1\right\}
+$$
+Otherwise reject $\beta'$ and set $\beta^{(i)} = \beta^{(i-1)}$. 
+4. Sample $\theta^{(i)} \sim \hbox{inv}-\Gamma(N + a,\, b + \sum x_i^{\beta^{(i)}})$.
+5. Repeat steps 2-4. 
+
+The acceptance probability in step 3 is the ratio of the full conditional distributions for $\beta$. 
 :::
 
 

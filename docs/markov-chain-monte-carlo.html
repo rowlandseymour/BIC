@@ -192,8 +192,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="5.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#properties-of-markov-chains"><i class="fa fa-check"></i><b>5.1</b> Properties of Markov Chains</a></li>
 <li class="chapter" data-level="5.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#metropolis-hastings"><i class="fa fa-check"></i><b>5.2</b> Metropolis-Hastings</a></li>
-<li class="chapter" data-level="5.5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#beyond-mcmc"><i class="fa fa-check"></i><b>5.5</b> Beyond MCMC</a></li>
-<li class="chapter" data-level="5.6" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.6</b> Lab</a></li>
+<li class="chapter" data-level="5.6" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#beyond-mcmc"><i class="fa fa-check"></i><b>5.6</b> Beyond MCMC</a></li>
+<li class="chapter" data-level="5.7" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.7</b> Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
 <ul>
@@ -544,7 +544,7 @@ p_\textrm{acc} = \min\left\{\frac{\exp\left\{-0.01\mu&#39; -\sum_{i=1}^{30}\frac
 <p>It seems that the posterior distribution is very similar when using these two prior distributions. This is because the data are very informative.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-79" class="example"><strong>Example 5.4  </strong></span>In Lab 3.9, we computed the MAP estimate for a parameter from the Pareto distribution. The density function of this distribution is
+<p><span id="exm:unlabeled-div-80" class="example"><strong>Example 5.4  </strong></span>In Lab 3.9, we computed the MAP estimate for a parameter from the Pareto distribution. The density function of this distribution is
 <span class="math display">\[
 \pi(x \mid \beta) = \frac{\beta}{x^{\beta + 1}}, \quad x &gt; 1.
 \]</span>
@@ -558,11 +558,13 @@ We can’t sample from this directly, so wee need to use a Metropolis-Hastings a
 p_{acc} = \min \left\{1, \frac{\beta&#39;^{N + a - 1}e^{-b\beta&#39;}}{\prod y_i^{\beta&#39; + 1}}\frac{\prod y_i^{\beta + 1}}{\beta^{N + a - 1}e^{-b\beta}} \right\} \\
 = \min \left\{1, \left(\frac{\beta&#39;}{\beta}\right)^{N + a - 1}{\prod y_i^{\beta - \beta&#39;}}\exp((\beta - \beta&#39;)b) \right\}.
 \]</span>
-The MCMC algorithm will be
-1. Set an initial value for <span class="math inline">\(\beta_1\)</span> and set <span class="math inline">\(i =1\)</span>.
-2. Propose a new value <span class="math inline">\(\beta&#39; \sim N(\beta_i, \sigma^2)\)</span>
-3. Accept <span class="math inline">\(\beta&#39;\)</span> with probability <span class="math inline">\(p_{acc}\)</span> and set <span class="math inline">\(\beta{i+1}= \beta&#39;\)</span>, otherwise reject and set<span class="math inline">\(\beta{i+1}= \beta_i\)</span>.
-4. Repeat steps 2, 3, and 4 for $ i = 2, , M$.</p>
+The MCMC algorithm will be</p>
+<ol style="list-style-type: decimal">
+<li>Set an initial value for <span class="math inline">\(\beta_1\)</span> and set <span class="math inline">\(i =1\)</span>.</li>
+<li>Propose a new value <span class="math inline">\(\beta&#39; \sim N(\beta_i, \sigma^2)\)</span></li>
+<li>Accept <span class="math inline">\(\beta&#39;\)</span> with probability <span class="math inline">\(p_{acc}\)</span> and set <span class="math inline">\(\beta{i+1}= \beta&#39;\)</span>, otherwise reject and set<span class="math inline">\(\beta{i+1}= \beta_i\)</span>.</li>
+<li>Repeat steps 2, 3, and 4 for $ i = 2, , M$.</li>
+</ol>
 <p>We fix <span class="math inline">\(b=0.01\)</span> and use the data</p>
 <pre><code>x &lt;- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)</code></pre>
 <p>to code up our algorithm.</p>
@@ -620,7 +622,7 @@ The MCMC algorithm will be
 ## 2.102268 7.027826</code></pre>
 <div id="gibbs-sampler" class="section level2 hasAnchor" number="5.3">
 <h2><span class="header-section-number">5.3</span> Gibbs Sampler<a href="markov-chain-monte-carlo.html#gibbs-sampler" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When we can sample directly from conditional posterior distributions, we can use a Gibbs sampler. Suppose we have a distribution with parameters <span class="math inline">\(\{\theta_1, \ldots, \theta_N\}\)</span>, a Gibbs sampler works as follows:</p>
+<p>When we can sample directly from full conditional distributions, we can use a Gibbs sampler. Suppose we have a distribution with parameters <span class="math inline">\(\{\theta_1, \ldots, \theta_N\}\)</span>, a Gibbs sampler works as follows:</p>
 <ol style="list-style-type: decimal">
 <li><p>Set initial values <span class="math inline">\(\{\theta_1^{(0)}, \ldots, \theta_N^{(0)}\}\)</span></p></li>
 <li><p>Set <span class="math inline">\(i = 1\)</span>.</p></li>
@@ -708,18 +710,57 @@ Therefore the full conditional distribution of <span class="math inline">\(\gamm
 <p><img src="_main_files/figure-html/unnamed-chunk-38-5.png" width="672" /></p>
 </div>
 </div>
-<div id="mcmc-diagnostics" class="section level2 hasAnchor" number="5.4">
-<h2><span class="header-section-number">5.4</span> MCMC Diagnostics<a href="markov-chain-monte-carlo.html#mcmc-diagnostics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="metropolis-within-gibbs" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Metropolis-within-Gibbs<a href="markov-chain-monte-carlo.html#metropolis-within-gibbs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now we have both the Metropolis-Hastings algorithm and Gibbs sampler, we can combine them to create a generic MCMC algorithm for essentially any posterior distribution with any number of parameters. To create our MCMC algorithm, we update any parameters where the full conditional distribution has closed form with a Gibbs sampler. For parameters where the full conditional distribution does not have a closed form, we use a Metropolis-Hastings algorithm to update the parameters.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-76" class="example"><strong>Example 5.6  </strong></span>Suppose <span class="math inline">\(X_1, \ldots, X_N \sim \hbox{Weibull}(\beta, \theta)\)</span>, where
+<span class="math display">\[
+\pi(x \mid\beta,\theta) = \frac{\beta}{\theta}x^{\beta - 1}\exp\left(-\frac{x^\beta}{\theta}\right), \qquad x, \beta, \theta &gt; 0.
+\]</span>
+We use an Exponential prior distribution with rate <span class="math inline">\(\lambda\)</span> on <span class="math inline">\(\beta\)</span> and an inverse gamma prior distribution on <span class="math inline">\(\theta\)</span> such that
+<span class="math display">\[
+\pi(\theta) = \frac{1}{\theta^{a - 1}}\exp\left(-\frac{b}{\theta}\right).
+\]</span>
+The posterior distribution is therefore
+<span class="math display">\[\begin{align*}
+\pi(\beta, \theta \mid \boldsymbol{x}) &amp;\propto \pi(\boldsymbol{x} \mid \beta, \theta)\pi(\beta)\pi(\theta) \\
+&amp;\propto \frac{\beta^N}{\theta^N}\prod x_i^{\beta - 1}\exp\left(-\frac{1}{\theta}\sum x_i^\beta\right)
+\\
+&amp;\times\exp(-\lambda\beta) \frac{1}{\theta^{a - 1}}\exp\left(-\frac{b}{\theta}\right)
+\end{align*}\]</span></p>
+<p>The full conditional distributions are therefore
+<span class="math display">\[\begin{align*}
+\pi(\beta, \mid \theta \boldsymbol{x}) &amp;\propto\beta^N\prod x_i^{\beta - 1}\exp\left(-\frac{1}{\theta}\sum x_i^\beta\right)\exp(-\lambda\beta) \\
+\pi(\theta, \mid \beta \boldsymbol{x}) &amp; \frac{1}{\theta^{N + a -1}}\exp\left(-\frac{1}{\theta}(b + \sum x_i^\beta)\right)
+\end{align*}\]</span></p>
+<p>There is no closed form for the full conditional distribution for <span class="math inline">\(\beta\)</span>, so we will need to use a Metropolis-Hastings algorithm to update this parameter in our MCMC algorithm. The full conditional distribution for <span class="math inline">\(\theta\)</span> is closed as it is proportional to an inverse Gamma distribution with shape <span class="math inline">\(N + a\)</span> and scale <span class="math inline">\(b + \sum x_i^\beta\)</span>. We can use a Gibbs sampler to update value for <span class="math inline">\(\theta\)</span>. A suitable MCMC algorithm will look like</p>
+<ol style="list-style-type: decimal">
+<li>Set initial values for <span class="math inline">\(\beta^{(0)}\)</span> and <span class="math inline">\(\theta^{(0)}\)</span> and <span class="math inline">\(i = 1\)</span>.</li>
+<li>Propose a new value for <span class="math inline">\(\beta\)</span>, <span class="math inline">\(\beta&#39; \sim U[\beta^{(i-1)} + \varepsilon, \beta^{(i-1)} - \varepsilon]\)</span></li>
+<li>Accept <span class="math inline">\(\beta&#39; = \beta^{(i)}\)</span> with probability
+<span class="math display">\[
+p_{\textrm{acc}} = \min\left\{\frac{\pi(\beta&#39;, \theta^{(i-1)} \mid \boldsymbol{x})}{\pi(\beta, \theta^{(i-1)} \mid \boldsymbol{x})}\frac{q(\beta^{(i-1)} \mid \beta&#39;)}{q(\beta&#39; \mid \beta^{(i-1)})} , 1\right\}
+\]</span>
+Otherwise reject <span class="math inline">\(\beta&#39;\)</span> and set <span class="math inline">\(\beta^{(i)} = \beta^{(i-1)}\)</span>.</li>
+<li>Sample <span class="math inline">\(\theta^{(i)} \sim \hbox{inv}-\Gamma(N + a,\, b + \sum x_i^{\beta^{(i)}})\)</span>.</li>
+<li>Repeat steps 2-4.</li>
+</ol>
+<p>The acceptance probability in step 3 is the ratio of the full conditional distributions for <span class="math inline">\(\beta\)</span>.</p>
+</div>
+</div>
+<div id="mcmc-diagnostics" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> MCMC Diagnostics<a href="markov-chain-monte-carlo.html#mcmc-diagnostics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>When running an MCMC algorithm, it is always important to check that the Markov chain has converged and is mixing well. For our purposes, mixing well means the chain is exploring the space of possible values of <span class="math inline">\(\theta\)</span> effectively and effectively and not getting stuck on the same value for a long time.</p>
 <p>A key way of doing this is by looking at the trace plot, which is a time series of the posterior samples simulated by the algorithm. The trace plot should look like it has converged to the stationary distribution and exploring the stationary distribution efficiently. What it shouldn’t look like is a long series of small steps, or being stuck in one spot for a long time. There are two definitions that help us isolate an efficient Markov chain.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-76" class="definition"><strong>Definition 5.7  </strong></span>The <strong>burn-in period</strong> is the number of iterations the Markov chain takes to reach the stationary distribution.</p>
+<p><span id="def:unlabeled-div-77" class="definition"><strong>Definition 5.7  </strong></span>The <strong>burn-in period</strong> is the number of iterations the Markov chain takes to reach the stationary distribution.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-77" class="definition"><strong>Definition 5.8  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
+<p><span id="def:unlabeled-div-78" class="definition"><strong>Definition 5.8  </strong></span>The <strong>thinning parameter</strong> is the period of iterations of the Markov chain that are stored.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-78" class="example"><strong>Example 5.6  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:norm">5.3</a>, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge. Although the posterior distribution is invariant to the choice of the proposal distribution, it still has a large effect of the efficiency of the algorithm and how well the chain mixes. The ideal trace plot looks like white noise, or a hairy caterpillar.</p>
+<p><span id="exm:unlabeled-div-79" class="example"><strong>Example 5.7  </strong></span>In Example <a href="markov-chain-monte-carlo.html#exm:norm">5.3</a>, we saw a Markov chain that mixes well. We took the burn-in period to be 3,000 iterations, which was how long it took to for the chain to converge. Although the posterior distribution is invariant to the choice of the proposal distribution, it still has a large effect of the efficiency of the algorithm and how well the chain mixes. The ideal trace plot looks like white noise, or a hairy caterpillar.</p>
 <p>In a Metropolis-Hasting random walk algorithm, the proposal distribution often has a large impact on how well the Markov chain mixes. The variance, or step size, of the proposal distribution can be tuned to ensure the chain mixes well.</p>
 <p>The following two examples show poorly mixing Markov chains. The first is where the step size is too big and the chain frequently gets stuck for several hundred iterations.</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="markov-chain-monte-carlo.html#cb96-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#to reproduce</span></span>
@@ -815,27 +856,27 @@ For large <span class="math inline">\(N\)</span>, even when <span class="math in
 </div>
 <p>The hypersphere example shows that in large dimensions we need our Markov chain to spend lots of time away from the posterior mode and in the tails of the distribution, but this is where the proposal distribution has lowest mass. We can avoid this by updating each parameter individually, but this means we need to use the full conditional distributions, which have highest mass near the mode. This ‘curse’ makes MCMC algorithms inefficient for large dimensions.</p>
 </div>
-<div id="beyond-mcmc" class="section level2 hasAnchor" number="5.5">
-<h2><span class="header-section-number">5.5</span> Beyond MCMC<a href="markov-chain-monte-carlo.html#beyond-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="beyond-mcmc" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Beyond MCMC<a href="markov-chain-monte-carlo.html#beyond-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>MCMC is not the only method available to generate samples from the posterior distribution. MCMC is often slow and inefficient. Much of the work in computational statistics research is about developing fast and efficient methods for sampling from posterior distributions. We are going to look at another method, called approximate Bayesian computation, in the next chapter. Two other methods, beyound the scope of this module, are Sequential Monte Carlo and Hamiltonian Monte Carlo.</p>
 <p>Sequential Monte Carlo (SMC) methods for Bayesian inference aim to estimate the posterior distribution of a state space model recursively based on the observed data. Initially, a set of particles representing possible states is sampled from the prior distribution. Then particles are propagated forward using the system dynamics and updated according to their likelihood given the observed data. This update step involves reweighting particles based on how well they explain the observed data. To ensure that the particle set accurately represents the posterior distribution, resampling is performed, where particles with higher weights are more likely to be retained. By iteratively repeating these steps, SMC effectively tracks the evolution of the posterior distribution over time, providing a flexible and computationally efficient framework for Bayesian inference in dynamic systems.</p>
 <p>Hamiltonian Monte Carlo (HMC) is a sophisticated Markov chain Monte Carlo (MCMC) method for sampling from complex, high-dimensional target distributions, commonly used in Bayesian inference. Unlike traditional MCMC methods, which rely on random walk proposals, HMC employs Hamiltonian dynamics to guide the exploration of the state space. By introducing auxiliary momentum variables, HMC constructs a joint distribution over the original target variables and the momentum variables. This augmented space enables the use of Hamiltonian dynamics, which can efficiently explore the target distribution by simulating the evolution of the system’s energy function. The key idea is to use the gradient of the target distribution’s log-probability to determine the momentum dynamics, leading to more effective proposals that can traverse the state space more efficiently. HMC samples are obtained by simulating Hamiltonian dynamics over a trajectory and then accepting or rejecting the proposed states based on Metropolis-Hastings criteria. Overall, HMC offers significant improvements in exploration efficiency compared to traditional MCMC methods, particularly in high-dimensional spaces, making it a powerful tool for Bayesian inference.</p>
 </div>
-<div id="lab-2" class="section level2 hasAnchor" number="5.6">
-<h2><span class="header-section-number">5.6</span> Lab<a href="markov-chain-monte-carlo.html#lab-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="lab-2" class="section level2 hasAnchor" number="5.7">
+<h2><span class="header-section-number">5.7</span> Lab<a href="markov-chain-monte-carlo.html#lab-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-80" class="exercise"><strong>Exercise 5.1  </strong></span>You observe the following draws from a Binomial distribution with 25 trials and probability of success <span class="math inline">\(p\)</span>.</p>
+<p><span id="exr:unlabeled-div-81" class="exercise"><strong>Exercise 5.1  </strong></span>You observe the following draws from a Binomial distribution with 25 trials and probability of success <span class="math inline">\(p\)</span>.</p>
 <pre><code>y &lt;- c(20, 16, 20, 17, 18, 19, 19, 18, 21, 20, 19, 22, 23, 19, 20, 19, 21, 20, 25, 15)</code></pre>
 <p>Use a normal prior distribution with mean 0.5 and variance <span class="math inline">\(0.1^2\)</span>. Write a Metropolis-Hastings Random Walk algorithm to obtain samples from the posterior distribution (you can use R’s built in function for the likelihood function and prior distribution, but if you don’t take logs you will run into small number errors).</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-81" class="exercise"><strong>Exercise 5.2  </strong></span>In a medical trial, to investigate the proportion <span class="math inline">\(p\)</span> of the population who have a particular disease a random sample of 20 individuals is taken. Ten of these are subject to a diagnostic test (Test A) which detects the disease when it is present with 100% certainty. The remaining 10 are given a test (test B) which only detects the disease with probability 0.8 when it is present. Neither test can give a false positive result. before collecting the data your prior belief about <span class="math inline">\(p\)</span> is represented by a U(0,1) distribution. Suppose that, for Test A, 5 out of 10 test positive while for test B, 3 out of 10 test positive. Use an MCMC algorithm to investigate the posterior density of <span class="math inline">\(p\)</span> and estimate its posterior mean and variance.</p>
+<p><span id="exr:unlabeled-div-82" class="exercise"><strong>Exercise 5.2  </strong></span>In a medical trial, to investigate the proportion <span class="math inline">\(p\)</span> of the population who have a particular disease a random sample of 20 individuals is taken. Ten of these are subject to a diagnostic test (Test A) which detects the disease when it is present with 100% certainty. The remaining 10 are given a test (test B) which only detects the disease with probability 0.8 when it is present. Neither test can give a false positive result. before collecting the data your prior belief about <span class="math inline">\(p\)</span> is represented by a U(0,1) distribution. Suppose that, for Test A, 5 out of 10 test positive while for test B, 3 out of 10 test positive. Use an MCMC algorithm to investigate the posterior density of <span class="math inline">\(p\)</span> and estimate its posterior mean and variance.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-82" class="exercise"><strong>Exercise 5.3  </strong></span>Code up an MCMC algorithm for Example 3.5 using Gibbs samplers.</p>
+<p><span id="exr:unlabeled-div-83" class="exercise"><strong>Exercise 5.3  </strong></span>Code up an MCMC algorithm for Example 3.5 using Gibbs samplers.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-83" class="exercise"><strong>Exercise 5.4  </strong></span>The density function for the inverse-gamma distribution is
+<p><span id="exr:unlabeled-div-84" class="exercise"><strong>Exercise 5.4  </strong></span>The density function for the inverse-gamma distribution is
 <span class="math display">\[
 \pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta/x}
 \]</span>
