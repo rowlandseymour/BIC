@@ -192,8 +192,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="5.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#properties-of-markov-chains"><i class="fa fa-check"></i><b>5.1</b> Properties of Markov Chains</a></li>
 <li class="chapter" data-level="5.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#metropolis-hastings"><i class="fa fa-check"></i><b>5.2</b> Metropolis-Hastings</a></li>
-<li class="chapter" data-level="5.5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#beyond-mcmc"><i class="fa fa-check"></i><b>5.5</b> Beyond MCMC</a></li>
-<li class="chapter" data-level="5.6" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.6</b> Lab</a></li>
+<li class="chapter" data-level="5.6" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#beyond-mcmc"><i class="fa fa-check"></i><b>5.6</b> Beyond MCMC</a></li>
+<li class="chapter" data-level="5.7" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.7</b> Lab</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
 <ul>
@@ -277,15 +277,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>A GP takes this one step further and puts a prior distribution on a function space. It is specified by a mean function, <span class="math inline">\(\mu(\cdot)\)</span> and covariance function <span class="math inline">\(k(\cdot, \cdot)\)</span>. The mean function describes the expected value of each point the function can be evaluated at, and the covariance function describes the relationship between each point on the function. The plot below shows three samples from a GP distribution with mean function the zero function <span class="math inline">\(\mu(x) = 0\, \forall x\)</span> and a covariance function that supports smooth functions.</p>
 <p><img src="_main_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
 <div class="definition">
-<p><span id="def:unlabeled-div-84" class="definition"><strong>Definition 6.1  </strong></span>A <strong>Gaussian Process</strong> is a collection of random variables, any finite number of which have a joint Gaussian distribution.</p>
+<p><span id="def:unlabeled-div-85" class="definition"><strong>Definition 6.1  </strong></span>A <strong>Gaussian Process</strong> is a collection of random variables, any finite number of which have a joint Gaussian distribution.</p>
 </div>
 <p>This says that is we think of a function as an infinite collection of points, then if any finite subset of those points following a Gaussian distribution, we have a Gaussian process. In reality, we set up the function so that is meets this definition. More formally,</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-85" class="definition"><strong>Definition 6.2  </strong></span>A <strong>GP distribution on a function <span class="math inline">\(f(x)\)</span></strong> is defined through its mean function <span class="math inline">\(\mu(x) = \mathbb{E}(x)\)</span> and covariance function <span class="math inline">\(k(x, x&#39;) = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x&#39;) - \mu(x&#39;))\right)\)</span>. We write it as <span class="math inline">\(f(x) \sim \mathcal{GP}(\mu(x), k(x, x&#39;))\)</span>.</p>
+<p><span id="def:unlabeled-div-86" class="definition"><strong>Definition 6.2  </strong></span>A <strong>GP distribution on a function <span class="math inline">\(f(x)\)</span></strong> is defined through its mean function <span class="math inline">\(\mu(x) = \mathbb{E}(x)\)</span> and covariance function <span class="math inline">\(k(x, x&#39;) = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x&#39;) - \mu(x&#39;))\right)\)</span>. We write it as <span class="math inline">\(f(x) \sim \mathcal{GP}(\mu(x), k(x, x&#39;))\)</span>.</p>
 </div>
 <p>Before we go any further, it is worth proceeding with caution. Those with good memories will recall Bernstein-von-Mises’ theorem from Chapter 3.</p>
 <div class="theorem">
-<p><span id="thm:unlabeled-div-86" class="theorem"><strong>Theorem 6.1  (Bernstein-von-Mises) </strong></span>For a well-specified model <span class="math inline">\(\pi(\boldsymbol{y} \mid \theta)\)</span> with a fixed number of parameters, and for a smooth prior distribution <span class="math inline">\(\pi(\theta)\)</span> that is non-zero around the MLE <span class="math inline">\(\hat{\theta}\)</span>, then
+<p><span id="thm:unlabeled-div-87" class="theorem"><strong>Theorem 6.1  (Bernstein-von-Mises) </strong></span>For a well-specified model <span class="math inline">\(\pi(\boldsymbol{y} \mid \theta)\)</span> with a fixed number of parameters, and for a smooth prior distribution <span class="math inline">\(\pi(\theta)\)</span> that is non-zero around the MLE <span class="math inline">\(\hat{\theta}\)</span>, then
 <span class="math display">\[
 \left|\left| \pi(\theta \mid \boldsymbol{y}) - N\left(\hat{\theta}, \frac{I(\hat{\theta})^{-1}}{n}\right) \right|\right|_{TV} \rightarrow 0.
 \]</span></p>
@@ -296,7 +296,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>One issue when using GPs is describing the covariance function. How do we decide how each pair of points (there being an infinite number of them)? There are lots of standard choices of covariance functions that we can choose from, each one making different assumptions about the function we are interested in.</p>
 <p>The most common covariance function is the squared exponential functions. It is used to model functions that are ‘nice’, i.e. they are smooth, continuous and infinitely differentiable.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-87" class="definition"><strong>Definition 6.3  </strong></span>The <strong>squared exponential covariance function</strong> takes the form
+<p><span id="def:unlabeled-div-88" class="definition"><strong>Definition 6.3  </strong></span>The <strong>squared exponential covariance function</strong> takes the form
 <span class="math display">\[
 k(x, x&#39;) = \alpha^2\exp\left\{-\frac{1}{l}(x-x&#39;)^2\right\},
 \]</span>
@@ -307,53 +307,53 @@ where <span class="math inline">\(\alpha^2\)</span> is the signal variance and <
 <p>The covariance is highest when the <span class="math inline">\(x\)</span> is near to 0, i.e. the points are immediately next to each other. If the value of <span class="math inline">\(x\)</span> is <span class="math inline">\(\pm 2\)</span>, the covariance is 0. As we are dealing with a joint normal distribution, a covariance of 0 implies independence. So with this covariance function, the value of <span class="math inline">\(f(x)\)</span> is independent of <span class="math inline">\(f(0)\)</span> if <span class="math inline">\(|x|\)</span> is larger than about two. The parameter <span class="math inline">\(l\)</span> is called the length scale parameter and dictates how quickly the covariance decays. Small values of <span class="math inline">\(l\)</span> mean that the value of the function at nearby points are independent of each other, resulting in functions that look like white noise. Large values of <span class="math inline">\(l\)</span> mean that even if points are far away, they are still highly dependent on each other. This gives very flat functions.</p>
 <p>The choice of covariance function is a modelling choice – it depends completely on the data generating process you are trying to model. The following properties are useful when deciding which covariance function to use.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-88" class="definition"><strong>Definition 6.4  </strong></span>A <strong>stationary</strong> covariance function is a function of <span class="math inline">\(\boldsymbol{x} - \boldsymbol{x}&#39;\)</span>. That means it is invariant to translations in space.</p>
+<p><span id="def:unlabeled-div-89" class="definition"><strong>Definition 6.4  </strong></span>A <strong>stationary</strong> covariance function is a function of <span class="math inline">\(\boldsymbol{x} - \boldsymbol{x}&#39;\)</span>. That means it is invariant to translations in space.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-89" class="definition"><strong>Definition 6.5  </strong></span>An <strong>isotropic</strong> covariance function is a function only of <span class="math inline">\(|\boldsymbol{x} - \boldsymbol{x}&#39;|\)</span>. That means it is invariant to rigid translations in space.</p>
+<p><span id="def:unlabeled-div-90" class="definition"><strong>Definition 6.5  </strong></span>An <strong>isotropic</strong> covariance function is a function only of <span class="math inline">\(|\boldsymbol{x} - \boldsymbol{x}&#39;|\)</span>. That means it is invariant to rigid translations in space.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-90" class="definition"><strong>Definition 6.6  </strong></span>An <strong>dot product</strong> covariance function is a function only of <span class="math inline">\(\boldsymbol{x}\cdot\boldsymbol{x}&#39;\)</span>. That means it is invariant to rigid rotations in space, but not translations.</p>
+<p><span id="def:unlabeled-div-91" class="definition"><strong>Definition 6.6  </strong></span>An <strong>dot product</strong> covariance function is a function only of <span class="math inline">\(\boldsymbol{x}\cdot\boldsymbol{x}&#39;\)</span>. That means it is invariant to rigid rotations in space, but not translations.</p>
 </div>
 <p>What is most important is that the matrix resulting from a covariance function is positive semi-definite. This is because covariance matrices must be positive semi-definite.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-91" class="definition"><strong>Definition 6.7  </strong></span>An <span class="math inline">\(N \times N\)</span> matrix <span class="math inline">\(\Sigma\)</span> is positive semi-definite if it is symmetric and
+<p><span id="def:unlabeled-div-92" class="definition"><strong>Definition 6.7  </strong></span>An <span class="math inline">\(N \times N\)</span> matrix <span class="math inline">\(\Sigma\)</span> is positive semi-definite if it is symmetric and
 <span class="math display">\[
 \boldsymbol{x}^T\Sigma\boldsymbol{x} \geq 0 \quad \hbox{for all } \boldsymbol{x} \in \mathbb{R}^N.
 \]</span></p>
 </div>
 <p>The squared exponential covariance function is isotropic and produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don’t produce functions that are continuous or differentiable. Three4 more are given below.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-92" class="definition"><strong>Definition 6.8  </strong></span>The <strong>M'atern</strong> covariance function models functions that are differentiable only once:
+<p><span id="def:unlabeled-div-93" class="definition"><strong>Definition 6.8  </strong></span>The <strong>M'atern</strong> covariance function models functions that are differentiable only once:
 <span class="math display">\[
 k(x, x&#39;) = \left(1 + \frac{\sqrt{3}(x - x&#39;)^2}{l} \right)\exp\left\{-\frac{\sqrt{3}(x - x&#39;)^2}{l} \right\}.
 \]</span></p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-93" class="definition"><strong>Definition 6.9  </strong></span>The <strong>periodic</strong> covariance function models functions that are periodic and it is given by
+<p><span id="def:unlabeled-div-94" class="definition"><strong>Definition 6.9  </strong></span>The <strong>periodic</strong> covariance function models functions that are periodic and it is given by
 <span class="math display">\[
 k(x, x&#39;) = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x&#39;)^2}{p} \right\},
 \]</span>
 where the period is <span class="math inline">\(p\)</span>.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-94" class="definition"><strong>Definition 6.10  </strong></span>The <strong>dot product</strong> covariance function models functions that are rotationally invariant and it is given by
+<p><span id="def:unlabeled-div-95" class="definition"><strong>Definition 6.10  </strong></span>The <strong>dot product</strong> covariance function models functions that are rotationally invariant and it is given by
 <span class="math display">\[
 k(x, x&#39;) = \alpha^2 + x\cdot x&#39;.
 \]</span></p>
 </div>
 <p>These are just some covariance functions. In addition to the covariance functions defined, we can make new covariance funcitons by combining existing ones.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-95" class="proposition"><strong>Proposition 6.1  </strong></span>If <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> are covariance functions, then so is <span class="math inline">\(k_1 + k_2\)</span>.</p>
+<p><span id="prp:unlabeled-div-96" class="proposition"><strong>Proposition 6.1  </strong></span>If <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> are covariance functions, then so is <span class="math inline">\(k_1 + k_2\)</span>.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-96" class="proof"><em>Proof</em>. </span>Let <span class="math inline">\(f_1\)</span> be a function with covariance function <span class="math inline">\(k_1\)</span> and <span class="math inline">\(f_2\)</span> be a function with covariance function <span class="math inline">\(k_2\)</span>, then <span class="math inline">\(f = f_1 + f_2\)</span> has covariance function <span class="math inline">\(k_1 + k_2\)</span>.</p>
+<p><span id="unlabeled-div-97" class="proof"><em>Proof</em>. </span>Let <span class="math inline">\(f_1\)</span> be a function with covariance function <span class="math inline">\(k_1\)</span> and <span class="math inline">\(f_2\)</span> be a function with covariance function <span class="math inline">\(k_2\)</span>, then <span class="math inline">\(f = f_1 + f_2\)</span> has covariance function <span class="math inline">\(k_1 + k_2\)</span>.</p>
 </div>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-97" class="proposition"><strong>Proposition 6.2  </strong></span>If <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> are covariance functions, then so is <span class="math inline">\(k_1k_2\)</span>.</p>
+<p><span id="prp:unlabeled-div-98" class="proposition"><strong>Proposition 6.2  </strong></span>If <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> are covariance functions, then so is <span class="math inline">\(k_1k_2\)</span>.</p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-98" class="proof"><em>Proof</em>. </span>See problem sheet.</p>
+<p><span id="unlabeled-div-99" class="proof"><em>Proof</em>. </span>See problem sheet.</p>
 </div>
 </div>
 <div id="gaussian-process-regression" class="section level3 hasAnchor" number="6.1.2">
@@ -366,7 +366,7 @@ k(x, x&#39;) = \alpha^2 + x\cdot x&#39;.
 <p>One difficulty is writing down the design matrices <span class="math inline">\(X\)</span>, it is often not straightforward to propose or justify these forms GPs allow us to take a much less arbitrary approach, simply saying that <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span> and placing a GP prior distribution on <span class="math inline">\(f\)</span>.</p>
 <p>Although we’re placing an prior distribution with an infinite dimension on <span class="math inline">\(f\)</span>, we only ever need to work with a finite dimensional object, making this much easier. We only observe the function at finite number of points <span class="math inline">\(\boldsymbol{f} = \{f(x_1), \ldots, f(x_N)\}\)</span> and we will infer the value of the function at points on a fine grid, <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. By the definition of a GP, the distribution of these points is a multivariate normal distribution.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-99" class="example"><strong>Example 6.1  </strong></span>Suppose we observe <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> at <span class="math inline">\(\boldsymbol{x} = \{x_1, \ldots, x_N\}\)</span>. The plot below shows these points.</p>
+<p><span id="exm:unlabeled-div-100" class="example"><strong>Example 6.1  </strong></span>Suppose we observe <span class="math inline">\(\boldsymbol{y} = \{y_1, \ldots, y_N\}\)</span> at <span class="math inline">\(\boldsymbol{x} = \{x_1, \ldots, x_N\}\)</span>. The plot below shows these points.</p>
 <p><img src="_main_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
 <p>Using the model <span class="math inline">\(y_i = f(x_i) + \varepsilon_i\)</span>, where <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>, we want to infer the function <span class="math inline">\(f\)</span> evaluated at a gird of points <span class="math inline">\(\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}\)</span>. We place a GP prior distribution on <span class="math inline">\(f \sim \mathcal{GP}(0, k)\)</span>, where <span class="math inline">\(k\)</span> is the squared exponential covariance function. Using the model, the covariance between points <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span> is
 <span class="math display">\[
@@ -406,10 +406,10 @@ The posterior mean for <span class="math inline">\(f\)</span> is a smooth line p
 <p>The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data. It allows us to treat the missing data points as random variables and infer the data points alongside the model parameters. This provides us with a method to quantify the uncertainty around our estimates of the missing data points.</p>
 <p>In data augmentation, we distinguish between two likelihood functions.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-100" class="definition"><strong>Definition 6.11  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
+<p><span id="def:unlabeled-div-101" class="definition"><strong>Definition 6.11  </strong></span>The <strong>observed data likelihood function</strong> is the likelihood function of the observed data.</p>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-101" class="definition"><strong>Definition 6.12  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
+<p><span id="def:unlabeled-div-102" class="definition"><strong>Definition 6.12  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
 </div>
 <p>The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn’t fully observe, we can’t compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, where the outcome of <span class="math inline">\(X\)</span> is observed and <span class="math inline">\(Y\)</span> unobserved. The complete data likelihood is <span class="math inline">\(pi(X = x, Y = y)\)</span> because we are considering all the events, observed or not. However, we can only compute <span class="math inline">\(\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)\)</span> or <span class="math inline">\(\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)\)</span>, since <span class="math inline">\(y\)</span> is unobserved.</p>
 <p>In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function.</p>
@@ -417,7 +417,7 @@ The posterior mean for <span class="math inline">\(f\)</span> is a smooth line p
 <h3><span class="header-section-number">6.2.1</span> Imputing censored observations<a href="advanced-computation.html#imputing-censored-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first example we will look at is when data is censored. Instead of throwing away these observations, we will instead treat them as random variables and infer their values.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-102" class="example"><strong>Example 6.2  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
+<p><span id="exm:unlabeled-div-103" class="example"><strong>Example 6.2  </strong></span>A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by <span class="math inline">\(p\)</span> and the number of suspicious transactions in a batch by <span class="math inline">\(Y\)</span>.</p>
 <p>The bank checks five batches and observes <span class="math inline">\(y_1, \ldots, y_4\)</span> suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6.</p>
 <p>The observed data likelihood functions is
 <span class="math display">\[
@@ -450,7 +450,7 @@ We can use a Gibbs sampler alternating between sampling <span class="math inline
 </div>
 <p>A mixture model is an example of latent variables being useful.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-103" class="example"><strong>Example 6.3  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
+<p><span id="exm:unlabeled-div-104" class="example"><strong>Example 6.3  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
 <p>Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.</p>
 <p><img src="postcode.jpeg" /><!-- -->
 The scanned image is a 10 by 10 grid of pixels, where the number of pixels coloured black of the <span class="math inline">\(i^{th}\)</span> image is <span class="math inline">\(Y_i \sim \hbox{Bin}(100, \theta)\)</span>. However, <span class="math inline">\(\theta\)</span> depends on if the letter is going to B1 or B2. To allow for this, we introduce a latent variable <span class="math inline">\(z_i \sim \hbox{Bernoulli}(p)\)</span> that describes if the characters on the <span class="math inline">\(i^{th}\)</span> image are B1 or B2. The observation <span class="math inline">\(y_i\)</span> is the number of pixels of the <span class="math inline">\(i^{th}\)</span> image that is taken up by the characters. We observe <span class="math inline">\(y_i\)</span>, but want to estimate <span class="math inline">\(z_i\)</span>. The difficultly is there lack of one-to-one correspondence between the values <span class="math inline">\(y_i\)</span> can take and the value <span class="math inline">\(z_i\)</span>. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 (<span class="math inline">\(Z = 1\)</span>), then <span class="math inline">\(Y_i \sim \hbox{Bin}(100, \theta_1)\)</span> and if it is going to B2 (<span class="math inline">\(Z = 2\)</span>), then <span class="math inline">\(Y_i \sim \hbox{Bin}(100, \theta_2)\)</span>. The plot below shows the two densities and the overlap between them for <span class="math inline">\(p_1 = 0.9\)</span> and <span class="math inline">\(p_2 = 0.85\)</span>.</p>
@@ -519,14 +519,14 @@ The full conditional distribution is therefore <span class="math inline">\(z_i \
 <h2><span class="header-section-number">6.3</span> Approximate Bayesian Computation<a href="advanced-computation.html#approximate-bayesian-computation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>So far, we have always considered models where the likelihood function is easy to work with. By easy, we mean that we can evaluate the likelihood function for lots of different values, and we can evaluate it cheaply. In some cases, it might not be possible to write down the likelihood function, or it might not be possible to evaluate it. In these cases, we refer to methods call <strong>likelihood free inference</strong>.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-104" class="example"><strong>Example 6.4  </strong></span>Models to predict the weather are notoriously complex. They contain a huge number of parameters, and sometimes it is not possible to write this model down exactly. In cases where the likelihood function for the weather model can be written down, we would have to start the MCMC algorithm from scratch every time we collected new data.</p>
+<p><span id="exm:unlabeled-div-105" class="example"><strong>Example 6.4  </strong></span>Models to predict the weather are notoriously complex. They contain a huge number of parameters, and sometimes it is not possible to write this model down exactly. In cases where the likelihood function for the weather model can be written down, we would have to start the MCMC algorithm from scratch every time we collected new data.</p>
 </div>
 <p>Approximate Bayesian Computation (ABC) is a likelihood free algorithm that relies on reject sampling from the prior distribution. When constructing an ABC algorithm, we only need to be able to generate data given a parameter value and not evaluate the likelihood of seeing specific data given a parameter value.</p>
 <p>We are going to look at two types of ABC. The first is ABC with rejection</p>
 <div id="abc-with-rejection" class="section level3 hasAnchor" number="6.3.1">
 <h3><span class="header-section-number">6.3.1</span> ABC with Rejection<a href="advanced-computation.html#abc-with-rejection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="definition">
-<p><span id="def:unlabeled-div-105" class="definition"><strong>Definition 6.13  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Approximate Bayesian Computation algorithm with rejection</p>
+<p><span id="def:unlabeled-div-106" class="definition"><strong>Definition 6.13  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Approximate Bayesian Computation algorithm with rejection</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value for the parameter <span class="math inline">\(\theta^*\)</span> from the prior distribution <span class="math inline">\(\pi(\theta)\)</span>.</li>
 <li>Generate some data <span class="math inline">\(y*\)</span> from the data generating process using the parameter value <span class="math inline">\(\theta^*\)</span>.</li>
@@ -535,14 +535,14 @@ The full conditional distribution is therefore <span class="math inline">\(z_i \
 </ol>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-106" class="definition"><strong>Definition 6.14  </strong></span>The approximate posterior distribution using ABC with rejection is
+<p><span id="def:unlabeled-div-107" class="definition"><strong>Definition 6.14  </strong></span>The approximate posterior distribution using ABC with rejection is
 <span class="math display">\[
 \pi_\varepsilon(\theta \mid y) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
 \]</span>
 where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&lt; \varepsilon\}\)</span>.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-107" class="example"><strong>Example 6.5  </strong></span>This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe <span class="math inline">\(Y_1, \ldots, y_510\sim Beta(3, \beta)\)</span>. We place a uniform prior on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim U[0, 5]\)</span>. The ABC algorithm with rejection works as follows:</p>
+<p><span id="exm:unlabeled-div-108" class="example"><strong>Example 6.5  </strong></span>This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe <span class="math inline">\(Y_1, \ldots, y_510\sim Beta(3, \beta)\)</span>. We place a uniform prior on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim U[0, 5]\)</span>. The ABC algorithm with rejection works as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value <span class="math inline">\(\beta^* \sim U[0, 5]\)</span>.</li>
 <li>Simulate <span class="math inline">\(y^*_1, \ldots, y^*_10 \sim Beta(3,\beta^*)\)</span></li>
@@ -598,7 +598,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&
 </div>
 <p>One important question is how to choose the value for <span class="math inline">\(\varepsilon\)</span>? It turns out this is an incredibly hard question that is specific to each application. Often the approximate posterior distribution <span class="math inline">\(\pi_\varepsilon(\theta \mid y)\)</span> is very sensitive to the choice of <span class="math inline">\(\varepsilon\)</span>.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-108" class="example"><strong>Example 6.6  </strong></span>Let’s repeat the example, first with <span class="math inline">\(\varepsilon = 0.12\)</span>. In this case, almost all of the proposals are rejected.</p>
+<p><span id="exm:unlabeled-div-109" class="example"><strong>Example 6.6  </strong></span>Let’s repeat the example, first with <span class="math inline">\(\varepsilon = 0.12\)</span>. In this case, almost all of the proposals are rejected.</p>
 <div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="advanced-computation.html#cb112-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
 <span id="cb112-2"><a href="advanced-computation.html#cb112-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb112-3"><a href="advanced-computation.html#cb112-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
@@ -646,7 +646,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&
 ## 1.181349 2.587056</code></pre>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-109" class="example"><strong>Example 6.7  </strong></span>And now again with <span class="math inline">\(\varepsilon = 2\)</span>. In this case, almost all of the proposals are accepted.</p>
+<p><span id="exm:unlabeled-div-110" class="example"><strong>Example 6.7  </strong></span>And now again with <span class="math inline">\(\varepsilon = 2\)</span>. In this case, almost all of the proposals are accepted.</p>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="advanced-computation.html#cb121-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
 <span id="cb121-2"><a href="advanced-computation.html#cb121-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb121-3"><a href="advanced-computation.html#cb121-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
@@ -695,7 +695,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&
 <p>When <span class="math inline">\(\varepsilon = 0.12\)</span>, almost all the proposals are rejected. Although the approximate posterior mean is close to the true value, given we only have 7 samples we cannot say much about the posterior distribution. When <span class="math inline">\(\varepsilon = 2\)</span>, almost all the proposals are accepted. This histogram shows that we are really just sampling from the prior distribution, i.e. <span class="math inline">\(\pi_2(\beta \mid y) \approx \pi(\beta)\)</span>.</p>
 </div>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-110" class="proposition"><strong>Proposition 6.3  </strong></span>Using an ABC rejection algorithm
+<p><span id="prp:unlabeled-div-111" class="proposition"><strong>Proposition 6.3  </strong></span>Using an ABC rejection algorithm
 <span class="math display">\[
 \lim_{\varepsilon \rightarrow \infty} \pi_\varepsilon(\theta \mid y) \overset{D}= \pi(\theta),
 \]</span>
@@ -705,11 +705,11 @@ and
 \]</span></p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-111" class="proof"><em>Proof</em>. </span>See problem sheet.</p>
+<p><span id="unlabeled-div-112" class="proof"><em>Proof</em>. </span>See problem sheet.</p>
 </div>
 <p>This example and the proposition show that if we set <span class="math inline">\(\varepsilon\)</span> too large, we don’t learn anything about <span class="math inline">\(\theta\)</span>, we just recover the data. The smaller the value of <span class="math inline">\(\varepsilon\)</span>, the better. But very small values may require very long run times, or have such few samples that the noise from the sampling generator is larger than the signal in the accepted samples. The only diagnostic tools we have are the proportion of samples accepted and the histograms of the approximate posterior and prior distributions.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-112" class="example"><strong>Example 6.8  </strong></span>An example of where this is useful is epidemic modelling. Suppose we have a population of 100 individuals and at each time point an individual is Susceptible to a disease, Infected with the disease, or Recovered and therefore immune. Once infected with the disease, an individual infects people according to a Poisson process with rate <span class="math inline">\(\beta\)</span>. Each infected person is infected from a time period drawn from an Exponential distribution with rate <span class="math inline">\(1\)</span>. We observe the total number of people infected with the disease at the end of the outbreak. To carry out inference for the infection rate <span class="math inline">\(\beta\)</span>, we need to use the augmented likelihood function The augmented likelihood function for this model is given by</p>
+<p><span id="exm:unlabeled-div-113" class="example"><strong>Example 6.8  </strong></span>An example of where this is useful is epidemic modelling. Suppose we have a population of 100 individuals and at each time point an individual is Susceptible to a disease, Infected with the disease, or Recovered and therefore immune. Once infected with the disease, an individual infects people according to a Poisson process with rate <span class="math inline">\(\beta\)</span>. Each infected person is infected from a time period drawn from an Exponential distribution with rate <span class="math inline">\(1\)</span>. We observe the total number of people infected with the disease at the end of the outbreak. To carry out inference for the infection rate <span class="math inline">\(\beta\)</span>, we need to use the augmented likelihood function The augmented likelihood function for this model is given by</p>
 <p><span class="math display">\[
 \pi(\textbf{i}, \textbf{r}| \beta) \propto \underbrace{\exp\Big(- \sum\limits_{j=1}^n\sum\limits_{k=1}^N \beta\big((r_j \wedge i_k) - (i_j \wedge i_k)\big)\Big)}_\text{Avoiding infection} \\
 \times\hspace{1.8cm} \underbrace{\prod\limits_{\substack{j=1 \\ j \neq \kappa}}^n\Big(\sum\limits_{k \in \mathcal{Y}_j} \beta\Big)}_\text{Becoming infectious}  \\
@@ -807,11 +807,11 @@ This likelihood function cannot be evaluated as we do not observe the infection 
 <h3><span class="header-section-number">6.3.2</span> Summary ABC with Rejection<a href="advanced-computation.html#summary-abc-with-rejection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>ABC with rejection suffers from the curse of dimensionality (see Chapter 5). As the number of data points increases, the probability we get a ‘close’ match decreases. This means we have to increase <span class="math inline">\(\varepsilon\)</span> and degrade the quality of our approximation.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-113" class="example"><strong>Example 6.9  </strong></span>Let’s repeat the Beta example with <span class="math inline">\(n = 200\)</span> observed data points. We need <span class="math inline">\(\varepsilon &gt; 15\)</span> for any proposals to be accepted.</p>
+<p><span id="exm:unlabeled-div-114" class="example"><strong>Example 6.9  </strong></span>Let’s repeat the Beta example with <span class="math inline">\(n = 200\)</span> observed data points. We need <span class="math inline">\(\varepsilon &gt; 15\)</span> for any proposals to be accepted.</p>
 </div>
 <p>We can avoid the curse of dimensionality by comparing summary statistics instead. This leads us to the Summary ABC algorithm.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-114" class="definition"><strong>Definition 6.15  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Summary Approximate Bayesian Computation algorithm with rejection</p>
+<p><span id="def:unlabeled-div-115" class="definition"><strong>Definition 6.15  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Summary Approximate Bayesian Computation algorithm with rejection</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value for the parameter <span class="math inline">\(\theta^*\)</span> from the prior distribution <span class="math inline">\(\pi(\theta)\)</span>.</li>
 <li>Generate some data <span class="math inline">\(y*\)</span> from the data generating process using the parameter value <span class="math inline">\(\theta^*\)</span>.</li>
@@ -821,7 +821,7 @@ This likelihood function cannot be evaluated as we do not observe the infection 
 </div>
 <p>Similar to the ABC algorithm with rejection, we also have the following proposition.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-115" class="proposition"><strong>Proposition 6.4  </strong></span>The approximate posterior distribution using ABC with rejection is
+<p><span id="prp:unlabeled-div-116" class="proposition"><strong>Proposition 6.4  </strong></span>The approximate posterior distribution using ABC with rejection is
 <span class="math display">\[
 \pi_\varepsilon(\theta \mid S(y)) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
 \]</span>
@@ -829,17 +829,17 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (
 </div>
 <p>Using summary statistics only increases the approximation however, as we are approximating the data using a summary of it. The only case when we are not approximating further is when the statistic contains all the information about the underlying sample it is summarising. This is known as a sufficient statistic.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-116" class="definition"><strong>Definition 6.16  </strong></span>A statistic <span class="math inline">\(S\)</span> is a sufficient statistic for the parameter <span class="math inline">\(\theta\)</span> if the conditional distribution <span class="math inline">\(\pi(y | S(y))\)</span> does not depend on <span class="math inline">\(\theta\)</span>.</p>
+<p><span id="def:unlabeled-div-117" class="definition"><strong>Definition 6.16  </strong></span>A statistic <span class="math inline">\(S\)</span> is a sufficient statistic for the parameter <span class="math inline">\(\theta\)</span> if the conditional distribution <span class="math inline">\(\pi(y | S(y))\)</span> does not depend on <span class="math inline">\(\theta\)</span>.</p>
 </div>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-117" class="proposition"><strong>Proposition 6.5  </strong></span>Using a Summary ABC rejection algorithm with a sufficient statistic <span class="math inline">\(S\)</span>
+<p><span id="prp:unlabeled-div-118" class="proposition"><strong>Proposition 6.5  </strong></span>Using a Summary ABC rejection algorithm with a sufficient statistic <span class="math inline">\(S\)</span>
 <span class="math display">\[
 \lim_{\varepsilon \rightarrow 0} \pi_\varepsilon(\theta \mid S(y)) \overset{D}= \pi(\theta \mid y).
 \]</span></p>
 </div>
 <p>The difficulty with sufficient statistics is that they only exist for ‘nice’ distributions, like the Gamma, Beta and Poisson distributions. In these cases, we can work with the posterior distribution directly or use and MCMC algorithm.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-118" class="example"><strong>Example 6.10  </strong></span>Let’s repeat the beta distribution example using the mean as the summary statistic. We can set <span class="math inline">\(\varepsilon = 0.001\)</span>.</p>
+<p><span id="exm:unlabeled-div-119" class="example"><strong>Example 6.10  </strong></span>Let’s repeat the beta distribution example using the mean as the summary statistic. We can set <span class="math inline">\(\varepsilon = 0.001\)</span>.</p>
 <div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="advanced-computation.html#cb137-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb137-2"><a href="advanced-computation.html#cb137-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
 <span id="cb137-3"><a href="advanced-computation.html#cb137-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
@@ -884,7 +884,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (
 <div id="gaussian-processes-1" class="section level3 hasAnchor" number="6.4.1">
 <h3><span class="header-section-number">6.4.1</span> Gaussian Processes<a href="advanced-computation.html#gaussian-processes-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-119" class="exercise"><strong>Exercise 6.1  </strong></span>Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use</p>
+<p><span id="exr:unlabeled-div-120" class="exercise"><strong>Exercise 6.1  </strong></span>Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use</p>
 <div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="advanced-computation.html#cb144-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb144-2"><a href="advanced-computation.html#cb144-2" tabindex="-1"></a>y <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="fl">3.0942822</span>, <span class="fl">3.0727920</span>, <span class="fl">2.6137341</span>, <span class="fl">1.8818820</span>, <span class="fl">1.2746738</span>, <span class="fl">1.2532116</span>, <span class="fl">1.4620830</span>, <span class="fl">1.4194647</span>, <span class="fl">1.6786969</span>, <span class="fl">1.1057042</span>, <span class="fl">0.4118125</span>)</span></code></pre></div>
 <p>with <span class="math inline">\(\sigma^2 = 0.2\)</span>.To draw samples from the multivariate normal distribution with mean vector <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance matrix <span class="math inline">\(\Sigma\)</span> use</p>
@@ -896,10 +896,10 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (
 <span id="cb145-6"><a href="advanced-computation.html#cb145-6" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-120" class="exercise"><strong>Exercise 6.2  </strong></span>Repeat Exercise 6.1, but this time set the fine grid to be <span class="math inline">\(\boldsymbol{x}^* = \{-5, -4.9, -4.8, \ldots, 9.8, 9.9, 10\}\)</span>. What happens to the posterior distribution after <span class="math inline">\(x^* = 5\)</span>?</p>
+<p><span id="exr:unlabeled-div-121" class="exercise"><strong>Exercise 6.2  </strong></span>Repeat Exercise 6.1, but this time set the fine grid to be <span class="math inline">\(\boldsymbol{x}^* = \{-5, -4.9, -4.8, \ldots, 9.8, 9.9, 10\}\)</span>. What happens to the posterior distribution after <span class="math inline">\(x^* = 5\)</span>?</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-121" class="exercise"><strong>Exercise 6.3  </strong></span>You observe the following data</p>
+<p><span id="exr:unlabeled-div-122" class="exercise"><strong>Exercise 6.3  </strong></span>You observe the following data</p>
 <div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="advanced-computation.html#cb146-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb146-2"><a href="advanced-computation.html#cb146-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="fl">0.5</span><span class="sc">*</span>x) <span class="sc">+</span> <span class="fu">log</span>(x <span class="sc">+</span> <span class="dv">6</span>)</span>
 <span id="cb146-3"><a href="advanced-computation.html#cb146-3" tabindex="-1"></a>y</span></code></pre></div>
@@ -913,10 +913,10 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (
 <div id="missing-data" class="section level3 hasAnchor" number="6.4.2">
 <h3><span class="header-section-number">6.4.2</span> Missing Data<a href="advanced-computation.html#missing-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-122" class="exercise"><strong>Exercise 6.4  </strong></span>In Example 6.2, suppose the observed data is <span class="math inline">\(\{y_1, y_2, y_3, y_4\} = \{4, 4, 5 ,2\}\)</span>. Design and code an MCMC algorithm to generate samples from the posterior distribution for <span class="math inline">\(p\)</span> and <span class="math inline">\(y_5\)</span>.</p>
+<p><span id="exr:unlabeled-div-123" class="exercise"><strong>Exercise 6.4  </strong></span>In Example 6.2, suppose the observed data is <span class="math inline">\(\{y_1, y_2, y_3, y_4\} = \{4, 4, 5 ,2\}\)</span>. Design and code an MCMC algorithm to generate samples from the posterior distribution for <span class="math inline">\(p\)</span> and <span class="math inline">\(y_5\)</span>.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-123" class="exercise"><strong>Exercise 6.5  </strong></span>Suppose you manage a clinical trial. You administer a new drug to patients and record how many days until their symptoms are alleviated. You observe the times for the first 9 patients</p>
+<p><span id="exr:unlabeled-div-124" class="exercise"><strong>Exercise 6.5  </strong></span>Suppose you manage a clinical trial. You administer a new drug to patients and record how many days until their symptoms are alleviated. You observe the times for the first 9 patients</p>
 <div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="advanced-computation.html#cb149-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">33</span>,  <span class="dv">17</span>, <span class="dv">218</span>,   <span class="dv">3</span>,  <span class="dv">39</span>,   <span class="dv">3</span>,  <span class="dv">43</span>,  <span class="dv">14</span>,  <span class="dv">20</span>)</span></code></pre></div>
 <p>Patient 10 drops out of the trial on day 50 and at this point, their symptoms have not changed. They send an email on day 200 to say they no longer have any symptoms (i.e. <span class="math inline">\(x_i \in [50, \ldots, 200]\)</span>. Write down a model for this problem and derive the posterior distribution. Design and code an MCMC algorithm to generate samples from the posterior distribution for any model parameters and <span class="math inline">\(x_{10}\)</span>.</p>
 </div>
@@ -924,13 +924,13 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (
 <div id="approximate-bayesian-computation-1" class="section level3 hasAnchor" number="6.4.3">
 <h3><span class="header-section-number">6.4.3</span> Approximate Bayesian Computation<a href="advanced-computation.html#approximate-bayesian-computation-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-124" class="exercise"><strong>Exercise 6.6  </strong></span>You observe the following data from an <span class="math inline">\(N(5, \sigma^2)\)</span> distribution.</p>
+<p><span id="exr:unlabeled-div-125" class="exercise"><strong>Exercise 6.6  </strong></span>You observe the following data from an <span class="math inline">\(N(5, \sigma^2)\)</span> distribution.</p>
 <pre><code>-5.93,  33.12, -21.41, -12.42, -17.64,  -5.47, -27.95, -22.25, -20.40, -26.28, -24.57,  
 3.06,  44.28, 6.02, -21.14,  14.79, -15.10, 53.18,  38.61,   5.71</code></pre>
 <p>Use an Exp(0.1) prior distribution on <span class="math inline">\(\sigma^2\)</span> and develop a summary statistic ABC algorithm to draw samples from the approximate posterior distribution.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-125" class="exercise"><strong>Exercise 6.7  </strong></span>You observe the following data from an <span class="math inline">\(Exp(\lambda)\)</span> distribution.</p>
+<p><span id="exr:unlabeled-div-126" class="exercise"><strong>Exercise 6.7  </strong></span>You observe the following data from an <span class="math inline">\(Exp(\lambda)\)</span> distribution.</p>
 <pre><code>2.6863422, 8.8468112, 8.8781831, 0.2712696, 1.8902442</code></pre>
 <p>Use an <span class="math inline">\(Beta(1, 3)\)</span> prior distribution on <span class="math inline">\(\lambda\)</span> and develop an ABC algorithm to draw samples from the approximate posterior distribution. Write the ABC algorithm as a function so you can run it for different values of <span class="math inline">\(\varepsilon\)</span>. Run your algorithm for <span class="math inline">\(\varepsilon = \{20, \ldots, 100\}\)</span> and record the approximate posterior median. Plot the relative error in your estimate against the true value of lambda, which is 0.2.</p>
 </div>
