@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  20 FEB 2024 09:16
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  23 FEB 2024 09:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -466,11 +466,7 @@ Package: amsthm 2020/05/29 v2.20.6
 \c@example=\count327
 \c@exercise=\count328
 \c@hypothesis=\count329
-(./_main.aux
-
-LaTeX Warning: Label `exm:norm' multiply defined.
-
-)
+No file _main.aux.
 \openout1 = `_main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 142.
@@ -790,6 +786,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 142.
 LaTeX Info: Redefining \pageref on input line 142.
 LaTeX Info: Redefining \nameref on input line 142.
+
+Package hyperref Warning: Rerun to get /PageLabels entry.
+
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
 (Font)              scaled to size 12.0pt on input line 144.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
@@ -831,33 +830,33 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 
 ] [2
 
-] (./_main.toc
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 7.0pt on input line 2.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 2.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.00092pt on input line 2.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.00064pt on input line 2.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00046pt on input line 2.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 2.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 6.99925pt on input line 2.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 2.
-[3])
+]
 \tf@toc=\write4
 \openout4 = `_main.toc'.
 
-[4]
+[3] [4
+
+]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[5
-
-] [6] [7] [8]
+[5]
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 7.0pt on input line 250.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 5.0pt on input line 250.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 10.00092pt on input line 250.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 7.00064pt on input line 250.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 5.00046pt on input line 250.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 9.99893pt on input line 250.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 6.99925pt on input line 250.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 4.99947pt on input line 250.
+[6] [7] [8]
 Chapter 1.
 [9
 
@@ -1008,9 +1007,9 @@ Z[i]), type = []l[])[]
 Underfull \vbox (badness 3547) has occurred while \output is active []
 
 [23]
-Overfull \hbox (69.75pt too wide) in paragraph at lines 937--937
-[]\TU/lmtt/m/n/10 ##  [1]  0.14434204  0.52031944 -0.67704889 -0.95414435 -0.23
-405509 -0.22953957[] 
+Overfull \hbox (38.25pt too wide) in paragraph at lines 937--937
+[]\TU/lmtt/m/n/10 ##  [1]  0.5908597  0.3347177  0.1307710 -0.3455252 -0.634262
+9  0.2211001[] 
  []
 
 [24] [25]
@@ -1059,9 +1058,18 @@ File: _main_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [33]
+
+LaTeX Warning: Reference `exm:exponential' on page 34 undefined on input line 1
+359.
+
+
 Underfull \vbox (badness 1005) has occurred while \output is active []
 
-[34] [35]
+[34]
+
+LaTeX Warning: Reference `exm:binom' on page 35 undefined on input line 1401.
+
+[35]
 Overfull \hbox (27.9614pt too wide) detected at line 1415
 []
  []
@@ -1069,7 +1077,15 @@ Overfull \hbox (27.9614pt too wide) detected at line 1415
 [36]
 File: _main_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-14-1.pdf>
-[37] [38]
+[37]
+
+LaTeX Warning: Reference `exm:binom' on page 38 undefined on input line 1522.
+
+[38]
+
+LaTeX Warning: Reference `exm:binom' on page 39 undefined on input line 1555.
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 1555--1556
 
  []
@@ -1166,7 +1182,15 @@ File: _main_files/figure-latex/unnamed-chunk-31-2.pdf Graphic file (type pdf)
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[59] [60] [61] [62]
+[59]
+
+LaTeX Warning: Reference `def:Markov' on page 60 undefined on input line 2235.
+
+[60]
+
+LaTeX Warning: Reference `exm:King' on page 61 undefined on input line 2282.
+
+[61] [62]
 Underfull \hbox (badness 10000) in paragraph at lines 2393--2395
 
  []
@@ -1256,7 +1280,11 @@ File: _main_files/figure-latex/unnamed-chunk-38-5.pdf Graphic file (type pdf)
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[77] [78] [79] [80]
+[77] [78]
+
+LaTeX Warning: Reference `exm:norm' on page 79 undefined on input line 2964.
+
+[79] [80]
 File: _main_files/figure-latex/unnamed-chunk-39-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-39-1.pdf>
 
@@ -1359,82 +1387,74 @@ Overfull \hbox (35.59247pt too wide) detected at line 3457
  []
 
 [99] [100]
-Overfull \hbox (59.25pt too wide) in paragraph at lines 3569--3569
+Missing character: There is no ∣ (U+2223) in font [lmroman10-regular]:mapping=t
+ex-text;!
+[101] [102]
+Overfull \hbox (59.25pt too wide) in paragraph at lines 3648--3648
 []\TU/lmtt/m/n/10 ##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4
 677043 0.7339799[] 
  []
 
-[101]
 File: _main_files/figure-latex/unnamed-chunk-50-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-50-1.pdf>
-[102]
-Overfull \hbox (59.25pt too wide) in paragraph at lines 3660--3660
-[]\TU/lmtt/m/n/10 ##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4
-677043 0.7339799[] 
- []
-
-File: _main_files/figure-latex/unnamed-chunk-51-1.pdf Graphic file (type pdf)
-<use _main_files/figure-latex/unnamed-chunk-51-1.pdf>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [103]
-Overfull \hbox (59.25pt too wide) in paragraph at lines 3748--3748
+Overfull \hbox (59.25pt too wide) in paragraph at lines 3739--3739
 []\TU/lmtt/m/n/10 ##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4
 677043 0.7339799[] 
  []
 
 [104]
-File: _main_files/figure-latex/unnamed-chunk-52-1.pdf Graphic file (type pdf)
-<use _main_files/figure-latex/unnamed-chunk-52-1.pdf>
+File: _main_files/figure-latex/unnamed-chunk-51-1.pdf Graphic file (type pdf)
+<use _main_files/figure-latex/unnamed-chunk-51-1.pdf>
 [105]
-Overfull \hbox (154.77533pt too wide) detected at line 3846
-[][][][] [][][][] [] [] []  []  [] []  []  [] []
+Overfull \hbox (59.25pt too wide) in paragraph at lines 3827--3827
+[]\TU/lmtt/m/n/10 ##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4
+677043 0.7339799[] 
  []
 
 [106]
-Underfull \vbox (badness 10000) detected at line 3927
+File: _main_files/figure-latex/unnamed-chunk-52-1.pdf Graphic file (type pdf)
+<use _main_files/figure-latex/unnamed-chunk-52-1.pdf>
+[107]
+Overfull \hbox (154.77533pt too wide) detected at line 3925
+[][][][] [][][][] [] [] []  []  [] []  []  [] []
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[107]
+[108] [109]
 File: _main_files/figure-latex/unnamed-chunk-53-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-53-1.pdf>
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1014) has occurred while \output is active []
 
-[108] [109] [110]
+[110] [111]
 File: _main_files/figure-latex/unnamed-chunk-54-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-54-1.pdf>
-[111]
-Overfull \hbox (38.25pt too wide) in paragraph at lines 4143--4143
-[]\TU/lmtt/m/n/10 ##  [1] -0.8011436  0.2770003  1.1693495  1.9265967  2.487020
-5  2.7917595[] 
- []
 
-File: _main_files/figure-latex/unnamed-chunk-57-1.pdf Graphic file (type pdf)
-<use _main_files/figure-latex/unnamed-chunk-57-1.pdf>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 [112]
-Overfull \hbox (106.5pt too wide) in paragraph at lines 4184--4184
-[]\TU/lmtt/m/n/10 -5.93,  33.12, -21.41, -12.42, -17.64,  -5.47, -27.95, -22.25
-, -20.40, -26.28, -24.57,[] 
- []
+Underfull \vbox (badness 2452) has occurred while \output is active []
 
-No file _main.bbl.
-[113] (./_main.aux)
+[113] [114]
 
-LaTeX Warning: There were multiply-defined labels.
+! LaTeX Error: Bad math environment delimiter.
 
- ) 
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.4244 ...[b, c)\) and \(n_3\) for \(\theta \in \[
+                                                  c, d]\). From this we can ...
+ 
 Here is how much of TeX's memory you used:
- 19900 strings out of 476179
- 378525 string characters out of 5809544
- 853763 words of memory out of 5000000
- 40293 multiletter control sequences out of 15000+600000
+ 19824 strings out of 476179
+ 376861 string characters out of 5809544
+ 850379 words of memory out of 5000000
+ 40224 multiletter control sequences out of 15000+600000
  477227 words of font info for 98 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 86i,17n,121p,1264b,598s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-Output written on _main.pdf (113 pages).
+ 86i,17n,121p,1264b,597s stack positions out of 10000i,1000n,20000p,200000b,200000s
+Output written on _main.pdf (114 pages).
