@@ -1,59 +1,33 @@
-#The likelihood function is
-# \pi(p \mid x) \propto p^5(1-p)^5(0.8p)^3(1-0.8p)^7
-#Removing constants and combining terms gives
-# \pi(p \mid x) \propto p^8(1-p)^5(1-0.8p)^7, and
-# log\pi(p \mid x) \propto 8log(p) + 5log(1-p) + 7log(1-0.8p)
+lambda.store <- numeric(n.iter)
+gamma.store <- numeric(n.iter)
 
+lambda.current <- 5
+gamma.current <- 1
 
-# Function to evaluate loglikelihood --------------------------------------
-
-log.likelihood <- function(x, p){
-
-  log.value <- 8*log(p) + 5*log(1-p) + 7*log(1-0.8*p)
-
-  return(log.value)
-
-}
-
-# MCMC Sampler ------------------------------------------------------------
-
-#Initialise Values
-x <- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)
-n.iter <- 10000 #number of iterations
-p.current <- 0.5 #initial value for p
-p.store <- numeric(n.iter) #empty vecotr to store p at each iteration
-
-#Run MCMC For Loop
 for(i in 1:n.iter){
 
-  #Propose prop value for p
-  p.prop <- rnorm(1, p.current, 0.1)
-
-  if(p.prop > 0 & p.prop < 1){
-  #Compute current and prop loglikelihood
-  loglike.prop     <- log.likelihood(x, p.prop)
-  loglike.current <- log.likelihood(x, p.current)
-
-  #Compute Log acceptance probability
-  log.p.acc <- loglike.prop - loglike.current #No prior ratio as it is uniform
-
-  #Accept/Reject
-  u <- runif(1)
-  if(log(u) < log.p.acc){
-    p.current <- p.prop
-  }
-  }
-
-  #Store Current Value
-  p.store[i] <- p.current
+  lambda.current <- rgamma(1, 11, 95 + gamma.current)
+  gamma.current  <- rexp(1, lambda.current + 0.01)
 
 
+  lambda.store[i] <- lambda.current
+  gamma.store[i] <- gamma.current
 }
 
-#Plot trace plots
-plot(p.store, type = 'l')
 
-#Investigate posterior
-hist(p.store, freq = FALSE, main = "", xlab = expression(p))
-mean(p.store)
-quantile(p.store, c(0.025, 0.975))
+# Plot Trace Plots --------------------------------------------------------
+plot(gamma.store, type = 'l')
+plot(lambda.store, type = 'l')
+
+
+# Plot Posterior Distibrutions --------------------------------------------
+hist(gamma.store, main = "", freq = FALSE, xlab = expression(gamma))
+median(gamma.store)
+quantile(gamma.store, c(0.025, 0.975))
+
+hist(lambda.store, main = "", freq = FALSE, xlab = expression(lambda))
+median(lambda.store)
+quantile(lambda.store, c(0.025, 0.975))
+
+
+

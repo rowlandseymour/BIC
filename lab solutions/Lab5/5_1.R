@@ -1,49 +1,49 @@
-#Function that evaluates Pareto loglikelihood
-log.likelihood <- function(x, beta){
-
-  log.value <- length(x)*log(beta) - (beta + 1)*sum(log(x))
-
-  return(log.value)
-
-}
 
 # MCMC Sampler ------------------------------------------------------------
 
 #Initialise Values
-x <- c(1.019844, 1.043574, 1.360953, 1.049228, 1.491926, 1.192943, 1.323738, 1.262572, 2.034768, 1.451654)
+y <- c(20, 16, 20, 17, 18, 19, 19, 18, 21, 20, 19, 22, 23, 19, 20, 19, 21, 20, 25, 15)
 n.iter <- 10000 #number of iterations
-beta.current <- 2 #initial value for beta
-beta.store <- numeric(n.iter) #empty vecotr to store beta at each iteration
+p.current <- 0.5 #initial value for p
+p.store <- numeric(n.iter) #empty vecotr to store p at each iteration
 
 #Run MCMC For Loop
 for(i in 1:n.iter){
 
-  #Propose prop value for beta
-  beta.prop <- rnorm(1, beta.current, 0.1)
+  #Propose prop value for p
+  p.prop <- rnorm(1, p.current, 0.1)
 
+  if(p.prop > 0 & p.prop < 1){ #Automatically reject if p is outside of [0, 1]
   #Compute current and prop loglikelihood
-  loglike.prop     <- log.likelihood(x, beta.prop)
-  loglike.current <- log.likelihood(x, beta.current)
+  loglike.prop    <- sum(dbinom(y, 25, p.prop, log = TRUE))
+  loglike.current <- sum(dbinom(y, 25, p.current, log = TRUE))
 
   #Compute Log acceptance probability
   log.p.acc <- loglike.prop - loglike.current +
-    dgamma(beta.prop, 1, 0.01, log = TRUE) - dgamma(beta.current, 1, 0.01, log = TRUE)
+    dnorm(p.prop, 0.5, 0.1, log = TRUE) - dnorm(p.current, 0.5, 0.1, log = TRUE)
 
   #Accept/Reject
   u <- runif(1)
   if(log(u) < log.p.acc){
-    beta.current <- beta.prop
+    p.current <- p.prop
   }
-
+  }
   #Store Current Value
-  beta.store[i] <- beta.current
+  p.store[i] <- p.current
 
 
 }
 
 #Plot trace plots
-plot(beta.store, type = 'l')
+plot(p.store, type = 'l')
 
 #Investigate posterior
-hist(beta.store, freq = FALSE, main = "", xlab = expression(beta))
-quantile(beta.store, c(0.025, 0.975))
+hist(p.store, freq = FALSE, main = "", xlab = expression(p))
+quantile(p.store, c(0.025, 0.975))
+
+
+#Plot Prior on Top
+x <- seq(0, 1, 0.01)
+prior.density <- dnorm(x, 0.5, 0.1)
+lines(x, prior.density, type = 'l')
+

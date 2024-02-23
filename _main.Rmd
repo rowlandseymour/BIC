@@ -2360,7 +2360,7 @@ Simulate some data from the inverse-gamma distribution and see if you can recove
 
 # Advanced Computation
 
-Now we have the tools of Bayesian inference and methods to sample from complex posterior distributions, we can start to look at more advanced methods and models. This chapter is split into three distinct parts, each showing a different method in Bayesian inference.
+Now we have the tools of Bayesian inference and methods to sample from complex posterior distributions, we can start to look at more advanced methods and models. This chapter is split into four distinct parts, each showing a different method in Bayesian inference.
 
 ## Gaussian Processes
 
@@ -2793,6 +2793,60 @@ An MCMC algorithm for this would repeat the following two steps:
 This algorithm may be very slow to converge and explore the posterior distribution. This is because it has so many parameters. There is 3 model parameters ($p$, $\beta_1$ and $\beta_2$) and $N$ latent variables. Exploring a posterior distribution with this many dimensions may take a lot of time. Royal Mail delivered ~20,000,000 letters a day in 2023. 
 :::
 
+### Grouped Data
+Often, we can only receive data in grouped form. This is often the case in medical and crime settings, where patients are grouped together to protect their identity. Grouping data introduces a difficulty when trying to perform inference. Augmenting the data, by introducing parameters to represent different parts of the group can both simplify the inference workflow and provide more information than is possible otherwise. 
+
+::: {.example}
+Suppose that we have data on the number of treatment sessions required by a random sample of patients before they recover from a disease. For identifiability reasons, the numbers of patients requiring two or fewer treatment sessions are grouped and we obtain the following table
+
+|Number of sessions $x$   |  $\leq 2$ | 3  |  4 | 5  | 6 |
+|---|---|---|---|---|---|
+| Frequency $f(x)$  |25   |  7 | 4  |  3  | 1|
+
+We are interested the the probability the treatment sessions are a success. We can model this using the geometric distribution, assuming each treatment session is independent and has probability of success is $p$. For each group of patients,  we can work out their contribution to the observed likelihood function using a geometric distribution.  For example, the contribution to the likelihood function for patients who had three treatment sessions is $((1-p)^2p)^7$. For the group that had two or fewer sessions, the likelihood contribution is $(1-(1-p))^{25}$. The observed likelihood function is therefore
+\begin{align*}
+\pi(f_{1, 2}, f_3, \ldots, f_6 \mid p) &= (1-(1-p))^{25}(1-p)^{43}p^{15} \\
+&= p^{40}(1-p)^{43}(2-p)^{25}
+\end{align*}
+There is no conjugate prior distribution that induces conjugacy. We use the prior distribution $p \sim \hbox{Beta}(\alpha, \beta)$.By Bayes' theorem, the posterior distribution is
+$$
+\pi(p \mid f_{1, 2}, f_3, \ldots, f_6 ) \propto p^{40 + \alpha - 1}(1-p)^{43 + \beta - 1}(2-p)^{25}.
+$$
+
+We can use a Metropolis-Hasting algorithm to sample from this algorithm. A suitable algorithm would look like this
+
+1. Initialize $p^{(0)}$ and $i = 1$. 
+2. Propose $p' \sim U[p^{(i)} + \varepsilon, p^{(i)} - \varepsilon]$. 
+3. Accept $p^{(i+1)}=p'$ with probability $p_{acc}$, otherwise reject as set $p^{(i+1)}=p^{(i)}$.
+4. Set $i=i+1$ and repeat steps 2-3. 
+
+The acceptance probability in step 3 is given by
+$$
+p_{\textrm{acc}} = \min\left\{\frac{p'^{40 + \alpha - 1}(1-p')^{43 + \beta - 1}(2-p')^{25}}{p^{40 + \alpha - 1}(1-p)^{43 + \beta - 1}(2-p)^{25}} ,1\right\}
+$$
+Instead of using the observed likelihood, we can write the complete likelihood function supposing we had seen the number of patients who had had one and two sessions. The complete likelihood function is
+$$
+\pi(f_1 \ldots, f_6 \mid p) = p^{40}(1-p)^{\sum f(x) - 40}. 
+$$
+Now, the Beta($\alpha, \beta)$ prior distribution is conjugate and we have 
+$$
+p \mid f_1 \ldots, f_6  \sim \hbox{Beta}(40 + \alpha, \sum f(x) - 40 + \beta).
+$$
+Now, we need to derive the full conditional distribution for $f(1)$, the number of patients who were treated after only one sessions, $\pi(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6)$. Under the geometric distribution model, the probability a patient is treated after exactly one session is $p$ and after two sessions is $(1-p)p$. We can use these probabilities in a Binomial distribution. We have 25 patients each with a probability of being treated $q$, where 
+$$
+q = \frac{p}{p + (1-p)p}
+$$
+Therefore $f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \sim \hbox{Bin}(25, q)$. We do not need to sample $f_2$ as we have $f_2 = 25 - f_1$. Our MCMC algorithm using the complete data likelihood function and inferring $f_1$ and $f_2$ as well as $p$ could be
+
+1. Initialise $p^{(0)}$, $f_1^{(0)}$ and  $f_2^{(0)}$. Set $i = 1$. 
+2. Sample $p^{(i)} \mid f_1^{(i-1)}, f_2^{(i-1)}, f_3 \ldots, f_6  \sim \hbox{Beta}(40 + \alpha, \sum f(x) - 40 + \beta)$
+3. Sample $f_1^{(i)} \mid p^{(i)}, f_{1, 2}, f_3, \ldots, f_6 $
+4. Compute $f_2^{(i)} = 25 - f_1^{(i)}$. 
+5. Repeat steps 2 - 4. 
+
+This MCMC algorithm avoids us needing to do any tuning or accept/reject steps, making it more efficient. 
+:::
+
 
 ## Approximate Bayesian Computation
 So far, we have always considered models where the likelihood function is easy to work with. By easy, we mean that we can evaluate the likelihood function for lots of different values, and we can evaluate it cheaply. In some cases, it might not be possible to write down the likelihood function, or it might not be possible to evaluate it. In these cases, we refer to methods call **likelihood free inference**. 
@@ -3171,6 +3225,79 @@ abline(v = 2, col = 'red')
 mean(b.store, na.rm = TRUE)
 quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
 ```
+:::
+
+
+## Prior Ellicitation
+Throughout this course, we have tried to be objective in our choice of prior distributions. We have discussed **uninformative** and **invariant** prior distributions. Sometimes we have used **vague** prior distributions, such as the Exp(0.01) distribution. And other times, we have left the parameters as generic values. This misses out on one real difference between Bayesian and frequentist inference. In Bayesian inference, we can include prior information about the model parameters. Determining the value of prior parameters is know as prior elicitation. This is more of an art than a science and still controversial in the Bayesian world. In this section, we are going to look at a few ways of how to elicit prior information from experts. 
+
+:::{.example}
+This example to show how difficult it is to talk to experts in other areas about probabilities and risk. Suppose we are interested in estimating the number of crashes on a new motorway that is being designed. Denote the number of crashes per week by $X$ and suppose $X \sim \hbox{Po}(\lambda)$. We place a $\lambda \sim \Gamma(\alpha, \beta)$ prior distribution on the rate parameter $\lambda$. The density function of this prior distribution is 
+$$
+\pi(\lambda) = \frac{\beta^\alpha}{\Gamma(\alpha)}\lambda^{\alpha-1}\exp(-\lambda\beta). 
+$$
+The parameter $\alpha$ is know as the shape parameter and $\beta$ the rate parameter. 
+
+We interview road traffic police, highway engineers and driving experts to estimate the values of $\alpha$ and $\beta$. The difficulty is that they do not know about the Gamma distribution or what shape and rate parameters are. Instead, we can ask them about summaries of the data. For the Gamma distribution, the mean is $\alpha/\beta$, the mode is $(\alpha - 1)/\beta$ and the variance is $\alpha/\beta^2$. If we can get information about two of these then we can solve for $\alpha$ and $\beta$. But needing two brings about another difficulty, non-mathematicians have limited understanding of statistics and probability. They can find it difficult to differentiate between the mean and the mode, and the concept of variance is very difficult to explain. 
+:::
+
+### Prior Summaries
+The first method we are going to look at is called summary matching. For this method, we ask experts to provide summaries of what they think the prior distribution is. We then choose a function form for the prior distribution and use these summaries to estimate the prior distribution. The choice of summaries depend on the application in hand as well as the choice of prior distribution. Common choices are: the mean, median, mode, variance, and cumulative probabilities (i.e. $\pi(\theta < 0.5)$). 
+
+:::{.example}
+Let's return to the motorway example from above. Suppose that a highway engineer tells us the expected number of crashes per week is 0.75 and the probability that $\lambda < 0.9$ is 80\%. Matching summaries tells us
+$$
+\frac{\alpha}{\beta} = 0.75 \\
+\int_0^{0.9}\pi(\lambda) d\lambda = 0.8
+$$
+
+From the expectation, we have $\alpha = 0.7\beta$. To estimate the value of $\beta$ from the cumulative probability, we need to find the root to the equation 
+$$
+\int_0^{0.9} \frac{\beta^{0.75\beta}}{\Gamma(\beta)}\lambda^{0.75\beta-1}e^{-\lambda\beta}d\lambda - 0.8 = 0. 
+$$
+
+This looks horrible, but there are many optimisation ways to solve this problem. 
+
+```{r}
+cummulative.eqn <- function(b){
+  #Compute equation with value beta = b
+  value <- pgamma(0.9, 0.75*b, b)-0.8
+  return(value)
+  
+}
+
+uniroot(cummulative.eqn, lower = 1, upper = 1000)
+```
+This gives us $\beta = 21.8$ and $\alpha = 13.65$. 
+:::
+
+### Betting with Histograms
+The difficulty with the summary matching method is that it requires experts to describe probabilities about the prior parameter, which is difficult to do and quite an abstract concept. Instead of asking them to describe summaries, we can ask them to draw the prior distribution completely,  using a betting framework. 
+
+In the **prior weights** (sometimes called roulette) method, we give the the experts a set of intervals for the parameter of interest and fixed number of coins. We then ask the experts to place the coins in the intervals according to how likely they think the parameter will be in each interval, effectively betting on what value the parameter will take. For example, they might place $n_1$ coins in the interval $\theta \in [a, b)$, $n_2$ in $\theta \in [b, c)$ and $n_3$ for $\theta \in \[c, d]$. From this we can construct our prior density. 
+
+
+:::{.example}
+Suppose we are interested in the probability a pharmaceutical drug has the desired clinical effect. The outcome of each patient's treatment can be modelled by $X\sim\hbox{Bernoulli}(p)$. We ask a clinical about their experience with patients and similar treatments. We ask the expert to estimate the probability of successful treatment by betting on the value for $p$ using the following table and 20 coins. 
+
+
+| $p$        | Coins |
+|------------|-------|
+| [0, 0.2)   | 3     |
+| [0.2, 0.4) | 7     |
+| [0.4, 0.6) | 5     |
+| [0.6, 0.8) | 3     |
+| [0.8, 1]   | 2     |
+
+
+We can use the website http://optics.eee.nottingham.ac.uk/match/uncertainty.php# to fit a distribution to this table. It proposes the best fit of a $p \sim \Gamma(3.10, 6.89)$. We can use this distribution as the prior distribution, although it is not conjugate and places weight on $p > 1$. Another option is a Beta$(1.64, 2.16)$ distribution, 
+:::
+
+### Prior Intervals
+The last method we will look at is the **bisection** method. In this method, we ask the experts to propose four intervals, each of which the parameter value is likely to fall into, i.e. $\pi(\theta \in [a, b)) = \pi(\theta \in [c, d)) = \pi(\theta \in [e, f))= \pi(\theta \in [g, h)) = 0.25$. From these intervals, we develop a prior distribution that fits these intervals. 
+
+:::{.example}
+The police are interested in estimating the number of matching features between a fingerprint from a crime scene and a fingerprint from a suspect in the police station. The number of matching features is $X \sim \hbox{Po}(\lambda)$. We speak to experienced fingerprint analysts. She advises us that about a quarter of the time, she would expect to see between 0 and 4 matches and this is when it is unlikely for the suspect to be the criminal. She says in some cases, it's very clear that the suspect is the criminal as she would expect to see 20 to 30 matches.  The rest of the time, she sees some matches but the fingerprint collected at the crime scene is poor quality, so see may see 5 to 14 matches. She agrees that the matches are uniform across this range. So our four intervals are [0, 4], [5, 12], [13, 19], [20, 30]. Using the Match software, we get a Uniform[0, 30] distribution. 
 :::
 
 ## Lab
