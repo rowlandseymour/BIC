@@ -1093,26 +1093,20 @@ The parameter <span class="math inline">\(\alpha\)</span> is know as the shape p
 <p><span id="exr:unlabeled-div-126" class="exercise"><strong>Exercise 6.1  </strong></span>Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use</p>
 <div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="advanced-computation.html#cb150-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb150-2"><a href="advanced-computation.html#cb150-2" tabindex="-1"></a>y <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="fl">3.0942822</span>, <span class="fl">3.0727920</span>, <span class="fl">2.6137341</span>, <span class="fl">1.8818820</span>, <span class="fl">1.2746738</span>, <span class="fl">1.2532116</span>, <span class="fl">1.4620830</span>, <span class="fl">1.4194647</span>, <span class="fl">1.6786969</span>, <span class="fl">1.1057042</span>, <span class="fl">0.4118125</span>)</span></code></pre></div>
-<p>with <span class="math inline">\(\sigma^2 = 0.2\)</span>.To draw samples from the multivariate normal distribution with mean vector <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance matrix <span class="math inline">\(\Sigma\)</span> use</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="advanced-computation.html#cb151-1" tabindex="-1"></a>mvnorm.chol <span class="ot">&lt;-</span> <span class="cf">function</span>(mu, Sigma){</span>
-<span id="cb151-2"><a href="advanced-computation.html#cb151-2" tabindex="-1"></a>  <span class="co">#Multivariate Normal Sampler with Cholesky Input</span></span>
-<span id="cb151-3"><a href="advanced-computation.html#cb151-3" tabindex="-1"></a>  <span class="co">#Inputs: mu -- mean, chol -- covariance matrix</span></span>
-<span id="cb151-4"><a href="advanced-computation.html#cb151-4" tabindex="-1"></a>  Sigma.chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(Sigma <span class="sc">+</span> <span class="fl">0.0001</span><span class="sc">*</span><span class="fu">dim</span>(Sigma)[<span class="dv">1</span>])</span>
-<span id="cb151-5"><a href="advanced-computation.html#cb151-5" tabindex="-1"></a>  <span class="fu">return</span>(mu <span class="sc">+</span> <span class="fu">t</span>(Sigma.chol)<span class="sc">%*%</span><span class="fu">rnorm</span>(<span class="fu">length</span>(mu)))  </span>
-<span id="cb151-6"><a href="advanced-computation.html#cb151-6" tabindex="-1"></a>}</span></code></pre></div>
+<p>with <span class="math inline">\(\sigma^2 = 0.2\)</span>.To draw samples from the multivariate normal distribution with mean vector <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance matrix <span class="math inline">\(\Sigma\)</span> use the MASS package.</p>
 </div>
 <div class="exercise">
 <p><span id="exr:unlabeled-div-127" class="exercise"><strong>Exercise 6.2  </strong></span>Repeat Exercise 6.1, but this time set the fine grid to be <span class="math inline">\(\boldsymbol{x}^* = \{-5, -4.9, -4.8, \ldots, 9.8, 9.9, 10\}\)</span>. What happens to the posterior distribution after <span class="math inline">\(x^* = 5\)</span>?</p>
 </div>
 <div class="exercise">
 <p><span id="exr:unlabeled-div-128" class="exercise"><strong>Exercise 6.3  </strong></span>You observe the following data</p>
-<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="advanced-computation.html#cb152-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
-<span id="cb152-2"><a href="advanced-computation.html#cb152-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="fl">0.5</span><span class="sc">*</span>x) <span class="sc">+</span> <span class="fu">log</span>(x <span class="sc">+</span> <span class="dv">6</span>)</span>
-<span id="cb152-3"><a href="advanced-computation.html#cb152-3" tabindex="-1"></a>y</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="advanced-computation.html#cb151-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb151-2"><a href="advanced-computation.html#cb151-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="fl">0.5</span><span class="sc">*</span>x) <span class="sc">+</span> <span class="fu">log</span>(x <span class="sc">+</span> <span class="dv">6</span>)</span>
+<span id="cb151-3"><a href="advanced-computation.html#cb151-3" tabindex="-1"></a>y</span></code></pre></div>
 <pre><code>##  [1] -0.8011436  0.2770003  1.1693495  1.9265967  2.4870205  2.7917595
 ##  [7]  2.8234927  2.6197438  2.2679618  1.8864383  1.5967517</code></pre>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="advanced-computation.html#cb154-1" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;f(x)&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">4</span>))</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="advanced-computation.html#cb153-1" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;f(x)&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">4</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
 <p>Fit a function to the data using a GP prior distribution. Note that this time there is no noise.</p>
 </div>
 </div>
@@ -1123,7 +1117,7 @@ The parameter <span class="math inline">\(\alpha\)</span> is know as the shape p
 </div>
 <div class="exercise">
 <p><span id="exr:unlabeled-div-130" class="exercise"><strong>Exercise 6.5  </strong></span>Suppose you manage a clinical trial. You administer a new drug to patients and record how many days until their symptoms are alleviated. You observe the times for the first 9 patients</p>
-<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="advanced-computation.html#cb155-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">33</span>,  <span class="dv">17</span>, <span class="dv">218</span>,   <span class="dv">3</span>,  <span class="dv">39</span>,   <span class="dv">3</span>,  <span class="dv">43</span>,  <span class="dv">14</span>,  <span class="dv">20</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="advanced-computation.html#cb154-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">33</span>,  <span class="dv">17</span>, <span class="dv">218</span>,   <span class="dv">3</span>,  <span class="dv">39</span>,   <span class="dv">3</span>,  <span class="dv">43</span>,  <span class="dv">14</span>,  <span class="dv">20</span>)</span></code></pre></div>
 <p>Patient 10 drops out of the trial on day 50 and at this point, their symptoms have not changed. They send an email on day 200 to say they no longer have any symptoms (i.e. <span class="math inline">\(x_i \in [50, \ldots, 200]\)</span>. Write down a model for this problem and derive the posterior distribution. Design and code an MCMC algorithm to generate samples from the posterior distribution for any model parameters and <span class="math inline">\(x_{10}\)</span>.</p>
 </div>
 </div>

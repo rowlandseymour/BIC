@@ -3346,16 +3346,7 @@ Code up example 6.1. How does your choice of length scale affect the posterior d
 x <- -5:5
 y <-  c(3.0942822, 3.0727920, 2.6137341, 1.8818820, 1.2746738, 1.2532116, 1.4620830, 1.4194647, 1.6786969, 1.1057042, 0.4118125)
 ```
-with $\sigma^2 = 0.2$.To draw samples from the multivariate normal distribution with mean vector $\boldsymbol{\mu}$ and covariance matrix $\Sigma$ use
-
-```{r}
-mvnorm.chol <- function(mu, Sigma){
-  #Multivariate Normal Sampler with Cholesky Input
-  #Inputs: mu -- mean, chol -- covariance matrix
-  Sigma.chol <- chol(Sigma + 0.0001*dim(Sigma)[1])
-  return(mu + t(Sigma.chol)%*%rnorm(length(mu)))  
-}
-```
+with $\sigma^2 = 0.2$.To draw samples from the multivariate normal distribution with mean vector $\boldsymbol{\mu}$ and covariance matrix $\Sigma$ use the MASS package. 
 :::
 
 

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  5 MAR 2024 08:36
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  5 MAR 2024 08:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1007,15 +1007,9 @@ Z[i]), type = []l[])[]
 Underfull \vbox (badness 3547) has occurred while \output is active []
 
 [23]
-Overfull \hbox (33.0pt too wide) in paragraph at lines 937--937
-[]\TU/lmtt/m/n/10 ##  [1]  0.067087419  0.940651611 -0.584863209 -0.008208485 -
-0.295150339[] 
- []
-
-
-Overfull \hbox (33.0pt too wide) in paragraph at lines 937--937
-[]\TU/lmtt/m/n/10 ##  [6] -0.350848322 -0.999261089  0.627317125  0.040368462 -
-0.383698324[] 
+Overfull \hbox (38.25pt too wide) in paragraph at lines 937--937
+[]\TU/lmtt/m/n/10 ##  [1] -0.1259864  0.1814492  0.4804704 -0.6773273 -0.550195
+8  0.4273912[] 
  []
 
 [24] [25]
