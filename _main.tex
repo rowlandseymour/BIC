@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.067087419  0.940651611 -0.584863209 -0.008208485 -0.295150339
-##  [6] -0.350848322 -0.999261089  0.627317125  0.040368462 -0.383698324
+##  [1] -0.1259864  0.1814492  0.4804704 -0.6773273 -0.5501958  0.4273912
+##  [7]  0.7136305 -0.1005017 -0.4499845 -0.5172146
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.85670749 0.03333333
+## [1] 5.46957233 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.498869 5.214546
+## [1] 5.111734 5.827411
 \end{verbatim}
 
 \end{example}
@@ -1784,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.1374065
+## [1] 0.3900044
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -4332,7 +4332,6 @@ The code below shows how to set up a Gaussian Process and draw samples from it i
 \end{example}
 
 \begin{exercise}
-
 Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use
 
 \begin{Shaded}
@@ -4342,19 +4341,7 @@ Code up example 6.1. How does your choice of length scale affect the posterior d
 \end{Highlighting}
 \end{Shaded}
 
-with \(\sigma^2 = 0.2\).To draw samples from the multivariate normal distribution with mean vector \(\boldsymbol{\mu}\) and covariance matrix \(\Sigma\) use
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mvnorm.chol }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(mu, Sigma)\{}
-  \CommentTok{\#Multivariate Normal Sampler with Cholesky Input}
-  \CommentTok{\#Inputs: mu {-}{-} mean, chol {-}{-} covariance matrix}
-\NormalTok{  Sigma.chol }\OtherTok{\textless{}{-}} \FunctionTok{chol}\NormalTok{(Sigma }\SpecialCharTok{+} \FloatTok{0.0001}\SpecialCharTok{*}\FunctionTok{dim}\NormalTok{(Sigma)[}\DecValTok{1}\NormalTok{])}
-  \FunctionTok{return}\NormalTok{(mu }\SpecialCharTok{+} \FunctionTok{t}\NormalTok{(Sigma.chol)}\SpecialCharTok{\%*\%}\FunctionTok{rnorm}\NormalTok{(}\FunctionTok{length}\NormalTok{(mu)))  }
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
+with \(\sigma^2 = 0.2\).To draw samples from the multivariate normal distribution with mean vector \(\boldsymbol{\mu}\) and covariance matrix \(\Sigma\) use the MASS package.
 \end{exercise}
 
 \begin{exercise}
@@ -4383,7 +4370,7 @@ You observe the following data
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-59-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-58-1.pdf}
 
 Fit a function to the data using a GP prior distribution. Note that this time there is no noise.
 \end{exercise}
