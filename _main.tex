@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.5908597  0.3347177  0.1307710 -0.3455252 -0.6342629  0.2211001
-##  [7] -0.5017332 -0.8353498  0.8527114  0.4695873
+##  [1]  0.067087419  0.940651611 -0.584863209 -0.008208485 -0.295150339
+##  [6] -0.350848322 -0.999261089  0.627317125  0.040368462 -0.383698324
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.87143516 0.03333333
+## [1] 4.85670749 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.513596 5.229274
+## [1] 4.498869 5.214546
 \end{verbatim}
 
 \end{example}
@@ -1784,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.7857623
+## [1] 0.1374065
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -4278,6 +4278,59 @@ The police are interested in estimating the number of matching features between 
 \hypertarget{gaussian-processes-1}{%
 \subsection{Gaussian Processes}\label{gaussian-processes-1}}
 
+\begin{example}
+The code below shows how to set up a Gaussian Process and draw samples from it in R.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{require}\NormalTok{(MASS)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: MASS
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{squared.exponential.covariance }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x1, x2, alpha, ell) \{}
+  \CommentTok{\#Squared Exponential Covariance Function}
+  \CommentTok{\#Inputs: x1, x2 {-}{-} vectors, alpha, ell {-}{-} variance and length scale parameter}
+\NormalTok{  pairwise\_distances }\OtherTok{\textless{}{-}} \FunctionTok{outer}\NormalTok{(x1, x2, }\StringTok{"{-}"}\NormalTok{)}
+\NormalTok{  covariance\_matrix }\OtherTok{\textless{}{-}}\NormalTok{ alpha }\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5} \SpecialCharTok{*}\NormalTok{ (pairwise\_distances }\SpecialCharTok{/}\NormalTok{ ell)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+  \FunctionTok{return}\NormalTok{(covariance\_matrix)}
+\NormalTok{\}}
+
+\CommentTok{\#Set up GP}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{5}\NormalTok{, }\FloatTok{0.01}\NormalTok{)}
+\NormalTok{mu }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{length}\NormalTok{(x))}
+\NormalTok{Sigma }\OtherTok{\textless{}{-}} \FunctionTok{squared.exponential.covariance}\NormalTok{(x, x, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+
+\CommentTok{\#Generate Samples and Summaries}
+\NormalTok{f }\OtherTok{\textless{}{-}}\NormalTok{ MASS}\SpecialCharTok{::}\FunctionTok{mvrnorm}\NormalTok{(}\DecValTok{1000}\NormalTok{, mu, Sigma)}
+\NormalTok{f.mean }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(f, }\DecValTok{2}\NormalTok{, mean) }\CommentTok{\#GP mean}
+\NormalTok{f.}\FloatTok{95.}\NormalTok{upper }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(f, }\DecValTok{2}\NormalTok{, quantile, }\FloatTok{0.975}\NormalTok{)}
+\NormalTok{f.}\FloatTok{95.}\NormalTok{lower }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(f, }\DecValTok{2}\NormalTok{, quantile, }\FloatTok{0.025}\NormalTok{)}
+
+\CommentTok{\#Generate some plots}
+\FunctionTok{plot}\NormalTok{(x, f[}\DecValTok{1}\NormalTok{, ], }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(f[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, ]), }\FunctionTok{max}\NormalTok{(f[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, ])))}
+\FunctionTok{lines}\NormalTok{(x, f[}\DecValTok{2}\NormalTok{, ], }\AttributeTok{col =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(x, f[}\DecValTok{3}\NormalTok{, ], }\AttributeTok{col =} \DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-56-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(x, f.mean, }\AttributeTok{type =} \StringTok{\textquotesingle{}l\textquotesingle{}}\NormalTok{, }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{)) }\CommentTok{\#0 {-}{-} no surprise there}
+\FunctionTok{polygon}\NormalTok{(}\FunctionTok{c}\NormalTok{(x, }\FunctionTok{rev}\NormalTok{(x)), }\FunctionTok{c}\NormalTok{(f.}\FloatTok{95.}\NormalTok{lower, }\FunctionTok{rev}\NormalTok{(f.}\FloatTok{95.}\NormalTok{upper)), }\AttributeTok{col =} \FunctionTok{rgb}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\FloatTok{0.25}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/unnamed-chunk-56-2.pdf}
+\end{example}
+
 \begin{exercise}
 
 Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use
@@ -4330,7 +4383,7 @@ You observe the following data
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{_main_files/figure-latex/unnamed-chunk-58-1.pdf}
+\includegraphics{_main_files/figure-latex/unnamed-chunk-59-1.pdf}
 
 Fit a function to the data using a GP prior distribution. Note that this time there is no noise.
 \end{exercise}

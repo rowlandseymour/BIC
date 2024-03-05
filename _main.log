@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  23 FEB 2024 09:21
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  5 MAR 2024 08:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1007,9 +1007,15 @@ Z[i]), type = []l[])[]
 Underfull \vbox (badness 3547) has occurred while \output is active []
 
 [23]
-Overfull \hbox (38.25pt too wide) in paragraph at lines 937--937
-[]\TU/lmtt/m/n/10 ##  [1]  0.5908597  0.3347177  0.1307710 -0.3455252 -0.634262
-9  0.2211001[] 
+Overfull \hbox (33.0pt too wide) in paragraph at lines 937--937
+[]\TU/lmtt/m/n/10 ##  [1]  0.067087419  0.940651611 -0.584863209 -0.008208485 -
+0.295150339[] 
+ []
+
+
+Overfull \hbox (33.0pt too wide) in paragraph at lines 937--937
+[]\TU/lmtt/m/n/10 ##  [6] -0.350848322 -0.999261089  0.627317125  0.040368462 -
+0.383698324[] 
  []
 
 [24] [25]
@@ -1452,7 +1458,7 @@ l.4244 ...[b, c)\) and \(n_3\) for \(\theta \in \[
 Here is how much of TeX's memory you used:
  19824 strings out of 476179
  376861 string characters out of 5809544
- 850379 words of memory out of 5000000
+ 849379 words of memory out of 5000000
  40224 multiletter control sequences out of 15000+600000
  477227 words of font info for 98 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191

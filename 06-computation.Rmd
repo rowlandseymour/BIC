@@ -944,6 +944,42 @@ The police are interested in estimating the number of matching features between 
 
 ### Gaussian Processes
 
+:::{.example}
+The code below shows how to set up a Gaussian Process and draw samples from it in R. 
+```{r}
+require(MASS)
+
+squared.exponential.covariance <- function(x1, x2, alpha, ell) {
+  #Squared Exponential Covariance Function
+  #Inputs: x1, x2 -- vectors, alpha, ell -- variance and length scale parameter
+  pairwise_distances <- outer(x1, x2, "-")
+  covariance_matrix <- alpha * exp(-0.5 * (pairwise_distances / ell)^2)
+  return(covariance_matrix)
+}
+
+#Set up GP
+x <- seq(0, 5, 0.01)
+mu <- rep(0, length(x))
+Sigma <- squared.exponential.covariance(x, x, 1, 1)
+
+#Generate Samples and Summaries
+f <- MASS::mvrnorm(1000, mu, Sigma)
+f.mean <- apply(f, 2, mean) #GP mean
+f.95.upper <- apply(f, 2, quantile, 0.975)
+f.95.lower <- apply(f, 2, quantile, 0.025)
+
+#Generate some plots
+plot(x, f[1, ], type = 'l', ylim = c(min(f[1:3, ]), max(f[1:3, ])))
+lines(x, f[2, ], col = 2)
+lines(x, f[3, ], col = 3)
+
+plot(x, f.mean, type = 'l', ylim = c(-5, 5)) #0 -- no surprise there
+polygon(c(x, rev(x)), c(f.95.lower, rev(f.95.upper)), col = rgb(0, 0, 1, 0.25))
+
+```
+
+:::
+
 :::{.exercise}
 Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use 
 ```{r}
