@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  5 MAR 2024 08:40
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.2)  7 MAR 2024 09:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -923,9 +923,10 @@ Chapter 2.
 ]
 File: _main_files/figure-latex/unnamed-chunk-3-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-3-1.pdf>
+[18]
 File: _main_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-4-1.pdf>
-[18]
+
 Overfull \hbox (48.75pt too wide) in paragraph at lines 738--738
 []\TU/lmtt/m/n/10 # Plot one --------------------------------------------------
 --------------[] 
@@ -1003,13 +1004,10 @@ Overfull \hbox (69.75pt too wide) in paragraph at lines 913--913
 Z[i]), type = []l[])[] 
  []
 
-
-Underfull \vbox (badness 3547) has occurred while \output is active []
-
 [23]
-Overfull \hbox (38.25pt too wide) in paragraph at lines 937--937
-[]\TU/lmtt/m/n/10 ##  [1] -0.1259864  0.1814492  0.4804704 -0.6773273 -0.550195
-8  0.4273912[] 
+Overfull \hbox (69.75pt too wide) in paragraph at lines 937--937
+[]\TU/lmtt/m/n/10 ##  [1] -0.68799827 -0.85301783 -0.35572810 -0.33877214 -0.86
+201107  0.77282045[] 
  []
 
 [24] [25]
@@ -1382,14 +1380,11 @@ Overfull \hbox (27.83228pt too wide) detected at line 3436
  []
 
 [98]
-Overfull \hbox (35.59247pt too wide) detected at line 3457
+Overfull \hbox (32.91248pt too wide) detected at line 3457
 []
  []
 
-[99] [100]
-Missing character: There is no ∣ (U+2223) in font [lmroman10-regular]:mapping=t
-ex-text;!
-[101] [102]
+[99] [100] [101] [102]
 Overfull \hbox (59.25pt too wide) in paragraph at lines 3648--3648
 []\TU/lmtt/m/n/10 ##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4
 677043 0.7339799[] 

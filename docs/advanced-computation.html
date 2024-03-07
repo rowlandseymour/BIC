@@ -418,7 +418,7 @@ The posterior mean for <span class="math inline">\(f\)</span> is a smooth line p
 <div class="definition">
 <p><span id="def:unlabeled-div-102" class="definition"><strong>Definition 6.12  </strong></span>The <strong>complete data likelihood function</strong> is the likelihood function of the observed data and any missing or censored data had they been fully observed.</p>
 </div>
-<p>The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn’t fully observe, we can’t compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, where the outcome of <span class="math inline">\(X\)</span> is observed and <span class="math inline">\(Y\)</span> unobserved. The complete data likelihood is <span class="math inline">\(pi(X = x, Y = y)\)</span> because we are considering all the events, observed or not. However, we can only compute <span class="math inline">\(\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)\)</span> or <span class="math inline">\(\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)\)</span>, since <span class="math inline">\(y\)</span> is unobserved.</p>
+<p>The difference between the two likelihood functions is that the complete data likelihood function is the function had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn’t fully observe, we can’t compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, where the outcome of <span class="math inline">\(X\)</span> is observed and <span class="math inline">\(Y\)</span> unobserved. The complete data likelihood is <span class="math inline">\(\pi(X = x, Y = y)\)</span> because we are considering all the events, observed or not. However, we can only compute <span class="math inline">\(\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)\)</span> or <span class="math inline">\(\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)\)</span>, since <span class="math inline">\(y\)</span> is unobserved.</p>
 <p>In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function.</p>
 <div id="imputing-censored-observations" class="section level3 hasAnchor" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Imputing censored observations<a href="advanced-computation.html#imputing-censored-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -493,7 +493,7 @@ p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
 \]</span>
 If we use a Beta(<span class="math inline">\(\alpha_1, \beta_1\)</span>) distribution for our prior distribution on <span class="math inline">\(\theta_1\)</span>, the full conditional distribution of <span class="math inline">\(\theta_1\)</span> is
 <span class="math display">\[\begin{align*}
-\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2) \propto pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\theta_1) \\
+\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2) \propto \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\theta_1) \\
 &amp;\propto \theta_1^{\sum_{i; z_i = 1}y_i}(1-\theta_1)^{100N_1 - \sum_{i; z_i = 1}y_i}\theta^{\alpha_1 - 1}(1-\theta^{\beta_1 - 1}) \\
 &amp; \propto \theta_1^{\sum_{i; z_i = 1}y_i + \alpha_1 -1 }(1-\theta_1)^{100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i - 1}
 \end{align*}\]</span>
@@ -584,7 +584,7 @@ Therefore <span class="math inline">\(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \si
 <ol style="list-style-type: decimal">
 <li>Initialise <span class="math inline">\(p^{(0)}\)</span>, <span class="math inline">\(f_1^{(0)}\)</span> and <span class="math inline">\(f_2^{(0)}\)</span>. Set <span class="math inline">\(i = 1\)</span>.</li>
 <li>Sample <span class="math inline">\(p^{(i)} \mid f_1^{(i-1)}, f_2^{(i-1)}, f_3 \ldots, f_6 \sim \hbox{Beta}(40 + \alpha, \sum f(x) - 40 + \beta)\)</span></li>
-<li>Sample $f_1^{(i)} p^{(i)}, f_{1, 2}, f_3, , f_6 $</li>
+<li>Sample <span class="math inline">\(f_1^{(i)} \mid p^{(i)}, f_{1, 2}, f_3, \ldots, f_6\)</span></li>
 <li>Compute <span class="math inline">\(f_2^{(i)} = 25 - f_1^{(i)}\)</span>.</li>
 <li>Repeat steps 2 - 4.</li>
 </ol>

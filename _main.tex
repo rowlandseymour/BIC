@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] -0.1259864  0.1814492  0.4804704 -0.6773273 -0.5501958  0.4273912
-##  [7]  0.7136305 -0.1005017 -0.4499845 -0.5172146
+##  [1] -0.68799827 -0.85301783 -0.35572810 -0.33877214 -0.86201107  0.77282045
+##  [7] -0.96175566 -0.57162165  0.43668815  0.05605728
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 5.46957233 0.03333333
+## [1] 4.90698737 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 5.111734 5.827411
+## [1] 4.549149 5.264826
 \end{verbatim}
 
 \end{example}
@@ -1784,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.3900044
+## [1] 0.9218455
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -3357,7 +3357,7 @@ The \textbf{observed data likelihood function} is the likelihood function of the
 The \textbf{complete data likelihood function} is the likelihood function of the observed data and any missing or censored data had they been fully observed.
 \end{definition}
 
-The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn't fully observe, we can't compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events \(X\) and \(Y\), where the outcome of \(X\) is observed and \(Y\) unobserved. The complete data likelihood is \(pi(X = x, Y = y)\) because we are considering all the events, observed or not. However, we can only compute \(\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)\) or \(\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)\), since \(y\) is unobserved.
+The difference between the two likelihood functions is that the complete data likelihood function is the function had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn't fully observe, we can't compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events \(X\) and \(Y\), where the outcome of \(X\) is observed and \(Y\) unobserved. The complete data likelihood is \(\pi(X = x, Y = y)\) because we are considering all the events, observed or not. However, we can only compute \(\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)\) or \(\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)\), since \(y\) is unobserved.
 
 In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function.
 
@@ -3451,7 +3451,7 @@ p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
 \]
 If we use a Beta(\(\alpha_1, \beta_1\)) distribution for our prior distribution on \(\theta_1\), the full conditional distribution of \(\theta_1\) is
 \begin{align*}
-\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2) \propto pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\theta_1) \\
+\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2) \propto \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\theta_1) \\
 &\propto \theta_1^{\sum_{i; z_i = 1}y_i}(1-\theta_1)^{100N_1 - \sum_{i; z_i = 1}y_i}\theta^{\alpha_1 - 1}(1-\theta^{\beta_1 - 1}) \\
 & \propto \theta_1^{\sum_{i; z_i = 1}y_i + \alpha_1 -1 }(1-\theta_1)^{100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i - 1}
 \end{align*}
@@ -3560,7 +3560,7 @@ Therefore \(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \sim \hbox{Bin}(25, q)\). We 
 \item
   Sample \(p^{(i)} \mid f_1^{(i-1)}, f_2^{(i-1)}, f_3 \ldots, f_6 \sim \hbox{Beta}(40 + \alpha, \sum f(x) - 40 + \beta)\)
 \item
-  Sample \$f\_1\^{}\{(i)\} \mid p\^{}\{(i)\}, f\_\{1, 2\}, f\_3, \ldots, f\_6 \$
+  Sample \(f_1^{(i)} \mid p^{(i)}, f_{1, 2}, f_3, \ldots, f_6\)
 \item
   Compute \(f_2^{(i)} = 25 - f_1^{(i)}\).
 \item

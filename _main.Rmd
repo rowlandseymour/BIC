@@ -2671,7 +2671,7 @@ The **observed data likelihood function** is the likelihood function of the obse
 The **complete data likelihood function** is the likelihood function of the observed data and any missing or censored data had they been fully observed. 
 :::
 
-The difference between the two likelihood functions is that the complete data likelihood function is the functions had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn't fully observe, we can't compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events $X$ and $Y$, where the outcome of $X$ is observed and $Y$ unobserved. The complete data likelihood is $pi(X = x, Y = y)$ because we are considering all the events, observed or not. However, we can only compute $\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)$ or $\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)$, since $y$ is unobserved. 
+The difference between the two likelihood functions is that the complete data likelihood function is the function had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn't fully observe, we can't compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events $X$ and $Y$, where the outcome of $X$ is observed and $Y$ unobserved. The complete data likelihood is $\pi(X = x, Y = y)$ because we are considering all the events, observed or not. However, we can only compute $\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)$ or $\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)$, since $y$ is unobserved. 
 
 In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function. 
 
@@ -2763,7 +2763,7 @@ p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
 $$
 If we use a Beta($\alpha_1, \beta_1$) distribution for our prior distribution on $\theta_1$, the full conditional distribution of $\theta_1$ is
 \begin{align*}
-\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2) \propto pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\theta_1) \\
+\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2) \propto \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\theta_1) \\
 &\propto \theta_1^{\sum_{i; z_i = 1}y_i}(1-\theta_1)^{100N_1 - \sum_{i; z_i = 1}y_i}\theta^{\alpha_1 - 1}(1-\theta^{\beta_1 - 1}) \\
 & \propto \theta_1^{\sum_{i; z_i = 1}y_i + \alpha_1 -1 }(1-\theta_1)^{100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i - 1}
 \end{align*}
@@ -2840,7 +2840,7 @@ Therefore $f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \sim \hbox{Bin}(25, q)$. We do
 
 1. Initialise $p^{(0)}$, $f_1^{(0)}$ and  $f_2^{(0)}$. Set $i = 1$. 
 2. Sample $p^{(i)} \mid f_1^{(i-1)}, f_2^{(i-1)}, f_3 \ldots, f_6  \sim \hbox{Beta}(40 + \alpha, \sum f(x) - 40 + \beta)$
-3. Sample $f_1^{(i)} \mid p^{(i)}, f_{1, 2}, f_3, \ldots, f_6 $
+3. Sample $f_1^{(i)} \mid p^{(i)}, f_{1, 2}, f_3, \ldots, f_6$
 4. Compute $f_2^{(i)} = 25 - f_1^{(i)}$. 
 5. Repeat steps 2 - 4. 
 
