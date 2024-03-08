@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] -0.68799827 -0.85301783 -0.35572810 -0.33877214 -0.86201107  0.77282045
-##  [7] -0.96175566 -0.57162165  0.43668815  0.05605728
+##  [1]  0.02465201  0.24852313  0.33214305  0.89471068  0.53776920 -0.47896835
+##  [7]  0.77817169 -0.71523979 -0.83757630 -0.40134497
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.90698737 0.03333333
+## [1] 4.93828243 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.549149 5.264826
+## [1] 4.580444 5.296121
 \end{verbatim}
 
 \end{example}
@@ -1784,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.9218455
+## [1] 0.8611674
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -3203,7 +3203,7 @@ The most common covariance function is the squared exponential functions. It is 
 \begin{definition}
 The \textbf{squared exponential covariance function} takes the form
 \[
-k(x, x') = \alpha^2\exp\left\{-\frac{1}{l}(x-x')^2\right\},
+k(x, x') = \alpha^2\exp\left\{-\frac{1}{l^2}(x-x')^2\right\},
 \]
 where \(\alpha^2\) is the signal variance and \(l>0\) is the length scale parameter.
 \end{definition}
@@ -3400,7 +3400,9 @@ We can use a Gibbs sampler alternating between sampling \(p\) and \(y_5\).
 
 Often there are variables that are cannot be observed, these may be hidden somehow or introduced to help with the modelling. Instead we can learn about this variable indirectly from the data.
 
+\begin{definition}
 A \textbf{latent variable} is a variable that cannot be observed.
+\end{definition}
 
 A mixture model is an example of latent variables being useful.
 

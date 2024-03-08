@@ -2470,7 +2470,7 @@ The most common covariance function is the squared exponential functions. It is 
 :::{.definition} 
 The **squared exponential covariance function** takes the form
 $$
-k(x, x') = \alpha^2\exp\left\{-\frac{1}{l}(x-x')^2\right\},
+k(x, x') = \alpha^2\exp\left\{-\frac{1}{l^2}(x-x')^2\right\},
 $$
 where $\alpha^2$ is the signal variance and $l>0$ is the length scale parameter.
 :::
@@ -2712,7 +2712,7 @@ We can use a Gibbs sampler alternating between sampling $p$ and $y_5$.
 ### Imputing Latent Variables
 Often there are variables that are cannot be observed, these may be hidden somehow or introduced to help with the modelling. Instead we can learn about this variable indirectly from the data.
 
-::: {.defintion}
+::: {.definition}
 A **latent variable** is a variable that cannot be observed. 
 :::
 
