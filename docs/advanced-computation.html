@@ -305,7 +305,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="definition">
 <p><span id="def:unlabeled-div-88" class="definition"><strong>Definition 6.3  </strong></span>The <strong>squared exponential covariance function</strong> takes the form
 <span class="math display">\[
-k(x, x&#39;) = \alpha^2\exp\left\{-\frac{1}{l}(x-x&#39;)^2\right\},
+k(x, x&#39;) = \alpha^2\exp\left\{-\frac{1}{l^2}(x-x&#39;)^2\right\},
 \]</span>
 where <span class="math inline">\(\alpha^2\)</span> is the signal variance and <span class="math inline">\(l&gt;0\)</span> is the length scale parameter.</p>
 </div>
@@ -452,12 +452,12 @@ We can use a Gibbs sampler alternating between sampling <span class="math inline
 <div id="imputing-latent-variables" class="section level3 hasAnchor" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> Imputing Latent Variables<a href="advanced-computation.html#imputing-latent-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Often there are variables that are cannot be observed, these may be hidden somehow or introduced to help with the modelling. Instead we can learn about this variable indirectly from the data.</p>
-<div class="defintion">
-<p>A <strong>latent variable</strong> is a variable that cannot be observed.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-104" class="definition"><strong>Definition 6.13  </strong></span>A <strong>latent variable</strong> is a variable that cannot be observed.</p>
 </div>
 <p>A mixture model is an example of latent variables being useful.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-104" class="example"><strong>Example 6.3  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
+<p><span id="exm:unlabeled-div-105" class="example"><strong>Example 6.3  </strong></span>Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.</p>
 <p>Suppose the machine is processing a bag of letters addressed to people in either B1 or B2 postcodes. The camera scans the first two characters of the postcode (B1 or B2) and records the proportion of the scanned image that is taken up by the characters. The picture below shows an example of what the scanned image looks like.</p>
 <p><img src="postcode.jpeg" /><!-- -->
 The scanned image is a 10 by 10 grid of pixels, where the number of pixels coloured black of the <span class="math inline">\(i^{th}\)</span> image is <span class="math inline">\(Y_i \sim \hbox{Bin}(100, \theta)\)</span>. However, <span class="math inline">\(\theta\)</span> depends on if the letter is going to B1 or B2. To allow for this, we introduce a latent variable <span class="math inline">\(z_i \sim \hbox{Bernoulli}(p)\)</span> that describes if the characters on the <span class="math inline">\(i^{th}\)</span> image are B1 or B2. The observation <span class="math inline">\(y_i\)</span> is the number of pixels of the <span class="math inline">\(i^{th}\)</span> image that is taken up by the characters. We observe <span class="math inline">\(y_i\)</span>, but want to estimate <span class="math inline">\(z_i\)</span>. The difficultly is there lack of one-to-one correspondence between the values <span class="math inline">\(y_i\)</span> can take and the value <span class="math inline">\(z_i\)</span>. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 (<span class="math inline">\(Z = 1\)</span>), then <span class="math inline">\(Y_i \sim \hbox{Bin}(100, \theta_1)\)</span> and if it is going to B2 (<span class="math inline">\(Z = 2\)</span>), then <span class="math inline">\(Y_i \sim \hbox{Bin}(100, \theta_2)\)</span>. The plot below shows the two densities and the overlap between them for <span class="math inline">\(p_1 = 0.9\)</span> and <span class="math inline">\(p_2 = 0.85\)</span>.</p>
@@ -525,7 +525,7 @@ The full conditional distribution is therefore <span class="math inline">\(z_i \
 <h3><span class="header-section-number">6.2.3</span> Grouped Data<a href="advanced-computation.html#grouped-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Often, we can only receive data in grouped form. This is often the case in medical and crime settings, where patients are grouped together to protect their identity. Grouping data introduces a difficulty when trying to perform inference. Augmenting the data, by introducing parameters to represent different parts of the group can both simplify the inference workflow and provide more information than is possible otherwise.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-105" class="example"><strong>Example 6.4  </strong></span>Suppose that we have data on the number of treatment sessions required by a random sample of patients before they recover from a disease. For identifiability reasons, the numbers of patients requiring two or fewer treatment sessions are grouped and we obtain the following table</p>
+<p><span id="exm:unlabeled-div-106" class="example"><strong>Example 6.4  </strong></span>Suppose that we have data on the number of treatment sessions required by a random sample of patients before they recover from a disease. For identifiability reasons, the numbers of patients requiring two or fewer treatment sessions are grouped and we obtain the following table</p>
 <table>
 <thead>
 <tr class="header">
@@ -596,14 +596,14 @@ Therefore <span class="math inline">\(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \si
 <h2><span class="header-section-number">6.3</span> Approximate Bayesian Computation<a href="advanced-computation.html#approximate-bayesian-computation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>So far, we have always considered models where the likelihood function is easy to work with. By easy, we mean that we can evaluate the likelihood function for lots of different values, and we can evaluate it cheaply. In some cases, it might not be possible to write down the likelihood function, or it might not be possible to evaluate it. In these cases, we refer to methods call <strong>likelihood free inference</strong>.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-106" class="example"><strong>Example 6.5  </strong></span>Models to predict the weather are notoriously complex. They contain a huge number of parameters, and sometimes it is not possible to write this model down exactly. In cases where the likelihood function for the weather model can be written down, we would have to start the MCMC algorithm from scratch every time we collected new data.</p>
+<p><span id="exm:unlabeled-div-107" class="example"><strong>Example 6.5  </strong></span>Models to predict the weather are notoriously complex. They contain a huge number of parameters, and sometimes it is not possible to write this model down exactly. In cases where the likelihood function for the weather model can be written down, we would have to start the MCMC algorithm from scratch every time we collected new data.</p>
 </div>
 <p>Approximate Bayesian Computation (ABC) is a likelihood free algorithm that relies on reject sampling from the prior distribution. When constructing an ABC algorithm, we only need to be able to generate data given a parameter value and not evaluate the likelihood of seeing specific data given a parameter value.</p>
 <p>We are going to look at two types of ABC. The first is ABC with rejection</p>
 <div id="abc-with-rejection" class="section level3 hasAnchor" number="6.3.1">
 <h3><span class="header-section-number">6.3.1</span> ABC with Rejection<a href="advanced-computation.html#abc-with-rejection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="definition">
-<p><span id="def:unlabeled-div-107" class="definition"><strong>Definition 6.13  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Approximate Bayesian Computation algorithm with rejection</p>
+<p><span id="def:unlabeled-div-108" class="definition"><strong>Definition 6.14  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Approximate Bayesian Computation algorithm with rejection</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value for the parameter <span class="math inline">\(\theta^*\)</span> from the prior distribution <span class="math inline">\(\pi(\theta)\)</span>.</li>
 <li>Generate some data <span class="math inline">\(y*\)</span> from the data generating process using the parameter value <span class="math inline">\(\theta^*\)</span>.</li>
@@ -612,14 +612,14 @@ Therefore <span class="math inline">\(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \si
 </ol>
 </div>
 <div class="definition">
-<p><span id="def:unlabeled-div-108" class="definition"><strong>Definition 6.14  </strong></span>The approximate posterior distribution using ABC with rejection is
+<p><span id="def:unlabeled-div-109" class="definition"><strong>Definition 6.15  </strong></span>The approximate posterior distribution using ABC with rejection is
 <span class="math display">\[
 \pi_\varepsilon(\theta \mid y) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
 \]</span>
 where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&lt; \varepsilon\}\)</span>.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-109" class="example"><strong>Example 6.6  </strong></span>This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe <span class="math inline">\(Y_1, \ldots, y_510\sim Beta(3, \beta)\)</span>. We place a uniform prior on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim U[0, 5]\)</span>. The ABC algorithm with rejection works as follows:</p>
+<p><span id="exm:unlabeled-div-110" class="example"><strong>Example 6.6  </strong></span>This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe <span class="math inline">\(Y_1, \ldots, y_510\sim Beta(3, \beta)\)</span>. We place a uniform prior on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim U[0, 5]\)</span>. The ABC algorithm with rejection works as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value <span class="math inline">\(\beta^* \sim U[0, 5]\)</span>.</li>
 <li>Simulate <span class="math inline">\(y^*_1, \ldots, y^*_10 \sim Beta(3,\beta^*)\)</span></li>
@@ -675,7 +675,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&
 </div>
 <p>One important question is how to choose the value for <span class="math inline">\(\varepsilon\)</span>? It turns out this is an incredibly hard question that is specific to each application. Often the approximate posterior distribution <span class="math inline">\(\pi_\varepsilon(\theta \mid y)\)</span> is very sensitive to the choice of <span class="math inline">\(\varepsilon\)</span>.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-110" class="example"><strong>Example 6.7  </strong></span>Let’s repeat the example, first with <span class="math inline">\(\varepsilon = 0.12\)</span>. In this case, almost all of the proposals are rejected.</p>
+<p><span id="exm:unlabeled-div-111" class="example"><strong>Example 6.7  </strong></span>Let’s repeat the example, first with <span class="math inline">\(\varepsilon = 0.12\)</span>. In this case, almost all of the proposals are rejected.</p>
 <div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="advanced-computation.html#cb112-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
 <span id="cb112-2"><a href="advanced-computation.html#cb112-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb112-3"><a href="advanced-computation.html#cb112-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
@@ -723,7 +723,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&
 ## 1.181349 2.587056</code></pre>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-111" class="example"><strong>Example 6.8  </strong></span>And now again with <span class="math inline">\(\varepsilon = 2\)</span>. In this case, almost all of the proposals are accepted.</p>
+<p><span id="exm:unlabeled-div-112" class="example"><strong>Example 6.8  </strong></span>And now again with <span class="math inline">\(\varepsilon = 2\)</span>. In this case, almost all of the proposals are accepted.</p>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="advanced-computation.html#cb121-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
 <span id="cb121-2"><a href="advanced-computation.html#cb121-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb121-3"><a href="advanced-computation.html#cb121-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
@@ -772,7 +772,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&
 <p>When <span class="math inline">\(\varepsilon = 0.12\)</span>, almost all the proposals are rejected. Although the approximate posterior mean is close to the true value, given we only have 7 samples we cannot say much about the posterior distribution. When <span class="math inline">\(\varepsilon = 2\)</span>, almost all the proposals are accepted. This histogram shows that we are really just sampling from the prior distribution, i.e. <span class="math inline">\(\pi_2(\beta \mid y) \approx \pi(\beta)\)</span>.</p>
 </div>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-112" class="proposition"><strong>Proposition 6.3  </strong></span>Using an ABC rejection algorithm
+<p><span id="prp:unlabeled-div-113" class="proposition"><strong>Proposition 6.3  </strong></span>Using an ABC rejection algorithm
 <span class="math display">\[
 \lim_{\varepsilon \rightarrow \infty} \pi_\varepsilon(\theta \mid y) \overset{D}= \pi(\theta),
 \]</span>
@@ -782,11 +782,11 @@ and
 \]</span></p>
 </div>
 <div class="proof">
-<p><span id="unlabeled-div-113" class="proof"><em>Proof</em>. </span>See problem sheet.</p>
+<p><span id="unlabeled-div-114" class="proof"><em>Proof</em>. </span>See problem sheet.</p>
 </div>
 <p>This example and the proposition show that if we set <span class="math inline">\(\varepsilon\)</span> too large, we don’t learn anything about <span class="math inline">\(\theta\)</span>, we just recover the data. The smaller the value of <span class="math inline">\(\varepsilon\)</span>, the better. But very small values may require very long run times, or have such few samples that the noise from the sampling generator is larger than the signal in the accepted samples. The only diagnostic tools we have are the proportion of samples accepted and the histograms of the approximate posterior and prior distributions.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-114" class="example"><strong>Example 6.9  </strong></span>An example of where this is useful is epidemic modelling. Suppose we have a population of 100 individuals and at each time point an individual is Susceptible to a disease, Infected with the disease, or Recovered and therefore immune. Once infected with the disease, an individual infects people according to a Poisson process with rate <span class="math inline">\(\beta\)</span>. Each infected person is infected from a time period drawn from an Exponential distribution with rate <span class="math inline">\(1\)</span>. We observe the total number of people infected with the disease at the end of the outbreak. To carry out inference for the infection rate <span class="math inline">\(\beta\)</span>, we need to use the augmented likelihood function The augmented likelihood function for this model is given by</p>
+<p><span id="exm:unlabeled-div-115" class="example"><strong>Example 6.9  </strong></span>An example of where this is useful is epidemic modelling. Suppose we have a population of 100 individuals and at each time point an individual is Susceptible to a disease, Infected with the disease, or Recovered and therefore immune. Once infected with the disease, an individual infects people according to a Poisson process with rate <span class="math inline">\(\beta\)</span>. Each infected person is infected from a time period drawn from an Exponential distribution with rate <span class="math inline">\(1\)</span>. We observe the total number of people infected with the disease at the end of the outbreak. To carry out inference for the infection rate <span class="math inline">\(\beta\)</span>, we need to use the augmented likelihood function The augmented likelihood function for this model is given by</p>
 <p><span class="math display">\[
 \pi(\textbf{i}, \textbf{r}| \beta) \propto \underbrace{\exp\Big(- \sum\limits_{j=1}^n\sum\limits_{k=1}^N \beta\big((r_j \wedge i_k) - (i_j \wedge i_k)\big)\Big)}_\text{Avoiding infection} \\
 \times\hspace{1.8cm} \underbrace{\prod\limits_{\substack{j=1 \\ j \neq \kappa}}^n\Big(\sum\limits_{k \in \mathcal{Y}_j} \beta\Big)}_\text{Becoming infectious}  \\
@@ -884,11 +884,11 @@ This likelihood function cannot be evaluated as we do not observe the infection 
 <h3><span class="header-section-number">6.3.2</span> Summary ABC with Rejection<a href="advanced-computation.html#summary-abc-with-rejection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>ABC with rejection suffers from the curse of dimensionality (see Chapter 5). As the number of data points increases, the probability we get a ‘close’ match decreases. This means we have to increase <span class="math inline">\(\varepsilon\)</span> and degrade the quality of our approximation.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-115" class="example"><strong>Example 6.10  </strong></span>Let’s repeat the Beta example with <span class="math inline">\(n = 200\)</span> observed data points. We need <span class="math inline">\(\varepsilon &gt; 15\)</span> for any proposals to be accepted.</p>
+<p><span id="exm:unlabeled-div-116" class="example"><strong>Example 6.10  </strong></span>Let’s repeat the Beta example with <span class="math inline">\(n = 200\)</span> observed data points. We need <span class="math inline">\(\varepsilon &gt; 15\)</span> for any proposals to be accepted.</p>
 </div>
 <p>We can avoid the curse of dimensionality by comparing summary statistics instead. This leads us to the Summary ABC algorithm.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-116" class="definition"><strong>Definition 6.15  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Summary Approximate Bayesian Computation algorithm with rejection</p>
+<p><span id="def:unlabeled-div-117" class="definition"><strong>Definition 6.16  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Summary Approximate Bayesian Computation algorithm with rejection</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value for the parameter <span class="math inline">\(\theta^*\)</span> from the prior distribution <span class="math inline">\(\pi(\theta)\)</span>.</li>
 <li>Generate some data <span class="math inline">\(y*\)</span> from the data generating process using the parameter value <span class="math inline">\(\theta^*\)</span>.</li>
@@ -898,7 +898,7 @@ This likelihood function cannot be evaluated as we do not observe the infection 
 </div>
 <p>Similar to the ABC algorithm with rejection, we also have the following proposition.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-117" class="proposition"><strong>Proposition 6.4  </strong></span>The approximate posterior distribution using ABC with rejection is
+<p><span id="prp:unlabeled-div-118" class="proposition"><strong>Proposition 6.4  </strong></span>The approximate posterior distribution using ABC with rejection is
 <span class="math display">\[
 \pi_\varepsilon(\theta \mid S(y)) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
 \]</span>
@@ -906,17 +906,17 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (
 </div>
 <p>Using summary statistics only increases the approximation however, as we are approximating the data using a summary of it. The only case when we are not approximating further is when the statistic contains all the information about the underlying sample it is summarising. This is known as a sufficient statistic.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-118" class="definition"><strong>Definition 6.16  </strong></span>A statistic <span class="math inline">\(S\)</span> is a sufficient statistic for the parameter <span class="math inline">\(\theta\)</span> if the conditional distribution <span class="math inline">\(\pi(y | S(y))\)</span> does not depend on <span class="math inline">\(\theta\)</span>.</p>
+<p><span id="def:unlabeled-div-119" class="definition"><strong>Definition 6.17  </strong></span>A statistic <span class="math inline">\(S\)</span> is a sufficient statistic for the parameter <span class="math inline">\(\theta\)</span> if the conditional distribution <span class="math inline">\(\pi(y | S(y))\)</span> does not depend on <span class="math inline">\(\theta\)</span>.</p>
 </div>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-119" class="proposition"><strong>Proposition 6.5  </strong></span>Using a Summary ABC rejection algorithm with a sufficient statistic <span class="math inline">\(S\)</span>
+<p><span id="prp:unlabeled-div-120" class="proposition"><strong>Proposition 6.5  </strong></span>Using a Summary ABC rejection algorithm with a sufficient statistic <span class="math inline">\(S\)</span>
 <span class="math display">\[
 \lim_{\varepsilon \rightarrow 0} \pi_\varepsilon(\theta \mid S(y)) \overset{D}= \pi(\theta \mid y).
 \]</span></p>
 </div>
 <p>The difficulty with sufficient statistics is that they only exist for ‘nice’ distributions, like the Gamma, Beta and Poisson distributions. In these cases, we can work with the posterior distribution directly or use and MCMC algorithm.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-120" class="example"><strong>Example 6.11  </strong></span>Let’s repeat the beta distribution example using the mean as the summary statistic. We can set <span class="math inline">\(\varepsilon = 0.001\)</span>.</p>
+<p><span id="exm:unlabeled-div-121" class="example"><strong>Example 6.11  </strong></span>Let’s repeat the beta distribution example using the mean as the summary statistic. We can set <span class="math inline">\(\varepsilon = 0.001\)</span>.</p>
 <div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="advanced-computation.html#cb137-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
 <span id="cb137-2"><a href="advanced-computation.html#cb137-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
 <span id="cb137-3"><a href="advanced-computation.html#cb137-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
@@ -960,7 +960,7 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (
 <h2><span class="header-section-number">6.4</span> Prior Ellicitation<a href="advanced-computation.html#prior-ellicitation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Throughout this course, we have tried to be objective in our choice of prior distributions. We have discussed <strong>uninformative</strong> and <strong>invariant</strong> prior distributions. Sometimes we have used <strong>vague</strong> prior distributions, such as the Exp(0.01) distribution. And other times, we have left the parameters as generic values. This misses out on one real difference between Bayesian and frequentist inference. In Bayesian inference, we can include prior information about the model parameters. Determining the value of prior parameters is know as prior elicitation. This is more of an art than a science and still controversial in the Bayesian world. In this section, we are going to look at a few ways of how to elicit prior information from experts.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-121" class="example"><strong>Example 6.12  </strong></span>This example to show how difficult it is to talk to experts in other areas about probabilities and risk. Suppose we are interested in estimating the number of crashes on a new motorway that is being designed. Denote the number of crashes per week by <span class="math inline">\(X\)</span> and suppose <span class="math inline">\(X \sim \hbox{Po}(\lambda)\)</span>. We place a <span class="math inline">\(\lambda \sim \Gamma(\alpha, \beta)\)</span> prior distribution on the rate parameter <span class="math inline">\(\lambda\)</span>. The density function of this prior distribution is
+<p><span id="exm:unlabeled-div-122" class="example"><strong>Example 6.12  </strong></span>This example to show how difficult it is to talk to experts in other areas about probabilities and risk. Suppose we are interested in estimating the number of crashes on a new motorway that is being designed. Denote the number of crashes per week by <span class="math inline">\(X\)</span> and suppose <span class="math inline">\(X \sim \hbox{Po}(\lambda)\)</span>. We place a <span class="math inline">\(\lambda \sim \Gamma(\alpha, \beta)\)</span> prior distribution on the rate parameter <span class="math inline">\(\lambda\)</span>. The density function of this prior distribution is
 <span class="math display">\[
 \pi(\lambda) = \frac{\beta^\alpha}{\Gamma(\alpha)}\lambda^{\alpha-1}\exp(-\lambda\beta).
 \]</span>
@@ -971,7 +971,7 @@ The parameter <span class="math inline">\(\alpha\)</span> is know as the shape p
 <h3><span class="header-section-number">6.4.1</span> Prior Summaries<a href="advanced-computation.html#prior-summaries" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The first method we are going to look at is called summary matching. For this method, we ask experts to provide summaries of what they think the prior distribution is. We then choose a function form for the prior distribution and use these summaries to estimate the prior distribution. The choice of summaries depend on the application in hand as well as the choice of prior distribution. Common choices are: the mean, median, mode, variance, and cumulative probabilities (i.e. <span class="math inline">\(\pi(\theta &lt; 0.5)\)</span>).</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-122" class="example"><strong>Example 6.13  </strong></span>Let’s return to the motorway example from above. Suppose that a highway engineer tells us the expected number of crashes per week is 0.75 and the probability that <span class="math inline">\(\lambda &lt; 0.9\)</span> is 80%. Matching summaries tells us
+<p><span id="exm:unlabeled-div-123" class="example"><strong>Example 6.13  </strong></span>Let’s return to the motorway example from above. Suppose that a highway engineer tells us the expected number of crashes per week is 0.75 and the probability that <span class="math inline">\(\lambda &lt; 0.9\)</span> is 80%. Matching summaries tells us
 <span class="math display">\[
 \frac{\alpha}{\beta} = 0.75 \\
 \int_0^{0.9}\pi(\lambda) d\lambda = 0.8
@@ -1011,7 +1011,7 @@ The parameter <span class="math inline">\(\alpha\)</span> is know as the shape p
 <p>The difficulty with the summary matching method is that it requires experts to describe probabilities about the prior parameter, which is difficult to do and quite an abstract concept. Instead of asking them to describe summaries, we can ask them to draw the prior distribution completely, using a betting framework.</p>
 <p>In the <strong>prior weights</strong> (sometimes called roulette) method, we give the the experts a set of intervals for the parameter of interest and fixed number of coins. We then ask the experts to place the coins in the intervals according to how likely they think the parameter will be in each interval, effectively betting on what value the parameter will take. For example, they might place <span class="math inline">\(n_1\)</span> coins in the interval <span class="math inline">\(\theta \in [a, b)\)</span>, <span class="math inline">\(n_2\)</span> in <span class="math inline">\(\theta \in [b, c)\)</span> and <span class="math inline">\(n_3\)</span> for <span class="math inline">\(\theta \in \[c, d]\)</span>. From this we can construct our prior density.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-123" class="example"><strong>Example 6.14  </strong></span>Suppose we are interested in the probability a pharmaceutical drug has the desired clinical effect. The outcome of each patient’s treatment can be modelled by <span class="math inline">\(X\sim\hbox{Bernoulli}(p)\)</span>. We ask a clinical about their experience with patients and similar treatments. We ask the expert to estimate the probability of successful treatment by betting on the value for <span class="math inline">\(p\)</span> using the following table and 20 coins.</p>
+<p><span id="exm:unlabeled-div-124" class="example"><strong>Example 6.14  </strong></span>Suppose we are interested in the probability a pharmaceutical drug has the desired clinical effect. The outcome of each patient’s treatment can be modelled by <span class="math inline">\(X\sim\hbox{Bernoulli}(p)\)</span>. We ask a clinical about their experience with patients and similar treatments. We ask the expert to estimate the probability of successful treatment by betting on the value for <span class="math inline">\(p\)</span> using the following table and 20 coins.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1049,7 +1049,7 @@ The parameter <span class="math inline">\(\alpha\)</span> is know as the shape p
 <h3><span class="header-section-number">6.4.3</span> Prior Intervals<a href="advanced-computation.html#prior-intervals" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The last method we will look at is the <strong>bisection</strong> method. In this method, we ask the experts to propose four intervals, each of which the parameter value is likely to fall into, i.e. <span class="math inline">\(\pi(\theta \in [a, b)) = \pi(\theta \in [c, d)) = \pi(\theta \in [e, f))= \pi(\theta \in [g, h)) = 0.25\)</span>. From these intervals, we develop a prior distribution that fits these intervals.</p>
 <div class="example">
-<p><span id="exm:unlabeled-div-124" class="example"><strong>Example 6.15  </strong></span>The police are interested in estimating the number of matching features between a fingerprint from a crime scene and a fingerprint from a suspect in the police station. The number of matching features is <span class="math inline">\(X \sim \hbox{Po}(\lambda)\)</span>. We speak to experienced fingerprint analysts. She advises us that about a quarter of the time, she would expect to see between 0 and 4 matches and this is when it is unlikely for the suspect to be the criminal. She says in some cases, it’s very clear that the suspect is the criminal as she would expect to see 20 to 30 matches. The rest of the time, she sees some matches but the fingerprint collected at the crime scene is poor quality, so see may see 5 to 14 matches. She agrees that the matches are uniform across this range. So our four intervals are [0, 4], [5, 12], [13, 19], [20, 30]. Using the Match software, we get a Uniform[0, 30] distribution.</p>
+<p><span id="exm:unlabeled-div-125" class="example"><strong>Example 6.15  </strong></span>The police are interested in estimating the number of matching features between a fingerprint from a crime scene and a fingerprint from a suspect in the police station. The number of matching features is <span class="math inline">\(X \sim \hbox{Po}(\lambda)\)</span>. We speak to experienced fingerprint analysts. She advises us that about a quarter of the time, she would expect to see between 0 and 4 matches and this is when it is unlikely for the suspect to be the criminal. She says in some cases, it’s very clear that the suspect is the criminal as she would expect to see 20 to 30 matches. The rest of the time, she sees some matches but the fingerprint collected at the crime scene is poor quality, so see may see 5 to 14 matches. She agrees that the matches are uniform across this range. So our four intervals are [0, 4], [5, 12], [13, 19], [20, 30]. Using the Match software, we get a Uniform[0, 30] distribution.</p>
 </div>
 </div>
 </div>
@@ -1058,7 +1058,7 @@ The parameter <span class="math inline">\(\alpha\)</span> is know as the shape p
 <div id="gaussian-processes-1" class="section level3 hasAnchor" number="6.5.1">
 <h3><span class="header-section-number">6.5.1</span> Gaussian Processes<a href="advanced-computation.html#gaussian-processes-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="example">
-<p><span id="exm:unlabeled-div-125" class="example"><strong>Example 6.16  </strong></span>The code below shows how to set up a Gaussian Process and draw samples from it in R.</p>
+<p><span id="exm:unlabeled-div-126" class="example"><strong>Example 6.16  </strong></span>The code below shows how to set up a Gaussian Process and draw samples from it in R.</p>
 <div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="advanced-computation.html#cb146-1" tabindex="-1"></a><span class="fu">require</span>(MASS)</span></code></pre></div>
 <pre><code>## Loading required package: MASS</code></pre>
 <div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="advanced-computation.html#cb148-1" tabindex="-1"></a>squared.exponential.covariance <span class="ot">&lt;-</span> <span class="cf">function</span>(x1, x2, alpha, ell) {</span>
@@ -1090,16 +1090,16 @@ The parameter <span class="math inline">\(\alpha\)</span> is know as the shape p
 <p><img src="_main_files/figure-html/unnamed-chunk-56-2.png" width="672" /></p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-126" class="exercise"><strong>Exercise 6.1  </strong></span>Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use</p>
+<p><span id="exr:unlabeled-div-127" class="exercise"><strong>Exercise 6.1  </strong></span>Code up example 6.1. How does your choice of length scale affect the posterior distribution. You can use</p>
 <div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="advanced-computation.html#cb150-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb150-2"><a href="advanced-computation.html#cb150-2" tabindex="-1"></a>y <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="fl">3.0942822</span>, <span class="fl">3.0727920</span>, <span class="fl">2.6137341</span>, <span class="fl">1.8818820</span>, <span class="fl">1.2746738</span>, <span class="fl">1.2532116</span>, <span class="fl">1.4620830</span>, <span class="fl">1.4194647</span>, <span class="fl">1.6786969</span>, <span class="fl">1.1057042</span>, <span class="fl">0.4118125</span>)</span></code></pre></div>
 <p>with <span class="math inline">\(\sigma^2 = 0.2\)</span>.To draw samples from the multivariate normal distribution with mean vector <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance matrix <span class="math inline">\(\Sigma\)</span> use the MASS package.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-127" class="exercise"><strong>Exercise 6.2  </strong></span>Repeat Exercise 6.1, but this time set the fine grid to be <span class="math inline">\(\boldsymbol{x}^* = \{-5, -4.9, -4.8, \ldots, 9.8, 9.9, 10\}\)</span>. What happens to the posterior distribution after <span class="math inline">\(x^* = 5\)</span>?</p>
+<p><span id="exr:unlabeled-div-128" class="exercise"><strong>Exercise 6.2  </strong></span>Repeat Exercise 6.1, but this time set the fine grid to be <span class="math inline">\(\boldsymbol{x}^* = \{-5, -4.9, -4.8, \ldots, 9.8, 9.9, 10\}\)</span>. What happens to the posterior distribution after <span class="math inline">\(x^* = 5\)</span>?</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-128" class="exercise"><strong>Exercise 6.3  </strong></span>You observe the following data</p>
+<p><span id="exr:unlabeled-div-129" class="exercise"><strong>Exercise 6.3  </strong></span>You observe the following data</p>
 <div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="advanced-computation.html#cb151-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">5</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb151-2"><a href="advanced-computation.html#cb151-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="fl">0.5</span><span class="sc">*</span>x) <span class="sc">+</span> <span class="fu">log</span>(x <span class="sc">+</span> <span class="dv">6</span>)</span>
 <span id="cb151-3"><a href="advanced-computation.html#cb151-3" tabindex="-1"></a>y</span></code></pre></div>
@@ -1113,10 +1113,10 @@ The parameter <span class="math inline">\(\alpha\)</span> is know as the shape p
 <div id="missing-data" class="section level3 hasAnchor" number="6.5.2">
 <h3><span class="header-section-number">6.5.2</span> Missing Data<a href="advanced-computation.html#missing-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-129" class="exercise"><strong>Exercise 6.4  </strong></span>In Example 6.2, suppose the observed data is <span class="math inline">\(\{y_1, y_2, y_3, y_4\} = \{4, 4, 5 ,2\}\)</span>. Design and code an MCMC algorithm to generate samples from the posterior distribution for <span class="math inline">\(p\)</span> and <span class="math inline">\(y_5\)</span>.</p>
+<p><span id="exr:unlabeled-div-130" class="exercise"><strong>Exercise 6.4  </strong></span>In Example 6.2, suppose the observed data is <span class="math inline">\(\{y_1, y_2, y_3, y_4\} = \{4, 4, 5 ,2\}\)</span>. Design and code an MCMC algorithm to generate samples from the posterior distribution for <span class="math inline">\(p\)</span> and <span class="math inline">\(y_5\)</span>.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-130" class="exercise"><strong>Exercise 6.5  </strong></span>Suppose you manage a clinical trial. You administer a new drug to patients and record how many days until their symptoms are alleviated. You observe the times for the first 9 patients</p>
+<p><span id="exr:unlabeled-div-131" class="exercise"><strong>Exercise 6.5  </strong></span>Suppose you manage a clinical trial. You administer a new drug to patients and record how many days until their symptoms are alleviated. You observe the times for the first 9 patients</p>
 <div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="advanced-computation.html#cb154-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">33</span>,  <span class="dv">17</span>, <span class="dv">218</span>,   <span class="dv">3</span>,  <span class="dv">39</span>,   <span class="dv">3</span>,  <span class="dv">43</span>,  <span class="dv">14</span>,  <span class="dv">20</span>)</span></code></pre></div>
 <p>Patient 10 drops out of the trial on day 50 and at this point, their symptoms have not changed. They send an email on day 200 to say they no longer have any symptoms (i.e. <span class="math inline">\(x_i \in [50, \ldots, 200]\)</span>. Write down a model for this problem and derive the posterior distribution. Design and code an MCMC algorithm to generate samples from the posterior distribution for any model parameters and <span class="math inline">\(x_{10}\)</span>.</p>
 </div>
@@ -1124,13 +1124,13 @@ The parameter <span class="math inline">\(\alpha\)</span> is know as the shape p
 <div id="approximate-bayesian-computation-1" class="section level3 hasAnchor" number="6.5.3">
 <h3><span class="header-section-number">6.5.3</span> Approximate Bayesian Computation<a href="advanced-computation.html#approximate-bayesian-computation-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-131" class="exercise"><strong>Exercise 6.6  </strong></span>You observe the following data from an <span class="math inline">\(N(5, \sigma^2)\)</span> distribution.</p>
+<p><span id="exr:unlabeled-div-132" class="exercise"><strong>Exercise 6.6  </strong></span>You observe the following data from an <span class="math inline">\(N(5, \sigma^2)\)</span> distribution.</p>
 <pre><code>-5.93,  33.12, -21.41, -12.42, -17.64,  -5.47, -27.95, -22.25, -20.40, -26.28, -24.57,  
 3.06,  44.28, 6.02, -21.14,  14.79, -15.10, 53.18,  38.61,   5.71</code></pre>
 <p>Use an Exp(0.1) prior distribution on <span class="math inline">\(\sigma^2\)</span> and develop a summary statistic ABC algorithm to draw samples from the approximate posterior distribution.</p>
 </div>
 <div class="exercise">
-<p><span id="exr:unlabeled-div-132" class="exercise"><strong>Exercise 6.7  </strong></span>You observe the following data from an <span class="math inline">\(Exp(\lambda)\)</span> distribution.</p>
+<p><span id="exr:unlabeled-div-133" class="exercise"><strong>Exercise 6.7  </strong></span>You observe the following data from an <span class="math inline">\(Exp(\lambda)\)</span> distribution.</p>
 <pre><code>2.6863422, 8.8468112, 8.8781831, 0.2712696, 1.8902442</code></pre>
 <p>Use an <span class="math inline">\(Beta(1, 3)\)</span> prior distribution on <span class="math inline">\(\lambda\)</span> and develop an ABC algorithm to draw samples from the approximate posterior distribution. Write the ABC algorithm as a function so you can run it for different values of <span class="math inline">\(\varepsilon\)</span>. Run your algorithm for <span class="math inline">\(\varepsilon = \{20, \ldots, 100\}\)</span> and record the approximate posterior median. Plot the relative error in your estimate against the true value of lambda, which is 0.2.</p>
 </div>
