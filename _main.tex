@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.75541118  0.18912103  0.60454957  0.78924349  0.06259018 -0.18902736
-##  [7] -0.13782457  0.87434985  0.85971805 -0.91912562
+##  [1]  0.553115799 -0.409512337  0.772483251 -0.662282372 -0.437719561
+##  [6]  0.392869676  0.064881319  0.396970438 -0.778228898  0.006972023
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.90140451 0.03333333
+## [1] 5.20700107 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.543566 5.259243
+## [1] 4.849162 5.564840
 \end{verbatim}
 
 \end{example}
@@ -1784,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.1788364
+## [1] 0.7418799
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -3546,7 +3546,7 @@ Instead of using the observed likelihood, we can write the complete likelihood f
 \]
 Now, the Beta(\(\alpha, \beta)\) prior distribution is conjugate and we have
 \[
-p \mid f_1 \ldots, f_6  \sim \hbox{Beta}(40 + \alpha, \sum f(x) - 40 + \beta).
+p \mid f_1 \ldots, f_6  \sim \hbox{Beta}\left(40 + \alpha, \sum_i  x_if_i - 40 + \beta\right).
 \]
 Now, we need to derive the full conditional distribution for \(f(1)\), the number of patients who were treated after only one sessions, \(\pi(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6)\). Under the geometric distribution model, the probability a patient is treated after exactly one session is \(p\) and after two sessions is \((1-p)p\). We can use these probabilities in a Binomial distribution. We have 25 patients each with a probability of being treated \(q\), where
 \[
@@ -3560,7 +3560,7 @@ Therefore \(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \sim \hbox{Bin}(25, q)\). We 
 \item
   Initialise \(p^{(0)}\), \(f_1^{(0)}\) and \(f_2^{(0)}\). Set \(i = 1\).
 \item
-  Sample \(p^{(i)} \mid f_1^{(i-1)}, f_2^{(i-1)}, f_3 \ldots, f_6 \sim \hbox{Beta}(40 + \alpha, \sum f(x) - 40 + \beta)\)
+  Sample \(p^{(i)} \mid f_1^{(i-1)}, f_2^{(i-1)}, f_3 \ldots, f_6 \sim \hbox{Beta}(40 + \alpha, \sum xf - 40 + \beta)\)
 \item
   Sample \(f_1^{(i)} \mid p^{(i)}, f_{1, 2}, f_3, \ldots, f_6\)
 \item

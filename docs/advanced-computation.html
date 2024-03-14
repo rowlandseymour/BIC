@@ -574,7 +574,7 @@ Instead of using the observed likelihood, we can write the complete likelihood f
 \]</span>
 Now, the Beta(<span class="math inline">\(\alpha, \beta)\)</span> prior distribution is conjugate and we have
 <span class="math display">\[
-p \mid f_1 \ldots, f_6  \sim \hbox{Beta}(40 + \alpha, \sum f(x) - 40 + \beta).
+p \mid f_1 \ldots, f_6  \sim \hbox{Beta}\left(40 + \alpha, \sum_i  x_if_i - 40 + \beta\right).
 \]</span>
 Now, we need to derive the full conditional distribution for <span class="math inline">\(f(1)\)</span>, the number of patients who were treated after only one sessions, <span class="math inline">\(\pi(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6)\)</span>. Under the geometric distribution model, the probability a patient is treated after exactly one session is <span class="math inline">\(p\)</span> and after two sessions is <span class="math inline">\((1-p)p\)</span>. We can use these probabilities in a Binomial distribution. We have 25 patients each with a probability of being treated <span class="math inline">\(q\)</span>, where
 <span class="math display">\[
@@ -583,7 +583,7 @@ q = \frac{p}{p + (1-p)p}
 Therefore <span class="math inline">\(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \sim \hbox{Bin}(25, q)\)</span>. We do not need to sample <span class="math inline">\(f_2\)</span> as we have <span class="math inline">\(f_2 = 25 - f_1\)</span>. Our MCMC algorithm using the complete data likelihood function and inferring <span class="math inline">\(f_1\)</span> and <span class="math inline">\(f_2\)</span> as well as <span class="math inline">\(p\)</span> could be</p>
 <ol style="list-style-type: decimal">
 <li>Initialise <span class="math inline">\(p^{(0)}\)</span>, <span class="math inline">\(f_1^{(0)}\)</span> and <span class="math inline">\(f_2^{(0)}\)</span>. Set <span class="math inline">\(i = 1\)</span>.</li>
-<li>Sample <span class="math inline">\(p^{(i)} \mid f_1^{(i-1)}, f_2^{(i-1)}, f_3 \ldots, f_6 \sim \hbox{Beta}(40 + \alpha, \sum f(x) - 40 + \beta)\)</span></li>
+<li>Sample <span class="math inline">\(p^{(i)} \mid f_1^{(i-1)}, f_2^{(i-1)}, f_3 \ldots, f_6 \sim \hbox{Beta}(40 + \alpha, \sum xf - 40 + \beta)\)</span></li>
 <li>Sample <span class="math inline">\(f_1^{(i)} \mid p^{(i)}, f_{1, 2}, f_3, \ldots, f_6\)</span></li>
 <li>Compute <span class="math inline">\(f_2^{(i)} = 25 - f_1^{(i)}\)</span>.</li>
 <li>Repeat steps 2 - 4.</li>
