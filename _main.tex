@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.02465201  0.24852313  0.33214305  0.89471068  0.53776920 -0.47896835
-##  [7]  0.77817169 -0.71523979 -0.83757630 -0.40134497
+##  [1]  0.75541118  0.18912103  0.60454957  0.78924349  0.06259018 -0.18902736
+##  [7] -0.13782457  0.87434985  0.85971805 -0.91912562
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.93828243 0.03333333
+## [1] 4.90140451 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.580444 5.296121
+## [1] 4.543566 5.259243
 \end{verbatim}
 
 \end{example}
@@ -1784,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.8611674
+## [1] 0.1788364
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -3542,7 +3542,7 @@ p_{\textrm{acc}} = \min\left\{\frac{p'^{40 + \alpha - 1}(1-p')^{43 + \beta - 1}(
 \]
 Instead of using the observed likelihood, we can write the complete likelihood function supposing we had seen the number of patients who had had one and two sessions. The complete likelihood function is
 \[
-\pi(f_1 \ldots, f_6 \mid p) = p^{40}(1-p)^{\sum f(x) - 40}. 
+\pi(f_1 \ldots, f_6 \mid p) = p^{40}(1-p)^{\sum xf - 40}. 
 \]
 Now, the Beta(\(\alpha, \beta)\) prior distribution is conjugate and we have
 \[
@@ -3617,7 +3617,7 @@ where \({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||< \varepsilon\}\).
 
 \begin{example}
 
-This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe \(Y_1, \ldots, y_510\sim Beta(3, \beta)\). We place a uniform prior on \(\beta\) such that \(\beta \sim U[0, 5]\). The ABC algorithm with rejection works as follows:
+This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe \(Y_1, \ldots, y_{10}\sim Beta(3, \beta)\). We place a uniform prior on \(\beta\) such that \(\beta \sim U[0, 5]\). The ABC algorithm with rejection works as follows:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -3625,7 +3625,7 @@ This is a simple example, where we can derive the posterior distribution, but it
 \item
   Sample a value \(\beta^* \sim U[0, 5]\).
 \item
-  Simulate \(y^*_1, \ldots, y^*_10 \sim Beta(3,\beta^*)\)
+  Simulate \(y^*_1, \ldots, y^*_{10} \sim Beta(3,\beta^*)\)
 \item
   Compute \(D = \sum_{i=1}^{10}(y_i -y^*_i)^2\). If \(D < 0.75\), accept \(\beta^*\) as a sample from the posterior distribution. Otherwise, reject \(\beta^*\).
 \item

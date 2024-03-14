@@ -2826,7 +2826,7 @@ p_{\textrm{acc}} = \min\left\{\frac{p'^{40 + \alpha - 1}(1-p')^{43 + \beta - 1}(
 $$
 Instead of using the observed likelihood, we can write the complete likelihood function supposing we had seen the number of patients who had had one and two sessions. The complete likelihood function is
 $$
-\pi(f_1 \ldots, f_6 \mid p) = p^{40}(1-p)^{\sum f(x) - 40}. 
+\pi(f_1 \ldots, f_6 \mid p) = p^{40}(1-p)^{\sum xf - 40}. 
 $$
 Now, the Beta($\alpha, \beta)$ prior distribution is conjugate and we have 
 $$
@@ -2879,10 +2879,10 @@ where ${A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||< \varepsilon\}$.
 :::
 
 ::: {.example}
-This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe $Y_1, \ldots, y_510\sim Beta(3, \beta)$. We place a uniform prior on $\beta$ such that $\beta \sim U[0, 5]$. The ABC algorithm with rejection works as follows:
+This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe $Y_1, \ldots, y_{10}\sim Beta(3, \beta)$. We place a uniform prior on $\beta$ such that $\beta \sim U[0, 5]$. The ABC algorithm with rejection works as follows:
 
 1. Sample a value $\beta^* \sim U[0, 5]$. 
-2. Simulate $y^*_1, \ldots, y^*_10 \sim Beta(3,\beta^*)$
+2. Simulate $y^*_1, \ldots, y^*_{10} \sim Beta(3,\beta^*)$
 3. Compute $D = \sum_{i=1}^{10}(y_i -y^*_i)^2$. If $D < 0.75$, accept $\beta^*$ as a sample from the posterior distribution. Otherwise, reject $\beta^*$.
 4. Repeat steps 1, 2, and 3. 
 

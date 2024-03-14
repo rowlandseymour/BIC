@@ -570,7 +570,7 @@ p_{\textrm{acc}} = \min\left\{\frac{p&#39;^{40 + \alpha - 1}(1-p&#39;)^{43 + \be
 \]</span>
 Instead of using the observed likelihood, we can write the complete likelihood function supposing we had seen the number of patients who had had one and two sessions. The complete likelihood function is
 <span class="math display">\[
-\pi(f_1 \ldots, f_6 \mid p) = p^{40}(1-p)^{\sum f(x) - 40}.
+\pi(f_1 \ldots, f_6 \mid p) = p^{40}(1-p)^{\sum xf - 40}.
 \]</span>
 Now, the Beta(<span class="math inline">\(\alpha, \beta)\)</span> prior distribution is conjugate and we have
 <span class="math display">\[
@@ -619,10 +619,10 @@ Therefore <span class="math inline">\(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \si
 where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&lt; \varepsilon\}\)</span>.</p>
 </div>
 <div class="example">
-<p><span id="exm:unlabeled-div-110" class="example"><strong>Example 6.6  </strong></span>This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe <span class="math inline">\(Y_1, \ldots, y_510\sim Beta(3, \beta)\)</span>. We place a uniform prior on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim U[0, 5]\)</span>. The ABC algorithm with rejection works as follows:</p>
+<p><span id="exm:unlabeled-div-110" class="example"><strong>Example 6.6  </strong></span>This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe <span class="math inline">\(Y_1, \ldots, y_{10}\sim Beta(3, \beta)\)</span>. We place a uniform prior on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim U[0, 5]\)</span>. The ABC algorithm with rejection works as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value <span class="math inline">\(\beta^* \sim U[0, 5]\)</span>.</li>
-<li>Simulate <span class="math inline">\(y^*_1, \ldots, y^*_10 \sim Beta(3,\beta^*)\)</span></li>
+<li>Simulate <span class="math inline">\(y^*_1, \ldots, y^*_{10} \sim Beta(3,\beta^*)\)</span></li>
 <li>Compute <span class="math inline">\(D = \sum_{i=1}^{10}(y_i -y^*_i)^2\)</span>. If <span class="math inline">\(D &lt; 0.75\)</span>, accept <span class="math inline">\(\beta^*\)</span> as a sample from the posterior distribution. Otherwise, reject <span class="math inline">\(\beta^*\)</span>.</li>
 <li>Repeat steps 1, 2, and 3.</li>
 </ol>
