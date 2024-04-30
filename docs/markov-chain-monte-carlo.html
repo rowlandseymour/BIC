@@ -738,8 +738,8 @@ The posterior distribution is therefore
 \end{align*}\]</span></p>
 <p>The full conditional distributions are therefore
 <span class="math display">\[\begin{align*}
-\pi(\beta, \mid \theta \boldsymbol{x}) &amp;\propto\beta^N\prod x_i^{\beta - 1}\exp\left(-\frac{1}{\theta}\sum x_i^\beta\right)\exp(-\lambda\beta) \\
-\pi(\theta, \mid \beta \boldsymbol{x}) &amp; \frac{1}{\theta^{N + a -1}}\exp\left(-\frac{1}{\theta}(b + \sum x_i^\beta)\right)
+\pi(\beta \mid \theta, \boldsymbol{x}) &amp;\propto\beta^N\prod x_i^{\beta - 1}\exp\left(-\frac{1}{\theta}\sum x_i^\beta\right)\exp(-\lambda\beta) \\
+\pi(\theta \mid \beta, \boldsymbol{x}) &amp; \frac{1}{\theta^{N + a -1}}\exp\left(-\frac{1}{\theta}(b + \sum x_i^\beta)\right)
 \end{align*}\]</span></p>
 <p>There is no closed form for the full conditional distribution for <span class="math inline">\(\beta\)</span>, so we will need to use a Metropolis-Hastings algorithm to update this parameter in our MCMC algorithm. The full conditional distribution for <span class="math inline">\(\theta\)</span> is closed as it is proportional to an inverse Gamma distribution with shape <span class="math inline">\(N + a\)</span> and scale <span class="math inline">\(b + \sum x_i^\beta\)</span>. We can use a Gibbs sampler to update value for <span class="math inline">\(\theta\)</span>. A suitable MCMC algorithm will look like</p>
 <ol style="list-style-type: decimal">

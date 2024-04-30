@@ -33,9 +33,9 @@ The posterior distribution is therefore $\theta \mid \boldsymbol{y} \sim \textrm
 
 ## Reporting Conclsuions from Bayesian Inference
 
-In the previous example, we derived the posterior distribution $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is $\frac{4}{198} = \frac{2}{99}$. That is to say given the data, we expect that for every 99 accounts, two to be bots. The posterior mode for $\theta$ is $\frac{3}{200}$ or 1.5%. 
+In the previous example, we derived the posterior distribution $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is $\frac{4}{198+4} = \frac{2}{101}$. That is to say given the data, we expect that for every 101 accounts, two to be bots. The posterior mode for $\theta$ is $\frac{3}{200}$ or 1.5%. 
 
-It is important to share the uncertainty about out beliefs. In a frequentist framework, this would be via a confidence interval. The Bayesian analogues is a credible interval. 
+It is important to share the uncertainty about out beliefs. In a frequentist framework, this would be via a confidence interval. The Bayesian analogue is a credible interval. 
 
 ::: {.definition}
 A **credible interval** is a central interval of posterior probability which corresponds, in the case of a 100$(1-\alpha)$% interval, to the range of values that capture 100$(1-\alpha)$% of the posterior probability. 

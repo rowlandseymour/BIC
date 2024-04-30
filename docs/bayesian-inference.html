@@ -276,8 +276,8 @@ The posterior distribution is therefore <span class="math inline">\(\theta \mid 
 </div>
 <div id="reporting-conclsuions-from-bayesian-inference" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Reporting Conclsuions from Bayesian Inference<a href="bayesian-inference.html#reporting-conclsuions-from-bayesian-inference" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In the previous example, we derived the posterior distribution <span class="math inline">\(\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)\)</span>. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is <span class="math inline">\(\frac{4}{198} = \frac{2}{99}\)</span>. That is to say given the data, we expect that for every 99 accounts, two to be bots. The posterior mode for <span class="math inline">\(\theta\)</span> is <span class="math inline">\(\frac{3}{200}\)</span> or 1.5%.</p>
-<p>It is important to share the uncertainty about out beliefs. In a frequentist framework, this would be via a confidence interval. The Bayesian analogues is a credible interval.</p>
+<p>In the previous example, we derived the posterior distribution <span class="math inline">\(\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)\)</span>. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is <span class="math inline">\(\frac{4}{198+4} = \frac{2}{101}\)</span>. That is to say given the data, we expect that for every 101 accounts, two to be bots. The posterior mode for <span class="math inline">\(\theta\)</span> is <span class="math inline">\(\frac{3}{200}\)</span> or 1.5%.</p>
+<p>It is important to share the uncertainty about out beliefs. In a frequentist framework, this would be via a confidence interval. The Bayesian analogue is a credible interval.</p>
 <div class="definition">
 <p><span id="def:unlabeled-div-31" class="definition"><strong>Definition 3.1  </strong></span>A <strong>credible interval</strong> is a central interval of posterior probability which corresponds, in the case of a 100<span class="math inline">\((1-\alpha)\)</span>% interval, to the range of values that capture 100<span class="math inline">\((1-\alpha)\)</span>% of the posterior probability.</p>
 </div>
@@ -403,7 +403,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <span id="cb27-12"><a href="bayesian-inference.html#cb27-12" tabindex="-1"></a>mu1       <span class="ot">&lt;-</span> sigma1.sq<span class="sc">*</span>(<span class="fu">sum</span>(y)<span class="sc">/</span>(sigma<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> mu0<span class="sc">/</span>(sigma0<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb27-13"><a href="bayesian-inference.html#cb27-13" tabindex="-1"></a></span>
 <span id="cb27-14"><a href="bayesian-inference.html#cb27-14" tabindex="-1"></a><span class="fu">c</span>(mu1, sigma1.sq) <span class="co">#output mean and variance</span></span></code></pre></div>
-<pre><code>## [1] 5.11878134 0.03333333</code></pre>
+<pre><code>## [1] 5.13506297 0.03333333</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bayesian-inference.html#cb29-1" tabindex="-1"></a><span class="co">#Create plot</span></span>
 <span id="cb29-2"><a href="bayesian-inference.html#cb29-2" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
 <span id="cb29-3"><a href="bayesian-inference.html#cb29-3" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(mu, <span class="at">mean =</span> mu1, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma1.sq))</span>
@@ -411,7 +411,7 @@ The posterior mean is partially defined through the weighted average of the popu
 <p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>The 95% credible interval for the population’s mean reaction time is</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="bayesian-inference.html#cb30-1" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), mu1, <span class="fu">sqrt</span>(sigma1.sq))</span></code></pre></div>
-<pre><code>## [1] 4.760943 5.476620</code></pre>
+<pre><code>## [1] 4.777224 5.492902</code></pre>
 </div>
 <p>When the prior distribution induces the same function form in the posterior distribution, this is known as conjugacy.</p>
 <div class="definition">
