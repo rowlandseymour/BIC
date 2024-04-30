@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.553115799 -0.409512337  0.772483251 -0.662282372 -0.437719561
-##  [6]  0.392869676  0.064881319  0.396970438 -0.778228898  0.006972023
+##  [1]  0.2121361  0.4511264 -0.9089789 -0.8754315  0.4486410 -0.0380641
+##  [7] -0.7743946  0.3450668  0.8147804 -0.7309042
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1131,9 +1131,9 @@ The posterior distribution is therefore \(\theta \mid \boldsymbol{y} \sim \textr
 \hypertarget{reporting-conclsuions-from-bayesian-inference}{%
 \section{Reporting Conclsuions from Bayesian Inference}\label{reporting-conclsuions-from-bayesian-inference}}
 
-In the previous example, we derived the posterior distribution \(\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)\). But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is \(\frac{4}{198} = \frac{2}{99}\). That is to say given the data, we expect that for every 99 accounts, two to be bots. The posterior mode for \(\theta\) is \(\frac{3}{200}\) or 1.5\%.
+In the previous example, we derived the posterior distribution \(\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)\). But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is \(\frac{4}{198+4} = \frac{2}{101}\). That is to say given the data, we expect that for every 101 accounts, two to be bots. The posterior mode for \(\theta\) is \(\frac{3}{200}\) or 1.5\%.
 
-It is important to share the uncertainty about out beliefs. In a frequentist framework, this would be via a confidence interval. The Bayesian analogues is a credible interval.
+It is important to share the uncertainty about out beliefs. In a frequentist framework, this would be via a confidence interval. The Bayesian analogue is a credible interval.
 
 \begin{definition}
 A \textbf{credible interval} is a central interval of posterior probability which corresponds, in the case of a 100\((1-\alpha)\)\% interval, to the range of values that capture 100\((1-\alpha)\)\% of the posterior probability.
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 5.20700107 0.03333333
+## [1] 4.85400939 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.849162 5.564840
+## [1] 4.496171 5.211848
 \end{verbatim}
 
 \end{example}
@@ -1784,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.7418799
+## [1] 0.6576433
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -2917,8 +2917,8 @@ The posterior distribution is therefore
 
 The full conditional distributions are therefore
 \begin{align*}
-\pi(\beta, \mid \theta \boldsymbol{x}) &\propto\beta^N\prod x_i^{\beta - 1}\exp\left(-\frac{1}{\theta}\sum x_i^\beta\right)\exp(-\lambda\beta) \\
-\pi(\theta, \mid \beta \boldsymbol{x}) & \frac{1}{\theta^{N + a -1}}\exp\left(-\frac{1}{\theta}(b + \sum x_i^\beta)\right)
+\pi(\beta \mid \theta, \boldsymbol{x}) &\propto\beta^N\prod x_i^{\beta - 1}\exp\left(-\frac{1}{\theta}\sum x_i^\beta\right)\exp(-\lambda\beta) \\
+\pi(\theta \mid \beta, \boldsymbol{x}) & \frac{1}{\theta^{N + a -1}}\exp\left(-\frac{1}{\theta}(b + \sum x_i^\beta)\right)
 \end{align*}
 
 There is no closed form for the full conditional distribution for \(\beta\), so we will need to use a Metropolis-Hastings algorithm to update this parameter in our MCMC algorithm. The full conditional distribution for \(\theta\) is closed as it is proportional to an inverse Gamma distribution with shape \(N + a\) and scale \(b + \sum x_i^\beta\). We can use a Gibbs sampler to update value for \(\theta\). A suitable MCMC algorithm will look like
