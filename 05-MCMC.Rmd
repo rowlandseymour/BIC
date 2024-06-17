@@ -158,7 +158,7 @@ In practice, we don't need to evaluate the full posterior distribution. Recall
 $$
 \pi(\theta \mid \boldsymbol{y}) = \frac{\pi(\boldsymbol{y} \mid \theta) \pi(\theta)}{\pi(y)}
 $$
-As the the denominator doesn't depend on $\theta$, it cancels in the ration. The ratio becomes
+As the the denominator doesn't depend on $\theta$, it cancels in the ratio. The ratio becomes
 $$
 \frac{\pi(\theta' \mid \boldsymbol{y})}{\pi(\theta \mid \boldsymbol{y})} = \frac{\pi(\boldsymbol{y} \mid \theta') \pi(\theta')}{\pi(\boldsymbol{y} \mid \theta) \pi(\theta)}.
 $$

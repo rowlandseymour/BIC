@@ -932,8 +932,8 @@ R has many build in commands and you used these in Computer Lab I. An example is
 \end{Shaded}
 
 \begin{verbatim}
-##  [1]  0.2121361  0.4511264 -0.9089789 -0.8754315  0.4486410 -0.0380641
-##  [7] -0.7743946  0.3450668  0.8147804 -0.7309042
+##  [1]  0.02630280  0.15897398  0.07743111 -0.55770066  0.63129461  0.42662953
+##  [7]  0.09940611 -0.01219736  0.11839917  0.96228538
 \end{verbatim}
 
 The functions has three \textbf{arguments}: \emph{n} the number of samples to be generated, \emph{min} the lower limit of the interval, \emph{max} the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval {[}-1, 1{]}. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
@@ -1128,8 +1128,8 @@ This functional dependence on \(\theta\) identifies the \(\pi(\theta \mid \bolds
 The posterior distribution is therefore \(\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)\).
 \end{example}
 
-\hypertarget{reporting-conclsuions-from-bayesian-inference}{%
-\section{Reporting Conclsuions from Bayesian Inference}\label{reporting-conclsuions-from-bayesian-inference}}
+\hypertarget{reporting-conclusions-from-bayesian-inference}{%
+\section{Reporting Conclusions from Bayesian Inference}\label{reporting-conclusions-from-bayesian-inference}}
 
 In the previous example, we derived the posterior distribution \(\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)\). But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is \(\frac{4}{198+4} = \frac{2}{101}\). That is to say given the data, we expect that for every 101 accounts, two to be bots. The posterior mode for \(\theta\) is \(\frac{3}{200}\) or 1.5\%.
 
@@ -1316,7 +1316,7 @@ Now we have derived the posterior distribution, we can explore it using R. We si
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.85400939 0.03333333
+## [1] 4.92664356 0.03333333
 \end{verbatim}
 
 \begin{Shaded}
@@ -1339,7 +1339,7 @@ The 95\% credible interval for the population's mean reaction time is
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.496171 5.211848
+## [1] 4.568805 5.284482
 \end{verbatim}
 
 \end{example}
@@ -1784,7 +1784,7 @@ Throughout this module, we will be using R's built in random number generation. 
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.6576433
+## [1] 0.02209088
 \end{verbatim}
 
 \hypertarget{inverse-transform-sampling}{%
@@ -2337,7 +2337,7 @@ In practice, we don't need to evaluate the full posterior distribution. Recall
 \[
 \pi(\theta \mid \boldsymbol{y}) = \frac{\pi(\boldsymbol{y} \mid \theta) \pi(\theta)}{\pi(y)}
 \]
-As the the denominator doesn't depend on \(\theta\), it cancels in the ration. The ratio becomes
+As the the denominator doesn't depend on \(\theta\), it cancels in the ratio. The ratio becomes
 \[
 \frac{\pi(\theta' \mid \boldsymbol{y})}{\pi(\theta \mid \boldsymbol{y})} = \frac{\pi(\boldsymbol{y} \mid \theta') \pi(\theta')}{\pi(\boldsymbol{y} \mid \theta) \pi(\theta)}.
 \]
