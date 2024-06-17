@@ -31,7 +31,7 @@ $$
 The posterior distribution is therefore $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$.
 :::
 
-## Reporting Conclsuions from Bayesian Inference
+## Reporting Conclusions from Bayesian Inference
 
 In the previous example, we derived the posterior distribution $\theta \mid \boldsymbol{y} \sim \textrm{Beta}(4, 198)$. But often, we want to share more descriptive information about our beliefs given the observed data. In this example, the posterior mean given the data is $\frac{4}{198+4} = \frac{2}{101}$. That is to say given the data, we expect that for every 101 accounts, two to be bots. The posterior mode for $\theta$ is $\frac{3}{200}$ or 1.5%. 
 
