@@ -891,7 +891,7 @@ $$
 \int_0^{0.9}\pi(\lambda) d\lambda = 0.8
 $$
 
-From the expectation, we have $\alpha = 0.7\beta$. To estimate the value of $\beta$ from the cumulative probability, we need to find the root to the equation 
+From the expectation, we have $\alpha = 0.75\beta$. To estimate the value of $\beta$ from the cumulative probability, we need to find the root to the equation 
 $$
 \int_0^{0.9} \frac{\beta^{0.75\beta}}{\Gamma(\beta)}\lambda^{0.75\beta-1}e^{-\lambda\beta}d\lambda - 0.8 = 0. 
 $$

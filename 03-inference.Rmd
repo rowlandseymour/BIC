@@ -122,7 +122,7 @@ $$
 **Likelihood function**. 
 As the observations are independent, the likelihood function is given by the product of the $N$ normal density functions as follows,
 \begin{align*}
-\pi(\boldsymbol{y} \mid \mu, \theta^2) &= \prod_{i=1}^{N} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{(y_i - \mu)^2}{2\sigma^2}\right\} \\
+\pi(\boldsymbol{y} \mid \mu, \sigma^2) &= \prod_{i=1}^{N} \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{(y_i - \mu)^2}{2\sigma^2}\right\} \\
 &= (2\pi\sigma^2)^{-\frac{N}{2}}\exp\left\{-\sum_{i=1}^{N}\frac{(y_i - \mu)^2}{2\sigma^2}\right\}.
 \end{align*}
 
@@ -241,9 +241,9 @@ $$
 :::
 
 ::: {.example}
-Students have to submit coursework for a particular statistical modules. However, each semester a number of students miss the deadline and hand in their coursework late. Last year, three out of 20 students handed their coursework in late. This year, the course has thirty students in. How many students can we expect to hand in their coursework late? 
+Students have to submit coursework for a particular statistical module. However, each semester a number of students miss the deadline and hand in their coursework late. Last year, three out of 20 students handed their coursework in late. This year, the course has thirty students in. How many students can we expect to hand in their coursework late? 
 
-We can model the number of students handing their coursework in late, denoted by $Y$, using a Binomial distribution, i.e. $Y \sim \textrm{Bin}(n, \theta)$ where $n$ is the number of students and $\theta$ is the probability of any particular student handing in their coursework late. As in Example \@ref(exm:binom), we assign a uniform prior distribution to $\theta \sim U[0, 1]$. Given then observed data, we can derive $\theta \mid \boldsymbol{y} \sim Beta(4, 28)$ (See problem sheets for derivation).
+We can model the number of students handing their coursework in late, denoted by $Y$, using a Binomial distribution, i.e. $Y \sim \textrm{Bin}(n, \theta)$ where $n$ is the number of students and $\theta$ is the probability of any particular student handing in their coursework late. As in Example \@ref(exm:binom), we assign a uniform prior distribution to $\theta \sim U[0, 1]$. Given the observed data, we can derive $\theta \mid \boldsymbol{y} \sim Beta(4, 28)$ (See problem sheets for derivation).
 
 Now we can derive the posterior predictive distribution of $Z$, the number of students who hand in late. We model $Z$ using a Binomial distribution, $Z \sim \textrm{Bin}(30, \theta)$. The distribution of $Z$ given the observed data is 
 
