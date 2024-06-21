@@ -300,7 +300,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>These two properties make Markov chains nice to work with, especially the Markov property (Definition <a href="markov-chain-monte-carlo.html#def:Markov">5.1</a>). Two other important definitions are</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-64" class="definition"><strong>Definition 5.3  </strong></span>The <strong>period </strong>of a state <span class="math inline">\(i\)</span> is given by <span class="math inline">\(d_i = \textrm{gcd}\{n &gt; 0; p_{ii} &gt; 0 \}\)</span>. A state is <strong>aperiodic</strong> if <span class="math inline">\(d_i = 1\)</span>. An <strong>aperiodic chain</strong> is a chain where all states are aperiodic.</p>
+<p><span id="def:unlabeled-div-64" class="definition"><strong>Definition 5.3  </strong></span>The <strong>period </strong>of a state <span class="math inline">\(i\)</span> is given by <span class="math inline">\(d_i = \textrm{gcd}\{n \in \mathbb{N}; p_{ii} &gt; 0 \}\)</span>. A state is <strong>aperiodic</strong> if <span class="math inline">\(d_i = 1\)</span>. An <strong>aperiodic chain</strong> is a chain where all states are aperiodic.</p>
 </div>
 <div class="definition">
 <p><span id="def:unlabeled-div-65" class="definition"><strong>Definition 5.4  </strong></span>A Markov chain is <strong>irreducible</strong> if there exists an <span class="math inline">\(n \in \mathbb{N}\)</span> such that <span class="math inline">\(\mathbb{P} (Y_n = i \mid Y_0 = j) &gt; 0\)</span> for all pairs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. In other words, it is possible to move from any state to any other state in a finite number of steps.</p>

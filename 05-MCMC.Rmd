@@ -65,7 +65,7 @@ The probability of transitioning from state $i$ to state $j$ in a Markov chain i
 These two properties make Markov chains nice to work with, especially the Markov property (Definition \@ref(def:Markov)). Two other important definitions are
 
 ::: {.definition}
-The **period **of a state $i$ is given by $d_i = \textrm{gcd}\{n  > 0; p_{ii} > 0 \}$. A state is **aperiodic** if $d_i = 1$. An **aperiodic chain** is a chain where all states are aperiodic. 
+The **period **of a state $i$ is given by $d_i = \textrm{gcd}\{n  \in \mathbb{N}; p_{ii} > 0 \}$. A state is **aperiodic** if $d_i = 1$. An **aperiodic chain** is a chain where all states are aperiodic. 
 :::
 
 
