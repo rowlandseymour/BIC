@@ -1,0 +1,16 @@
+\begin{thebibliography}{}
+
+\bibitem[Hairer and Mattingly, 2011]{hairer11}
+Hairer, M. and Mattingly, J.~C. (2011).
+\newblock Yet another look at {H}arris' ergodic theorem for {M}arkov chains.
+\newblock In {\em Seminar on {S}tochastic {A}nalysis, {R}andom {F}ields and
+  {A}pplications {VI}}, volume~63 of {\em Progr. Probab.}, pages 109--117.
+  Birkh\"auser/Springer Basel AG, Basel.
+
+\bibitem[Meyn and Tweedie, 2009]{meyntweedie}
+Meyn, S. and Tweedie, R.~L. (2009).
+\newblock {\em Markov chains and stochastic stability}.
+\newblock Cambridge University Press, Cambridge, second edition.
+\newblock With a prologue by Peter W. Glynn.
+
+\end{thebibliography}

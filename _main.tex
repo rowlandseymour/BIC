@@ -1793,26 +1793,34 @@ Throughout this module, we will be using R's built in random number generation. 
 Suppose we want to sample from a non-uniform one-dimensional distribution. The inverse transform theorem allows us to do this using the distribution's inverse function.
 
 \begin{definition}
-Let \(X\) be a real-valued random variable with a distribution function \(F\). Then the \textbf{inverse function} of a distribution function \(F\), denoted \(F^{-1}\), is defined for all \(u \in (0, 1)\) by
+Let \(X\) be a real-valued random variable with a distribution function \(F\). Then the \textbf{generalised inverse} \(F^{-1}\colon [0,1] \to [-\infty,\infty]\) of a distribution function \(F\), is defined for all \(u \in [0, 1]\) by
 \[
-F^{-1}(u) = \inf\{x \in\mathbb{R} : F(x) > u\}.
+F^{-1}(u) = \inf\{x \in\mathbb{R} : F(x) \geq u\},
 \]
+where we use the convention \(\inf \varnothing = +\infty\).
 \end{definition}
 
+This definiton entails that $F^{-1}$ is left-continuous (while the \textit{quantile function} \(q(u) = \inf\{x \in \mathbb{R}: F(x) > u\}\) is right-continuous). The reason for us to not demand a strict inequality for the generalised inverse is that our definition provides
+\begin{equation}\label{eq:pseudo}
+\forall x \in \mathbb{R}, u \in [0,1]: u \leq F(x) \iff F^{-1}(u) \leq x. 
+\end{equation}
+We also note that if \(F\) is bijective, its inverse function is identical to the generalised inverse.
+
 \begin{theorem}
-Let \(F :\mathbb{R} \rightarrow [0, 1]\) be a continuous distribution function, \(U \sim U[0, 1]\) and \(Y = F^{-1}(U)\). Then \(Y\) has distribution function \(F\).
+Let \(F :\mathbb{R} \rightarrow [0, 1]\) be a  distribution function, \(U \sim U[0, 1]\) and \(Y = F^{-1}(U)\). Then \(Y\) has distribution function \(F\).
 \end{theorem}
 
 \begin{proof}
-We have
+From \eqref{eq:pseudo} we obtain
 \[
-\mathbb{P}(Y \leq a) = \mathbb{P}(F^{-1}(U) \leq a) = \mathbb{P}(\inf\{x \in\mathbb{R} : F(x) > u\} \leq a). 
+\mathbb{P}(Y \leq x) = \mathbb{P}(F^{-1}(U) \leq x) = \mathbb{P}(U \leq F(x)) = F(x),
 \]
-Since \(\inf\{x \in\mathbb{R} : F(x) > u\} \leq a\) can only hold if \(F(a) \geq U\), we have
-\[
-\mathbb{P}(Y \leq a)  = \mathbb{P}(F(a)\geq U)
-\]
-As \(U \sim U[0, 1]\), we have \(\mathbb{P}(F(a)\geq U) = F(a)\).
+where the last equality follows from \(U \sim U[0, 1]\).
+%Since \(\inf\{x \in\mathbb{R} : F(x) \geq U\} \leq a\) is equivalent to \(U \leq F(a)\), we have
+%\[
+%\mathbb{P}(Y \leq a)  = \mathbb{P}(F(a)\geq U)
+%\]
+%As \(U \sim U[0, 1]\), we have \(\mathbb{P}(F(a)\geq U) = F(a)\).
 \end{proof}
 
 This theorem says that if we have a random variable \(U \sim U[0, 1]\) and we want to get \(Y \sim F\), then we can use \(F^{-1}(U)\). Viewing this theorem graphically can provide a much more intuitive understanding.
@@ -1905,7 +1913,7 @@ Hence, if \(U \sim U[0, 1]\), then \(\tan\left(\pi\left(U - \frac{1}{2}\right)\r
 \hypertarget{rejection-sampling}{%
 \section{Rejection Sampling}\label{rejection-sampling}}
 
-We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling works by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. The plot below shows an example from this. We would like to generate a sample from the distribution with the curved density function, which is challenging. Instead, we find a distribution whose density function bounds the one we are interested in a sample from that. In this case we can use the uniform distribution. Once we have generated our sample from he uniform distribution, we choose to accept or reject it based on the distribution we are interested in. In this case we reject it.
+We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling works by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. The plot below shows an example from this. We would like to generate a sample from the distribution with the curved density function, which is challenging. Instead, we find a distribution whose density function \(\pi\) multiplied by some $c \geq 1$ (call \(c\pi\) an \textit{unnormalised density function}) bounds the one we wish to sample from. In this case we can use the uniform distribution. Once we have generated our sample from he uniform distribution, we choose to accept or reject it based on the distribution we are interested in. In this case we reject it.
 
 \includegraphics{_main_files/figure-latex/unnamed-chunk-25-1.pdf}
 
@@ -1918,14 +1926,14 @@ Suppose we want to sample from a density \(\pi\), but can only generate samples 
 \item
   Sampling \(U \sim U[0, 1]\)
 \item
-  Computing \(k = \frac{\pi(u)}{cq(y)}\)
+  Computing \(k = \frac{\pi(y)}{cq(y)}\)
 \item
   Accepting \(y\) if \(U < k\) and rejecting otherwise.
 \end{enumerate}
 
-This says draw sample a point \(y\) according to the density \(q\). Draw a vertical line at \(y\) from the \(x\)-axis to \(cq(y)\). Sample uniformly on this line. If the uniformly random sample is below \(q\), then accept it. Otherwise, reject it. The theory behind this is as follows. Suppose we sample some point y according to this algorithm and we want to work out its density \(f\), then
+This says draw sample a point \(y\) according to the density \(q\). Draw a vertical line at \(y\) from the \(x\)-axis to \(cq(y)\). Sample uniformly on this line. If the uniformly random sample is below \(q\), then accept it. Otherwise, reject it. The theory behind this is as follows. Suppose we sample some point \(y\) according to this algorithm and we want to work out its density \(f\), then
 \[
-f(y) \propto q(y)\pi(U < k) = q(y)\frac{\pi(u)}{cq(y)} = \frac{\pi(u)}{c}.
+f(y) \propto q(y)\pi(U < k) = q(y)\frac{\pi(y)}{cq(y)} = \frac{\pi(y)}{c}.
 \]
 Therefore, \(f = p\).
 
@@ -2106,7 +2114,7 @@ Suppose the bottom right corner of the \(i^{th}\) rectangle has coordinates \((x
 \item
   If \(x < x_{i+1}\) accept the sample
 \item
-  Sample \(u_1 \sim U[0, 1]\) and set \(y = y_i + u_1(y_{i+1} − y_i)\)
+  Sample \(u_1 \sim U[0, 1]\) and set \(y = y_i + u_1(y_{i+1} - y_i)\)
 \item
   If \(y < f(y)\), where \(f\) is the density function of a standard normal distribution, then accept the sample.
 \end{enumerate}
@@ -2170,7 +2178,7 @@ He decided to travel according to these rules:
 \item
   At the end of each week, he decides to stay on the same island or move to a neighboring island according to a coin toss. If it's heads he proposes moving clockwise, and tails anti-clockwise. The island he is considering moving to is called the proposal island.
 \item
-  To decided if he is going to move to the proposal island, the King counts out a number of shells equal to the number of size of the island. So if island five is the proposal island, he counts out five shells. He then counts out a number of stones equal to the size of the current island.
+  To decide if he is going to move to the proposal island, the King counts out a number of shells equal to the number of size of the island. So if island five is the proposal island, he counts out five shells. He then counts out a number of stones equal to the size of the current island.
 \item
   If the number of seashells is greater than the number of stones, he moves to the proposed island. If the number of seashells is less than the number of stones, he takes a different strategy. He discards the number of stones equal to the number of seashells. So if there are six stone and five seashells, he ends up with 6-5=1 stones. He then places the stones and seashells into a bag a chooses one at random. If he picks a seashell, he moves to the proposed island, otherwise if he picks a shell, he stays put.
 \end{enumerate}
@@ -2225,64 +2233,109 @@ We can recognise several different statistical principles in this example. The K
 \section{Properties of Markov Chains}\label{properties-of-markov-chains}}
 
 \begin{definition}
-\protect\hypertarget{def:Markov}{}\label{def:Markov}A sequence of random variables \(\{Y_1, Y_2, \ldots\}\) is a \textbf{Markov chain} if \(\mathbb{P}(Y_{n+1} \mid Y_{n}, \ldots, Y_1) = \mathbb{P}(Y_{n+1} \mid Y_{n})\). That is that distribution of the next state \(Y_{n+1}\) only depends on the current state \(Y_n\) and not any previous states.
+\protect\hypertarget{def:Markov}{}\label{def:Markov}A sequence of random variables \(Y = (Y_n)_{n \in \mathbb{N}_0}\) is a \textbf{Markov chain} if \(\mathbb{P}(Y_{n+1} \in \cdot \mid Y_{n}, \ldots, Y_0) = \mathbb{P}(Y_{n+1} \in \cdot \mid Y_{n})\) a.s. That is, the distribution of the next state \(Y_{n+1}\) conditional on its entire past only depends on the current state \(Y_n\).
+\end{definition}
+
+\begin{definition} 
+A Markov chain is called \textbf{homogeneous} if for any $n,m \in \mathbb{N}_0$ it holds that $\mathbb{P}(Y_{n+ m} \in \cdot \mid Y_n) = \mathbb{P}(Y_{m} \in \cdot \mid Y_0)$. That is, transition probabilities only depend on the time differences.
+\end{definition}
+
+From here on, we will only deal with homogeneous Markov chains and will therefore synonymously use the terms \textit{Markov chain} and \textit{homogeneous Markov chain}.
+
+\begin{definition} 
+If for some finite set \(S = \{i_1,\ldots,i_N\}\) we have \(\mathbb{P}(Y_n \in S) = 1\) for all $n \in \mathbb{N}_0$, we call \(Y\) a \textbf{finite Markov chain} and \(S\) its \textbf{state space}.
+\end{definition}
+
+By relabelling, we may always assume wlog that \(S = \{1,\ldots,N\} \) for a finite Markov chain with $N$ states.
+
+\begin{definition}
+For a finite Markov chain the probability of transitioning from state \(i\) to state \(j\) in a Markov chain is given by \(p_{ij}\). The \textbf{transition matrix} for a Markov chain with \(N\) states is the \(N \times N\) matrix \(P = (p_{i,j})_{i,j=1,\ldots,n}\), where the \(\{i, j\}^{th}\) entry  \(p_{ij}\) is the probability  of moving from state \(i\) to state \(j\), i.e., \(\mathbb{P}(Y_{n+1} = i \mid Y_n = j) = \mathbb{P}(Y_{1} = i \mid Y_0 = j).\)
+\end{definition}
+
+
+These  properties make Markov chains nice to work with. Two other important definitions are:
+
+\begin{definition}
+For a finite Markov chain, the \textbf{period }of a state \(i\) is given by \(d_i = \textrm{gcd}\{n > 0; p_{ii} > 0 \}\). A state is \textbf{aperiodic} if \(d_i = 1\). An \textbf{aperiodic chain} is a chain where all states are aperiodic.
 \end{definition}
 
 \begin{definition}
-The probability of transitioning from state \(i\) to state \(j\) in a Markov chain is given by \(p_{ij}\). The \textbf{transition matrix} for a Markov chain with \(N\) states is the \(N \times N\) matrix \(P\), where the \(\{i, j\}^{th}\) entry denoted by \(p_{ij}\) is probability is moving from state \(i\) to state \(j\).
+A finite Markov chain is \textbf{irreducible} if for any \(i,j \in S\) there exists an \(n \in \mathbb{N}_0\) such that \(\mathbb{P} (Y_n = j \mid Y_0 = i) > 0\). In other words, it is possible to move from any state to any other state in a finite number of steps.
 \end{definition}
 
-These two properties make Markov chains nice to work with, especially the Markov property (Definition \ref{def:Markov}). Two other important definitions are
-
-\begin{definition}
-The \textbf{period }of a state \(i\) is given by \(d_i = \textrm{gcd}\{n > 0; p_{ii} > 0 \}\). A state is \textbf{aperiodic} if \(d_i = 1\). An \textbf{aperiodic chain} is a chain where all states are aperiodic.
-\end{definition}
-
-\begin{definition}
-A Markov chain is \textbf{irreducible} if there exists an \(n \in \mathbb{N}\) such that \(\mathbb{P} (Y_n = i \mid Y_0 = j) > 0\) for all pairs \(i\) and \(j\). In other words, it is possible to move from any state to any other state in a finite number of steps.
-\end{definition}
-
-We can use these definitions to start working with distributions. Suppose, the state we start at is drawn from some distribution \(Y_1 \sim \boldsymbol{q}\). Then the distributions of the second state \(Y_2\) depends on the distribution of \(Y_1\) and the transition probabilities
+We can use these definitions to start working with distributions. Suppose, the state we start at is drawn from some distribution \(Y_0 \sim q\). Then the distributions of the second state \(Y_1\) depends on the distribution of \(Y_0\) and the transition probabilities
 \[
-\mathbb{P}(Y_2 = j) = \sum_i q_ip_{ij}.
+\mathbb{P}(Y_1 = j) = \sum_i q_ip_{ij}.
 \]
-If we denote the distribution of \(Y_2 \sim \boldsymbol{q}^{(2)}\), then we can write it in terms of the transition matrix \(\boldsymbol{q}^\prime = \boldsymbol{q}P\). Now suppose we would like the distribution of \(Y_3 \sim \boldsymbol{q}^{(3)}\), thanks to the Markov property, this is the distribution for \(Y_2\) multiplied by the transition matrix, so \(Y_3 \sim qP^2\). Inductively, \(P_k \sim qP^{k-1}\). To use Markov chains to sample from distributions, we need to identify the Eigenvalues of the transition matrix.
+If we denote the distribution of \(Y_1 \sim {q}^{(1)}\), then we can write it in terms of the transition matrix \({q}^{(1)} = {q}P\). Now suppose we would like to determine the distribution of \(Y_2 \sim {q}^{(2)}\), thanks to the Markov property, this is the distribution for \(Y_2\) multiplied by the transition matrix from the right, so \(Y_3 \sim qP^2\). Inductively, \(Y_k \sim qP^{k-1}\). To use Markov chains to sample from distributions, we need to identify the eigenvalues of the transition matrix.
 
-\begin{proposition}
-A transition matrix \(P\) always has at least one eigenvalue equal to one.
-\end{proposition}
+%\begin{proposition}
+%A transition matrix \(P\) always has at least one eigenvalue equal to one.
+%\end{proposition}
 
-\begin{proof}
-The columns of \(P\) sum to 1 as they are probability distributions. Therefore, \(1\) is an eigenvalue.
-\end{proof}
+%\begin{proof}
+%The columns of \(P\) sum to 1 as they are probability distributions. Therefore, \(1\) is an eigenvalue.
+%\end{proof}
 
 \begin{definition}
-If a transition matrix \(P\) has a unique Eigenvalue that takes the value 1, there is a unique distribution \(\pi\) such that
+Suppose that there exists a probability vector \(\pi\) (that is, \(p_i \geq 0\) and  \(\sum_{i=1}^n \pi(i) = 1\))  that is a left-eigenvector with eigenvalue \(1\) for the transition matrix \(P\), i.e.,
 \[
 \pi P = \pi. 
 \]
-This distribution \(\pi\), is known as the \textbf{stationary distribution}.
+Then  \(\pi\) is called the \textbf{stationary distribution} of the Markov chain corresponding to \(P\).
 \end{definition}
 
-This important concept underpins MCMC methods. It says that no matter where we start our chain, we'll eventually end up sampling states according to the distribution \(\pi\). It make take a long time to reach the stationary distribution, but it will eventually get there.
+The terminology arises from the fact that if the Markov chain is started in \(\pi\), the marginal distributions \(\mathbb{P}_{Y_n}\) remain unchanged (they are \textbf{invariant} under time translation), since then 
+\[q^{(n)} = \pi P^n = (\pi P)P^{n-1} = \pi P^{n-1} = qP^{(n-1)} = \cdots = \pi.\]
+ A basic fact is the following. 
 
-In order to check whether our Markov chain will converge to a stationary distribution, we need to check:
+\begin{theorem} 
+If a finite Markov chain is irreducible, a unique stationary distribution exists.
+\end{theorem}
+
+\begin{definition} 
+	A  finite Markov chain is called ergodic if for all  \(i,j \in S\) it holds that 
+	\[\lim_{n \to \infty} \mathbb{P}(Y_n = j \mid Y_0 = j) = \pi(i).\] 
+	Equivalently,  for any initial distribution $q$, 
+	\[\lim_{n \to \infty} qP^n = \pi.\]
+\end{definition}
+
+Irreducibility is not sufficient to guarantee ergodicity of a Markov chain: take a two state Markov chain with transition matrix 
+\[P = \begin{pmatrix} 0 & 1\\ 1 & 0 \end{pmatrix},\]
+that is the chain deterministically moves from state $1$ to $2$ and vice versa. Then \(Y\) is clearly irreducible and \(\pi = (1/2,1/2)\) is its unique stationary distribution since  
+\[(1/2, 1/2) =  \begin{pmatrix} 0 & 1\\ 1 & 0 \end{pmatrix} = (1/2,1/2).\]
+However, if started in $1$, the chain does not converge, since then \(\mathbb{P}(Y_{2n} = 1) = 1 \neq 1/2 = \pi(1). \) The problem  is the lack of aperiodicity, since by its very nature, \(d_1 = d_2 = 2 > 1\). In fact, aperiodicity is the missing piece to guarantee convergence to the stationary distribution, irrespectively of the initialisation: 
+
+
+\begin{theorem} 
+A finite Markov chain is ergodic if, and only if, it is irreducible and aperiodic.
+\end{theorem}
+ 
+
+This important concept underpins MCMC methods. It says that no matter where we start our ergodic chain, we'll eventually end up sampling states according to the target distribution \(\pi\). It make take a long time to reach the stationary distribution, but it will eventually get there.
+
+In order to check whether our finite Markov chain will converge to a stationary distribution, we therefore need to check:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  the Markov chain is aperiodic,
+the Markov chain is irreducible, and
 \item
-  the Markov chain is irreducible, and
-\item
-  that there exists a unique distribution \(\pi\) such that \(\pi P = \pi\).
+  the Markov chain is aperiodic.
+%\item
+ % that there exists a unique distribution \(\pi\) such that \(\pi P = \pi\).
 \end{enumerate}
+When we want to sample from a prescribed distribution \(\pi\) we additionally need to check the following condition for a finite Markov chain satisfying the above: 
+\begin{enumerate} 
+\item[3.] \(\pi\) is stationary for the Markov chain.
+\end{enumerate} 
+Note here that for finite chains, uniqueness is automatic by irreducibility.
 
 \begin{example}
 In Example \ref{exm:King}, the King wanted to visit the islands according to how large they are. We can think of the islands as the states and the stationary distribution as \(p(Y = i) \propto i\). The eccentric method the King used allowed him to construct a transition matrix for an aperiodic Markov chain. He also never visited islands regularly using this method.
 \end{example}
 
-When designing a Markov chain, it is usually straightforward to design one that meets conditions one and two. Condition three is more difficult to prove, but for some chains it is possible to show they satisfy detailed balance.
+When designing a Markov chain, it is usually straightforward to design one that meets conditions one and two. Constructing a chain with prescribed stationary distribution \(\pi\) is more difficult, but a detailed balance criterion can help with this.
 
 \begin{definition}
 The Markov chain with transition matrix \(P\) satisfies the \textbf{detailed balance} equation with respect to the distribution \(\pi\) if
@@ -2291,7 +2344,7 @@ The Markov chain with transition matrix \(P\) satisfies the \textbf{detailed bal
 \]
 \end{definition}
 
-\begin{theorem}[Detailed Balance]
+\begin{theorem}[Detailed Balance for finite chains]
 Let \(P\) be a transition matrix that satisfies detailed balance with respect to the distribution \(\pi\). Then \(\pi P = \pi\).
 \end{theorem}
 
@@ -2305,12 +2358,94 @@ The \(j^{th}\) row of \(\pi P\) is
 Hence \(\pi P = \pi\).
 \end{proof}
 
-The section has shown us that we can use a Markov chain theory to simulate from a probability distribution \(\pi\). All we need is for the Markov chain to be irreducible, aperiodic, and for the transition matrix to satisfy \(\pi P = \pi\). This provides the foundation theory for MCMC and allows us to sample from a posterior distribution \(\pi\). What it doesn't tell us is how to design the Markov chain, and that is what the next sections deal with.
+So far, we have shown that we can use \textit{finite }state Markov chain theory to simulate from a \textit{discrete} probability distribution \(\pi\) by running a Markov chain with \(\pi\) as a stationary distribution for a sufficently long time. However, for discrete distributions this is of course overkill, since we can easily sample from such distributions via the inverse transformation method. All of the above concepts translate however in a natural way to Markov chains with more complicated state spaces, and we will just briefly comment on this now: 
+
+The generalisation of the transition matrix is a \textit{Markov kernel} \(P \colon S \times \mathcal{S} \to [0,1]\) on a general Borel state space \((S,\mathcal{B}(S))\), which satisfies the following properties: 
+
+\begin{enumerate} 
+\item \(\forall x \in S: \quad P(x, \cdot) \text{ is a probability measure}\), 
+\item \(\forall A \in \mathcal{B}(S): \quad x \mapsto P(x, A) \text{ is measurable.}\)
+\end{enumerate}
+
+For two Markov kernels \(P,Q\) we let 
+\[Q\circ P(x,A) = \int_{S} P(x, dy ) Q(y,A), \quad (x,A) \in S \times \mathcal{B}(S),\]
+and for a probability measure \(q\) on \(S\) let \(qP\) be the probability measure
+\[qP(A) = \int_S q(dx) P(x,A), \quad A \in \mathcal{B}(S).\]
+
+If \(S\) is nice enough, the Markov property is equivalent to demanding that 
+\[\forall A \in \mathcal{B}(S): \quad \mathbb{P}(Y_{n+1} \in A \mid Y_n, \ldots, Y_0) = P(Y_n, A). \]
+Then, if we iteratively define the Markov kernels \(P^1 = P\) and
+\[P^{n+1}(x,A) = P^n \circ P(x,A) = \int_{S} P^{n}(x, dy) P(y, A), \quad (x,A) \in S \times \mathcal{B}(S),\]
+then,
+\begin{equation} 
+P^{n+m} = P^n \circ P^m \tag{\text{Chapman--Kolmogorov equation}}
+\end{equation}
+and 
+\begin{equation} 
+\mathbb{P}(Y_1 \in A_1, \ldots, Y_n \in A_n \mid Y_0 = x) = \int_S P(x, dy_0)  \int_{A_1, \times \cdots \times A_n} \prod_{i=1}^n P(y_{i-1}, dy_i).
+\end{equation}
+Analogously to the finite state space case we then call a distribution \(\pi\) on \(S\) a  \textbf{stationary distribution} if 
+\[\pi P = \pi,\]
+and thus iteratively 
+\[\mathbb{P}(Y_n \in \cdot \mid Y_0 \sim \pi) = \pi.\]
+\begin{definition} 
+A \(Y\) is a Markov chain with unique stationary distribution \(\pi\) is called \textbf{ergodic} if 
+\[\forall x \in S: \quad \lim_{n \to \infty} \lVert P^n(x,\cdot) - \pi \rVert_{\mathrm{TV}} = 0,\]
+where we recall that for two probability measures \(\mu,\nu\) on \(S\) their total variation distance is given by 
+\[\lVert \mu - \nu \rVert_{\mathrm{TV}} = \sup_{A \in \mathcal{B}(S)} \lvert \mu(A) - \nu(A) \rvert.\]
+\end{definition}
+Determining whether a general Markov chain is ergodic is a much more demanding task than in the finite state space situation. For a given Markov kernel, verification is based on checking extensions of the notions of irreducibility, aperiodicity and \textbf{recurrence} for countable Markov chains, where the latter property encodes the idea that return times to any state \(i\) should be finite almost surely. The main challenge for general state spaces is that there need not be any states \(x \in S\) such that \(P(y,\{x\}) > 0\) for any \(y \in S\) (e.g.\ when the transition probabilities are absolutely continuous). Instead of going into technical details, we only cite a quantitative result that provides \textbf{exponentially fast} convergence to the invariant distribution given explicit criteria on \(P\).
+
+\begin{theorem}[\cite{hairer11}]
+Suppose that \(Y\) satisfies the following conditions: 
+\begin{enumerate} 
+\item \textbf{Drift condition:} There exists a \textit{penalty function} \(V\colon S \to [1,\infty)\) and constants \(K \geq 0, \gamma \in (0,1)\) such that 
+\[\forall x \in S: \underbrace{\int_S V(y)\, P(x,dy)}_{= \mathbb{E}[V(Y_1) \mid Y_0 = x]}  \leq \gamma V(x) + K. \]
+\item \textbf{Minorisation condition:} There exists a constant \(\alpha \in (0,1)\) and a probability measure \(\nu\) such that 
+\[\forall A \in \mathcal{B}(S): \quad \inf_{x \in C} P(x,A) \geq \alpha \nu(A)\]
+where  \(C = \{x \in S: V(x) \leq R\}\) for some \(R > 2K/(1-\gamma).\)
+\end{enumerate}
+Then, \(Y\) has a unique stationary distribution \(\pi\) and there exist explicit constants \(D > 0, \kappa \in (0,1)\) such that 
+\[\lVert P^n(x,\cdot) - \pi \rVert_{\mathrm{TV}} \leq DV(x) \kappa^n, \quad x \in S.\]
+\end{theorem}
+
+\begin{corollary} 
+Suppose that for some probability measure \(\nu\) and \(\alpha \in (0,1)\) the following \textbf{Doeblin minorisation criterion} holds: 
+\[\forall x \in S, A \in \mathcal{B}(S): \quad P(x,A) \geq \alpha \nu(A). \]
+Then, there exist constants \(D > 0,\kappa \in (0,1)\) such that
+\[\sup_{x \in S} \lVert P^n(x,\cdot) - \pi \rVert_{\mathrm{TV}} \leq D\kappa^n.\]
+\end{corollary}
+\begin{proof} 
+Choose \(\gamma = 1/2, V \equiv 1, K = 1/2\). Then, for arbitrary \(R > 2 = 2K/(1-\gamma)\), we have \(C = \{x \in S: V(x) \leq R\} = S\) and hence by assumption 
+\[\inf_{x \in C} P(x,A) = \inf_{x \in S} P(x,A)  \geq \alpha \nu.\]
+Moreover, for any \(x \in S\) by construction.
+\[\mathbb{E}[V(Y_1) \mid Y_0 = x] = 1 = \gamma V(x) +K.\]	
+Consequently, the drift and miniorsiation criteria from the previous theorem are satisfied, yielding the assertion.
+\end{proof}
+\begin{remark} 
+It can be shown that \(\kappa = 1 - \alpha, D=1\), see \cite[Theorem 16.0.2]{meyntweedie}
+\end{remark}
+
+Such results provide the foundation theory for MCMC and allow us to sample approximatively from a posterior distribution \(\pi\) for an appropriately constructed chain. What it doesn't tell us is how to design the Markov chain, and that is what the next sections deal with. The following extension of the detailed balance condition will be helpful for this purpose:
+
+\begin{theorem}[Detailed Balance for dominated chains]\label{theo:reversibility}
+Let \(P\) be a Markov kernel such that for any \((x,A) \in S \times \mathcal{B}(S)\) it holds that \(P(x,A) = \int_A p(x,y) \,\mu(dy)\) for some dominating measure \(\mu\). If \(P\)  satisfies detailed balance with respect to a distribution \(\pi \ll \mu\) in the sense that 
+\[\pi(x)p(x,y) = \pi(y)p(y,x), \quad x,y \in S,\]
+then \(\pi P = \pi\), i.e.\, \(\pi\) is stationary.
+\end{theorem}
+
+\begin{proof}
+Using detailed balance and Fubini, we find for any \(A \in \mathcal{B}(S)\), 
+\begin{align*} 
+\pi P(A) &= \int_S \int_A \pi(x) p(x,y) \, \mu(dy)\, \mu(dx) =\int_S \int_A \pi(y) p(y,x) \, \mu(dy)\, \mu(dx)\\
+&= \int_A \pi(y) \underbrace{\Big(\int_S p(y,x) \, \mu(dx)\Big)}_{= \mathbb{P}(Y_1 \in S \mid Y_0 = y) = 1} \, \mu(dy) = \int_A \pi(y) \, \mu(dy) = \pi(A). 
+\end{align*}
+\end{proof}
 
 \hypertarget{metropolis-hastings}{%
 \section{Metropolis-Hastings}\label{metropolis-hastings}}
 
-We're now going to look at MCMC algorithms. The first algorithm we are going to look at is the Metropolis-Hasting algorithm. This is a useful algorithm if we cannot sample directly from the posterior distribution and if the conditional distributions do not have a closed form. The Metropolis-Hastings algorithm is like the island example we saw earlier. At each iteration, we propose a new sample and then accept or reject it based on the likelihood function, the prior and how likely we are to propose this new sample given the current one.
+We're now going to look at MCMC algorithms. The first algorithm we are going to look at is the Metropolis--Hastings algorithm. This is a useful algorithm if we cannot sample directly from the posterior distribution and if the conditional distributions do not have a closed form. The Metropolis-Hastings algorithm is like the island example we saw earlier. At each iteration, we propose a new sample and then accept or reject it based on the likelihood function, the prior and how likely we are to propose this new sample given the current one.
 
 Suppose we want to sample from the posterior distribution \(\pi(\theta \mid \boldsymbol{y})\). The Metropolis-Hastings works as follows:
 
@@ -2344,7 +2479,7 @@ As the the denominator doesn't depend on \(\theta\), it cancels in the ratio. Th
 This is the likelihood ratio multiplied by the prior ratio.
 
 \begin{proposition}
-The Markov chain generated by the Metropolis-Hastings algorithm satisfies detailed balance with respect to the posterior distribution.
+The Markov chain generated by the Metropolis-Hastings algorithm satisfies detailed balance with respect to the posterior distribution and the posterior is stationary.
 \end{proposition}
 
 \begin{proof}
@@ -2352,7 +2487,7 @@ Denote the current state \(\theta\) and the proposed state \(\theta'\). We would
 \[
 \pi(\theta \mid \boldsymbol{y}) \pi(\theta'\mid\theta) = \pi(\theta' \mid \boldsymbol{y}) \pi(\theta\mid\theta').
 \]
-The density of \(\theta'\) given the proposed state \(\theta\) is the proposal density multiplied by the acceptance probability. It is given by
+The density of \(\theta'\) given the proposed state \(\theta\) is the proposal density multiplied by the acceptance probability. It is thus given by
 \begin{align*}
 \pi(\theta' \mid \theta) &= q(\theta' \mid \theta)p_{acc}\\
 &=  q(\theta' \mid \theta)\min\left\{\frac{\pi(\theta' \mid \boldsymbol{y})}{\pi(\theta' \mid \boldsymbol{y})}\frac{q(\theta \mid \theta')}{q(\theta' \mid \theta)}, \, 1\right\} \\
@@ -2364,17 +2499,16 @@ The left hand side of the detailed balance equation becomes
 \pi(\theta \mid \boldsymbol{y})\pi(\theta' \mid \theta) = \min\{\pi(\theta' \mid \boldsymbol{y})q(\theta \mid \theta'),\, \pi(\theta \mid \boldsymbol{y})q(\theta' \mid \theta)\}.
 \]
 Analogously, we can show the right hand side is
-
 \[
 \pi(\theta' \mid \boldsymbol{y})\pi(\theta \mid \theta') = \min\{\pi(\theta' \mid \boldsymbol{y})q(\theta \mid \theta'),\, \pi(\theta \mid \boldsymbol{y})q(\theta' \mid \theta)\}.
 \]
-Hence, \(\pi(\theta \mid \boldsymbol{y}) \pi(\theta'\mid\theta) = \pi(\theta' \mid \boldsymbol{y}) \pi(\theta\mid\theta')\) and the Markov chain satisfies detailed balance with respect to the posterior disquisition.
+Hence, \(\pi(\theta \mid \boldsymbol{y}) \pi(\theta'\mid\theta) = \pi(\theta' \mid \boldsymbol{y}) \pi(\theta\mid\theta')\) and the Markov chain satisfies detailed balance with respect to the posterior disquisition. Stationarity of the posterior distribution is now an immediate consequence of Theorem \ref{theo:reversibility}.
 \end{proof}
 
 \begin{example}
 \protect\hypertarget{exm:norm}{}\label{exm:norm}
 
-A counter monitors the time until atoms decays. It collects the data \(X_1, \ldots, X_N\) and we assume \(X_i \sim \hbox{Exp}(\lambda)\). The time until these atom decays is short, less than 1 second, so we assume \(\lambda \sim \hbox{Beta}(\alpha, \beta)\).
+A counter monitors the time until atoms decays. It collects the data \(X_1, \ldots, X_N\) and we assume \(X_i \sim \hbox{Exp}(\lambda)\). The average time \(1/\lambda\) until these atom decays is very long, so assuming \(\lambda \sim \hbox{Beta}(\alpha, \beta)\) is reasonable.
 
 The prior distribution is given by
 \[
@@ -2633,7 +2767,7 @@ The MCMC algorithm will be
 \item
   Propose a new value \(\beta' \sim N(\beta_i, \sigma^2)\)
 \item
-  Accept \(\beta'\) with probability \(p_{acc}\) and set \(\beta{i+1}= \beta'\), otherwise reject and set\(\beta{i+1}= \beta_i\).
+  Accept \(\beta'\) with probability \(p_{acc}\) and set \(\beta_{i+1}= \beta'\), otherwise reject and set\(\beta_{i+1}= \beta_i\).
 \item
   Repeat steps 2, 3, and 4 for \$ i = 2, \ldots, M\$.
 \end{enumerate}
@@ -2729,14 +2863,17 @@ When we can sample directly from full conditional distributions, we can use a Gi
   Set initial values \(\{\theta_1^{(0)}, \ldots, \theta_N^{(0)}\}\)
 \item
   Set \(i = 1\).
-\item
+ \begin{enumerate}
+\item[2.1]
   Draw a value for \(\theta_1^{(i)}\) from \(\pi(\theta_1 \mid \theta_2^{(i-1)}, \ldots, \theta_N^{(i-1)}))\).
+\item[2.2]
+  Draw a value for \(\theta_2^{(i)}\) from \(\pi(\theta_2 \mid \theta_1^{(i)}, \theta_3^{(i-1)}, \ldots, \theta_N^{(i-1)}))\).
+  \item[\(\vdots\)]
+\item[2.N] Draw a value for \(\theta_N^{(i)}\) from \(\pi(\theta_N \mid \theta_1^{(i)}, \theta_2^{(i)}, \ldots, \theta_{N-1}^{(i)}))\).
+  %Repeat steps 3 and 4 for parameters \(\{\theta_3^{(i)}, \ldots, \theta_N^{(i)}\}\).
+ \end{enumerate}
 \item
-  Draw a value for \(\theta_2^{(i)}\) from \(\pi(\theta_2 \mid \theta_1^{(i-1)}, \theta_3^{(i-1)}, \ldots, \theta_N^{(i-1)}))\).
-\item
-  Repeat steps 3 and 4 for parameters \(\{\theta_3^{(i)}, \ldots, \theta_N^{(i)}\}\).
-\item
-  Repeat steps 3, 4, and 5, for \(i = 2, \ldots M\).
+  Repeat step 2 for \(i = 2, \ldots M\).
 \end{enumerate}
 
 In code, this might look like
@@ -4243,7 +4380,7 @@ This gives us \(\beta = 21.8\) and \(\alpha = 13.65\).
 
 The difficulty with the summary matching method is that it requires experts to describe probabilities about the prior parameter, which is difficult to do and quite an abstract concept. Instead of asking them to describe summaries, we can ask them to draw the prior distribution completely, using a betting framework.
 
-In the \textbf{prior weights} (sometimes called roulette) method, we give the the experts a set of intervals for the parameter of interest and fixed number of coins. We then ask the experts to place the coins in the intervals according to how likely they think the parameter will be in each interval, effectively betting on what value the parameter will take. For example, they might place \(n_1\) coins in the interval \(\theta \in [a, b)\), \(n_2\) in \(\theta \in [b, c)\) and \(n_3\) for \(\theta \in \[c, d]\). From this we can construct our prior density.
+In the \textbf{prior weights} (sometimes called roulette) method, we give the the experts a set of intervals for the parameter of interest and fixed number of coins. We then ask the experts to place the coins in the intervals according to how likely they think the parameter will be in each interval, effectively betting on what value the parameter will take. For example, they might place \(n_1\) coins in the interval \(\theta \in [a, b)\), \(n_2\) in \(\theta \in [b, c)\) and \(n_3\) for \(\theta \in [c, d]\). From this we can construct our prior density.
 
 \begin{example}
 Suppose we are interested in the probability a pharmaceutical drug has the desired clinical effect. The outcome of each patient's treatment can be modelled by \(X\sim\hbox{Bernoulli}(p)\). We ask a clinical about their experience with patients and similar treatments. We ask the expert to estimate the probability of successful treatment by betting on the value for \(p\) using the following table and 20 coins.

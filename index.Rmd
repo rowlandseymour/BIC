@@ -1,7 +1,7 @@
 ---
 title: "Bayesian Inference and Computation"
-author: "Dr Rowland Seymour"
-date: "Semester 2, 2024"
+author: "Dr Mengchu Li and Dr Lukas Trottner"
+date: "Semester 2, 2025"
 site: bookdown::bookdown_site
 output: gitbook
 documentclass: book
@@ -57,19 +57,8 @@ By the end of the course, students should be able to:
 
 ## Module Structure
 
-The module is split between theory and computation. Each week will have three lectures, one computer lab and one guided study. In the labs, you will need to bring your own laptop. The timetable for this module is
+The module is split between theory and computation. Each week will have three lectures, one computer lab and one guided study. In the labs, you will need to bring your own laptop. 
 
-| Week | Monday (1200)    | Tuesday (1000) | Thursday (1100) | Friday (1200) |
-|------|------------------|----------------|-----------------|---------------|
-| 2    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G19  |
-| 3    | Physics West 115 | Nuffield G18   | Arts LR5        | Nuffield G19  |
-| 4    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
-| 5    | Physics West 115 | Nuffield G18   | Arts LR5        | Nuffield G19  |
-| 6    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
-| 7    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
-| 8    | Physics West 115 | Nuffield G18   | Arts LR5        | Nuffield G19  |
-| 9    | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G19  |
-| 10   | Physics West 115 | Nuffield G18   | Nuffield G13    | Nuffield G13  |
 ## Assessment
 
 Assessment for this module is 50% via an exam and 50% via coursework
@@ -79,11 +68,6 @@ assignment -- assignment 1 will be worth 10% of the final mark, with
 assignments 2 and 3 counting for 20% each. More details about the
 assignments will be made available during the semester.
 
-## Getting Help
-
-There are lots of ways of getting help throughout the module. You can
-visit my office hour (Watson 317) on Thursdays at 0900-1030 or email me at
-[r.g.seymour\@bham.ac.uk](mailto:r.g.seymour@bham.ac.uk){.email}.
 
 ## Recommended Books and Videos
 

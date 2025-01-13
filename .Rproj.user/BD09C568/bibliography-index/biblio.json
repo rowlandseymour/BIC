@@ -24,6 +24,65 @@
             "type": "book"
         },
         {
+            "DOI": "10.1007/978-3-0348-0021-1\\_7",
+            "ISBN": "978-3-0348-0020-4",
+            "URL": "https://doi.org/10.1007/978-3-0348-0021-1_7",
+            "author": [
+                {
+                    "family": "Hairer",
+                    "given": "Martin"
+                },
+                {
+                    "family": "Mattingly",
+                    "given": "Jonathan C."
+                }
+            ],
+            "collection-title": "Progr. probab.",
+            "container-title": "Seminar on Stochastic Analysis, Random Fields and Applications VI",
+            "id": "hairer11",
+            "issued": {
+                "date-parts": [
+                    [
+                        2011
+                    ]
+                ]
+            },
+            "page": "109-117",
+            "publisher": "Birkhäuser/Springer Basel AG, Basel",
+            "title": "Yet another look at Harris’ ergodic theorem for Markov chains",
+            "type": "chapter",
+            "volume": "63"
+        },
+        {
+            "DOI": "10.1017/CBO9780511626630",
+            "ISBN": "978-0-521-73182-9",
+            "URL": "https://doi.org/10.1017/CBO9780511626630",
+            "author": [
+                {
+                    "family": "Meyn",
+                    "given": "Sean"
+                },
+                {
+                    "family": "Tweedie",
+                    "given": "Richard L."
+                }
+            ],
+            "edition": "Second",
+            "id": "meyntweedie",
+            "issued": {
+                "date-parts": [
+                    [
+                        2009
+                    ]
+                ]
+            },
+            "note": "With a prologue by Peter W. Glynn",
+            "page": "xxviii+594",
+            "publisher": "Cambridge University Press, Cambridge",
+            "title": "Markov chains and stochastic stability",
+            "type": "book"
+        },
+        {
             "URL": "https://www.R-project.org/",
             "author": [
                 {

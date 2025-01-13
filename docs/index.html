@@ -20,7 +20,7 @@
   <meta name="twitter:description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
   <meta name="twitter:image" content="/uob_logo.png" />
 
-<meta name="author" content="Dr Rowland Seymour" />
+<meta name="author" content="Dr Mengchu Li and Dr Lukas Trottner" />
 
 
 
@@ -65,7 +65,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -140,9 +140,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#module-aims"><i class="fa fa-check"></i><b>0.1</b> Module Aims</a></li>
 <li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#module-structure"><i class="fa fa-check"></i><b>0.2</b> Module Structure</a></li>
 <li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#assessment"><i class="fa fa-check"></i><b>0.3</b> Assessment</a></li>
-<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#getting-help"><i class="fa fa-check"></i><b>0.4</b> Getting Help</a></li>
-<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#recommended-books-and-videos"><i class="fa fa-check"></i><b>0.5</b> Recommended Books and Videos</a></li>
-<li class="chapter" data-level="0.6" data-path="index.html"><a href="index.html#common-distributions"><i class="fa fa-check"></i><b>0.6</b> Common Distributions</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#recommended-books-and-videos"><i class="fa fa-check"></i><b>0.4</b> Recommended Books and Videos</a></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#common-distributions"><i class="fa fa-check"></i><b>0.5</b> Common Distributions</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="fundamentals.html"><a href="fundamentals.html"><i class="fa fa-check"></i><b>1</b> Fundamentals of Bayesian Inference</a>
 <ul>
@@ -247,8 +246,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="header">
 <h1 class="title">Bayesian Inference and Computation</h1>
-<p class="author"><em>Dr Rowland Seymour</em></p>
-<p class="date"><em>Semester 2, 2024</em></p>
+<p class="author"><em>Dr Mengchu Li and Dr Lukas Trottner</em></p>
+<p class="date"><em>Semester 2, 2025</em></p>
 </div>
 <div id="practicalities" class="section level1 unnumbered hasAnchor">
 <h1>Practicalities<a href="index.html#practicalities" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -288,90 +287,7 @@ physics, biological, engineering and other mathematical contexts.</li>
 </div>
 <div id="module-structure" class="section level2 hasAnchor" number="0.2">
 <h2><span class="header-section-number">0.2</span> Module Structure<a href="index.html#module-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The module is split between theory and computation. Each week will have three lectures, one computer lab and one guided study. In the labs, you will need to bring your own laptop. The timetable for this module is</p>
-<table>
-<colgroup>
-<col width="8%" />
-<col width="25%" />
-<col width="22%" />
-<col width="23%" />
-<col width="20%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Week</th>
-<th>Monday (1200)</th>
-<th>Tuesday (1000)</th>
-<th>Thursday (1100)</th>
-<th>Friday (1200)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>2</td>
-<td>Physics West 115</td>
-<td>Nuffield G18</td>
-<td>Nuffield G13</td>
-<td>Nuffield G19</td>
-</tr>
-<tr class="even">
-<td>3</td>
-<td>Physics West 115</td>
-<td>Nuffield G18</td>
-<td>Arts LR5</td>
-<td>Nuffield G19</td>
-</tr>
-<tr class="odd">
-<td>4</td>
-<td>Physics West 115</td>
-<td>Nuffield G18</td>
-<td>Nuffield G13</td>
-<td>Nuffield G13</td>
-</tr>
-<tr class="even">
-<td>5</td>
-<td>Physics West 115</td>
-<td>Nuffield G18</td>
-<td>Arts LR5</td>
-<td>Nuffield G19</td>
-</tr>
-<tr class="odd">
-<td>6</td>
-<td>Physics West 115</td>
-<td>Nuffield G18</td>
-<td>Nuffield G13</td>
-<td>Nuffield G13</td>
-</tr>
-<tr class="even">
-<td>7</td>
-<td>Physics West 115</td>
-<td>Nuffield G18</td>
-<td>Nuffield G13</td>
-<td>Nuffield G13</td>
-</tr>
-<tr class="odd">
-<td>8</td>
-<td>Physics West 115</td>
-<td>Nuffield G18</td>
-<td>Arts LR5</td>
-<td>Nuffield G19</td>
-</tr>
-<tr class="even">
-<td>9</td>
-<td>Physics West 115</td>
-<td>Nuffield G18</td>
-<td>Nuffield G13</td>
-<td>Nuffield G19</td>
-</tr>
-<tr class="odd">
-<td>10</td>
-<td>Physics West 115</td>
-<td>Nuffield G18</td>
-<td>Nuffield G13</td>
-<td>Nuffield G13</td>
-</tr>
-</tbody>
-</table>
+<p>The module is split between theory and computation. Each week will have three lectures, one computer lab and one guided study. In the labs, you will need to bring your own laptop.</p>
 </div>
 <div id="assessment" class="section level2 hasAnchor" number="0.3">
 <h2><span class="header-section-number">0.3</span> Assessment<a href="index.html#assessment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -382,14 +298,8 @@ assignment – assignment 1 will be worth 10% of the final mark, with
 assignments 2 and 3 counting for 20% each. More details about the
 assignments will be made available during the semester.</p>
 </div>
-<div id="getting-help" class="section level2 hasAnchor" number="0.4">
-<h2><span class="header-section-number">0.4</span> Getting Help<a href="index.html#getting-help" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>There are lots of ways of getting help throughout the module. You can
-visit my office hour (Watson 317) on Thursdays at 0900-1030 or email me at
-<a href="mailto:r.g.seymour@bham.ac.uk" class="email">r.g.seymour@bham.ac.uk</a>.</p>
-</div>
-<div id="recommended-books-and-videos" class="section level2 hasAnchor" number="0.5">
-<h2><span class="header-section-number">0.5</span> Recommended Books and Videos<a href="index.html#recommended-books-and-videos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="recommended-books-and-videos" class="section level2 hasAnchor" number="0.4">
+<h2><span class="header-section-number">0.4</span> Recommended Books and Videos<a href="index.html#recommended-books-and-videos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>No books are required for this course and the whole material is
 contained in these notes. However, you may find it useful to use other
 resources in your studies. I recommend the following:</p>
@@ -415,8 +325,8 @@ set of video lectures for this book can be found on
 <a href="https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN">YouTube</a>.</p></li>
 </ol>
 </div>
-<div id="common-distributions" class="section level2 hasAnchor" number="0.6">
-<h2><span class="header-section-number">0.6</span> Common Distributions<a href="index.html#common-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="common-distributions" class="section level2 hasAnchor" number="0.5">
+<h2><span class="header-section-number">0.5</span> Common Distributions<a href="index.html#common-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>For many Bayesian inference problems, it is useful to be able to
 identify probability density functions (for continuous random variables)
 and probability mass functions (for discrete random variables) up to

@@ -129,7 +129,6 @@ exr:unlabeled-div-133
 module-aims
 module-structure
 assessment
-getting-help
 recommended-books-and-videos
 common-distributions
 fundamentals
