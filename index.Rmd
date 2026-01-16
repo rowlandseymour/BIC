@@ -2,8 +2,9 @@
 title: "Bayesian Inference and Computation"
 author: "Dr Junqi Tang (based on lecture notes by Dr Rowland Seymour)"
 date: "Semester 2, 2026"
-output: gitbook
 site: bookdown::bookdown_site
+output:
+  bookdown::bs4_book: default
 documentclass: book
 bibliography:
 - book.bib
@@ -13,6 +14,7 @@ link-citations: yes
 description: This book contains the lecture notes for the module Bayesian Inference
   and Computation.
 cover-image: uob_logo.png
+---
 header-includes:
 - \usepackage{amscd,amsmath,amsthm,amssymb,array,bbm,hhline,mathrsfs   , enumitem, comment,booktabs,fancybox,calc,textcomp,xcolor,graphicx,bm,bbm,xspace,nicefrac,stmaryrd,url,arcs,listings,nameref,natbib   }
 - \DeclareMathOperator*{\argmax}{arg\,max}
