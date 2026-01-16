@@ -6,6 +6,7 @@ site: bookdown::bookdown_site
 output:
   bookdown::bs4_book: default
 documentclass: book
+output_dir: "docs"
 bibliography:
 - book.bib
 - packages.bib
