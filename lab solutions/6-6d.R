@@ -5,7 +5,7 @@ sigma.sq.store <- numeric(n.iter)
 epsilon <- 30
 for(i in 1:n.iter){
 
-  sigma.sq <- rexp(1, 1)
+  sigma.sq <- rexp(1, 0.1)
 
   x.star <- rnorm(20, 5, sqrt(sigma.sq))
 

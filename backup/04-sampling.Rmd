@@ -1,0 +1,731 @@
+# Sampling
+
+## Uniform Random Numbers
+What we won't be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is because computers aren't good at being random, they require algorithmic instructions. True random number generation often uses physical methods, such as the radioactive decay of atoms, or atmospheric noise.
+
+Throughout this module, we will be using R's built in random number generation. This is a pseudo random number generator that has excellent random properties, but will eventually repeat. A basic random number generation tool that we will repeatedly use in the module involves sampling from a uniform distribution on the unit interval, which can be done in R using
+```{r}
+runif(1, 0, 1)
+```
+
+
+## Inverse Transform Sampling
+Suppose we want to sample from a non-uniform one-dimensional distribution. The inverse transform theorem allows us to do this using the distribution's inverse function. 
+
+::: {.definition}
+Let $X$ be a real-valued random variable with a distribution function $F$. Then the **inverse function** of a distribution  function $F$, denoted $F^{-1}$, is defined for all $u \in (0, 1)$ by
+$$
+F^{-1}(u) = \inf\{x \in\mathbb{R} : F(x) > u\}.
+$$
+:::
+
+::: {.theorem} 
+Let $F :\mathbb{R} \rightarrow [0, 1]$ be a continuous distribution function, $U \sim U[0, 1]$ and $Y = F^{-1}(U)$. Then $Y$ has distribution function $F$.
+:::
+
+::: {.proof}
+We have
+$$
+\mathbb{P}(Y \leq a) = \mathbb{P}(F^{-1}(U) \leq a) = \mathbb{P}(\inf\{x \in\mathbb{R} : F(x) > u\} \leq a). 
+$$
+Since $\inf\{x \in\mathbb{R} : F(x) > u\} \leq a$ can only hold if $F(a) \geq U$, we have
+$$
+\mathbb{P}(Y \leq a)  = \mathbb{P}(F(a)\geq U)
+$$
+As $U \sim U[0, 1]$, we have $\mathbb{P}(F(a)\geq U) = F(a)$. 
+:::
+
+This theorem says that if we have a random variable $U \sim U[0, 1]$ and we want to get $Y \sim F$, then we can use $F^{-1}(U)$. Viewing this theorem graphically can provide a much more intuitive understanding. 
+
+::: {.example}
+We would like to sample from an exponential distribution with rate $\lambda$, i.e. $Y ~ \sim \hbox{Exp}(\lambda)$. The density function is given by
+
+$$
+\pi(y \mid \lambda) = \begin{cases} 
+      \lambda e^{\lambda y} & y \geq 0 \\
+    0  & \text{otherwise.}
+   \end{cases}
+$$
+
+The distribution function can be derived by
+\begin{align*}
+F(y \mid \lambda) &= \int_0^y \lambda e^{\lambda t}\,dt \\
+& =  1 - e^{\lambda y}.
+\end{align*}
+Finally, the inverse function is given by
+$$
+F^{-1}(y \mid \lambda) = -\frac{1}{\lambda}\log(1-y).  
+$$
+Therefore, if $U \sim U[0, 1]$, then it follows that $-\frac{1}{\lambda}log(1-U) \sim \hbox{Exp}(\lambda)$. 
+
+The R code below generates a plot to show this (with $\lambda = 0.5$). We can plot the CDF for most one parameter distributions straightforwardly. We can think of this theorem as allowing us to sample a point on the y-axis and then computing the quantile this corresponds to. 
+
+```{r}
+set.seed(12345) # to reproduce
+y <- seq(0, 10, 0.01) #Show on the interval [0, 5]
+f <- 1 - exp(-0.5*y)    #Construct the cumulative density 
+                        #function (CDF)
+plot(y, f, type ='l', xlab = "y", ylab= "CDF")
+
+#Sample u
+u <- runif(1)
+
+#Get the corresponding y value
+f.inv <- -2*log(1-u)
+
+#plot 
+segments(x0 = 0, y0 = u, x1 = f.inv, y1 = u, lty = 2)
+segments(x0 = f.inv, y0 = 0, x1 = f.inv, y1 = u, lty = 2)
+text(x = f.inv, y = -0.01, expression(F[-1](U)), col = 4)
+text(x = -.1, y = u, "U", col = 4)
+```
+:::
+
+::: {.example}
+Suppose we want to generate samples from the Cauchy distribution with location 0 and scale 1. This has density function 
+$$
+\pi(x) = \frac{1}{\pi(1+x^2)}, \quad x \in \mathbb{R}.
+$$
+A plot of this function is shown below. 
+```{r}
+x <- seq(-5, 5, 0.01)
+y <- 1/(pi*(1 + x^2))
+plot(x, y, type = 'l')
+```
+To use the inverse transform method, we first need to find the CDF:
+$$
+F(x) = \int_{-\infty}^x \frac{1}{\pi(1+t^2)}dt
+$$
+Letting $t = \tan \theta$, we can write $dt = \sec^2(\theta)d\theta$. The integral becomes
+$$
+F(x) = \int_{-\frac{\pi}{2}}^{\arctan(x)} \frac{\sec^2(\theta)}{\pi(1+\tan^2(\theta))} d\theta
+$$
+As $1 + \tan^2(\theta) = \sec^2(\theta)$, we can write the integral as
+$$
+F(x) = \int_{-\frac{\pi}{2}}^{\arctan(x)} \frac{1}{\pi}du\\
+= \left[\frac{\theta}{\pi}\right]_{-\frac{\pi}{2}}^{\arctan(x)}\\
+= \frac{\arctan(x)}{\pi} + \frac{1}{2}.
+$$
+The inverse of the distribution function is 
+$$
+F^{-1}(x) = \tan\left(\pi\left(x - \frac{1}{2}\right)\right).
+$$
+Hence, if $U \sim U[0, 1]$, then $\tan\left(\pi\left(U - \frac{1}{2}\right)\right) \sim \hbox{Cauchy}(0, 1)$.
+:::
+
+## Rejection Sampling
+We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling works by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we're actually interested in. The plot below shows an example from this. We would like to generate a sample from the distribution with the curved density function, which is challenging. Instead, we find a distribution whose density function bounds the one we are interested in a sample from that. In this case we can use the uniform distribution. Once we have generated our sample from he uniform distribution, we choose to accept or reject it based on the distribution we are interested in. In this case we reject it. 
+
+```{r echo = FALSE}
+set.seed(1234)   #to reproduce
+M <- 3/4         #set M
+y <- runif(1)    #sample Y ~ Q
+p <- 3/4*y*(2-y) #compute pi(y)
+k <- p/(M*1)     #compute k
+u <- runif(1)    #sample U ~ U[0, 1]
+
+
+#Create nice plot
+a <- seq(0, 2, 0.01)
+b <- 3/4*a*(2-a)
+c <- M*rep(1, length(a))
+plot(a, b, ylim = c(0, M), type = 'l')
+lines(a, c)
+segments(x0 = y, y0 = 0, x1 = y,  y1 =3/4*y*(2-y) , lty = 2, lwd = 2)
+segments(x0 = y,  y0 =3/4*y*(2-y), x1 = y, y1 = M, lty = 2, col = 2, lwd = 2)
+points(x = y, y = u, pch = 19)
+```
+
+
+Suppose we want to sample from a density $\pi$, but can only generate samples from a density $q$. If there exists some constant $c > 0$, such that $\frac{\pi(y)}{q(y)} \leq c$ for all $y$, then we can generate samples from $\pi$ by
+
+1. Sampling $Y \sim Q$
+
+2. Sampling $U \sim U[0, 1]$
+
+3. Computing $k = \frac{\pi(u)}{cq(y)}$
+
+4. Accepting $y$ if $U < k$ and rejecting otherwise. 
+
+This says draw sample a point $y$ according to the density $q$. Draw a vertical line at $y$ from the $x$-axis to $cq(y)$. Sample uniformly on this line. If the uniformly random sample is below $q$, then accept it. Otherwise, reject it. The theory behind this is as follows. Suppose we sample some point y according to this algorithm and we want to work out its density $f$, then 
+$$
+f(y) \propto q(y)\pi(U < k) = q(y)\frac{\pi(u)}{cq(y)} = \frac{\pi(u)}{c}.
+$$
+Therefore, $f = p$. 
+
+::: {.example}
+Suppose we want to sample from a distribution that has the density
+$$
+\pi(y) = \begin{cases}
+\frac{3}{4}y(2-y), \qquad y \in [0, 2] \\
+0, \qquad \textrm{otherwise}
+\end{cases}.
+$$
+This has a maximum at $\frac{3}{4}$. We choose $p \sim U[0, 1]$ and $c = \frac{3}{2}$. The R code below shows a pictorial version of how one sample is generated. 
+```{r}
+set.seed(1234)   #to reproduce
+scaling.c <- 3/2         #set c
+y <- runif(1, 0, 2)    #sample Y ~ Q
+p <- 3/4*y*(2-y) #compute pi(y)
+k <- p/(scaling.c*1/2)     #compute k
+u <- runif(1)    #sample U ~ U[0, 1]
+ifelse(u < k, 'accept', 'reject') #Accept if  u < k
+
+
+#Create nice plot
+a <- seq(0, 2, 0.01)
+b <- 3/4*a*(2-a)
+scaling.c  <- scaling.c*rep(1, length(a))
+plot(a, b, ylim = c(0, 3/2), type = 'l')
+lines(a, scaling.c)
+segments(x0 = y, y0 = 0, x1 = y,  y1 =3/4*y*(2-y) , 
+          lty = 2, lwd = 2)
+segments(x0 = y,  y0 =3/4*y*(2-y), x1 = y, y1 = 3/2, lty = 2, 
+          col = 2, lwd = 2)
+points(x = y, y = u, pch = 19)
+
+```
+The plot also shows how the choices of $c$ and $q$ can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better $q$ to minimise this space. 
+:::
+
+::: {.example}
+Suppose we want to sample from a Beta(4, 8) distribution. This distribution looks like
+```{r}
+x <- seq(0, 1, 0.001)
+y <- dbeta(x, 4, 8)
+```
+A uniform distribution on [0, 1] will cover the Beta distribution and we can then use a rejection sampling algorithm. First, we need to find $c$, the maximum of the Beta distribution. We can find this by differentiating the pdf and setting it equal to 0:
+$$
+\pi(x) = \frac{1}{B(4, 8)}x^3(1-x)^7 \\
+\implies \frac{d \pi(x)}{d x} = \frac{1}{B(4, 8)}(3x^2(1-x)^7 - 7x^3(1-x)^6) \\
+\implies \frac{d \pi(x)}{d x} = \frac{1}{B(4, 8)}(x^2(1-x)^7(3-10x)).
+$$
+Setting this equal to 0 gives us the maximum at $x = \frac{3}{10}$. This means we can set $\pi(3/10) = \frac{1}{B(4, 8)} \frac{3^7 7^{10}}{10^{10}}$. Our rejection sampling algorithm is therefore
+
+1. Sample $u \sim U[0, 1]$
+2. Compute $k = \pi(u)/cq(u)$. 
+3. Accept $u$ with probability $k$. 
+:::
+
+
+::: {.example}
+In this example, we want to sample from a Gamma(3, 2) distribution. The density function is shown below.
+```{r}
+x <- seq(0, 6, 0.01)
+y <- dgamma(x, 3, 2)
+```
+
+We will use an Exp(1) distribution as our proposal distribution. To find the value of $c$, consider $R(x) = \frac{\pi(x)}{q(x)}$
+$$
+R(x) = \frac{\frac{2^3}{\Gamma(3)}x^2\exp(-2x)}{\exp(-x)} \\
+ =  \frac{2^3}{\Gamma(3)}x^2 \exp(-x)
+$$
+To find the maximum of this ratio, we differentiate and set the result equal to 0. 
+$$
+\frac{dR}{dx} = 2x\exp(-x) - x^2\exp(-x)\\
+= x\exp(-x)(2 - x)
+$$
+The maximum is therefore at 2. The value of the ratio at $x = 2$ is $R(2) = \frac{2^3}{\Gamma(3)}4\exp(-2)$. This is therefore our value of c. We can see how $\pi(x)$ and $cq(x)$ look of the graph below. 
+```{r}
+x <- seq(0, 6, 0.01)
+y <- dgamma(x, 3, 2)
+scaling.c <- 2^3/gamma(3)*4*exp(-2)
+q <- dexp(x, 1)
+
+plot(x, y, type = 'l')
+lines(x, q*scaling.c, col = 2, lty = 2)
+```
+
+The exponential distribution completely encloses the gamma distribution using this value of $c$, wiht the two densities just touching at $x=2$. Our rejection sampling algorithm is therefore
+
+1. Sample $u \sim \hbox{exp}(1)$
+2. Compute $k = \frac{\pi(u)}{cq(u)}$
+3. Accept $u$ with probability $k$. 
+:::
+
+### Rejection Sampling Efficiency
+Suppose we are using a rejection sampling algorithm to sample from $f(y)$ using the proposal distribution $g(y)$. How good is our rejection sampling algorithm? What does it mean to be a 'good' rejection sampling algorithm. One measure of the efficiency of a sampler is, on average, how many samples to we need to generate until one is accepted. 
+
+::: {.proposition}
+The number of samples proposed in a rejection sampling algorithm before one is accepted is distributed geometrically with mean $\frac{1}{M}$. 
+:::
+
+::: {.proof}
+Given a proposed value $y$, and let $A$ be the event of sample is accepted. The probability a sample is accepted, given it takes the value $y$ is 
+$$
+A \mid y \sim \hbox{Bernoulli}\left(\frac{f(y)}{Mg(y)}\right).
+$$
+
+By the tower property
+\begin{align*}
+E(A) & = E(E(A\mid y)) \\
+& = E\left(\frac{f(y)}{Mg(y)}\right) \\
+& = \int \frac{f(y)}{Mg(y)} g(y) dy \\
+& = \frac{1}{M}\int f(y) dy \\
+& = \frac{1}{M}.
+\end{align*}
+
+Therefore, the number of samples proposed before one is accepted is distributed geometrically with mean $\frac{1}{M}$. 
+:::
+
+## Ziggurat Sampling
+The final method we are going to look at in this chapter is Ziggurat sampling. It is used to sample from a $N(0, 1)$ distribution using samples from a $U(0, 1)$ distribution. A Ziggurat is a kind of stepped pyramid. To start the sampling algorithm, we approximate the normal distribution by a series of horizontal rectangles, each with the same area. An example of this is shown below. 
+
+```{r echo = FALSE}
+x <- seq(0, 5, 0.01)
+y <- dnorm(x, 0, 1)
+plot(x, y, type = 'l', col = "blue", lwd = 3)
+
+table <- list()
+table$x <- c(2.093446, 2.093446, 1.676493, 1.393368, 1.100918, 0.765337)
+table$y <- c(0.044592, 0.097856, 0.151121, 0.217632, 0.297658, 0.398943)
+
+segments(x0 = 0, x1 = table$x, y0= table$y, y1 = table$y)
+segments(x0 = table$x[2:6], x1 = table$x[2:6] , y0= table$y[1:5], y1 = table$y[2:6])
+segments(x0 = table$x[1], x1 = 2.5, y0 = table$y[1], y1 = table$y[1])
+segments(x0 = table$x[1], x1 = 2.5, y0 = table$y[1], y1 = table$y[1])
+segments(x0 = 2.5, x1 = 2.5, y0 = 0, y1 = table$y[1])
+```
+To generate a sample, we choose a rectangle at random -- we might do this by sampling on the y-axis uniformly at random. We then sample uniformly at random within the rectangle. We accept the sample if it is 'clearly' in the box. By clearly, we mean that is is also contained in the rectangle above. If it is, not contained in the rectangle above, we generate a new uniform random number to accept or reject the sample. 
+
+Suppose the bottom right corner of the $i^{th}$ rectangle has coordinates $(x_i, y_i)$. The Ziggurat algorithm is 
+
+1. Sample a rectangle $i$ uniformly at random
+2. Sample $u_0 \sim U[0, 1]$ and set $x = u_0x_i$
+3. If $x < x_{i+1}$ accept the sample
+4. Sample $u_1 \sim U[0, 1]$ and set $y = y_i + u_1(y_{i+1} − y_i)$
+5. If $y < f(y)$, where $f$ is the density function of a standard normal distribution, then accept the sample.
+
+
+This only generates samples for the positive side of the normal distribution. To generate samples from the full distribution, we multiply each sample by -1 with probability a half. 
+
+## Approximate Bayesian Computation
+So far, we have always considered models where the likelihood function is easy to work with. By easy, we mean that we can evaluate the likelihood function for lots of different values, and we can evaluate it cheaply. In some cases, it might not be possible to write down the likelihood function, or it might not be possible to evaluate it. In these cases, we refer to methods call **likelihood free inference**. 
+
+:::{.example}
+Models to predict the weather are notoriously complex. They contain a huge number of parameters, and sometimes it is not possible to write this model down exactly. In cases where the likelihood function for the weather model can be written down, we would have to start the MCMC algorithm from scratch every time we collected new data.
+:::
+
+Approximate Bayesian Computation (ABC) is a likelihood free algorithm that relies on reject sampling from the prior distribution. When constructing an ABC algorithm, we only need to be able to generate data given a parameter value and not evaluate the likelihood of seeing specific data given a parameter value.
+
+We are going to look at two types of ABC. The first is ABC with rejection
+
+### ABC with Rejection
+
+:::{.definition}
+To carry out inference for a parameter $\theta$ using an Approximate Bayesian Computation algorithm with rejection
+
+1. Sample a value for the parameter $\theta^*$ from the prior distribution $\pi(\theta)$. 
+2. Generate some data $y*$ from the data generating process using the parameter value $\theta^*$.
+3. Accept $\theta^*$ as a value from the posterior distribution if $||y - y^*|| < \varepsilon$ for some $\varepsilon > 0$. Otherwise reject $\theta^*$
+4. Repeat steps 1 - 3.
+:::
+
+:::{.definition}
+The approximate posterior distribution using ABC with rejection is
+$$
+\pi_\varepsilon(\theta \mid y) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
+$$
+where ${A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||< \varepsilon\}$. 
+:::
+
+::: {.example}
+This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe $Y_1, \ldots, y_{10}\sim Beta(3, \beta)$. We place a uniform prior on $\beta$ such that $\beta \sim U[0, 5]$. The ABC algorithm with rejection works as follows:
+
+1. Sample a value $\beta^* \sim U[0, 5]$. 
+2. Simulate $y^*_1, \ldots, y^*_{10} \sim Beta(3,\beta^*)$
+3. Compute $D = \sum_{i=1}^{10}(y_i -y^*_i)^2$. If $D < 0.75$, accept $\beta^*$ as a sample from the posterior distribution. Otherwise, reject $\beta^*$.
+4. Repeat steps 1, 2, and 3. 
+
+The code below carries out this algorithm. 
+
+```{r}
+#Set Up Example
+set.seed(1234)
+n <- 10
+y <- rbeta(n, 3, 2)
+y
+
+#Set Up ABC
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 0.75
+
+#Run ABC
+for(i in 1:n.iter){
+  
+  #Propose new beta
+  b <- runif(1, 0, 5)
+  
+  #Simualate data
+  y.star <- rbeta(n, 3, b)
+  
+  #Compute statistic
+  d <- sum((y-y.star)^2)
+  
+  #Accept/Reject
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+:::
+
+
+One important question is how to choose the value for $\varepsilon$? It turns out this is an incredibly hard question that is specific to each application. Often the approximate posterior distribution $\pi_\varepsilon(\theta \mid y)$ is very sensitive to the choice of $\varepsilon$. 
+
+:::{.example}
+Let's repeat the example, first with $\varepsilon = 0.12$. In this case, almost all of the proposals are rejected. 
+```{r}
+#Set Up Example
+set.seed(1234)
+n <- 10
+y <- rbeta(n, 3, 2)
+y
+
+#Set Up ABC
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 0.12
+
+#Run ABC
+for(i in 1:n.iter){
+  
+  #Propose new beta
+  b <- runif(1, 0, 5)
+  
+  #Simualate data
+  y.star <- rbeta(n, 3, b)
+  
+  #Compute statistic
+  d <- sum((y-y.star)^2)
+  
+  #Accept/Reject
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+:::
+
+:::{.example}
+And now again with $\varepsilon = 2$. In this case, almost all of the proposals are accepted.  
+```{r}
+#Set Up Example
+set.seed(1234)
+n <- 10
+y <- rbeta(n, 3, 2)
+y
+
+#Set Up ABC
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 2
+
+#Run ABC
+for(i in 1:n.iter){
+  
+  #Propose new beta
+  b <- runif(1, 0, 5)
+  
+  #Simualate data
+  y.star <- rbeta(n, 3, b)
+  
+  #Compute statistic
+  d <- sum((y-y.star)^2)
+  
+  #Accept/Reject
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+When $\varepsilon = 0.12$, almost all the proposals are rejected. Although the approximate posterior mean is close to the true value, given we only have 7 samples we cannot say much about the posterior distribution.  When $\varepsilon = 2$, almost all the proposals are accepted. This histogram shows that we are really just sampling from the prior distribution, i.e. $\pi_2(\beta \mid y) \approx \pi(\beta)$. 
+:::
+
+:::{.proposition}
+Using an ABC rejection algorithm
+$$
+\lim_{\varepsilon \rightarrow \infty} \pi_\varepsilon(\theta \mid y) \overset{D}= \pi(\theta),
+$$
+and 
+$$
+\lim_{\varepsilon \rightarrow 0} \pi_\varepsilon(\theta \mid y) \overset{D}= \pi(\theta \mid y). 
+$$
+:::
+
+
+:::{.proof}
+See problem sheet.
+:::
+
+This example and the proposition show that if we set $\varepsilon$ too large, we don't learn anything about $\theta$, we just recover the data. The smaller the value of $\varepsilon$, the better. But very small values may require very long run times, or have such few samples that the noise from the sampling generator is larger than the signal in the accepted samples. The only diagnostic tools we have are the proportion of samples accepted and the histograms of the approximate posterior and prior distributions.
+
+:::{.example}
+An example of where this is useful is epidemic modelling. Suppose we have a population of 100 individuals and at each time point an individual is Susceptible to a disease, Infected with the disease, or Recovered and therefore immune. Once infected with the disease, an individual infects people according to a Poisson process with rate $\beta$. Each infected person is infected from a time period drawn from an Exponential distribution with rate $1$. We observe the total number of people infected with the disease at the end of the outbreak. To carry out inference for the infection rate $\beta$, we need to use the augmented likelihood function 	The augmented likelihood function for this model is given by
+
+$$
+\pi(\textbf{i}, \textbf{r}| \beta) \propto \underbrace{\exp\Big(- \sum\limits_{j=1}^n\sum\limits_{k=1}^N \beta\big((r_j \wedge i_k) - (i_j \wedge i_k)\big)\Big)}_\text{Avoiding infection} \\
+ \times\hspace{1.8cm} \underbrace{\prod\limits_{\substack{j=1 \\ j \neq \kappa}}^n\Big(\sum\limits_{k \in \mathcal{Y}_j} \beta\Big)}_\text{Becoming infectious}  \\
+\times \hspace{1.8cm}\underbrace{\prod\limits_{j=1}^n\pi(r_j -i_j | \gamma = 1)}_\text{Remaining infected}.
+$$
+This likelihood function cannot be evaluated as we do not observe the infection time $i$ or recovery time $r$. Instead we can use ABC sampling with rejection. Each iteration, sample a value for $\beta$, simulate an outbreak and compare the observed and simulated number of people infected. If they are 'close' we accept the value for $\beta$ as a sample from our posterior distribution. This means all we have to do is simulate outbreaks.  
+
+
+```{r}
+#This function simualtes an outbreak of a disease in a population of size N, with infection rate beta and recovery rate gamma.
+simSIR.Markov <- function(N, beta, gamma) {
+  
+  # initial number of infectives and susceptibles;
+  I <- 1
+  S <- N-1;
+  
+  # recording time;
+  t <- 0;
+  times <- c(t);
+  
+  # a vector which records the type of event (1=infection, 2=removal)
+  type <- c(1);
+  
+  while (I > 0) {
+    
+    # time to next event;
+    t <- t + rexp(1, (beta/N)*I*S + gamma*I);
+    times <- append(times, t);
+    
+    if (runif(1) < beta*S/(beta*S + N*gamma)) {
+      # infection
+      I <- I+1;
+      S <- S-1;
+      type <- append(type, 1);
+    }
+    else {
+      #removal
+      I <- I-1
+      type <- append(type, 2);
+    }
+  }
+  
+  
+  # record the times of events (infections/removals), the type of the event, the final size (including
+  # the initial infective) and the duration. 
+  
+  res <- list("t" = times, "type" = type, "final.size" = sum(type==1), "duration" = t, "N" = N);
+  return(res)
+}
+
+#Set Up Example
+set.seed(1234)
+n <- 200
+y <- simSIR.Markov(100, 2, 1)$final.size
+
+
+#Set Up ABC
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 250
+
+#Run ABC
+for(i in 1:n.iter){
+  
+  #Propose an infection rate
+  b <- runif(1, 0, 5)
+  
+  #Simualte an outbreak
+  y.star <- simSIR.Markov(100, b, 1)$final.size
+  
+  #Compute difference
+  d <- sum((y-y.star)^2)
+  
+  #Accept/Reject
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+:::
+
+### Summary ABC with Rejection
+ABC with rejection suffers from the curse of dimensionality (see Chapter 5). As the number of data points increases, the probability we get a 'close' match decreases. This means we have to increase $\varepsilon$ and degrade the quality of our approximation. 
+
+:::{.example}
+Let's repeat the Beta example with $n = 200$ observed data points. We need $\varepsilon > 15$ for any proposals to be accepted. 
+:::
+
+
+We can avoid the curse of dimensionality by comparing summary statistics instead. This leads us to the Summary ABC algorithm. 
+
+:::{.definition}
+To carry out inference for a parameter $\theta$ using an Summary Approximate Bayesian Computation algorithm with rejection
+
+1. Sample a value for the parameter $\theta^*$ from the prior distribution $\pi(\theta)$. 
+2. Generate some data $y*$ from the data generating process using the parameter value $\theta^*$.
+3. Accept $\theta^*$ as a value from the posterior distribution if $||S(y) - S(y^*)|| < \varepsilon$ for some $\varepsilon > 0$ and summary summary statistic $S$. Otherwise reject $\theta^*$
+4. Repeat steps 1 - 3.
+:::
+
+
+
+Similar to the ABC algorithm with rejection, we also have the following proposition. 
+
+:::{.proposition}
+The approximate posterior distribution using ABC with rejection is
+$$
+\pi_\varepsilon(\theta \mid S(y)) \propto \int \pi(y^* \mid \theta^*)\pi(\theta^*)I_{A_\varepsilon(y^*)} dy^*,
+$$
+where ${A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - (y)||< \varepsilon\}$. 
+:::
+
+Using summary statistics only increases the approximation however, as we are approximating the data using a summary of it. The only case when we are not approximating further is when the statistic  contains all the information about the underlying sample it is summarising. This is known as a sufficient statistic. 
+
+:::{.definition}
+A statistic $S$ is a sufficient statistic for the parameter $\theta$ if the conditional distribution $\pi(y | S(y))$ does not depend on $\theta$. 
+:::
+
+:::{.proposition}
+Using a Summary ABC rejection algorithm with a sufficient statistic $S$
+$$
+\lim_{\varepsilon \rightarrow 0} \pi_\varepsilon(\theta \mid S(y)) \overset{D}= \pi(\theta \mid y).
+$$
+:::
+
+The difficulty with sufficient statistics is that they only exist for 'nice' distributions, like the Gamma, Beta and Poisson distributions. In these cases, we can work with the posterior distribution directly or use and MCMC algorithm. 
+
+:::{.example}
+Let's repeat the beta distribution example using the mean as the summary statistic. We can set $\varepsilon = 0.001$. 
+
+```{r}
+set.seed(1234)
+n <- 200
+y <- rbeta(n, 3, 2)
+
+
+n.iter <- 50000
+b.store <- numeric(n.iter)
+epsilon <- 0.001
+for(i in 1:n.iter){
+  
+  b <- runif(1, 0, 5)
+  
+  y.star <- rbeta(n, 3, b)
+  
+  d <- sum((mean(y)-mean(y.star))^2)
+  
+  if(d < epsilon){
+    b.store[i] <- b
+  } else{
+    b.store[i] <- NA
+  }
+  
+}
+
+#Get number of reject samples
+sum(is.na(b.store))
+
+#Plot Approximate Posterior
+hist(b.store, freq = FALSE, xlab = expression(beta), main = "")
+abline(v = 2, col = 'red')
+mean(b.store, na.rm = TRUE)
+quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
+```
+:::
+
+
+## Lab
+
+The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1 (e.g. estimating $\pi$). 
+
+::: {.exercise}
+Visit random.org to generate some truly random numbers. How does this site generate numbers that are truly random?
+:::
+
+::: {.exercise}
+A random variable $X$ has density $\pi(x) = ax^2$ for $x\in[0,1]$ and 0 otherwise.  Find the value $a$. Use the inverse transform method to generate 10,000 samples from this distribution. Plot a histogram against the true density function. 
+:::
+
+::: {.exercise}
+Let $X$ have the density $\pi(x) = \frac{1}{\theta}x^{\frac{1-\theta}{\theta}}$ for $x \in [0, 1]$. Use the inverse transform method to generate 10,000 samples from this distribution with $\theta = \{1, 5, 10\}$. 
+:::
+
+::: {.exercise}
+Let $X$ have the density $\pi(x) = 3x^2$ for $x \in [0, 1]$ and 0 otherwise. Use a rejection sampling method to generate 10,000 from this distribution. Plot the results against the true density to check you have the same distribution. 
+:::
+
+::: {.exercise}
+The half normal distribution with mean 0 and variance 1 has density function 
+$$
+\pi(x) = \frac{2}{\sqrt{2\pi}}\exp{(-x^2/2)}
+$$
+for $x \geq 0$ and 0 otherwise.
+
+1. Denote the exponential density function by $q(x) = \lambda \exp(-\lambda x)$. Find the smallest $c$ such that  $\pi(x)/q(x) < c$. 
+2. Use a rejection sampling algorithm with an exponential proposal distribution to generate samples from the half normal distibrution with mean 0 and variance 1. 
+:::
+
+:::{.exercise}
+You observe the following data from an $N(5, \sigma^2)$ distribution. 
+```
+-5.93,  33.12, -21.41, -12.42, -17.64,  -5.47, -27.95, -22.25, -20.40, -26.28, -24.57,  
+3.06,  44.28, 6.02, -21.14,  14.79, -15.10, 53.18,  38.61,   5.71
+```
+Use an Exp(0.1) prior distribution on $\sigma^2$ and develop a summary statistic ABC algorithm to draw samples from the approximate posterior distribution. 
+:::
+
+:::{.exercise}
+You observe the following data from an $Exp(\lambda)$ distribution. 
+```
+2.6863422, 8.8468112, 8.8781831, 0.2712696, 1.8902442
+```
+Use an $Beta(1, 3)$ prior distribution on $\lambda$ and develop an ABC algorithm to draw samples from the approximate posterior distribution. Write the ABC algorithm as a function so you can run it for different values of $\varepsilon$. Run your algorithm for $\varepsilon = \{20, \ldots, 100\}$ and record the approximate posterior median. Plot the relative error in your estimate against the true value of lambda, which is 0.2. 
+:::
+
+
+

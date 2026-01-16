@@ -37,8 +37,8 @@ abc.function <- function(epsilon){
 epsilon <- 20:100
 abc.lambda <- numeric(length(epsilon))
 
-for(i in 1:length(epsilon))
+for(i in 1:length(epsilon)){
   abc.lambda[i] <- abc.function(i)
-
+}
 #Report relative error
-plot(epsilon, (abc.lambda - 0.2)/0.2*100, xlab = expression(epsilon), ylab = "Relative Error")
+plot(epsilon, (abc.lambda - 0.2)/0.2, xlab = expression(epsilon), ylab = "Relative Error")

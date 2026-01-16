@@ -3,7 +3,7 @@
 y <- c(4, 4, 5, 2)
 
 p <- 0.001
-y5 <- 3
+y5 <- 2
 
 n.iter <- 10000
 p.store <- numeric(n.iter)
@@ -15,7 +15,7 @@ y5.store <- numeric(n.iter)
 for(i in 1:n.iter){
 
   #Update p
-  p <- rbeta(1, 15 + y5 + 1, 1001*5 - 15 - y5)
+  p <- rbeta(1, 15 + y5 + 1, 5001 - 15 - y5)
 
   #Update y5
 
@@ -31,11 +31,13 @@ for(i in 1:n.iter){
 
 
 # Plot Posteriors ---------------------------------------------------------
-plot(p.store, type = 'l')
-hist(p.store)
-mean(p.store)
-quantile(p.store, c(0.025, 0.975))
+p.sample = p.store[-(1:1000)] # discard first 1000 samples as burn-in
+y5.sample = y5.store[-(1:1000)]
+plot(p.sample, type = 'l')
+hist(p.sample)
+mean(p.sample)
+quantile(p.sample, c(0.025, 0.975))
 
-plot(y5.store, type = 'l')
-mean(y5.store)
-table(y5.store)/n.iter
+plot(y5.sample, type = 'l')
+mean(y5.sample)
+table(y5.sample)/(n.iter-1000)

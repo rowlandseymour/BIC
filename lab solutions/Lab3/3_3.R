@@ -4,16 +4,16 @@
 # Function for posterior distribution -------------------------------------
 #This function computes the posterior distribution
 #It has four inputs: sum.x and N describing the data, and alpha and beta (both numerics correpsonding to the prior distribution)
-#It outputs a vector evaluating the posterior dstirbution at [0, 0.01, 0.02, ..., 10]
+#It outputs a vector evaluating the posterior distribution at [0, 0.01, 0.02, ..., 10]
 evaluate.posterior <- function(sum.x, N, alpha, beta){
-  
-  
+
+
   #Create grid
   p <- seq(0, 1, 0.01)
-  
+
   #Evaluate posterior
   posterior <- dbeta(p, sum.x + alpha, 100*N - sum.x + beta)
-  
+
   #Return posterior
   return(posterior)
 }
@@ -27,8 +27,8 @@ all.posteriors <- sapply(beta, evaluate.posterior, sum.x = 2971, N = 150, alpha 
 
 
 #Plot Posterior and Prior
-plot(p, all.posteriors[, 100], type = 'l', xlab = "p", ylab = "density")
-lines(p, dbeta(p, 2, beta[100]), col = 2)
+plot(p, all.posteriors[, 1000], type = 'l', xlab = "p", ylab = "density")
+lines(p, dbeta(p, 2, beta[1000]), col = 2)
 
 #The prior mean is alpha/ alpha + beta. The posterior mean is sum(x) + alpha / alpha + beta + 100N
 prior.mean <- 2/(2 + beta)
@@ -47,8 +47,8 @@ all.posteriors <- sapply(beta, evaluate.posterior, sum.x = 101, N = 5, alpha = 2
 
 
 #Plot Posterior and Prior
-plot(p, all.posteriors[, 1000], type = 'l', xlab = "p", ylab = "density")
-lines(p, dbeta(p, 2, beta[1000]), col = 2)
+plot(p, all.posteriors[, 500], type = 'l', xlab = "p", ylab = "density")
+lines(p, dbeta(p, 2, beta[500]), col = 2)
 
 #The prior mean is alpha/ alpha + beta. The posterior mean is sum(x) + alpha / alpha + beta + 100N
 prior.mean <- 2/(2 + beta)

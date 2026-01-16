@@ -20,7 +20,7 @@ Computationally verify that the Poisson distribution with rate $\lambda = 100$ c
 
 To do this, we can generate lots of samples from a Poisson(100) distribution and plot them on top of the density function of the normal distribution with mean and variance 100.
 
-R has four built-in functions for working with distributions. They take the form `rdist`, `ddist`, `pdist`, and `qdist`. You replace the `dist` part with the name of the distribution you want to work with, for example `unif` for the uniform distribution or `norm` for the normal distribution. As we are working with the the Poisson distribution, we will use `pois`. The prefixes allow you to work with the distribution in different ways: `r` gives you random numbers sampled form the distribution, `d` evaluates the density function, `p` evaluates the density function, and `q` evaluates the inverse density function (or quantile function).
+R has four built-in functions for working with distributions. They take the form `rdist`, `ddist`, `pdist`, and `qdist`. You replace the `dist` part with the name of the distribution you want to work with, for example `unif` for the uniform distribution or `norm` for the normal distribution. As we are working with the the Poisson distribution, we will use `pois`. The prefixes allow you to work with the distribution in different ways: `r` gives you random numbers sampled form the distribution, `d` evaluates the density function, `p` evaluates the distribution function, and `q` evaluates the inverse distribution function (or quantile function).
 
 The function `rpois` allows us to generate samples from a Poisson distribution. We store 10,000 samples in a vector `y` by calling
 ```{r}
@@ -49,15 +49,15 @@ The two match up well, showing the normal distribution is a suitable approximati
 Over the next two sessions, you will need to solve the following four problems in R. You can type `?` before any function in R (e.g. `?rnorm`) to bring up R's helpage on the function. Googling can also bring up lots of information, possible solutions and support. 
 
 ::: {.exercise}
-The changes in the Birmingham stock exchange each day can be modelled using a normal distribution. The price on day $i$, $X_i$ is given by
+The changes in the Birmingham stock exchange each day can be modelled using a normal distribution. The price on day $i \geq 1$, $X_i$ is given by
 $$
-X_i = \alpha X_{i-1}, \qquad \alpha \sim N(1.001, 0.005^2).
+X_i = \alpha_i X_{i-1}, \qquad \alpha_i \overset{i.i.d}{\sim} N(1.001, 0.005^2).
 $$
 The index begins at $X_0 = 100$. Investigate the distribution of the value of the stock market on days 50 and 100. 
 
 **Hard**. Use a simulation method to generate the relevant distributions. 
 
-**Medium**. Simulate the value for $\alpha$ for each of the 100 days and use the `cumprod` command to plot a trajectory. Use a for loop to repeat this 100 times and investigate the distribution of the value of the stock market on days 50 and 100. 
+**Medium**. Simulate the value of $\alpha_i$ and use the `cumprod` command to plot a trajectory of the market index over 100 days. Use a for loop to repeat this 100 times and investigate the distribution of the value of the stock market on days 50 and 100. 
 
 **Easy**. Fill in the blanks in the following code. 
 ```
@@ -176,7 +176,7 @@ Software that generates numbers using an LCG Setting $a = 3$, $c = 2$, $m = 7$ a
 
 1. Investigate the 'randomness' of this generator by creating the delay plot, where $X_{i-1}$ is plotted against $X_{i}$
 
-2. One way to improve the quality of these generators is to shuffle the sequence generated. Generate rate two sequences $X$ and $Y$ from two different LCGs, and report the shuffled sequence $Z_j = X_{Y_j}$. For the sequence $Y$ use the values  $a = 5$, $c = 1$, $m = 8$ and $Y_0 = 2$.
+2. One way to improve the quality of these generators is to shuffle the sequence generated. Generate two sequences $X$ and $Y$ from two different LCGs, and report the shuffled sequence $Z_j = X_{Y_j}$. For the sequence $Y$ use the values  $a = 5$, $c = 1$, $m = 8$ and $Y_0 = 2$.
 
 3. As the past two exercises show, LCGs are notoriously poor. in the 1960s and 70s, RANDU was a widely used LCG developed by IBM. According to Wikipedia
 > IBM's RANDU is widely considered to be one of the most ill-conceived random number generators ever designed, and was described as "truly horrible" by Donald Knuth.
@@ -310,7 +310,7 @@ Why might R's function be faster and more reliable than ours?
 :::
 
 ::: {.exercise}
-Write a function to evaluate the log of the probability density function of a Poisson distribution with rate $\lambda$.
+Write a function to evaluate the log of the probability mass function of a Poisson distribution with rate $\lambda$.
 :::
 
 
@@ -323,7 +323,7 @@ Consider the stock exchange problem in Exercise 2.1. Write a function that simul
 
 
 ## Good Coding Practices
-In the past two labs, we've written code to solve different problems. In this lab, we're going to take a step back and think about what good R code does and doesn't look like. 
+We've written code to solve different problems. In this lab, we're going to take a step back and think about what good R code does and doesn't look like. 
 
 ### Code Style
 Code should be both efficient and easy to read. In most cases it's better to write code that's easy to read and less efficient, than highly efficient code that's difficult to read. Some basic principles to make code easy to read are:

@@ -19,7 +19,7 @@ samples <- rnorm(5)
 rug(samples)
 ```
 
-The multivariate normal distribution extends this to a vector space, $\mathbb{R}^N$. Instead of having a mean and variance value, the distribution is defined through a mean vector and covariance matrix. The mean vector describes the expected value of each component of the vector and the covariance matrix describes the relationship between each pair of components in the vector. When we draw samples, we get vectors. The plot below shows the density of the multivariate normal distribution with $N = 2$, zero mean, $\sigma^2_x = \sigma^2_y = 1$ and $\rho = 0.7$. 
+The multivariate normal distribution extends this to the vector space $\mathbb{R}^N$. Instead of having a mean and variance value, the distribution is defined through a mean vector and covariance matrix. The mean vector describes the expected value of each component of the vector and the covariance matrix describes the relationship between each pair of components in the vector. When we draw samples, we get vectors. The plot below shows the density of the multivariate normal distribution with $N = 2$, zero mean, $\sigma^2_x = \sigma^2_y = 1$ and $\rho = 0.7$. 
 
 
 ```{r}
@@ -83,14 +83,20 @@ lines(x, f3, lty = 3)
 ```
 
 ::: {.definition}
-A **Gaussian Process** is a collection of random variables, any finite number of which have a joint Gaussian distribution. 
+A **Gaussian Process** $X = (X(t))_{t \in T}$ is a collection of real-valued random variables  indexed by some index set $T$, any finite number of which have a joint Gaussian distribution. Its mean function $T \ni t \mapsto \mu(t)$ is defined by $\mu(t) = \E[X(t)]$ and its covariance function $k(s,t) = \mathrm{Cov}(X(s), X(t)) = \mathbb{E}\left((X(s) - \mu(s))(X(t) - \mu(t))\right)$.
 :::
 
-This says that is we think of a function as an infinite collection of points, then if any finite subset of those points following a Gaussian distribution, we have a Gaussian process. In reality, we set up the function so that is meets this definition. More formally,
+It can be shown that a Gaussian process is uniquely characterised by its mean and covariance *function*, just as a multivariate normal distribution is uniquely characterised by its mean *vector*  and covariance *matrix*.
+
+Our particular interest is on Gaussian processes on real valued functions defined on $\mathbb{R}^N$, and therefore for the particular index set $T = \mathbb{R}^N$. In this case we use the notation $(f(x))_{x \in \mathbb{R}^N}$ for such a *random* function, which we formalise as follows:
 
 ::: {.definition}
-A **GP distribution on a function $f(x)$** is defined through its mean function $\mu(x) = \mathbb{E}(x)$ and covariance function $k(x, x') = \mathbb{E}(x)\left((f(x) - \mu(x))(f(x') - \mu(x'))\right)$. We write it as $f(x) \sim \mathcal{GP}(\mu(x), k(x, x'))$.
+A **GP on a function** $f = (f(x))_{x \in \mathbb{R}^N}$ is defined through its mean function $\mu(x) = \mathbb{E}[f(x)]$ and covariance function $k(x, x') = \mathrm{Cov}(f(x),f(x^\prime)) = \mathbb{E}\left[(f(x) - \mu(x))(f(x') - \mu(x'))\right]$, where $x,x^\prime \in \mathbb{R}^N$. We write this as $f \sim \mathcal{GP}(\mu, k)$.
 :::
+
+In particular, for such a Gaussian process $f$, we have that 
+\[\forall n \in \mathbb{N}, \boldsymbol{x} = (x_1,\ldots  x_n) \in (\mathbb{R}^N)^n: f(\boldsymbol{x}) := (f(x_1),\ldots,f(x_n)) \sim N\big(\mu(\boldsymbol{x}) , k(\boldsymbol{x},\boldsymbol{x})\big),\]
+where $\mu(\boldsymbol{x}) := (\mu(x_1),\ldots, \mu(x_n))$ and $k(\boldsymbol{x},\boldsymbol{x}) := (k(x_i,x_j))_{i,j = 1,\ldots, n}$.
 
 Before we go any further, it is worth proceeding with caution. Those with good memories will recall Bernstein-von-Mises' theorem from Chapter 3.
 
@@ -115,7 +121,9 @@ $$
 where $\alpha^2$ is the signal variance and $l>0$ is the length scale parameter.
 :::
 
-For now, consider $\alpha = l = 1$. What is the covariance between the function evaluated at 0 and the function evaluated at $x$? The plot below shows the covariance.
+The  length scale parameter $l$  dictates how quickly the covariance decays with increasing distance of points. Very small values of $l$ imply that even for nearby points $x, x^\prime$ the random values $f(x)$ and $f(x^\prime)$ can have very little correlation (recall that since the joint distribution is normal, zero correlation would actually be equivalent to independence),  resulting in functions that look like white noise. Large values of $l$ mean that even if points are far away, they can still highly dependent on each other. This gives rather smooth functions. 
+
+The plot below shows the covariance for $\alpha = l = 1$ between $f(0)$ and $f(x)$ as a function of $x$.
 
 ```{r echo = FALSE}
 x <- seq(-3, 3, 0.01)
@@ -123,45 +131,47 @@ k <- exp(-x^2)
 plot(x, k, type = 'l')
 ```
 
-The covariance is highest when the $x$ is near to 0, i.e. the points are immediately next to each other. If the value of $x$ is $\pm 2$, the covariance is 0. As we are dealing with a joint normal distribution, a covariance of 0 implies independence. So with this covariance function, the value of $f(x)$ is independent of $f(0)$ if $|x|$ is larger than about two. The parameter $l$ is called the length scale parameter and dictates how quickly the covariance decays. Small values of $l$ mean that the value of the function at nearby points are independent of each other, resulting in functions that look like white noise. Large values of $l$ mean that even if points are far away, they are still highly dependent on each other. This gives very flat functions. 
+
 
 
 The choice of covariance function is a modelling choice -- it depends completely on the data generating process you are trying to model. The following properties are useful when deciding which covariance function to use. 
 
 :::{.definition}
-A **stationary** covariance function is a function of $\boldsymbol{x} - \boldsymbol{x}'$. That means it is invariant to translations in space.
+A **stationary** covariance function is a function of $x - x'$. That means it is invariant to translations in space.
 :::
 
 :::{.definition}
-An **isotropic** covariance function is a function only of $|\boldsymbol{x} - \boldsymbol{x}'|$. That means it is invariant to rigid translations in space.
+An **isotropic** covariance function is a function only of $|x - x'|$. That means it is invariant to rigid transformations in space.
 :::
 
 :::{.definition}
-An **dot product** covariance function is a function only of $\boldsymbol{x}\cdot\boldsymbol{x}'$. That means it is invariant to rigid rotations in space, but not translations.
+An **dot product** covariance function is a function only of $x\cdot x'$. That means it is invariant to rigid rotations in space, but not translations.
 :::
 
-What is most important is that the matrix resulting from a covariance function is positive semi-definite. This is because covariance matrices must be positive semi-definite. 
+What is most important is that the matrix resulting from a covariance function is positive semi-definite to be a valid choice for a Gaussian process. This is because covariance matrices must be positive semi-definite. More formally:
 
 :::{.definition}
-An $N \times N$ matrix $\Sigma$ is positive semi-definite if it is symmetric and 
+An $n \times n$ matrix $\Sigma$ is positive semi-definite if 
 $$
-\boldsymbol{x}^T\Sigma\boldsymbol{x} \geq 0 \quad \hbox{for all } \boldsymbol{x} \in \mathbb{R}^N.
+x^T\Sigma x \geq 0 \quad \hbox{for all } x \in \mathbb{R}^n.
 $$
+A  function $k\colon \mathbb{R}^N \times \mathbb{R}^N \to \mathbb{R}$ is called a covariance function if for any $\boldsymbol{x} = (x_1,\ldots,x_n) \in (\mathbb{R}^N)^n$ it holds that $k(\boldsymbol{x},\boldsymbol{x})$ is symmetric positive semi-definite.
 :::
 
-The squared exponential covariance function is isotropic and produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don't produce functions that are continuous or differentiable. Three4 more are given below. 
+
+The squared exponential covariance function is isotropic and produces functions that are continuous and differentiable. There are many other types of covariance functions, including ones that don't produce functions that are continuous or differentiable. Three more are given below. 
 
 :::{.definition}
-The **M\'atern** covariance function models functions that are differentiable only once:
+The **Matérn** covariance function models functions that are differentiable only once:
 $$
-k(x, x') = \left(1 + \frac{\sqrt{3}(x - x')^2}{l} \right)\exp\left\{-\frac{\sqrt{3}(x - x')^2}{l} \right\}.
+k(x, x') = \left(1 + \frac{\sqrt{3}\lvert x - x'\rvert}{l} \right)\exp\left\{-\frac{\sqrt{3}\lvert x - x'\rvert}{l} \right\}.
 $$
 :::
 
 :::{.definition}
 The **periodic** covariance function models functions that are periodic and it is given by
 $$
-k(x, x') = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{(x-x')^2}{p} \right\},
+k(x, x') = \alpha^2 \exp\left\{-\frac{2}{l}\sin^2\frac{\lvert x-x'\rvert^2}{p} \right\},
 $$
 where the period is $p$.
 :::
@@ -173,14 +183,18 @@ k(x, x') = \alpha^2 + x\cdot x'.
 $$
 :::
 
-These are just some covariance functions. In addition to the covariance functions defined, we can make new covariance funcitons by combining existing ones. 
+These are just some covariance functions. In addition to the covariance functions defined, we can make new covariance functions by combining existing ones. 
 
 :::{.proposition}
-If $k_1$ and $k_2$ are covariance functions, then so is $k_1 + k_2$.
+If $k_1$ and $k_2$ are covariance functions, then so is $k = k_1 + k_2$.
 :::
 
 :::{.proof}
-Let $f_1$ be a function with covariance function $k_1$ and $f_2$ be a function with covariance function $k_2$, then $f = f_1 + f_2$ has covariance function $k_1 + k_2$.
+Let $n \in \mathbb{N}$, $x_1,\ldots,x_n \in \mathbb{R}^N$ and $a \in \R^n$ be arbitrarily chosen. Then,
+\[a^\top k(\boldsymbol{x},\boldsymbol{x}) a = \underbrace{a^\top k_1(\boldsymbol{x},\boldsymbol{x}) a}_{\geq 0} + \underbrace{a^\top k_2(\boldsymbol{x},\boldsymbol{x}) a}_{\geq 0} \geq 0, \]
+so $k$ is positive semidefinite. Moreover, since $k_i(\boldsymbol{x},\boldsymbol{x})$ are symmetric, so is $k_1(\boldsymbol{x},\boldsymbol{x}) + k_2(\boldsymbol{x},\boldsymbol{x})$. Since $n$, $x_1,\ldots,x_n$ and $a$ were arbitrarily  demonstrates that $k_1+k_2$ is a covariance function. An alternative probabilistic proof would be this: let $f_1$ and $f_2$ be *independent* Gaussian processes with covariance functions $k_1$ and $k_2$ and zero mean function, respectively. For any $\boldsymbol{x} = (x_1,\ldots,x_n)$ we then have $f_i(\boldsymbol{x}) \sim N(\boldsymbol{0}, k_i(\boldsymbol{x},\boldsymbol{x}))$ and therefore by independence of $f_1$ and $f_2$, 
+\[f_1(\boldsymbol{x}) + f_2(\boldsymbol{x}) \sim N\big(\boldsymbol{0}, k_1(\boldsymbol{x},\boldsymbol{x}) + k_2(\boldsymbol{x},\boldsymbol{x})\big) = N\big(\boldsymbol{0}, k(\boldsymbol{x},\boldsymbol{x})\big),\]
+so $k$ is a covariance function.
 :::
 
 :::{.proposition}
@@ -195,30 +209,24 @@ See problem sheet.
 ### Gaussian Process Regression
 One of the main applications of GPs in in regression. Suppose we observe the points below $\boldsymbol{y} = \{y_1, \ldots, y_N\}$ and want to fit a curve through them. One method is to write down a set of functions of the form $\boldsymbol{y} =  X^T\boldsymbol{\beta} + \boldsymbol{\varepsilon}$, where $X$ is the design matrix and $\boldsymbol{\beta}$ a vector of parameters. For each design matrix $X$, construct the posterior distributions for $\boldsymbol{\beta}$ and use some goodness-of-fit measure to choose the most suitable design matrix.
 
+One difficulty is writing down the design matrices $X$, it is often not straightforward to propose or justify these forms GPs allow us to take a much less arbitrary approach, simply saying that $y_i = f(x_i) + \varepsilon_i$ and placing a GP prior distribution on $f$. 
+
+Although we're placing an prior distribution with an infinite dimension on $f$, we only ever need to work with a finite dimensional object, making this much easier. We only have noisy observations of the function $\boldsymbol{f} = \{f(x_1), \ldots, f(x_n)\}$ at a finite number of points  and we aim to infer the value of the function at points on a fine grid, $\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_{n^\ast}^*)\}$. By the definition of a GP, the distribution of these points is a multivariate normal distribution. 
+
+:::{.example}
+Suppose we observe $\boldsymbol{y} = \{y_1, \ldots, y_n\}$ at $\boldsymbol{x} = \{x_1, \ldots, x_n\}$. The plot below shows these points. 
+
 ```{r}
 x <- -5:5
 y <- sin(x/2)^2 + exp(-x/5) + rnorm(length(x), 0, 0.2)
 plot(x, y)
 ```
 
-One difficulty is writing down the design matrices $X$, it is often not straightforward to propose or justify these forms GPs allow us to take a much less arbitrary approach, simply saying that $y_i = f(x_i) + \varepsilon_i$ and placing a GP prior distribution on $f$. 
-
-Although we're placing an prior distribution with an infinite dimension on $f$, we only ever need to work with a finite dimensional object, making this much easier. We only observe the function at finite number of points $\boldsymbol{f} = \{f(x_1), \ldots, f(x_N)\}$ and we will infer the value of the function at points on a fine grid, $\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}$. By the definition of a GP, the distribution of these points is a multivariate normal distribution. 
-
-:::{.example}
-Suppose we observe $\boldsymbol{y} = \{y_1, \ldots, y_N\}$ at $\boldsymbol{x} = \{x_1, \ldots, x_N\}$. The plot below shows these points. 
-
-```{r echo = FALSE}
-x <- seq(-3, 3, 0.01)
-k <- exp(-x^2)
-plot(x, k, type = 'l')
-```
-
-Using the model $y_i = f(x_i) + \varepsilon_i$, where $\varepsilon_i \sim N(0, \sigma^2)$, we want to infer the function $f$ evaluated at a gird of points $\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_N^*)\}$. We place a GP prior distribution on $f \sim \mathcal{GP}(0, k)$, where $k$ is the squared exponential covariance function. Using the model, the covariance between points $y_i$ and $y_j$ is
+Using the model $y_i = f(x_i) + \varepsilon_i$, where $\varepsilon_i \sim N(0, \sigma^2)$, we want to infer the function $f$ evaluated at a grid of points $\boldsymbol{f}^* = \{f(x_1^*), \ldots, f(x_{n^\ast}^*)\}$. We place a GP prior distribution on $f$, i.e.\  $f \sim \mathcal{GP}(0, k)$, where $k$ is some covariance function (in the simulation below the squared exponential) and assume that $f$ is independent of $\varepsilon_1,\ldots,\varepsilon_n$. Using the model, the covariance between points $y_i$ and $y_j$
 $$
-\textrm{cov}(y_i, y_j) = k(x_i, x_j) + \sigma^21_{i=j}.
+\mathrm{Cov}(y_i, y_j) = k(x_i, x_j) + \sigma^2 \mathbf{1}_{i=j}.
 $$
-That is the covariance function evaluated at $x_i$ and $x_j$ plus $\sigma^2$ if $i = j$. We can write this in matrix form as $K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I$ where $I$ is the identity matrix. The distribution of $\boldsymbol{y}$ is therefore $\boldsymbol{y} \sim N(\boldsymbol{0}, \, K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)$. By definition of the GP, the distribution of the function evaluated at the fine grid is $\boldsymbol{f}^* \sim N(\boldsymbol{0}, K(\boldsymbol{x}^*, \boldsymbol{x}^*))$. 
+That is the covariance function evaluated at $x_i$ and $x_j$ plus $\sigma^2$ if $i = j$. We can write this in matrix form as $\mathrm{Cov}(\boldsymbol{y},\boldsymbol{y}) = k(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I$ where $I$ is the identity matrix. The distribution of $\boldsymbol{y}$ is therefore $\boldsymbol{y} \sim N(\boldsymbol{0}, \, k(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)$. By definition of the GP, the distribution of the function evaluated at the fine grid is $\boldsymbol{f}^* \sim N(\boldsymbol{0}, k(\boldsymbol{x}^*, \boldsymbol{x}^*))$. 
 
 We can now write the joint distribution as
 $$
@@ -227,16 +235,16 @@ $$
 \boldsymbol{f}^*
 \end{pmatrix} \sim N\left(\boldsymbol{0}, \,
 \begin{pmatrix}
- K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I &  K(\boldsymbol{x}, \boldsymbol{x}^*)\\
-K(\boldsymbol{x}^*, \boldsymbol{x}) & K(\boldsymbol{x}^*, \boldsymbol{x}^*)
+ k(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I &  k(\boldsymbol{x}, \boldsymbol{x}^*)\\
+k(\boldsymbol{x}^*, \boldsymbol{x}) & k(\boldsymbol{x}^*, \boldsymbol{x}^*)
 \end{pmatrix}.
 \right)
 $$
-The off-diagonal terms in the covariance matrix describe the relationship between the observed points $\boldsymbol{y}$ and the points of interest $\boldsymbol{f}^*$. We can now write down the distribution of $\boldsymbol{f}^*$ given the observed points $\boldsymbol{y}$ and $\sigma^2$. 
+The off-diagonal terms in the covariance matrix describe the relationship between the observed points $\boldsymbol{y}$ and the points of interest $\boldsymbol{f}^*$. We can now write down the predictive distribution of $\boldsymbol{f}^*$ given the observed points $(\boldsymbol{x},\boldsymbol{y})$. 
 $$
-\boldsymbol{f}^* \mid \boldsymbol{y}, \sigma^2 \sim N(\boldsymbol{\mu}^*, \, K^*),
+\boldsymbol{f}^* \mid \boldsymbol{y} \sim N(\boldsymbol{\mu}^*, K^*),
 $$
-where $\boldsymbol{\mu}^* = K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2 I)^{-1} \boldsymbol{y}$ and $K^* = K(\boldsymbol{x}^*, \boldsymbol{x}^*) -  K(\boldsymbol{x}^*, \boldsymbol{x})(K(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)^{-1}K(\boldsymbol{x}, \boldsymbol{x}^*)$. 
+where $\boldsymbol{\mu}^* = k(\boldsymbol{x}^*, \boldsymbol{x})(k(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2 I)^{-1} \boldsymbol{y}$ and $K^* = k(\boldsymbol{x}^*, \boldsymbol{x}^*) -  k(\boldsymbol{x}^*, \boldsymbol{x})(k(\boldsymbol{x}, \boldsymbol{x}) + \sigma^2I)^{-1}k(\boldsymbol{x}, \boldsymbol{x}^*)$. 
 
 We set the fine gird to be $\boldsymbol{x}^* = \{-5, -4.99, -4.98, \ldots, 5\}$, the GP parameters $\alpha = l = 1$ and $\sigma = 0.2$. The posterior mean and 95\% credible interval are shown below. 
 ```{r echo = FALSE}
@@ -290,73 +298,71 @@ plot(x, y, xlab = "x", ylab = "f(x)", ylim = c(0, 4))
 lines(x.star, mu.star)
 polygon(c(x.star, rev(x.star)), c(f.lower, rev(f.upper)), col = rgb(0,0, 1, 0.25), border = FALSE)
 ```
-The posterior mean for $f$ is a smooth line passing near each point. The 95\% credible interval for $f$ has the smallest variance near each point, and largest furthest away from the points. 
+
+
+The posterior mean for $f$ is a smooth line passing near each point. The empirical 95\% credible interval for $f$ is thinnest in the vicinity of each data point (smaller variance for these grid points) and thickest in  the data gaps (larger variance). This nicely reflects our uncertainty about $f$ and you can imagine how the credivle intervals would shrink if we collect more data to fill the gaps.
 :::
 
 ## Data Augmentation
-Real world data are often messy with data points missing which may mean they are partially or completely unobserved. One common example of this is in clinical trials where people drop out of the trial before their treatment is complete. Another example is crime data, where only a fraction of crimes are reported and many crimes go unobserved. Two common ways to deal with partially or completely unobserved are:
+Real world data are often messy with data points missing which may mean they are partially or completely unobserved. One common example of this is in clinical trials where people drop out of the trial before their treatment is complete. Another example is crime data, where only a fraction of crimes are reported and many crimes go unobserved. Two common ways to deal with partially or completely unobserved data are:
 
-* Remove data points that are not completely observed. This throws away information and is likely to increase the overall uncertainty in the estimates. 
-* Replace data points that are not completely observed with estimates such as the sample mean. This is likely to underestimate the uncertainty as we are treating the observation as completely observed when it is not. 
+* Remove data points that are not completely observed. This throws away information and is likely to increase the overall uncertainty in the estimates due to the reduced sample size. 
+* Replace data points that are not completely observed with some estimates. This process is known as Data imputation. If we simply treat the imputed data as observed, then we are likely to underestimate the uncertainty as we are treating the observation as completely observed when it is not. 
 
-The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data. It allows us to treat the missing data points as random variables and infer the data points alongside the model parameters. This provides us with a method to quantify the uncertainty around our estimates of the missing data points.
+The Bayesian framework provides a natural way for dealing with missing, partially, or completely unobserved data using the technique called data augmentation. It allows us to infer the missing/hidden information alongside the model parameters. 
 
 In data augmentation, we distinguish between two likelihood functions.
 
-::: {.definition}
-The **observed data likelihood function** is the likelihood function of the observed data. 
-:::
-
-:::{.definition}
-The **complete data likelihood function** is the likelihood function of the observed data and any missing or censored data had they been fully observed. 
-:::
-
-The difference between the two likelihood functions is that the complete data likelihood function is the function had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn't fully observe, we can't compute it. Instead we can only evaluate the observed data likelihood function. A simple probability based example of this is if there are two events $X$ and $Y$, where the outcome of $X$ is observed and $Y$ unobserved. The complete data likelihood is $\pi(X = x, Y = y)$ because we are considering all the events, observed or not. However, we can only compute $\pi(x) = \int_{y \in Y}\pi(X = x, Y = y)$ or $\pi(x) = \sum_{y \in Y}\pi(X = x, Y = y)$, since $y$ is unobserved. 
-
-In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing variables that we want to have fully observed. This then gives us the complete data likelihood function. 
+* The **observed data likelihood function** is the likelihood function of the observed data. 
 
 
-### Imputing censored observations
+* The **complete data likelihood function** is the likelihood function of the observed data and any unobserved data had they been fully observed. 
+
+The difference between the two likelihood functions is that the complete data likelihood function is the function had we observed everything we want to observe. However, as the complete data likelihood function contains data we didn't fully observe, we can't compute it. Instead we can only evaluate the observed data likelihood function. 
+
+Mathematically, we can write the complete data set $X = (X_1,\dotsc,X_n)$, with each $X_i = (Y_i, Z_i)$, where $Y_i$ denotes the observed information while $Z_i$ denotes the unobserved/missing information. If we assume all the $X_i$'s are independent, then the complete (data) likelihood function is $\pi(x \mid \theta) = \prod_{i=1}^n\pi(x_i\mid \theta) = \prod_{i=1}^n\pi(y_i,z_i\mid \theta)$. Let $Y = (Y_1,\dotsc,Y_n)$ denote the **observed data** in the complete data set $X$. The observed data likelihood function is instead $\pi(y\mid \theta) = \prod_{i=1}^n\pi(y_i\mid \theta) = \prod_{i=1}^n \int \pi(y_i,z_i\mid \theta) dz_i$. 
+
+In data augmentation, we start off with the observed data likelihood function and then augment this function by introducing hidden (latent) variables which denotes the unobserved data. This then gives us the complete data likelihood function. Throughout the examples that we shall discuss below, we illustrate the point that it is often easier to work with the complete data likelihood in the presence of unobserved data, because it allows the use of Gibbs sampler for simultaneous Bayesian Inference on model parameters and the missing information. 
+
+
+### Censored observations
 The first example we will look at is when data is censored. Instead of throwing away these observations, we will instead treat them as random variables and infer their values. 
 
 ::: {.example}
-A bank checks transactions for suspicious activities in batches of 1000. Denote the probability a transaction is suspicious by $p$ and the number of suspicious transactions in a batch by $Y$.
-
-The bank checks five batches and observes $y_1, \ldots, y_4$ suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6. 
+A bank checks transactions for suspicious activities in batches of 1000. 
+It checks five batches and observes $y_1, \ldots, y_4$ suspicious transactions in the first four batches. Due to a computer error, the number of suspicious transactions in the final batch is not properly recorded, but is known to be less than 6. It is reasonable to assume $Y_1,\dotsc,Y_5 \mid p \overset{i.i.d}\sim \text{Binomial}(1000,p)$, but we do not observe the exact value of $Y_5$.
 
 
 The observed data likelihood functions is 
+\begin{align*}
+\pi(y_1, \ldots, y_4, y_5 < 6 \mid p) &=\sum_{y_5 = 0}^5 \pi(y_1,\dotsc,y_4,y_5 \mid p) = \sum_{y_5 = 0}^5 \left(\prod_{i=1}^5 \begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i} \right) \\ &= \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i} \right)\left(\sum_{y_5=0}^5\begin{pmatrix} 1000 \\ y_5 \end{pmatrix} p^{y_5}(1-p)^{1000 - y_5}\right).
+\end{align*}
+
+ Placing a uniform prior distribution on $p \sim \text{Unif}[0, 1]$ gives the posterior distribution
 $$
-\pi(y_1, \ldots, y_4, \tilde{y}_5 \mid p) = \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
+\pi(p \mid y_1, \ldots, y_4, y_5 <6) \propto \left( p^{\sum_{i=1}^4 y_i}(1-p)^{\sum_{i=1}^4y_i} \right)\left(\sum_{y_5=0}^5\begin{pmatrix} 1000 \\ y_5 \end{pmatrix} p^{y_5}(1-p)^{1000 - y_5}\right).
 $$
-This is known as marginalising over the missing variable, just as we did in the simple probability example earlier. Placing a uniform prior distribution on $p \sim U[0, 1]$ give the posterior distribution
+Although we could sample from this distribution using Metropolis-Hastings algorithms, they do not produce any information regarding the censored data point $y_5$, which may be of interest itself. 
+
+Instead, we can write down the complete data likelihood by assuming that the exact value of $y_5$ was observed: 
 $$
-\pi(p \mid y_1, \ldots, y_4, \tilde{y}_5)= \left(\prod_{i=1}^4\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{y_i} \right)\left(\sum_{j=0}^5\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000 - j}\right).
+\pi(y_1, \ldots, y_5 \mid p)  = \prod_{i=1}^5\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i}.
 $$
-Although we could sample from this distribution, it is not easy to work with. Instead, we can write down the complete data likelihood. Suppose that $y_5$ was observed, then the complete data likelihood may be written as 
-$$
-\pi(y_1, \ldots, y_5 \mid p)  = \prod_{i=1}^5\begin{pmatrix} 1000 \\ y_i \end{pmatrix} p^{y_i}(1-p)^{1000 - y_i},
-$$
-The posterior distribution is therefore 
+With the same uniform prior, the posterior distribution is 
 $$
 p \mid y_1, \ldots, y_5 \sim \hbox{Beta}\left(\sum_{i=1}^5 y_i + 1, 5000 + 1 - \sum_{i=1}^5 y_i\right).
 $$
 
-The full conditional distribution of $y_5$ given $p$, the other data points an $y_5 < 6$ is
+The conditional distribution of $Y_5\mid p, y_1, \dotsc,y_4$ can be computed using Bayes rule, with the additional constraint $Y_5 < 6$
 $$
-  \pi(y_5 = y \mid y_1, \ldots, y_4, y_5 < 6, p) = \frac{\begin{pmatrix} 1000 \\ y \end{pmatrix} p^{y}(1-p)^{1000 - y}}{\sum_{j=0}^{5}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000-j}}, \qquad y < 6
+  \pi( y_5 \mid y_1, \ldots, y_4,y_5<6, p) = \frac{\pi(y_1,\dotsc,y_5\mid p)}{\pi(y_1,\dotsc,y_4, y_5 < 6\mid p)}=\frac{\begin{pmatrix} 1000 \\ y_5 \end{pmatrix} p^{y_5}(1-p)^{1000 - y_5}}{\sum_{j=0}^{5}\begin{pmatrix} 1000 \\ j \end{pmatrix} p^{j}(1-p)^{1000-j}}, 
 $$
-We can use a Gibbs sampler alternating between sampling $p$ and $y_5$. 
+for $y_5 \in \{0,\dotsc,5\}$. With these two easy-to-sample conditional distributions identified, we can use a Gibbs sampler alternating between sampling $p$ and $y_5$. 
 :::
 
-### Imputing Latent Variables
-Often there are variables that are cannot be observed, these may be hidden somehow or introduced to help with the modelling. Instead we can learn about this variable indirectly from the data.
-
-::: {.definition}
-A **latent variable** is a variable that cannot be observed. 
-:::
-
-A mixture model is an example of latent variables being useful. 
+### Latent Variables
+Latent variable are variables that are cannot be observed, these may be hidden somehow or introduced to help with the modelling. 
+Mixture model is a major example where latent variables are particularly useful. 
 
 ::: {.example}
 Royal Mail use image detection software to read postcodes on letters. A camera scans the front of an envelope and then records the barcode. This example is a very simplified version of how the system could work.   
@@ -366,7 +372,10 @@ Suppose the machine is processing a bag of letters addressed to people in either
 ```{r echo = FALSE}
 knitr::include_graphics("postcode.jpeg")
 ```
-The scanned image is a 10 by 10 grid of pixels, where the number of pixels coloured black of the $i^{th}$ image is $Y_i \sim \hbox{Bin}(100, \theta)$. However, $\theta$ depends on if the letter is going to B1 or B2. To allow for this, we introduce a latent variable $z_i \sim \hbox{Bernoulli}(p)$ that describes if the characters on the $i^{th}$ image are B1 or B2. The observation $y_i$ is the number of pixels of the $i^{th}$ image that is taken up by the characters. We observe $y_i$, but want to estimate $z_i$. The difficultly is there lack of one-to-one correspondence between the values $y_i$ can take and the value $z_i$. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 ($Z = 1$), then $Y_i \sim \hbox{Bin}(100, \theta_1)$ and if it is going to B2 ($Z = 2$), then $Y_i \sim \hbox{Bin}(100, \theta_2)$.   The plot below shows the two densities and the overlap between them for $p_1 = 0.9$ and $p_2 = 0.85$.
+
+The scanned image is a 10 by 10 grid of pixels, where the number of pixels coloured black of the $i^{th}$ image is $Y_i\mid \theta \sim \hbox{Binomial}(100, \theta)$. However, $\theta$ depends on if the letter is going to B1 or B2. To allow for this, we introduce a latent variable $Z_i \in \{1,2\}$ that describes if the characters on the $i^{th}$ image are B1 or B2. In other words, one can think of $Z_i$ as 'membership' of $Y_i$ that we cannot observed. 
+
+The observation $y_i$ is the number of pixels of the $i^{th}$ image that is coloured black. We observe $y_i$, but want to infer its membership $Z_i$. The difficultly is the lack of one-to-one correspondence between the values $y_i$ can take and the value $z_i$. Due to the different handwriting and fonts used on envelopes, if the letter is going to B1 ($Z_i = 1$), then $Y_i \mid Z_i = 1 \sim \hbox{Binomial}(100, \theta_1)$ and if it is going to B2 ($Z_i = 2$), then $Y_i \mid Z_i = 2 \sim \hbox{Binomial}(100, \theta_2)$.   The plot below shows the two densities and the overlap between them for $\theta_1 = 0.85$ and $\theta_2 = 0.9$.
 
 ```{r echp = FALSE}
 a <- 1:100
@@ -377,60 +386,84 @@ plot(a, x, type = 'l', xlab = expression(y),
 lines(a, y, lty = 2)
 ```
 
-As the variables $\boldsymbol{z}$ are latent, the observed data likelihood function is 
-$$
-\pi(\boldsymbol{y} \mid  p, \theta_1, \theta_2) =\prod_{i=1}^N \left[ p\pi(y_i \mid p = \theta_1) + (1-p)\pi(y_i \mid \theta_2)\right].
-$$
-Instead, it's easier to work with the complete data likelihood function, supposing we had observed the variables $\boldsymbol{z}$. This is given by
+Suppose we have $X_i = \{Y_i,Z_i\}$ for $i = 1,\dotsc,N$, where the $Z_i$'s are latent variables that we do not observe. We assume $Z_i\mid p \overset{i.i.d.}\sim  2-\hbox{Bernoulli}(p)$, so that $\mathbb{P}(Z_i = 1\mid p) = p$ and $\mathbb{P}(Z_i = 2\mid p) = 1-p$, where the parameter $p$ describes how likely a letter is from B1 or B2. For each $i$, we have 
 \begin{align*}
-\pi(\boldsymbol{y}, \boldsymbol{z} \mid  p, \theta_1, \theta_2) &= \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\boldsymbol{z} \mid p)
-\propto p^{N_1}(1-p)^{N_2} \prod_{i; z_i = 1}\pi(y_i \mid \theta_1)\prod_{i; z_i = 2}\pi(y_i \mid \theta_2)
+\pi(y_i\mid p, \theta_1,\theta_2) &= \pi(y_i\mid Z_i = 1)\mathbb{P}(Z_i = 1) +  \pi(y_i\mid Z_i = 2)\mathbb{P}(Z_i = 2) \\ &= p \,\pi(y_i\mid \theta_1)+(1-p)\,\pi(y_i\mid\theta_2)
 \end{align*}
-where $N_1$ and $N_2$ are the number of letters for B1 and B2 respectively. This form makes it much easier to derive the posterior distribution, full conditional distributions and estimate the parameter values. By Bayes' theorem, the posterior distribution is
-$$
-\pi(\boldsymbol{z}, p, \theta_1, \theta_2 \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\boldsymbol{z} \mid p)\pi(p)\pi(\theta_1)\pi(\theta_2). 
-$$
-Note that we do not put a prior distribution on the latent variables $\boldsymbol{z}$. Instead, we learn about these variables in the terms $\pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\boldsymbol{z} \mid p)$. 
 
-We suppose we are ignorant about the value of $p$ and place a uniform prior distribution on the parameter $p$. The full conditional distribution is 
+Let $\boldsymbol{Y} = (Y_1,\dotsc,Y_n)$ denote all the observed data and $\boldsymbol{Z} = (Z_1,\dotsc,Z_n)$ denote all the unobserved data (memberships). 
+The observed data likelihood function is therefore 
 \begin{align*}
-\pi(p\mid \boldsymbol{z}, \boldsymbol{y}, \theta_1, \theta_2) &\propto \pi(\boldsymbol{z} \mid p)\pi(p)\\
-& = p^{N_1}(1-p)^{N_2}.
+\pi(\boldsymbol{y} \mid  p, \theta_1, \theta_2) &=\prod_{i=1}^N \bigg[ p\pi(y_i \mid \theta_1) + (1-p)\pi(y_i \mid \theta_2)\bigg] \\
+&=\prod_{i=1}^N \bigg[p \begin{pmatrix} 100 \\ y_i \end{pmatrix} \theta_1^{y_i}(1-\theta_1)^{100 - y_i} + (1-p)\begin{pmatrix} 100 \\ y_i \end{pmatrix} \theta_2^{y_i}(1-\theta_2)^{100 - y_i}\bigg]
 \end{align*}
-Hence,
-$$
-p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
-$$
-If we use a Beta($\alpha_1, \beta_1$) distribution for our prior distribution on $\theta_1$, the full conditional distribution of $\theta_1$ is
-\begin{align*}
-\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2) \propto \pi(\boldsymbol{y} \mid  \boldsymbol{z}, \theta_1, \theta_2)\pi(\theta_1) \\
-&\propto \theta_1^{\sum_{i; z_i = 1}y_i}(1-\theta_1)^{100N_1 - \sum_{i; z_i = 1}y_i}\theta^{\alpha_1 - 1}(1-\theta^{\beta_1 - 1}) \\
-& \propto \theta_1^{\sum_{i; z_i = 1}y_i + \alpha_1 -1 }(1-\theta_1)^{100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i - 1}
-\end{align*}
-Hence $\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2 \sim \hbox{Beta}(\sum_{i; z_i = 1}y_i + \alpha_1 , 100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i)$. Similarly,  $\theta_2 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_1 \sim \hbox{Beta}(\sum_{i; z_i = 2}y_i + \alpha_2 , 100N_2 + \beta_2 - \sum_{i; z_i = 2}y_i)$. 
 
-The distribution of $z_i$ given the parameters $p$, $\theta_1$ and $\theta_2$, and the observation $y_i$ is 
+Deriving full conditional distributions based on the above likelihood (even assuming uniform priors on $p,\theta_1,\theta_2$) is challenging due to the sum in the product of $N$ terms. 
+Instead, it's easier to work with the complete data likelihood function, which is given by
+
 \begin{align*}
-p^*_i & = \pi(z = 1 \mid p, y_1) \\
-&= \frac{p\pi(y_i \mid \theta_1)}{p\pi(y_i \mid \theta_1) + (1-p)\pi(y_i \mid \theta_2)}.
+\pi(\boldsymbol{y}, \boldsymbol{z} \mid  p, \theta_1, \theta_2) &=\prod_{i=1}^N \pi(y_i,z_i\mid p, \theta_1, \theta_2)=\prod_{i=1}^N \pi(y_i\mid z_i,p,\theta_1,\theta_2) \pi(z_i\mid p,\theta_1,\theta_2) \\ 
+&= \prod_{i=1}^N \begin{pmatrix} 100 \\ y_i \end{pmatrix} \theta_{z_i}^{y_i}(1-\theta_{z_i})^{100 - y_i}\mathbb{P}(Z_i = z_i) \\
+&= \prod_{i=1}^N \begin{pmatrix} 100 \\ y_i \end{pmatrix} (\theta_{1}^{y_i}(1-\theta_{1})^{100 - y_i}p)^{\mathbf{1}_{\{z_i = 1\}}}(\theta_{2}^{y_i}(1-\theta_{2})^{100 - y_i}(1-p))^{\mathbf{1}_{\{z_i = 2\}}} 
+\end{align*}
+\[ \small
+= \bigg[\prod_{i=1}^N \begin{pmatrix} 100 \\ y_i \end{pmatrix}\bigg] \bigg[\theta_{1}^{\sum_{i:z_i = 1}y_i}(1-\theta_{1})^{\sum_{i:z_i = 1}(100 -y_i)}p^{\sum_{i=1}^N \mathbf{1}_{\{z_i = 1\}}}\bigg] \bigg[\theta_{2}^{\sum_{i:z_i = 2}y_i}(1-\theta_{2})^{ \sum_{i:z_i = 2}(100 -y_i)}(1-p)^{\sum_{i=1}^N \mathbf{1}_{\{z_i = 2\}}}\bigg].
+\]
+This form, although looks complicated, is actually much easier to derive the full conditional distributions. By Bayes' theorem, the posterior distribution is
+$$
+\pi(\boldsymbol{z}, p, \theta_1, \theta_2 \mid \boldsymbol{y}) \propto \pi(\boldsymbol{y},  \boldsymbol{z} \mid p, \theta_1, \theta_2) \pi(p)\pi(\theta_1)\pi(\theta_2), 
+$$
+where we put some independent prior distributions on $p, \theta_1,\theta_2$. 
+Suppose we are ignorant about the value of $p$ and place a uniform prior distribution on the parameter $p$. The full conditional distribution is 
+\begin{align*}
+\pi(p\mid \boldsymbol{z}, \boldsymbol{y}, \theta_1, \theta_2) &\propto \pi(p,\boldsymbol{z}, \boldsymbol{y}, \theta_1, \theta_2) = \pi(\boldsymbol{y},  \boldsymbol{z} \mid p, \theta_1, \theta_2) \pi(p)\pi(\theta_1)\pi(\theta_2) 
+\end{align*}
+Hence, we just need to collect the terms that depend on $p$ from the complete data likelihood, and we obtain 
+\[
+\pi(p\mid \boldsymbol{z}, \boldsymbol{y}, \theta_1, \theta_2) \propto p^{N_1}(1-p)^{N_2}
+\]
+where $N_1 = \sum_{i=1}^N \mathbf{1}_{\{z_i = 1\}}$ and $N_2 = N - N_1 = \sum_{i=1}^N \mathbf{1}_{\{z_i = 2\}}$, which implies
+$$
+p \mid \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1).
+$$
+Note that we drop other variables as the distribution only depends on $\boldsymbol{z}$. 
+
+If we use Beta($\alpha_1, \beta_1$) as our prior distribution on $\theta_1$, the full conditional distribution of $\theta_1$ is
+\begin{align*}
+\pi(\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2, p) \propto \pi(\boldsymbol{y},  \boldsymbol{z} \mid p, \theta_1, \theta_2) \pi(\theta_1)  
+&\propto \theta_1^{\sum_{i; z_i = 1}y_i}(1-\theta_1)^{ \sum_{i; z_i = 1}(100-y_i)}\theta_1^{\alpha_1 - 1}(1-\theta_1)^{\beta_1 - 1} \\
+&= \theta_1^{\sum_{i; z_i = 1}y_i + \alpha_1 -1 }(1-\theta_1)^{\beta_1 + \sum_{i; z_i = 1}(100-y_i) - 1}
+\end{align*}
+Hence $\theta_1 \mid \boldsymbol{z}, \boldsymbol{y} \sim \hbox{Beta}(\sum_{i; z_i = 1}y_i + \alpha_1 , 100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i)$. Similarly,  $\theta_2 \mid \boldsymbol{z}, \boldsymbol{y} \sim \hbox{Beta}(\sum_{i; z_i = 2}y_i + \alpha_2 , 100N_2 + \beta_2 - \sum_{i; z_i = 2}y_i)$ under the prior $\theta_2 \sim \hbox{Beta}(\alpha_2,\beta_2)$. 
+
+Finally, we look at the conditional distribution of each $Z_i$ given the remaining hidden variables $\boldsymbol{z}_{-i}$, the parameters $p$, $\theta_1$ and $\theta_2$, and the observations $\boldsymbol{y}$. Similar to the previous derivation, we have 
+\begin{align*}
+\mathbb{P}(Z_i = 1 \mid \boldsymbol{z}_{-i},\boldsymbol{y}, \theta_2, p,\theta_1) \propto p\theta_1^{y_i}(1-\theta_1)^{100-y_i}
 \end{align*}
 Similarly, 
 \begin{align*}
-\pi(z = 2 \mid p, y_1) \\
-&= \frac{(1-p)\pi(y_i \mid \theta_2)}{p\pi(y_i \mid \theta_1) + (1-p)\pi(y_i \mid \theta_2)}.
+\mathbb{P}(Z_i = 2 \mid \boldsymbol{z}_{-i},\boldsymbol{y}, \theta_2, p,\theta_1) \propto \theta_2^{y_i}(1-\theta_2)^{100-y_i}(1-p).
 \end{align*}
-The full conditional distribution is therefore $z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)$.
+Since $Z_i$ can only take two values, 1 or 2, we must have 
+\[
+p^*_i = \mathbb{P}(Z_i = 1 \mid \boldsymbol{z}_{-i},\boldsymbol{y}, \theta_2, p,\theta_1) = \frac{p\theta_1^{y_i}(1-\theta_1)^{100-y_i}}{p\theta_1^{y_i}(1-\theta_1)^{100-y_i}+\theta_2^{y_i}(1-\theta_2)^{100-y_i}(1-p)}
+\]
+and 
+\[
+\mathbb{P}(Z_i = 2 \mid \boldsymbol{z}_{-i},\boldsymbol{y}, \theta_2, p,\theta_1) = \frac{\theta_2^{y_i}(1-\theta_2)^{100-y_i}(1-p)}{p\theta_1^{y_i}(1-\theta_1)^{100-y_i}+\theta_2^{y_i}(1-\theta_2)^{100-y_i}(1-p)}
+\]
+Therefore, therefore $Z_i \mid \boldsymbol{y}, p,\theta_1,\theta_2 \sim 2-\hbox{Bernoulli}(p^*_i)$.
 
-An MCMC algorithm for this would repeat the following two steps:
+An MCMC algorithm for this would repeat the following steps:
 
 1. Initialise values for $p, \theta_1, \theta_2$ and $\boldsymbol{z}$ 
-2. Sample $p \mid \boldsymbol{y}, \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1)$.
-3. Sample $\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_2 \sim\hbox{Beta}(\sum_{i; z_i = 1}y_i + \alpha_1 , 100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i)$.
-4. Sample $\theta_2 \mid \boldsymbol{z}, \boldsymbol{y}, \theta_1 \sim \hbox{Beta}(\sum_{i; z_i = 2}y_i + \alpha_2 , 100N_2 + \beta_2 - \sum_{i; z_i = 2}y_i)$. 
-5. Sample $z_i \mid \boldsymbol{y}, p \sim \hbox{Bernoulli}(p^*_i)$ for each $i$.
-6. Repeat Steps 3-5.
+2. Sample $p \mid \boldsymbol{z} \sim \hbox{Beta}(N_1 + 1, N_2 + 1)$.
+3. Sample $\theta_1 \mid \boldsymbol{z}, \boldsymbol{y}  \sim\hbox{Beta}(\sum_{i; z_i = 1}y_i + \alpha_1 , 100N_1 + \beta_1 - \sum_{i; z_i = 1}y_i)$.
+4. Sample $\theta_2 \mid \boldsymbol{z}, \boldsymbol{y} \sim \hbox{Beta}(\sum_{i; z_i = 2}y_i + \alpha_2 , 100N_2 + \beta_2 - \sum_{i; z_i = 2}y_i)$. 
+5. Sample $Z_i \mid \boldsymbol{y}, p,\theta_1,\theta_2 \sim 2-\hbox{Bernoulli}(p^*_i)$ for each $i$.
+6. Repeat Steps 2-5.
 
-This algorithm may be very slow to converge and explore the posterior distribution. This is because it has so many parameters. There is 3 model parameters ($p$, $\beta_1$ and $\beta_2$) and $N$ latent variables. Exploring a posterior distribution with this many dimensions may take a lot of time. Royal Mail delivered ~20,000,000 letters a day in 2023. 
+This algorithm may be slow to converge and explore the posterior distribution. This is because it has many parameters. There are 3 model parameters ($p$, $\beta_1$ and $\beta_2$) and $N$ latent variables. Exploring a posterior distribution with this many dimensions may take a lot of time and more efficient alternatives may be required.  
 :::
 
 ### Grouped Data
@@ -441,57 +474,77 @@ Suppose that we have data on the number of treatment sessions required by a rand
 
 |Number of sessions $x$   |  $\leq 2$ | 3  |  4 | 5  | 6 |
 |---|---|---|---|---|---|
-| Frequency $f(x)$  |25   |  7 | 4  |  3  | 1|
+| Frequency $f_x$  |25   |  7 | 4  |  3  | 1|
 
-We are interested the the probability the treatment sessions are a success. We can model this using the geometric distribution, assuming each treatment session is independent and has probability of success is $p$. For each group of patients,  we can work out their contribution to the observed likelihood function using a geometric distribution.  For example, the contribution to the likelihood function for patients who had three treatment sessions is $((1-p)^2p)^7$. For the group that had two or fewer sessions, the likelihood contribution is $(1-(1-p))^{25}$. The observed likelihood function is therefore
+We are interested the the probability the treatment sessions are a success, assuming each session succeed independently. 
+
+We can model the number of sessions required for each person using the geometric distribution, which has probability mass function 
+\[
+\mathbb{P}(X = x) = (1-p)^{x-1}p, \qquad x = 1,2,3,\dotsc
+\]
+if $X \sim \hbox{Geometric}(p)$. For each group of patients,  we can work out their contribution to the observed likelihood function using a geometric distribution.  For example, the contribution to the likelihood function for patients who had three treatment sessions is $((1-p)^2p)^7$. Since 
+\[
+\mathbb{P}(X \leq 2) = \mathbb{P}(X=1)+\mathbb{P}(X=2) = p+(1-p)p=(2-p)p,
+\]
+the group that had two or fewer sessions contributes to the likelihood contribution by $(p(2-p))^{25}$. 
+
+The observed likelihood function is therefore
 \begin{align*}
-\pi(f_{1, 2}, f_3, \ldots, f_6 \mid p) &= (1-(1-p))^{25}(1-p)^{43}p^{15} \\
+\pi(f_{1, 2}, f_3, \ldots, f_6 \mid p) &= [p(2-p)]^{25}\cdot [(1-p)^2p]^7\cdot [(1-p)^3p]^4 \cdot [(1-p)^4p]^3 \cdot (1-p)^5p.
+\\
+&= (p(2-p))^{25}(1-p)^{43}p^{15} \\
 &= p^{40}(1-p)^{43}(2-p)^{25}
 \end{align*}
-There is no conjugate prior distribution that induces conjugacy. We use the prior distribution $p \sim \hbox{Beta}(\alpha, \beta)$.By Bayes' theorem, the posterior distribution is
+There is no conjugate prior distribution that induces conjugacy. We use the prior distribution $p \sim \hbox{Beta}(\alpha, \beta)$. By Bayes' theorem, the posterior distribution is
 $$
 \pi(p \mid f_{1, 2}, f_3, \ldots, f_6 ) \propto p^{40 + \alpha - 1}(1-p)^{43 + \beta - 1}(2-p)^{25}.
 $$
 
 We can use a Metropolis-Hasting algorithm to sample from this algorithm. A suitable algorithm would look like this
 
-1. Initialize $p^{(0)}$ and $i = 1$. 
+1. Initialize $p^{(0)}$ and set $i = 0$. 
 2. Propose $p' \sim U[p^{(i)} + \varepsilon, p^{(i)} - \varepsilon]$. 
 3. Accept $p^{(i+1)}=p'$ with probability $p_{acc}$, otherwise reject as set $p^{(i+1)}=p^{(i)}$.
 4. Set $i=i+1$ and repeat steps 2-3. 
 
 The acceptance probability in step 3 is given by
 $$
-p_{\textrm{acc}} = \min\left\{\frac{p'^{40 + \alpha - 1}(1-p')^{43 + \beta - 1}(2-p')^{25}}{p^{40 + \alpha - 1}(1-p)^{43 + \beta - 1}(2-p)^{25}} ,1\right\}
+p_{\textrm{acc}} = \min\left\{\frac{(p')^{40 + \alpha - 1}(1-p')^{43 + \beta - 1}(2-p')^{25}}{p^{40 + \alpha - 1}(1-p)^{43 + \beta - 1}(2-p)^{25}} ,1\right\}.
 $$
-Instead of using the observed likelihood, we can write the complete likelihood function supposing we had seen the number of patients who had had one and two sessions. The complete likelihood function is
+Instead of using the observed data likelihood, we can write the complete data likelihood supposing we had seen the number of patients who had had one and two sessions. The complete data likelihood function is
+\begin{align*}
+\pi(f_1 \ldots, f_6 \mid p) &= p^{f_1}\cdot [(1-p)p]^{f_2} \cdot [(1-p)^2p]^7\cdot [(1-p)^3p]^4 \cdot [(1-p)^4p]^3 \cdot (1-p)^5p.
+\\&= p^{40}(1-p)^{f_2 + 43}, 
+\end{align*}
+where $f_2$ is the unobserved variable. Now, consider Beta($\alpha, \beta)$ as the prior distribution on $p$. We have
 $$
-\pi(f_1 \ldots, f_6 \mid p) = p^{40}(1-p)^{\sum xf - 40}. 
+p \mid f_1 \ldots, f_6  \sim \hbox{Beta}\left(40 + \alpha, f_2+43 + \beta\right).
 $$
-Now, the Beta($\alpha, \beta)$ prior distribution is conjugate and we have 
-$$
-p \mid f_1 \ldots, f_6  \sim \hbox{Beta}\left(40 + \alpha, \sum_i  x_if_i - 40 + \beta\right).
-$$
-Now, we need to derive the full conditional distribution for $f(1)$, the number of patients who were treated after only one sessions, $\pi(f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6)$. Under the geometric distribution model, the probability a patient is treated after exactly one session is $p$ and after two sessions is $(1-p)p$. We can use these probabilities in a Binomial distribution. We have 25 patients each with a probability of being treated $q$, where 
-$$
-q = \frac{p}{p + (1-p)p}
-$$
-Therefore $f_1 \mid p, f_{1, 2}, f_3, \ldots, f_6 \sim \hbox{Bin}(25, q)$. We do not need to sample $f_2$ as we have $f_2 = 25 - f_1$. Our MCMC algorithm using the complete data likelihood function and inferring $f_1$ and $f_2$ as well as $p$ could be
+In order to implement Gibbs sampler, we just need to find $\pi( f_2 \mid f_3 \ldots, f_6,p)$. Note that $f_1$ is not considered as an unknown variable since $f_1 = 25-f_2$ and once we know $f_2$, we would know $f_1$.
 
-1. Initialise $p^{(0)}$, $f_1^{(0)}$ and  $f_2^{(0)}$. Set $i = 1$. 
-2. Sample $p^{(i)} \mid f_1^{(i-1)}, f_2^{(i-1)}, f_3 \ldots, f_6  \sim \hbox{Beta}(40 + \alpha, \sum xf - 40 + \beta)$
-3. Sample $f_1^{(i)} \mid p^{(i)}, f_{1, 2}, f_3, \ldots, f_6$
-4. Compute $f_2^{(i)} = 25 - f_1^{(i)}$. 
-5. Repeat steps 2 - 4. 
+Under the geometric distribution model, the probability a patient recovers after exactly one session is $p$ and after two sessions is $(1-p)p$. Moreover, $\mathbb{P}(X = 2\mid X\leq 2) = \frac{(1-p)p}{p+(1-p)p} = \frac{1-p}{2-p}$, for $X\sim \hbox{Geometric}(p)$. We can therefore model $f_2$ as a Binomial distribution 
+\[
+f_2 \mid p\sim \hbox{Binomial}(25,q),
+\]
+where 
+$$
+q = \frac{1-p}{2-p}.
+$$
+Our Gibbs sampler could be
 
-This MCMC algorithm avoids us needing to do any tuning or accept/reject steps, making it more efficient. 
+1. Initialise $p$ and  $f_2$.  
+2. Sample $p \mid  f_2  \sim \hbox{Beta}(40 + \alpha, f_2 + 43 + \beta)$
+3. Sample $f_2 \mid p \sim \hbox{Binomial}(25,q)$ with $q = \frac{1-p}{2-p}.$
+4. Repeat steps 2 - 3. 
+
+This Gibbs sampler avoids any tuning or accept/reject steps in MH sampler, making it potentially more efficient.
 :::
 
 
 
 
 
-## Prior Ellicitation
+## Prior Ellicitation (Optional reading)
 Throughout this course, we have tried to be objective in our choice of prior distributions. We have discussed **uninformative** and **invariant** prior distributions. Sometimes we have used **vague** prior distributions, such as the Exp(0.01) distribution. And other times, we have left the parameters as generic values. This misses out on one real difference between Bayesian and frequentist inference. In Bayesian inference, we can include prior information about the model parameters. Determining the value of prior parameters is know as prior elicitation. This is more of an art than a science and still controversial in the Bayesian world. In this section, we are going to look at a few ways of how to elicit prior information from experts. 
 
 :::{.example}
@@ -537,7 +590,7 @@ This gives us $\beta = 21.8$ and $\alpha = 13.65$.
 ### Betting with Histograms
 The difficulty with the summary matching method is that it requires experts to describe probabilities about the prior parameter, which is difficult to do and quite an abstract concept. Instead of asking them to describe summaries, we can ask them to draw the prior distribution completely,  using a betting framework. 
 
-In the **prior weights** (sometimes called roulette) method, we give the the experts a set of intervals for the parameter of interest and fixed number of coins. We then ask the experts to place the coins in the intervals according to how likely they think the parameter will be in each interval, effectively betting on what value the parameter will take. For example, they might place $n_1$ coins in the interval $\theta \in [a, b)$, $n_2$ in $\theta \in [b, c)$ and $n_3$ for $\theta \in \[c, d]$. From this we can construct our prior density. 
+In the **prior weights** (sometimes called roulette) method, we give the the experts a set of intervals for the parameter of interest and fixed number of coins. We then ask the experts to place the coins in the intervals according to how likely they think the parameter will be in each interval, effectively betting on what value the parameter will take. For example, they might place $n_1$ coins in the interval $\theta \in [a, b)$, $n_2$ in $\theta \in [b, c)$ and $n_3$ for $\theta \in [c, d]$. From this we can construct our prior density. 
 
 
 :::{.example}
@@ -630,7 +683,7 @@ plot(x, y, xlab = "x", ylab = "f(x)", ylim = c(0, 4))
 Fit a function to the data using a GP prior distribution. Note that this time there is no noise. 
 :::
 
-### Missing Data
+### Censored Data
 
 :::{.exercise}
 In Example 6.2, suppose the observed data is $\{y_1, y_2, y_3, y_4\} = \{4, 4, 5 ,2\}$. Design and code an MCMC algorithm to generate samples from the posterior distribution for $p$ and $y_5$. 
@@ -639,9 +692,9 @@ In Example 6.2, suppose the observed data is $\{y_1, y_2, y_3, y_4\} = \{4, 4, 5
 :::{.exercise}
 Suppose you manage a clinical trial. You administer a new drug to patients and record how many days until their symptoms are alleviated. You observe the times for the first 9 patients
 ```{r}
-x <- c(33,  17, 218,   3,  39,   3,  43,  14,  20)
+x <- c(33.5,  17.8, 218.2,   3,  39.2,   3.5,  43.7,  14.6,  20)
 ```
-Patient 10 drops out of the trial on day 50 and at this point, their symptoms have not changed. They send an email on day 200 to say they no longer have any symptoms (i.e. $x_i \in [50, \ldots, 200]$. Write down a model for this problem and derive the posterior distribution. Design and code an MCMC algorithm to generate samples from the posterior distribution for any model parameters and $x_{10}$. 
+Patient 10 drops out of the trial on day 50 and at this point, their symptoms have not changed. They send an email on day 200 to say they no longer have any symptoms, i.e. $x_{10} \in (50, 200]$. Write down a model for this problem and derive the posterior distribution given a prior that you may choose. Design and code an MCMC algorithm to generate samples from the posterior distribution for any model parameters that you introduce and the censored observation $x_{10}$. 
 :::
 
 

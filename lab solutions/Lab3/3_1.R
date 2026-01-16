@@ -14,7 +14,7 @@ likelihood <- sapply(lambda,  likelihood.function, y) #evaluate at grid of point
 log.likelihood <- sapply(lambda,  log.likelihood.function, y) #evaluate at grid of points
 
 
-# Set Up Prior Computationally  ------------------------------------------------------------
+# Set Up Prior  ------------------------------------------------------------
 lambda   <- seq(0, 10, 0.01) #grid of lambda values
 prior    <- dexp(lambda, 0.1)
 log.prior <- dexp(lambda, 0.1, log = TRUE)
@@ -24,15 +24,15 @@ plot(lambda, prior, type = 'l', xlab = expression(lambda), ylab = "density")
 # Construct Posterior Distribution Computationally ----------------------------------------
 posterior <- prior*likelihood
 integrating.factor <- 0.5*0.01*(posterior[1] + posterior[1001] + 2*sum(posterior[-c(1, 1001)])) #Using trapezium rule
-posterior <- posterior/integrating.factor #normalise
-plot(lambda, posterior, type = 'l', xlab = expression(lambda), 
+posterior <- posterior/integrating.factor #normalize
+plot(lambda, posterior, type = 'l', xlab = expression(lambda),
      ylab = "posterior density")
 
 
 # Construct Posterior Distribution Analytically ---------------------------
-#The analytical distirbution is a Gamma(sum(y) +1, 50.1) distirbution
-posteiror.analytical <- dgamma(lambda, sum(y) + 1, 50.01)
-plot(lambda, posterior, type = 'l', xlab = expression(lambda), 
+#The analytical distribution is a Gamma(sum(y) +1, 50.1) distribution
+posteiror.analytical <- dgamma(lambda, sum(y) + 1, 50.1)
+plot(lambda, posterior, type = 'l', xlab = expression(lambda),
      ylab = "posterior density")
 lines(lambda, posteiror.analytical, col = 2)
 max(abs(posterior - posteiror.analytical)) #maximum absolute error

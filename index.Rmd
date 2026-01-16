@@ -1,17 +1,38 @@
 ---
 title: "Bayesian Inference and Computation"
-author: "Dr Mengchu Li and Dr Lukas Trottner"
-date: "Semester 2, 2025"
-site: bookdown::bookdown_site
+author: "Dr Junqi Tang (based on lecture notes by Dr Rowland Seymour)"
+date: "Semester 2, 2026"
 output: gitbook
+site: bookdown::bookdown_site
 documentclass: book
-bibliography: [book.bib, packages.bib]
+bibliography:
+- book.bib
+- packages.bib
 biblio-style: apalike
 link-citations: yes
-description: "This book contains the lecture notes for the module Bayesian Inference and Computation."
+description: This book contains the lecture notes for the module Bayesian Inference
+  and Computation.
 cover-image: uob_logo.png
-editor_options: 
-  markdown: 
+header-includes:
+- \usepackage{amscd,amsmath,amsthm,amssymb,array,bbm,hhline,mathrsfs   , enumitem, comment,booktabs,fancybox,calc,textcomp,xcolor,graphicx,bm,bbm,xspace,nicefrac,stmaryrd,url,arcs,listings,nameref,natbib   }
+- \DeclareMathOperator*{\argmax}{arg\,max}
+- \DeclareMathOperator*{\argmin}{arg\,min}
+- \newcommand{\R}{\mathbb{R}}
+- \newcommand{\N}{\mathbb{N}}
+- \newcommand{\ssubset}{\subset\joinrel\subset}
+- \newcommand{\E}{\mathbb{E}}
+- \newcommand{\PP}{\mathbb{P}}
+- \newcommand{\QQ}{\mathbb{Q}}
+- \newcommand{\edp}{e_{D,\psi}}
+- \newcommand{\ind}[1]{\mathds{ 1 }_{\{{#1}\}}}
+- \newcommand{\inda}[1]{\mathds{ 1 }_{{#1}}}
+- \newcommand*{\cF}{\mathcal{F}}
+- \newcommand{\eps}{\varepsilon}
+- \newcommand{\one}{\bm{1}}
+- \newcommand{\htheta}{\hat{\theta}_n}
+- \newcommand{\iid}{\overset{i.i.d}{\sim}}
+editor_options:
+  markdown:
     wrap: 72
 ---
 
@@ -104,28 +125,35 @@ identify probability density functions (for continuous random variables)
 and probability mass functions (for discrete random variables) up to
 proportionality. Some common density/mass functions are given below.
 
-**Normal distribution** $$
+**Normal distribution** $N(\mu,\sigma^2)$
+$$
 \pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\} \qquad x \in\mathbb{R},
 $$ where $\mu \in \mathbb{R}$ and $\sigma > 0$.
 
-**Beta distribution** $$
-\pi(x\mid \alpha, \beta) = \frac{1}{B(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad  x \in [0, 1],
-$$ where $\alpha, \beta > 0$ and $B(\alpha, \beta)$ is the [beta
+**Beta distribution** $\text{Beta}(\alpha,\beta)$
+$$
+\pi(x\mid \alpha, \beta) = \frac{1}{B(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad  x \in (0, 1),
+$$ where $\alpha, \beta > 0$ and $B(\alpha, \beta)$ is the [Beta
 function](https://en.wikipedia.org/wiki/Beta_function).
 
-**Gamma distribution** $$
+**Gamma distribution** $\text{Gamma}(\alpha,\beta)$
+$$
 \pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x} \qquad  x > 0,
-$$ where $\alpha, \beta > 0$ and $\Gamma(\alpha)$ is the [gamma
+$$ where $\alpha, \beta > 0$ and $\Gamma(\alpha)$ is the [Gamma
 function](https://en.wikipedia.org/wiki/Gamma_function).
 
-**Exponential distribution** $$
-f(x \mid \lambda) = \lambda e^{-\lambda x} \qquad x > 0,
+**Exponential distribution** $\text{Exp}(\lambda)$
+$$
+\pi(x \mid \lambda) = \lambda e^{-\lambda x} \qquad x > 0,
 $$ where $\lambda > 0$.
 
-**Poisson distribution** $$
-\pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{1, 2, \ldots\},
+**Poisson distribution** $\text{Pois}(\lambda)$
+$$
+\pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{0, 1, 2, \ldots\},
 $$ where $\lambda > 0$.
 
-**Binomial distribution** $$
+**Binomial distribution** $\text{Bin}(N,p)$
+\[
 \pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}
-$$ where $p \in [0, 1]$.
+\]
+where $p \in [0, 1]$.
