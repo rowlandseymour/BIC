@@ -1,14 +1,212 @@
-p.caption {
-  color: #777;
-  margin-top: 10px;
+/* University of Birmingham inspired theme */
+
+:root {
+  --uob-blue: #002147;
+  --uob-gold: #b4975a;
+  --uob-light-blue: #0066cc;
+  --uob-grey: #58595b;
 }
-p code {
-  white-space: inherit;
+
+/* Hero/cover image styling */
+.book .book-body .page-wrapper .page-inner section.normal img:first-of-type {
+  display: block;
+  max-width: 300px;
+  margin: 0 auto 2rem auto;
 }
+
+/* Main headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--uob-blue);
+}
+
+/* Chapter titles */
+.chapter h1 {
+  border-bottom: 3px solid var(--uob-gold);
+  padding-bottom: 0.5rem;
+}
+
+/* Sidebar/TOC styling */
+.book-summary {
+  background-color: var(--uob-blue);
+}
+
+.book-summary ul.summary li a {
+  color: #ffffff;
+}
+
+.book-summary ul.summary li a:hover {
+  color: var(--uob-gold);
+}
+
+.book-summary ul.summary li.active > a {
+  color: var(--uob-gold);
+  font-weight: bold;
+}
+
+/* Code blocks */
 pre {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 1rem;
   word-break: normal;
   word-wrap: normal;
 }
+
 pre code {
   white-space: inherit;
+  color: var(--uob-grey);
+}
+
+p code {
+  white-space: inherit;
+  background-color: #f8f9fa;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  color: var(--uob-blue);
+}
+
+/* Figure captions */
+p.caption {
+  color: #777;
+  margin-top: 10px;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Links */
+a {
+  color: var(--uob-light-blue);
+}
+
+a:hover {
+  color: var(--uob-blue);
+  text-decoration: underline;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+th {
+  background-color: var(--uob-blue);
+  color: white;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Blockquotes - for definitions, theorems etc */
+blockquote {
+  border-left: 4px solid var(--uob-gold);
+  padding-left: 1rem;
+  margin-left: 0;
+  background-color: #fafafa;
+  padding: 1rem;
+}
+
+/* Mathematical content */
+.MathJax {
+  font-size: 1.1em;
+}
+
+/* Numbered lists in learning outcomes */
+section.normal ol {
+  padding-left: 1.5rem;
+}
+
+section.normal ol li {
+  margin-bottom: 0.5rem;
+}
+
+/* Book title area */
+.book .book-header h1 {
+  color: var(--uob-blue);
+}
+
+/* bs4_book specific styles */
+
+/* Navbar */
+.navbar {
+  background-color: var(--uob-blue) !important;
+}
+
+.navbar-brand {
+  color: white !important;
+  font-weight: bold;
+}
+
+/* TOC in bs4_book */
+#TOC a {
+  color: var(--uob-blue);
+}
+
+#TOC a:hover {
+  color: var(--uob-light-blue);
+}
+
+#TOC .active {
+  border-left: 3px solid var(--uob-gold);
+  font-weight: 600;
+}
+
+/* Main content area */
+main {
+  max-width: 900px;
+}
+
+/* Footer */
+.book-footer {
+  border-top: 1px solid var(--uob-gold);
+  padding-top: 1rem;
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Definition/theorem boxes - if you want to add these later */
+.definition, .theorem, .lemma, .proof {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+
+.definition {
+  background-color: #e7f3ff;
+  border-left: 4px solid var(--uob-light-blue);
+}
+
+.theorem {
+  background-color: #fff8e7;
+  border-left: 4px solid var(--uob-gold);
+}
+
+/* R output styling */
+.sourceCode {
+  background-color: #f8f9fa;
+}
+
+/* Print styles */
+@media print {
+  .book-summary, .book-header {
+    display: none;
+  }
+  
+  .book-body {
+    margin-left: 0;
+  }
 }

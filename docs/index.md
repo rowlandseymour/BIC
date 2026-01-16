@@ -1,0 +1,146 @@
+---
+title: "Bayesian Inference and Computation"
+author: "Dr Junqi Tang (based on lecture notes by Dr Rowland Seymour)"
+date: "Semester 2, 2026"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography:
+- book.bib
+- packages.bib
+biblio-style: apalike
+link-citations: yes
+description: "This book contains the lecture notes for the module Bayesian Inference and Computation."
+cover-image: uob_logo.png
+url: https://rowlandseymour.github.io/BIC/
+output:
+  bookdown::bs4_book:
+    css: style.css
+    theme:
+      primary: "#002147"
+    repo: https://github.com/rowlandseymour/BIC
+    includes:
+      in_header: head.html
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+# Practicalities {.unnumbered}
+
+<img src="uob_logo.png" style="display: block; margin: auto;" />
+
+## Module Aims
+
+Bayesian inference is a set of methods where the probability of an event
+occurring can be updated as more information becomes available. It is
+fundamentally different from frequentist methods, which are based on
+long running relative frequencies. This module gives an introduction to
+the Bayesian approach to statistical analysis and the theory that
+underpins it.
+
+Students will be able to explain the distinctive features of Bayesian
+methodology, understand and appreciate the role of prior distributions
+and compute posterior distributions. It will cover the derivation of
+posterior distributions, the construction of prior distributions, and
+inference for missing data. Extensions are considered to models with
+more than a single parameter and how these can be used to analyse data.
+Computational methods have greatly advanced the use of Bayesian methods
+and this module covers, and allows students to apply, procedures for the
+sampling and analysis of intractable Bayesian problems.
+
+By the end of the course, students should be able to:
+
+1.  Demonstrate a full and rigorous understanding of all definitions
+    associated with Bayesian inference and understand the differences
+    between the Bayesian and frequentist approaches to inference
+2.  Demonstrate a sound understanding of the fundamental concepts of
+    Bayesian inference and computational sampling methods
+3.  Understand how to make inferences assuming various population
+    distributions while taking into account expert opinion and the
+    implications of weak prior knowledge and large samples
+4.  Demonstrate an understanding of the principles of Markov Chain Monte
+    Carlo and be able to programme an MCMC algorithm
+5.  Engage in Bayesian data analysis in diverse situations drawn from
+    physics, biological, engineering and other mathematical contexts.
+
+## Module Structure
+
+The module is split between theory and computation. Each week will have three lectures, one computer lab and one guided study. In the labs, you will need to bring your own laptop. 
+
+## Assessment
+
+Assessment for this module is 50% via an exam and 50% via coursework
+assignments during the semester. The exam will last 1h 30m and take
+place during the summer exam period. There will be three coursework
+assignment -- assignment 1 will be worth 10% of the final mark, with
+assignments 2 and 3 counting for 20% each. More details about the
+assignments will be made available during the semester.
+
+
+## Recommended Books and Videos
+
+No books are required for this course and the whole material is
+contained in these notes. However, you may find it useful to use other
+resources in your studies. I recommend the following:
+
+1.  [A First Course in Bayesian Statistical Methods - Peter D.
+    Hoff](https://link.springer.com/book/10.1007/978-0-387-92407-6).
+    This is a short book that covers the basics of Bayesian inference
+    and computation. To the point and well written, it's a useful place
+    to look topics up.
+
+2.  [Bayesian Data Analysis - Andrew Gelman, John Carlin, Hal Stern,
+    David Dunson, Aki Vehtari, and Donald
+    Rubin](http://www.stat.columbia.edu/~gelman/book/). This is a
+    thorough book explaining everything you'd need to know to carry out
+    Bayesian data analysis. It's a fairly long and in-depth book, but
+    the authors are authoritative and give good advice throughout.
+    Example code on the website is in R, Python and Stan.
+
+3.  [Statistical Rethinking - Richard
+    McElrath](https://xcelab.net/rm/statistical-rethinking/). This book
+    provides a friendly intuitive understanding of Bayesian inference
+    and computation. Aimed at social and natural scientists, it has less
+    theory that the other two books but is perhaps more approachable. A
+    set of video lectures for this book can be found on
+    [YouTube](https://www.youtube.com/playlist?list=PLDcUM9US4XdMROZ57-OIRtIK0aOynbgZN).
+
+## Common Distributions
+
+For many Bayesian inference problems, it is useful to be able to
+identify probability density functions (for continuous random variables)
+and probability mass functions (for discrete random variables) up to
+proportionality. Some common density/mass functions are given below.
+
+**Normal distribution** $N(\mu,\sigma^2)$
+$$
+\pi(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\} \qquad x \in\mathbb{R},
+$$ where $\mu \in \mathbb{R}$ and $\sigma > 0$.
+
+**Beta distribution** $\text{Beta}(\alpha,\beta)$
+$$
+\pi(x\mid \alpha, \beta) = \frac{1}{B(\alpha, \beta)}x^{\alpha-1}(1-x)^{\beta - 1} \qquad  x \in (0, 1),
+$$ where $\alpha, \beta > 0$ and $B(\alpha, \beta)$ is the [Beta
+function](https://en.wikipedia.org/wiki/Beta_function).
+
+**Gamma distribution** $\text{Gamma}(\alpha,\beta)$
+$$
+\pi(x\mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x} \qquad  x > 0,
+$$ where $\alpha, \beta > 0$ and $\Gamma(\alpha)$ is the [Gamma
+function](https://en.wikipedia.org/wiki/Gamma_function).
+
+**Exponential distribution** $\text{Exp}(\lambda)$
+$$
+\pi(x \mid \lambda) = \lambda e^{-\lambda x} \qquad x > 0,
+$$ where $\lambda > 0$.
+
+**Poisson distribution** $\text{Pois}(\lambda)$
+$$
+\pi(x = k \mid \lambda) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad k \in \{0, 1, 2, \ldots\},
+$$ where $\lambda > 0$.
+
+**Binomial distribution** $\text{Bin}(N,p)$
+\[
+\pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}
+\]
+where $p \in [0, 1]$.
