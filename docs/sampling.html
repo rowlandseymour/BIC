@@ -1,278 +1,104 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="en">
 <head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Sampling | Bayesian Inference and Computation</title>
-  <meta name="description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
-  <meta name="generator" content="bookdown 0.28.1 and GitBook 2.6.7" />
-
-  <meta property="og:title" content="Chapter 4 Sampling | Bayesian Inference and Computation" />
-  <meta property="og:type" content="book" />
-  <meta property="og:image" content="/uob_logo.png" />
-  <meta property="og:description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
-  
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Sampling | Bayesian Inference and Computation" />
-  
-  <meta name="twitter:description" content="This book contains the lecture notes for the module Bayesian Inference and Computation." />
-  <meta name="twitter:image" content="/uob_logo.png" />
-
-<meta name="author" content="Dr Junqi Tang (based on lecture notes by Dr Rowland Seymour)" />
-
-
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
-<link rel="prev" href="bayesian-inference.html"/>
-<link rel="next" href="markov-chain-monte-carlo.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 4 Sampling | Bayesian Inference and Computation</title>
+<meta name="author" content="Dr Junqi Tang (based on lecture notes by Dr Rowland Seymour)">
+<meta name="description" content="4.1 Uniform Random Numbers What we won’t be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is...">
+<meta name="generator" content="bookdown 0.28.1 with bs4_book()">
+<meta property="og:title" content="Chapter 4 Sampling | Bayesian Inference and Computation">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/uob_logo.png">
+<meta property="og:description" content="4.1 Uniform Random Numbers What we won’t be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 4 Sampling | Bayesian Inference and Computation">
+<meta name="twitter:description" content="4.1 Uniform Random Numbers What we won’t be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is...">
+<meta name="twitter:image" content="/uob_logo.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.1/transition.js"></script><script src="libs/bs3compat-0.4.1/tabs.js"></script><script src="libs/bs3compat-0.4.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 <style type="text/css">
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
-
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Practicalities</a>
-<ul>
-<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#module-aims"><i class="fa fa-check"></i><b>0.1</b> Module Aims</a></li>
-<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#module-structure"><i class="fa fa-check"></i><b>0.2</b> Module Structure</a></li>
-<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#assessment"><i class="fa fa-check"></i><b>0.3</b> Assessment</a></li>
-<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#recommended-books-and-videos"><i class="fa fa-check"></i><b>0.4</b> Recommended Books and Videos</a></li>
-<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#common-distributions"><i class="fa fa-check"></i><b>0.5</b> Common Distributions</a></li>
-</ul></li>
-<li class="chapter" data-level="1" data-path="fundamentals.html"><a href="fundamentals.html"><i class="fa fa-check"></i><b>1</b> Fundamentals Concepts</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="fundamentals.html"><a href="fundamentals.html#statistical-inference"><i class="fa fa-check"></i><b>1.1</b> Statistical Inference</a></li>
-<li class="chapter" data-level="1.2" data-path="fundamentals.html"><a href="fundamentals.html#frequentist-theory"><i class="fa fa-check"></i><b>1.2</b> Frequentist Theory</a></li>
-<li class="chapter" data-level="1.3" data-path="fundamentals.html"><a href="fundamentals.html#bayesian-paradigm"><i class="fa fa-check"></i><b>1.3</b> Bayesian Paradigm</a></li>
-<li class="chapter" data-level="1.4" data-path="fundamentals.html"><a href="fundamentals.html#bayes-theorem"><i class="fa fa-check"></i><b>1.4</b> Bayes’ Theorem</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="programming-in-r.html"><a href="programming-in-r.html"><i class="fa fa-check"></i><b>2</b> Programming in R</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="programming-in-r.html"><a href="programming-in-r.html#random-numbers-for-loops-and-r"><i class="fa fa-check"></i><b>2.1</b> Random Numbers, For Loops and R</a></li>
-<li class="chapter" data-level="2.2" data-path="programming-in-r.html"><a href="programming-in-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
-<ul>
-<li class="chapter" data-level="2.2.1" data-path="programming-in-r.html"><a href="programming-in-r.html#built-in-commands"><i class="fa fa-check"></i><b>2.2.1</b> Built in commands</a></li>
-<li class="chapter" data-level="2.2.2" data-path="programming-in-r.html"><a href="programming-in-r.html#user-defined-functions"><i class="fa fa-check"></i><b>2.2.2</b> User defined functions</a></li>
-</ul></li>
-<li class="chapter" data-level="2.3" data-path="programming-in-r.html"><a href="programming-in-r.html#good-coding-practices"><i class="fa fa-check"></i><b>2.3</b> Good Coding Practices</a>
-<ul>
-<li class="chapter" data-level="2.3.1" data-path="programming-in-r.html"><a href="programming-in-r.html#code-style"><i class="fa fa-check"></i><b>2.3.1</b> Code Style</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="bayesian-inference.html"><a href="bayesian-inference.html"><i class="fa fa-check"></i><b>3</b> Bayesian Inference</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="bayesian-inference.html"><a href="bayesian-inference.html#simple-examples"><i class="fa fa-check"></i><b>3.1</b> Simple Examples</a></li>
-<li class="chapter" data-level="3.2" data-path="bayesian-inference.html"><a href="bayesian-inference.html#reporting-conclusions-from-bayesian-inference"><i class="fa fa-check"></i><b>3.2</b> Reporting Conclusions from Bayesian Inference</a></li>
-<li class="chapter" data-level="3.3" data-path="bayesian-inference.html"><a href="bayesian-inference.html#conjugate-prior-and-posterior-analysis"><i class="fa fa-check"></i><b>3.3</b> Conjugate Prior and Posterior Analysis</a></li>
-<li class="chapter" data-level="3.4" data-path="bayesian-inference.html"><a href="bayesian-inference.html#prediction"><i class="fa fa-check"></i><b>3.4</b> Prediction</a></li>
-<li class="chapter" data-level="3.5" data-path="bayesian-inference.html"><a href="bayesian-inference.html#non-informative-prior-distibrutions"><i class="fa fa-check"></i><b>3.5</b> Non-informative Prior Distibrutions</a></li>
-<li class="chapter" data-level="3.6" data-path="bayesian-inference.html"><a href="bayesian-inference.html#frequentist-analysis-of-bayesian-methods"><i class="fa fa-check"></i><b>3.6</b> Frequentist analysis of Bayesian methods</a></li>
-<li class="chapter" data-level="3.7" data-path="bayesian-inference.html"><a href="bayesian-inference.html#hierarchical-models"><i class="fa fa-check"></i><b>3.7</b> Hierarchical Models</a></li>
-<li class="chapter" data-level="3.8" data-path="bayesian-inference.html"><a href="bayesian-inference.html#lab"><i class="fa fa-check"></i><b>3.8</b> Lab</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>4</b> Sampling</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="sampling.html"><a href="sampling.html#uniform-random-numbers"><i class="fa fa-check"></i><b>4.1</b> Uniform Random Numbers</a></li>
-<li class="chapter" data-level="4.2" data-path="sampling.html"><a href="sampling.html#inverse-transform-sampling"><i class="fa fa-check"></i><b>4.2</b> Inverse Transform Sampling</a></li>
-<li class="chapter" data-level="4.3" data-path="sampling.html"><a href="sampling.html#rejection-sampling"><i class="fa fa-check"></i><b>4.3</b> Rejection Sampling</a>
-<ul>
-<li class="chapter" data-level="4.3.1" data-path="sampling.html"><a href="sampling.html#rejection-sampling-efficiency"><i class="fa fa-check"></i><b>4.3.1</b> Rejection Sampling Efficiency</a></li>
-</ul></li>
-<li class="chapter" data-level="4.4" data-path="sampling.html"><a href="sampling.html#ziggurat-sampling"><i class="fa fa-check"></i><b>4.4</b> Ziggurat Sampling</a></li>
-<li class="chapter" data-level="4.5" data-path="sampling.html"><a href="sampling.html#approximate-bayesian-computation"><i class="fa fa-check"></i><b>4.5</b> Approximate Bayesian Computation</a>
-<ul>
-<li class="chapter" data-level="4.5.1" data-path="sampling.html"><a href="sampling.html#abc-with-rejection"><i class="fa fa-check"></i><b>4.5.1</b> ABC with Rejection</a></li>
-<li class="chapter" data-level="4.5.2" data-path="sampling.html"><a href="sampling.html#summary-abc-with-rejection"><i class="fa fa-check"></i><b>4.5.2</b> Summary ABC with Rejection</a></li>
-</ul></li>
-<li class="chapter" data-level="4.6" data-path="sampling.html"><a href="sampling.html#lab-1"><i class="fa fa-check"></i><b>4.6</b> Lab</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>5</b> Markov Chain Monte Carlo</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#properties-of-markov-chains"><i class="fa fa-check"></i><b>5.1</b> Properties of Markov Chains</a></li>
-<li class="chapter" data-level="5.2" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#metropolishastings"><i class="fa fa-check"></i><b>5.2</b> Metropolis–Hastings</a></li>
-<li class="chapter" data-level="5.3" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#gibbs-sampler"><i class="fa fa-check"></i><b>5.3</b> Gibbs Sampler</a></li>
-<li class="chapter" data-level="5.4" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#metropolis-within-gibbs"><i class="fa fa-check"></i><b>5.4</b> Metropolis-within-Gibbs</a></li>
-<li class="chapter" data-level="5.5" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#mcmc-diagnostics"><i class="fa fa-check"></i><b>5.5</b> MCMC Diagnostics</a></li>
-<li class="chapter" data-level="5.6" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#beyond-mcmc"><i class="fa fa-check"></i><b>5.6</b> Beyond MCMC</a></li>
-<li class="chapter" data-level="5.7" data-path="markov-chain-monte-carlo.html"><a href="markov-chain-monte-carlo.html#lab-2"><i class="fa fa-check"></i><b>5.7</b> Lab</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="advanced-computation.html"><a href="advanced-computation.html"><i class="fa fa-check"></i><b>6</b> Advanced Computation</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes"><i class="fa fa-check"></i><b>6.1</b> Gaussian Processes</a>
-<ul>
-<li class="chapter" data-level="6.1.1" data-path="advanced-computation.html"><a href="advanced-computation.html#covariance-functions"><i class="fa fa-check"></i><b>6.1.1</b> Covariance Functions</a></li>
-<li class="chapter" data-level="6.1.2" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-process-regression"><i class="fa fa-check"></i><b>6.1.2</b> Gaussian Process Regression</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="advanced-computation.html"><a href="advanced-computation.html#data-augmentation"><i class="fa fa-check"></i><b>6.2</b> Data Augmentation</a>
-<ul>
-<li class="chapter" data-level="6.2.1" data-path="advanced-computation.html"><a href="advanced-computation.html#censored-observations"><i class="fa fa-check"></i><b>6.2.1</b> Censored observations</a></li>
-<li class="chapter" data-level="6.2.2" data-path="advanced-computation.html"><a href="advanced-computation.html#latent-variables"><i class="fa fa-check"></i><b>6.2.2</b> Latent Variables</a></li>
-<li class="chapter" data-level="6.2.3" data-path="advanced-computation.html"><a href="advanced-computation.html#grouped-data"><i class="fa fa-check"></i><b>6.2.3</b> Grouped Data</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="advanced-computation.html"><a href="advanced-computation.html#prior-ellicitation-optional-reading"><i class="fa fa-check"></i><b>6.3</b> Prior Ellicitation (Optional reading)</a>
-<ul>
-<li class="chapter" data-level="6.3.1" data-path="advanced-computation.html"><a href="advanced-computation.html#prior-summaries"><i class="fa fa-check"></i><b>6.3.1</b> Prior Summaries</a></li>
-<li class="chapter" data-level="6.3.2" data-path="advanced-computation.html"><a href="advanced-computation.html#betting-with-histograms"><i class="fa fa-check"></i><b>6.3.2</b> Betting with Histograms</a></li>
-<li class="chapter" data-level="6.3.3" data-path="advanced-computation.html"><a href="advanced-computation.html#prior-intervals"><i class="fa fa-check"></i><b>6.3.3</b> Prior Intervals</a></li>
-</ul></li>
-<li class="chapter" data-level="6.4" data-path="advanced-computation.html"><a href="advanced-computation.html#lab-3"><i class="fa fa-check"></i><b>6.4</b> Lab</a>
-<ul>
-<li class="chapter" data-level="6.4.1" data-path="advanced-computation.html"><a href="advanced-computation.html#gaussian-processes-1"><i class="fa fa-check"></i><b>6.4.1</b> Gaussian Processes</a></li>
-<li class="chapter" data-level="6.4.2" data-path="advanced-computation.html"><a href="advanced-computation.html#censored-data"><i class="fa fa-check"></i><b>6.4.2</b> Censored Data</a></li>
-</ul></li>
-</ul></li>
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Bayesian Inference and Computation</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Inference and Computation</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Practicalities</a></li>
+<li><a class="" href="fundamentals.html"><span class="header-section-number">1</span> Fundamentals Concepts</a></li>
+<li><a class="" href="programming-in-r.html"><span class="header-section-number">2</span> Programming in R</a></li>
+<li><a class="" href="bayesian-inference.html"><span class="header-section-number">3</span> Bayesian Inference</a></li>
+<li><a class="active" href="sampling.html"><span class="header-section-number">4</span> Sampling</a></li>
+<li><a class="" href="markov-chain-monte-carlo.html"><span class="header-section-number">5</span> Markov Chain Monte Carlo</a></li>
+<li><a class="" href="advanced-computation.html"><span class="header-section-number">6</span> Advanced Computation</a></li>
+</ul>
+
+        <div class="book-extra">
+          
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="sampling" class="section level1 hasAnchor" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Sampling<a href="sampling.html#sampling" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="uniform-random-numbers" class="section level2 hasAnchor" number="4.1">
-<h2><span class="header-section-number">4.1</span> Uniform Random Numbers<a href="sampling.html#uniform-random-numbers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="sampling" class="section level1" number="4">
+<h1>
+<span class="header-section-number">4</span> Sampling<a class="anchor" aria-label="anchor" href="#sampling"><i class="fas fa-link"></i></a>
+</h1>
+<div id="uniform-random-numbers" class="section level2" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> Uniform Random Numbers<a class="anchor" aria-label="anchor" href="#uniform-random-numbers"><i class="fas fa-link"></i></a>
+</h2>
 <p>What we won’t be doing in this module is generating true uniform random numbers. This is incredibly difficult and usually requires lots of expensive hardware. This is because computers aren’t good at being random, they require algorithmic instructions. True random number generation often uses physical methods, such as the radioactive decay of atoms, or atmospheric noise.</p>
 <p>Throughout this module, we will be using R’s built in random number generation. This is a pseudo random number generator that has excellent random properties, but will eventually repeat. A basic random number generation tool that we will repeatedly use in the module involves sampling from a uniform distribution on the unit interval, which can be done in R using</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="sampling.html#cb54-1" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.01184791</code></pre>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 0.1457444</code></pre>
 </div>
-<div id="inverse-transform-sampling" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Inverse Transform Sampling<a href="sampling.html#inverse-transform-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="inverse-transform-sampling" class="section level2" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Inverse Transform Sampling<a class="anchor" aria-label="anchor" href="#inverse-transform-sampling"><i class="fas fa-link"></i></a>
+</h2>
 <p>Suppose we want to sample from a non-uniform one-dimensional distribution. The inverse transform theorem allows us to do this using the distribution’s inverse function.</p>
 <div class="definition">
 <p><span id="def:unlabeled-div-48" class="definition"><strong>Definition 4.1  </strong></span>The <em>generalised inverse</em> <span class="math inline">\(F^{-1}\colon [0,1] \to [-\infty,\infty]\)</span> of a cumulative distribution function <span class="math inline">\(F\)</span>, is defined for all <span class="math inline">\(u \in [0, 1]\)</span> by
@@ -317,24 +143,25 @@ F^{-1}(y \mid \lambda) = -\frac{1}{\lambda}\log(1-y).
 \]</span>
 Therefore, if <span class="math inline">\(U \sim U[0, 1]\)</span>, then it follows that <span class="math inline">\(-\frac{1}{\lambda}\log(1-U) \sim \hbox{Exp}(\lambda)\)</span>.</p>
 <p>The R code below generates a plot to show this (with <span class="math inline">\(\lambda = 0.5\)</span>). We can plot the CDF for most one parameter distributions straightforwardly. We can think of this theorem as allowing us to sample a point on the y-axis and then computing the quantile this corresponds to.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="sampling.html#cb56-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>) <span class="co"># to reproduce</span></span>
-<span id="cb56-2"><a href="sampling.html#cb56-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="fl">0.01</span>) <span class="co">#Show on the interval [0, 5]</span></span>
-<span id="cb56-3"><a href="sampling.html#cb56-3" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span><span class="sc">*</span>y)    <span class="co">#Construct the cumulative density </span></span>
-<span id="cb56-4"><a href="sampling.html#cb56-4" tabindex="-1"></a>                        <span class="co">#function (CDF)</span></span>
-<span id="cb56-5"><a href="sampling.html#cb56-5" tabindex="-1"></a><span class="fu">plot</span>(y, f, <span class="at">type =</span><span class="st">&#39;l&#39;</span>, <span class="at">xlab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">ylab=</span> <span class="st">&quot;CDF&quot;</span>)</span>
-<span id="cb56-6"><a href="sampling.html#cb56-6" tabindex="-1"></a></span>
-<span id="cb56-7"><a href="sampling.html#cb56-7" tabindex="-1"></a><span class="co">#Sample u</span></span>
-<span id="cb56-8"><a href="sampling.html#cb56-8" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb56-9"><a href="sampling.html#cb56-9" tabindex="-1"></a></span>
-<span id="cb56-10"><a href="sampling.html#cb56-10" tabindex="-1"></a><span class="co">#Get the corresponding y value</span></span>
-<span id="cb56-11"><a href="sampling.html#cb56-11" tabindex="-1"></a>f.inv <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u)</span>
-<span id="cb56-12"><a href="sampling.html#cb56-12" tabindex="-1"></a></span>
-<span id="cb56-13"><a href="sampling.html#cb56-13" tabindex="-1"></a><span class="co">#plot </span></span>
-<span id="cb56-14"><a href="sampling.html#cb56-14" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> <span class="dv">0</span>, <span class="at">y0 =</span> u, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb56-15"><a href="sampling.html#cb56-15" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> f.inv, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> f.inv, <span class="at">y1 =</span> u, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb56-16"><a href="sampling.html#cb56-16" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> f.inv, <span class="at">y =</span> <span class="sc">-</span><span class="fl">0.01</span>, <span class="fu">expression</span>(F[<span class="sc">-</span><span class="dv">1</span>](U)), <span class="at">col =</span> <span class="dv">4</span>)</span>
-<span id="cb56-17"><a href="sampling.html#cb56-17" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> <span class="sc">-</span>.<span class="dv">1</span>, <span class="at">y =</span> u, <span class="st">&quot;U&quot;</span>, <span class="at">col =</span> <span class="dv">4</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span> <span class="co"># to reproduce</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">0.01</span><span class="op">)</span> <span class="co">#Show on the interval [0, 5]</span></span>
+<span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span><span class="op">*</span><span class="va">y</span><span class="op">)</span>    <span class="co">#Construct the cumulative density </span></span>
+<span>                        <span class="co">#function (CDF)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">f</span>, type <span class="op">=</span><span class="st">'l'</span>, xlab <span class="op">=</span> <span class="st">"y"</span>, ylab<span class="op">=</span> <span class="st">"CDF"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Sample u</span></span>
+<span><span class="va">u</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Get the corresponding y value</span></span>
+<span><span class="va">f.inv</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">u</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#plot </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/segments.html">segments</a></span><span class="op">(</span>x0 <span class="op">=</span> <span class="fl">0</span>, y0 <span class="op">=</span> <span class="va">u</span>, x1 <span class="op">=</span> <span class="va">f.inv</span>, y1 <span class="op">=</span> <span class="va">u</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/segments.html">segments</a></span><span class="op">(</span>x0 <span class="op">=</span> <span class="va">f.inv</span>, y0 <span class="op">=</span> <span class="fl">0</span>, x1 <span class="op">=</span> <span class="va">f.inv</span>, y1 <span class="op">=</span> <span class="va">u</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">f.inv</span>, y <span class="op">=</span> <span class="op">-</span><span class="fl">0.01</span>, <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="cn">F</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">(</span><span class="va">U</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">-</span><span class="fl">.1</span>, y <span class="op">=</span> <span class="va">u</span>, <span class="st">"U"</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672"></div>
 </div>
 <div class="example">
 <p><span id="exm:unlabeled-div-52" class="example"><strong>Example 4.2  </strong></span>Suppose we want to generate samples from the Cauchy distribution with location 0 and scale 1. This has density function
@@ -342,10 +169,11 @@ Therefore, if <span class="math inline">\(U \sim U[0, 1]\)</span>, then it follo
 \pi(x) = \frac{1}{\pi(1+x^2)}, \quad x \in \mathbb{R}.
 \]</span>
 A plot of this function is shown below.</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="sampling.html#cb57-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="fl">0.01</span>)</span>
-<span id="cb57-2"><a href="sampling.html#cb57-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(pi<span class="sc">*</span>(<span class="dv">1</span> <span class="sc">+</span> x<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb57-3"><a href="sampling.html#cb57-3" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">pi</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="672">
 To use the inverse transform method, we first need to find the CDF:
 <span class="math display">\[
 F(x) = \int_{-\infty}^x \frac{1}{\pi(1+t^2)}dt
@@ -367,10 +195,12 @@ F^{-1}(x) = \tan\left(\pi\left(x - \frac{1}{2}\right)\right).
 Hence, if <span class="math inline">\(U \sim U[0, 1]\)</span>, then <span class="math inline">\(\tan\left(\pi\left(U - \frac{1}{2}\right)\right) \sim \hbox{Cauchy}(0, 1)\)</span>.</p>
 </div>
 </div>
-<div id="rejection-sampling" class="section level2 hasAnchor" number="4.3">
-<h2><span class="header-section-number">4.3</span> Rejection Sampling<a href="sampling.html#rejection-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="rejection-sampling" class="section level2" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> Rejection Sampling<a class="anchor" aria-label="anchor" href="#rejection-sampling"><i class="fas fa-link"></i></a>
+</h2>
 <p>We now have a way of sampling realisations from distributions where we can analytically derive the inverse distribution function. We can use this to sample from more complex densities, or simple densities more efficiently. Rejection sampling works by sampling according to a density we can sample from and then rejecting or accepting that sample based on the density we’re actually interested in. The plot below shows an example from this. We would like to generate a sample from the distribution with the curved density function, which is challenging. Instead, we find a distribution whose density function <span class="math inline">\(q\)</span> multiplied by some <span class="math inline">\(c \geq 1\)</span> (call <span class="math inline">\(cq\)</span> an <em>unnormalised density function</em>) bounds the one we wish to sample from. In this case we can use the uniform distribution. Once we have generated our sample from the uniform distribution, we choose to accept or reject it based on the distribution we are interested in. In this case we reject it.</p>
-<p><img src="_main_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-25-1.png" width="672"></div>
 <p>Suppose we want to sample from a density <span class="math inline">\(\pi\)</span>, but can only generate samples from a density <span class="math inline">\(q\)</span>. If there exists some constant <span class="math inline">\(c &gt; 0\)</span>, such that <span class="math inline">\(\frac{\pi(y)}{q(y)} \leq c\)</span> for all <span class="math inline">\(y\)</span>, then we can generate samples from <span class="math inline">\(\pi\)</span> by the following:</p>
 <ol style="list-style-type: decimal">
 <li><p>Sample <span class="math inline">\(y \sim q\)</span></p></li>
@@ -410,34 +240,37 @@ proving the claim on the acceptance probability. Finally, the previous two calcu
 \end{cases}.
 \]</span>
 The maximum of <span class="math inline">\(\pi\)</span> is given by <span class="math inline">\(\frac{3}{4}\)</span>. We choose <span class="math inline">\(q \sim U[0, 2] \sim 2U\)</span> for <span class="math inline">\(U \sim U[0,1]\)</span> and for illustrative purposes not choose <span class="math inline">\(c\)</span> optimally (which would be <span class="math inline">\(c = \frac{3}{2}\)</span> to maximise the acceptance probability) but <span class="math inline">\(c = 3\)</span>. The R code below shows a pictorial version of how one sample is generated.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="sampling.html#cb58-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)   <span class="co">#to reproduce</span></span>
-<span id="cb58-2"><a href="sampling.html#cb58-2" tabindex="-1"></a>scaling.c <span class="ot">&lt;-</span> <span class="dv">3</span>         <span class="co">#set c</span></span>
-<span id="cb58-3"><a href="sampling.html#cb58-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>)    <span class="co">#sample Y ~ Q</span></span>
-<span id="cb58-4"><a href="sampling.html#cb58-4" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) <span class="co">#compute pi(y)</span></span>
-<span id="cb58-5"><a href="sampling.html#cb58-5" tabindex="-1"></a>k <span class="ot">&lt;-</span> p<span class="sc">/</span>(scaling.c<span class="sc">*</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)     <span class="co">#compute k</span></span>
-<span id="cb58-6"><a href="sampling.html#cb58-6" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)    <span class="co">#sample U ~ U[0, 1]</span></span>
-<span id="cb58-7"><a href="sampling.html#cb58-7" tabindex="-1"></a><span class="fu">ifelse</span>(u <span class="sc">&lt;</span> k, <span class="st">&#39;accept&#39;</span>, <span class="st">&#39;reject&#39;</span>) <span class="co">#Accept if  u &lt; k</span></span></code></pre></div>
-<pre><code>## [1] &quot;reject&quot;</code></pre>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="sampling.html#cb60-1" tabindex="-1"></a><span class="co">#Create nice plot</span></span>
-<span id="cb60-2"><a href="sampling.html#cb60-2" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.01</span>)</span>
-<span id="cb60-3"><a href="sampling.html#cb60-3" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>a<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>a)</span>
-<span id="cb60-4"><a href="sampling.html#cb60-4" tabindex="-1"></a>scaling.c  <span class="ot">&lt;-</span> scaling.c<span class="sc">*</span><span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(a))</span>
-<span id="cb60-5"><a href="sampling.html#cb60-5" tabindex="-1"></a><span class="fu">plot</span>(a, b, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span><span class="sc">/</span><span class="dv">2</span>), <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
-<span id="cb60-6"><a href="sampling.html#cb60-6" tabindex="-1"></a><span class="fu">lines</span>(a, scaling.c<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb60-7"><a href="sampling.html#cb60-7" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y, <span class="at">y0 =</span> <span class="dv">0</span>, <span class="at">x1 =</span> y,  <span class="at">y1 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y) , </span>
-<span id="cb60-8"><a href="sampling.html#cb60-8" tabindex="-1"></a>          <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb60-9"><a href="sampling.html#cb60-9" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> y,  <span class="at">y0 =</span><span class="dv">3</span><span class="sc">/</span><span class="dv">4</span><span class="sc">*</span>y<span class="sc">*</span>(<span class="dv">2</span><span class="sc">-</span>y), <span class="at">x1 =</span> y, <span class="at">y1 =</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, </span>
-<span id="cb60-10"><a href="sampling.html#cb60-10" tabindex="-1"></a>          <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb60-11"><a href="sampling.html#cb60-11" tabindex="-1"></a><span class="fu">points</span>(<span class="at">x =</span> y, <span class="at">y =</span> u, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>   <span class="co">#to reproduce</span></span>
+<span><span class="va">scaling.c</span> <span class="op">&lt;-</span> <span class="fl">3</span>         <span class="co">#set c</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>    <span class="co">#sample Y ~ Q</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">3</span><span class="op">/</span><span class="fl">4</span><span class="op">*</span><span class="va">y</span><span class="op">*</span><span class="op">(</span><span class="fl">2</span><span class="op">-</span><span class="va">y</span><span class="op">)</span> <span class="co">#compute pi(y)</span></span>
+<span><span class="va">k</span> <span class="op">&lt;-</span> <span class="va">p</span><span class="op">/</span><span class="op">(</span><span class="va">scaling.c</span><span class="op">*</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>     <span class="co">#compute k</span></span>
+<span><span class="va">u</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>    <span class="co">#sample U ~ U[0, 1]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">u</span> <span class="op">&lt;</span> <span class="va">k</span>, <span class="st">'accept'</span>, <span class="st">'reject'</span><span class="op">)</span> <span class="co">#Accept if  u &lt; k</span></span></code></pre></div>
+<pre><code>## [1] "reject"</code></pre>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Create nice plot</span></span>
+<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fl">3</span><span class="op">/</span><span class="fl">4</span><span class="op">*</span><span class="va">a</span><span class="op">*</span><span class="op">(</span><span class="fl">2</span><span class="op">-</span><span class="va">a</span><span class="op">)</span></span>
+<span><span class="va">scaling.c</span>  <span class="op">&lt;-</span> <span class="va">scaling.c</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">scaling.c</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/segments.html">segments</a></span><span class="op">(</span>x0 <span class="op">=</span> <span class="va">y</span>, y0 <span class="op">=</span> <span class="fl">0</span>, x1 <span class="op">=</span> <span class="va">y</span>,  y1 <span class="op">=</span><span class="fl">3</span><span class="op">/</span><span class="fl">4</span><span class="op">*</span><span class="va">y</span><span class="op">*</span><span class="op">(</span><span class="fl">2</span><span class="op">-</span><span class="va">y</span><span class="op">)</span> , </span>
+<span>          lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/segments.html">segments</a></span><span class="op">(</span>x0 <span class="op">=</span> <span class="va">y</span>,  y0 <span class="op">=</span><span class="fl">3</span><span class="op">/</span><span class="fl">4</span><span class="op">*</span><span class="va">y</span><span class="op">*</span><span class="op">(</span><span class="fl">2</span><span class="op">-</span><span class="va">y</span><span class="op">)</span>, x1 <span class="op">=</span> <span class="va">y</span>, y1 <span class="op">=</span> <span class="fl">3</span><span class="op">/</span><span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>          col <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">y</span>, y <span class="op">=</span> <span class="va">u</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-26-1.png" width="672">
 The plot also shows how the choices of <span class="math inline">\(c\)</span> and <span class="math inline">\(q\)</span> can make the sampling more or less efficient. In our example, the rejection space is large, meaning many of our proposed samples will be rejected. Here, we could have chosen a better <span class="math inline">\(q\)</span> or a better <span class="math inline">\(c\)</span> for the given <span class="math inline">\(q\)</span> to minimise this space (compare with the first figure from this subsection).</p>
 </div>
 <div class="example">
 <p><span id="exm:unlabeled-div-55" class="example"><strong>Example 4.4  </strong></span>Suppose we want to sample from a Beta(4, 8) distribution. This distribution looks like</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="sampling.html#cb61-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.001</span>)</span>
-<span id="cb61-2"><a href="sampling.html#cb61-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dbeta</span>(x, <span class="dv">4</span>, <span class="dv">8</span>)</span>
-<span id="cb61-3"><a href="sampling.html#cb61-3" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-27-1.png" width="672" />
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.001</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">dbeta</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">4</span>, <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-27-1.png" width="672">
 A uniform distribution on [0, 1] will cover the Beta distribution and we can then use a rejection sampling algorithm. First, we need to find <span class="math inline">\(c\)</span>, the maximum of the Beta distribution. We can find this by differentiating the pdf and setting it equal to 0:
 <span class="math display">\[
 \pi(x) = \frac{1}{B(4, 8)}x^3(1-x)^7 \\
@@ -446,17 +279,19 @@ A uniform distribution on [0, 1] will cover the Beta distribution and we can the
 \]</span>
 Setting this equal to 0 gives us the maximum at <span class="math inline">\(x = \frac{3}{10}\)</span>. This means we can set <span class="math inline">\(c = \pi(3/10) = \frac{1}{B(4, 8)} \frac{3^3 7^{7}}{10^{10}} = \frac{11! 3^3 7^7}{3! 7! 10^{10}} \approx 2.935\)</span>. Our rejection sampling algorithm is therefore</p>
 <ol style="list-style-type: decimal">
-<li>Sample <span class="math inline">\(u \sim U[0, 1]\)</span></li>
+<li>Sample <span class="math inline">\(u \sim U[0, 1]\)</span>
+</li>
 <li>Compute <span class="math inline">\(k = \pi(u)/c\)</span>.</li>
 <li>Accept <span class="math inline">\(u\)</span> with probability <span class="math inline">\(k\)</span>. If rejected, repeat.</li>
 </ol>
 </div>
 <div class="example">
 <p><span id="exm:unlabeled-div-56" class="example"><strong>Example 4.5  </strong></span>In this example, we want to sample from a Gamma(3, 2) distribution. The density function is shown below.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="sampling.html#cb62-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
-<span id="cb62-2"><a href="sampling.html#cb62-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(x, <span class="dv">3</span>, <span class="dv">2</span>)</span>
-<span id="cb62-3"><a href="sampling.html#cb62-3" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span>, <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html">dgamma</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-28-1.png" width="672"></div>
 <p>We will use an Exp(1) distribution as our proposal distribution. To find the value of <span class="math inline">\(c\)</span>, consider <span class="math inline">\(R(x) = \frac{\pi(x)}{q(x)}\)</span>
 <span class="math display">\[
 R(x) = \frac{\frac{2^3}{\Gamma(3)}x^2\exp(-2x)}{\exp(-x)} \\
@@ -468,23 +303,28 @@ To find the maximum of this ratio, we differentiate and set the result equal to 
 = x\exp(-x)(2 - x)
 \]</span>
 The maximum is therefore at 2. The value of the ratio at <span class="math inline">\(x = 2\)</span> is <span class="math inline">\(R(2) = \frac{2^3}{\Gamma(3)}4\exp(-2)\)</span>. This is therefore our value of c. We can see how <span class="math inline">\(\pi(x)\)</span> and <span class="math inline">\(cq(x)\)</span> look in the graph below.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="sampling.html#cb63-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">6</span>, <span class="fl">0.01</span>)</span>
-<span id="cb63-2"><a href="sampling.html#cb63-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">dgamma</span>(x, <span class="dv">3</span>, <span class="dv">2</span>)</span>
-<span id="cb63-3"><a href="sampling.html#cb63-3" tabindex="-1"></a>scaling.c <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">^</span><span class="dv">3</span><span class="sc">/</span><span class="fu">gamma</span>(<span class="dv">3</span>)<span class="sc">*</span><span class="dv">4</span><span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span><span class="dv">2</span>)</span>
-<span id="cb63-4"><a href="sampling.html#cb63-4" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="fu">dexp</span>(x, <span class="dv">1</span>)</span>
-<span id="cb63-5"><a href="sampling.html#cb63-5" tabindex="-1"></a></span>
-<span id="cb63-6"><a href="sampling.html#cb63-6" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span>
-<span id="cb63-7"><a href="sampling.html#cb63-7" tabindex="-1"></a><span class="fu">lines</span>(x, q<span class="sc">*</span>scaling.c, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span>, <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html">dgamma</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">scaling.c</span> <span class="op">&lt;-</span> <span class="fl">2</span><span class="op">^</span><span class="fl">3</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/Special.html">gamma</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">*</span><span class="fl">4</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">dexp</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">q</span><span class="op">*</span><span class="va">scaling.c</span>, col <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-29-1.png" width="672"></div>
 <p>The exponential distribution completely encloses the gamma distribution using this value of <span class="math inline">\(c\)</span>, wiht the two densities just touching at <span class="math inline">\(x=2\)</span>. Our rejection sampling algorithm is therefore</p>
 <ol style="list-style-type: decimal">
-<li>Sample <span class="math inline">\(y \sim \hbox{exp}(1)\)</span></li>
-<li>Compute <span class="math inline">\(k = \frac{\pi(y)}{cq(y)}\)</span></li>
+<li>Sample <span class="math inline">\(y \sim \hbox{exp}(1)\)</span>
+</li>
+<li>Compute <span class="math inline">\(k = \frac{\pi(y)}{cq(y)}\)</span>
+</li>
 <li>Accept <span class="math inline">\(y\)</span> with probability <span class="math inline">\(k\)</span>; else reject and repeat.</li>
 </ol>
 </div>
-<div id="rejection-sampling-efficiency" class="section level3 hasAnchor" number="4.3.1">
-<h3><span class="header-section-number">4.3.1</span> Rejection Sampling Efficiency<a href="sampling.html#rejection-sampling-efficiency" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="rejection-sampling-efficiency" class="section level3" number="4.3.1">
+<h3>
+<span class="header-section-number">4.3.1</span> Rejection Sampling Efficiency<a class="anchor" aria-label="anchor" href="#rejection-sampling-efficiency"><i class="fas fa-link"></i></a>
+</h3>
 <p>Suppose we are using a rejection sampling algorithm to sample from <span class="math inline">\(\pi(y)\)</span> using the proposal distribution <span class="math inline">\(q(y)\)</span>. How good is our rejection sampling algorithm? What does it mean to be a ‘good’ rejection sampling algorithm. One measure of the efficiency of a sampler is, on average, how many samples do we need to generate until one is accepted.</p>
 <div class="proposition">
 <p><span id="prp:unlabeled-div-57" class="proposition"><strong>Proposition 4.1  </strong></span>The number of samples proposed in a rejection sampling algorithm before one is accepted is distributed geometrically with success probability <span class="math inline">\(\frac{1}{c}\)</span>.</p>
@@ -503,11 +343,13 @@ The maximum is therefore at 2. The value of the ratio at <span class="math inlin
 </div>
 </div>
 </div>
-<div id="ziggurat-sampling" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Ziggurat Sampling<a href="sampling.html#ziggurat-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ziggurat-sampling" class="section level2" number="4.4">
+<h2>
+<span class="header-section-number">4.4</span> Ziggurat Sampling<a class="anchor" aria-label="anchor" href="#ziggurat-sampling"><i class="fas fa-link"></i></a>
+</h2>
 <p>The final method we are going to look at in this chapter is Ziggurat sampling. It is generally used to sample from distributions supported on the positive half line with monotone densities, using only uniform samples. It may also be used for sampling from symmetric distributions via a sign flipping argument, as illustrated for a normal distribution below. Denote its density by <span class="math inline">\(\pi\)</span>.</p>
 <p>A Ziggurat is a kind of stepped pyramid. To start the sampling algorithm, we approximate the normal distribution on the positive half line by a series of horizontal rectangles numbered in decreasing order from <span class="math inline">\(n-1\)</span> to <span class="math inline">\(0\)</span> with bottom right corner being denoted by <span class="math inline">\((x_i,y_i) = (x_i, \pi(x_i))\)</span>, where <span class="math inline">\(x_0 = x_1\)</span>. We also set <span class="math inline">\(x_n = 0, y_n = \pi(0)\)</span>. For the base layer <span class="math inline">\(0\)</span> we then add the tail extending to the right of the <span class="math inline">\(0\)</span>-th rectangle, thus obtaining <span class="math inline">\(n-1\)</span> rectangles stacked upon the base layer. Moreover, the layers are chosen in such a way that they all have the same area <span class="math inline">\(A\)</span> (this can be achieved via a numerical root finding algorithm). An example of this is shown below.</p>
-<p><img src="_main_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-30-1.png" width="672"></div>
 <p>To generate a sample, we choose a layer at random – we might do this by sampling on the <span class="math inline">\(y\)</span>-axis uniformly at random.</p>
 <p>Assume first that we have sampled a layer <span class="math inline">\(i \in \{1,\ldots,n\}\)</span>, i.e., a true rectangle. We then sample uniformly at random within the rectangle and accept the sample if it is in the subgraph of the half-normal distribution. This is is done efficiently as follows: First sample uniformly the <span class="math inline">\(x\)</span>-value of the sample in the box. If this value is smaller than <span class="math inline">\(x_{i+1}\)</span>, then sampling uniformly in <span class="math inline">\([y_i,y_{i+1}]\)</span> will always return a sample in the subgraph and we can therefore terminate the algorithm and accept <span class="math inline">\(x\)</span>. Otherwise we need to sample the <span class="math inline">\(y\)</span>-value as well and check if <span class="math inline">\(y &lt; \pi(x)\)</span>, in which case we accept, or else reject and select a new layer.</p>
 <p>If the base layer is sampled things are a bit more complicated as we may need to sample uniformly from the tail. There are methods to do this efficiently for the half-normal distribution. We will not go into details on this and just note that for a large number of layers (a typical choice is <span class="math inline">\(n=256\)</span>) this case occurs very rarely and just ignoring this layer would result in a good, albeit compactly. supported, sample approximation.</p>
@@ -516,36 +358,47 @@ The maximum is therefore at 2. The value of the ratio at <span class="math inlin
 <li>Sample a layer <span class="math inline">\(i \in \{0,\ldots,n-1\}\)</span> uniformly at random</li>
 <li>If <span class="math inline">\(i &gt; 0\)</span>, do:
 <ol style="list-style-type: decimal">
-<li>Sample <span class="math inline">\(u_0 \sim U[0, 1]\)</span> and set <span class="math inline">\(x = u_0x_i\)</span></li>
+<li>Sample <span class="math inline">\(u_0 \sim U[0, 1]\)</span> and set <span class="math inline">\(x = u_0x_i\)</span>
+</li>
 <li>If <span class="math inline">\(x &lt; x_{i+1}\)</span>: accept the sample and terminate; else:</li>
-<li>Sample <span class="math inline">\(u_1 \sim U[0, 1]\)</span> and set <span class="math inline">\(y = y_i + u_1(y_{i+1} − y_i)\)</span></li>
+<li>Sample <span class="math inline">\(u_1 \sim U[0, 1]\)</span> and set <span class="math inline">\(y = y_i + u_1(y_{i+1} − y_i)\)</span>
+</li>
 <li>If <span class="math inline">\(y &lt; \pi(x)\)</span>: accept the sample. Else: return to Step 1.</li>
-</ol></li>
+</ol>
+</li>
 <li>Else
 <ol style="list-style-type: decimal">
-<li>Sample <span class="math inline">\(u_2 \sim U[0,1]\)</span> and set <span class="math inline">\(w = u_2 A\)</span></li>
-<li>If <span class="math inline">\(w &lt; x_0y_1\)</span>: sample and accept <span class="math inline">\(x \sim U[0,x_0]\)</span></li>
+<li>Sample <span class="math inline">\(u_2 \sim U[0,1]\)</span> and set <span class="math inline">\(w = u_2 A\)</span>
+</li>
+<li>If <span class="math inline">\(w &lt; x_0y_1\)</span>: sample and accept <span class="math inline">\(x \sim U[0,x_0]\)</span>
+</li>
 <li>Else: sample from the tail</li>
-</ol></li>
+</ol>
+</li>
 </ol>
 <p>Finally, to generate samples from the full normal distribution, we multiply each sample by -1 with probability <span class="math inline">\(1/2\)</span>.</p>
 </div>
-<div id="approximate-bayesian-computation" class="section level2 hasAnchor" number="4.5">
-<h2><span class="header-section-number">4.5</span> Approximate Bayesian Computation<a href="sampling.html#approximate-bayesian-computation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="approximate-bayesian-computation" class="section level2" number="4.5">
+<h2>
+<span class="header-section-number">4.5</span> Approximate Bayesian Computation<a class="anchor" aria-label="anchor" href="#approximate-bayesian-computation"><i class="fas fa-link"></i></a>
+</h2>
 <p>So far, we have always considered models where the likelihood function is easy to work with. By easy, we mean that we can evaluate the likelihood function for lots of different values, and we can evaluate it cheaply. In some cases, it might not be possible to write down the likelihood function, or it might not be possible to evaluate it. In these cases, we refer to methods call <strong>likelihood free inference</strong>.</p>
 <div class="example">
 <p><span id="exm:unlabeled-div-60" class="example"><strong>Example 4.6  </strong></span>Models to predict the weather are notoriously complex. They contain a huge number of parameters, and sometimes it is not possible to write this model down exactly. In cases where the likelihood function for the weather model can be written down, we would have to start the MCMC algorithm from scratch every time we collected new data.</p>
 </div>
 <p>Approximate Bayesian Computation (ABC) is a likelihood free algorithm that relies on reject sampling from the prior distribution. When constructing an ABC algorithm, we only need to be able to generate data given a parameter value and not evaluate the likelihood of seeing specific data given a parameter value.</p>
 <p>We are going to look at two types of ABC. The first is ABC with rejection</p>
-<div id="abc-with-rejection" class="section level3 hasAnchor" number="4.5.1">
-<h3><span class="header-section-number">4.5.1</span> ABC with Rejection<a href="sampling.html#abc-with-rejection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="abc-with-rejection" class="section level3" number="4.5.1">
+<h3>
+<span class="header-section-number">4.5.1</span> ABC with Rejection<a class="anchor" aria-label="anchor" href="#abc-with-rejection"><i class="fas fa-link"></i></a>
+</h3>
 <div class="definition">
 <p><span id="def:unlabeled-div-61" class="definition"><strong>Definition 4.2  </strong></span>To carry out inference for a parameter <span class="math inline">\(\theta\)</span> using an Approximate Bayesian Computation algorithm with rejection</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value for the parameter <span class="math inline">\(\theta^*\)</span> from the prior distribution <span class="math inline">\(\pi(\theta)\)</span>.</li>
 <li>Generate some data <span class="math inline">\(y*\)</span> from the data generating process using the parameter value <span class="math inline">\(\theta^*\)</span>.</li>
-<li>Accept <span class="math inline">\(\theta^*\)</span> as a value from the posterior distribution if <span class="math inline">\(||y - y^*|| &lt; \varepsilon\)</span> for some <span class="math inline">\(\varepsilon &gt; 0\)</span>. Otherwise reject <span class="math inline">\(\theta^*\)</span></li>
+<li>Accept <span class="math inline">\(\theta^*\)</span> as a value from the posterior distribution if <span class="math inline">\(||y - y^*|| &lt; \varepsilon\)</span> for some <span class="math inline">\(\varepsilon &gt; 0\)</span>. Otherwise reject <span class="math inline">\(\theta^*\)</span>
+</li>
 <li>Repeat steps 1 - 3.</li>
 </ol>
 </div>
@@ -560,151 +413,167 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||y^* - y||&
 <p><span id="exm:unlabeled-div-63" class="example"><strong>Example 4.7  </strong></span>This is a simple example, where we can derive the posterior distribution, but it allows us to see how this method works. Suppose we observe <span class="math inline">\(y_1, \ldots, y_{10}\)</span> from <span class="math inline">\(\text{Beta}(3, \beta)\)</span>. We placed a uniform prior on <span class="math inline">\(\beta\)</span> such that <span class="math inline">\(\beta \sim \text{Unif}[0, 5]\)</span>. The ABC algorithm with rejection works as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Sample a value <span class="math inline">\(\beta^* \sim \text{Unif}[0, 5]\)</span>.</li>
-<li>Simulate <span class="math inline">\(y^*_1, \ldots, y^*_{10} \sim \text{Beta}(3,\beta^*)\)</span></li>
+<li>Simulate <span class="math inline">\(y^*_1, \ldots, y^*_{10} \sim \text{Beta}(3,\beta^*)\)</span>
+</li>
 <li>Compute <span class="math inline">\(D = \sum_{i=1}^{10}(y_i -y^*_i)^2\)</span>. If <span class="math inline">\(D &lt; 0.75\)</span>, accept <span class="math inline">\(\beta^*\)</span> as a sample from the posterior distribution. Otherwise, reject <span class="math inline">\(\beta^*\)</span>.</li>
 <li>Repeat steps 1, 2, and 3.</li>
 </ol>
 <p>The code below carries out this algorithm.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="sampling.html#cb64-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
-<span id="cb64-2"><a href="sampling.html#cb64-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb64-3"><a href="sampling.html#cb64-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb64-4"><a href="sampling.html#cb64-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
-<span id="cb64-5"><a href="sampling.html#cb64-5" tabindex="-1"></a>y</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Set Up Example</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">rbeta</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">y</span></span></code></pre></div>
 <pre><code>##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4677043 0.7339799
 ##  [8] 0.7279578 0.7317827 0.7971786</code></pre>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="sampling.html#cb66-1" tabindex="-1"></a><span class="co">#Set Up ABC</span></span>
-<span id="cb66-2"><a href="sampling.html#cb66-2" tabindex="-1"></a>n.iter <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
-<span id="cb66-3"><a href="sampling.html#cb66-3" tabindex="-1"></a>b.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
-<span id="cb66-4"><a href="sampling.html#cb66-4" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.75</span></span>
-<span id="cb66-5"><a href="sampling.html#cb66-5" tabindex="-1"></a></span>
-<span id="cb66-6"><a href="sampling.html#cb66-6" tabindex="-1"></a><span class="co">#Run ABC</span></span>
-<span id="cb66-7"><a href="sampling.html#cb66-7" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
-<span id="cb66-8"><a href="sampling.html#cb66-8" tabindex="-1"></a>  </span>
-<span id="cb66-9"><a href="sampling.html#cb66-9" tabindex="-1"></a>  <span class="co">#Propose new beta</span></span>
-<span id="cb66-10"><a href="sampling.html#cb66-10" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
-<span id="cb66-11"><a href="sampling.html#cb66-11" tabindex="-1"></a>  </span>
-<span id="cb66-12"><a href="sampling.html#cb66-12" tabindex="-1"></a>  <span class="co">#Simualate data</span></span>
-<span id="cb66-13"><a href="sampling.html#cb66-13" tabindex="-1"></a>  y.star <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, b)</span>
-<span id="cb66-14"><a href="sampling.html#cb66-14" tabindex="-1"></a>  </span>
-<span id="cb66-15"><a href="sampling.html#cb66-15" tabindex="-1"></a>  <span class="co">#Compute statistic</span></span>
-<span id="cb66-16"><a href="sampling.html#cb66-16" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>((y<span class="sc">-</span>y.star)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb66-17"><a href="sampling.html#cb66-17" tabindex="-1"></a>  </span>
-<span id="cb66-18"><a href="sampling.html#cb66-18" tabindex="-1"></a>  <span class="co">#Accept/Reject</span></span>
-<span id="cb66-19"><a href="sampling.html#cb66-19" tabindex="-1"></a>  <span class="cf">if</span>(d <span class="sc">&lt;</span> epsilon){</span>
-<span id="cb66-20"><a href="sampling.html#cb66-20" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> b</span>
-<span id="cb66-21"><a href="sampling.html#cb66-21" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
-<span id="cb66-22"><a href="sampling.html#cb66-22" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb66-23"><a href="sampling.html#cb66-23" tabindex="-1"></a>  }</span>
-<span id="cb66-24"><a href="sampling.html#cb66-24" tabindex="-1"></a>  </span>
-<span id="cb66-25"><a href="sampling.html#cb66-25" tabindex="-1"></a>}</span>
-<span id="cb66-26"><a href="sampling.html#cb66-26" tabindex="-1"></a></span>
-<span id="cb66-27"><a href="sampling.html#cb66-27" tabindex="-1"></a><span class="co">#Get number of reject samples</span></span>
-<span id="cb66-28"><a href="sampling.html#cb66-28" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(b.store))</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Set Up ABC</span></span>
+<span><span class="va">n.iter</span> <span class="op">&lt;-</span> <span class="fl">50000</span></span>
+<span><span class="va">b.store</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="va">n.iter</span><span class="op">)</span></span>
+<span><span class="va">epsilon</span> <span class="op">&lt;-</span> <span class="fl">0.75</span></span>
+<span></span>
+<span><span class="co">#Run ABC</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n.iter</span><span class="op">)</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co">#Propose new beta</span></span>
+<span>  <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#Simualate data</span></span>
+<span>  <span class="va">y.star</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">rbeta</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">3</span>, <span class="va">b</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#Compute statistic</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">y</span><span class="op">-</span><span class="va">y.star</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#Accept/Reject</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="va">d</span> <span class="op">&lt;</span> <span class="va">epsilon</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">b.store</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">b</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span><span class="op">{</span></span>
+<span>    <span class="va">b.store</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#Get number of reject samples</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">b.store</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 37886</code></pre>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="sampling.html#cb68-1" tabindex="-1"></a><span class="co">#Plot Approximate Posterior</span></span>
-<span id="cb68-2"><a href="sampling.html#cb68-2" tabindex="-1"></a><span class="fu">hist</span>(b.store, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb68-3"><a href="sampling.html#cb68-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="sampling.html#cb69-1" tabindex="-1"></a><span class="fu">mean</span>(b.store, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Plot Approximate Posterior</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">b.store</span>, freq <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-31-1.png" width="672"></div>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">b.store</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2.03304</code></pre>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="sampling.html#cb71-1" tabindex="-1"></a><span class="fu">quantile</span>(b.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">b.store</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##      2.5%     97.5% 
 ## 0.5843792 4.1369339</code></pre>
 </div>
 <p>One important question is how to choose the value for <span class="math inline">\(\varepsilon\)</span>? It turns out this is an incredibly hard question that is specific to each application. Often the approximate posterior distribution <span class="math inline">\(\pi_\varepsilon(\theta \mid y)\)</span> is very sensitive to the choice of <span class="math inline">\(\varepsilon\)</span>.</p>
 <div class="example">
 <p><span id="exm:unlabeled-div-64" class="example"><strong>Example 4.8  </strong></span>Let’s repeat the example, first with <span class="math inline">\(\varepsilon = 0.12\)</span>. In this case, almost all of the proposals are rejected.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="sampling.html#cb73-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
-<span id="cb73-2"><a href="sampling.html#cb73-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb73-3"><a href="sampling.html#cb73-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb73-4"><a href="sampling.html#cb73-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
-<span id="cb73-5"><a href="sampling.html#cb73-5" tabindex="-1"></a>y</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Set Up Example</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">rbeta</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">y</span></span></code></pre></div>
 <pre><code>##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4677043 0.7339799
 ##  [8] 0.7279578 0.7317827 0.7971786</code></pre>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="sampling.html#cb75-1" tabindex="-1"></a><span class="co">#Set Up ABC</span></span>
-<span id="cb75-2"><a href="sampling.html#cb75-2" tabindex="-1"></a>n.iter <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
-<span id="cb75-3"><a href="sampling.html#cb75-3" tabindex="-1"></a>b.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
-<span id="cb75-4"><a href="sampling.html#cb75-4" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.12</span></span>
-<span id="cb75-5"><a href="sampling.html#cb75-5" tabindex="-1"></a></span>
-<span id="cb75-6"><a href="sampling.html#cb75-6" tabindex="-1"></a><span class="co">#Run ABC</span></span>
-<span id="cb75-7"><a href="sampling.html#cb75-7" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
-<span id="cb75-8"><a href="sampling.html#cb75-8" tabindex="-1"></a>  </span>
-<span id="cb75-9"><a href="sampling.html#cb75-9" tabindex="-1"></a>  <span class="co">#Propose new beta</span></span>
-<span id="cb75-10"><a href="sampling.html#cb75-10" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
-<span id="cb75-11"><a href="sampling.html#cb75-11" tabindex="-1"></a>  </span>
-<span id="cb75-12"><a href="sampling.html#cb75-12" tabindex="-1"></a>  <span class="co">#Simualate data</span></span>
-<span id="cb75-13"><a href="sampling.html#cb75-13" tabindex="-1"></a>  y.star <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, b)</span>
-<span id="cb75-14"><a href="sampling.html#cb75-14" tabindex="-1"></a>  </span>
-<span id="cb75-15"><a href="sampling.html#cb75-15" tabindex="-1"></a>  <span class="co">#Compute statistic</span></span>
-<span id="cb75-16"><a href="sampling.html#cb75-16" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>((y<span class="sc">-</span>y.star)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb75-17"><a href="sampling.html#cb75-17" tabindex="-1"></a>  </span>
-<span id="cb75-18"><a href="sampling.html#cb75-18" tabindex="-1"></a>  <span class="co">#Accept/Reject</span></span>
-<span id="cb75-19"><a href="sampling.html#cb75-19" tabindex="-1"></a>  <span class="cf">if</span>(d <span class="sc">&lt;</span> epsilon){</span>
-<span id="cb75-20"><a href="sampling.html#cb75-20" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> b</span>
-<span id="cb75-21"><a href="sampling.html#cb75-21" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
-<span id="cb75-22"><a href="sampling.html#cb75-22" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb75-23"><a href="sampling.html#cb75-23" tabindex="-1"></a>  }</span>
-<span id="cb75-24"><a href="sampling.html#cb75-24" tabindex="-1"></a>  </span>
-<span id="cb75-25"><a href="sampling.html#cb75-25" tabindex="-1"></a>}</span>
-<span id="cb75-26"><a href="sampling.html#cb75-26" tabindex="-1"></a></span>
-<span id="cb75-27"><a href="sampling.html#cb75-27" tabindex="-1"></a><span class="co">#Get number of reject samples</span></span>
-<span id="cb75-28"><a href="sampling.html#cb75-28" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(b.store))</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Set Up ABC</span></span>
+<span><span class="va">n.iter</span> <span class="op">&lt;-</span> <span class="fl">50000</span></span>
+<span><span class="va">b.store</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="va">n.iter</span><span class="op">)</span></span>
+<span><span class="va">epsilon</span> <span class="op">&lt;-</span> <span class="fl">0.12</span></span>
+<span></span>
+<span><span class="co">#Run ABC</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n.iter</span><span class="op">)</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co">#Propose new beta</span></span>
+<span>  <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#Simualate data</span></span>
+<span>  <span class="va">y.star</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">rbeta</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">3</span>, <span class="va">b</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#Compute statistic</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">y</span><span class="op">-</span><span class="va">y.star</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#Accept/Reject</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="va">d</span> <span class="op">&lt;</span> <span class="va">epsilon</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">b.store</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">b</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span><span class="op">{</span></span>
+<span>    <span class="va">b.store</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#Get number of reject samples</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">b.store</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 49993</code></pre>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="sampling.html#cb77-1" tabindex="-1"></a><span class="co">#Plot Approximate Posterior</span></span>
-<span id="cb77-2"><a href="sampling.html#cb77-2" tabindex="-1"></a><span class="fu">hist</span>(b.store, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb77-3"><a href="sampling.html#cb77-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="sampling.html#cb78-1" tabindex="-1"></a><span class="fu">mean</span>(b.store, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Plot Approximate Posterior</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">b.store</span>, freq <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-32-1.png" width="672"></div>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">b.store</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 1.831118</code></pre>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="sampling.html#cb80-1" tabindex="-1"></a><span class="fu">quantile</span>(b.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">b.store</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##     2.5%    97.5% 
 ## 1.181349 2.587056</code></pre>
 </div>
 <div class="example">
 <p><span id="exm:unlabeled-div-65" class="example"><strong>Example 4.9  </strong></span>And now again with <span class="math inline">\(\varepsilon = 2\)</span>. In this case, almost all of the proposals are accepted.</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="sampling.html#cb82-1" tabindex="-1"></a><span class="co">#Set Up Example</span></span>
-<span id="cb82-2"><a href="sampling.html#cb82-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb82-3"><a href="sampling.html#cb82-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb82-4"><a href="sampling.html#cb82-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
-<span id="cb82-5"><a href="sampling.html#cb82-5" tabindex="-1"></a>y</span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Set Up Example</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">rbeta</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">y</span></span></code></pre></div>
 <pre><code>##  [1] 0.8519237 0.5286251 0.3126172 0.9691679 0.4883547 0.4677043 0.7339799
 ##  [8] 0.7279578 0.7317827 0.7971786</code></pre>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="sampling.html#cb84-1" tabindex="-1"></a><span class="co">#Set Up ABC</span></span>
-<span id="cb84-2"><a href="sampling.html#cb84-2" tabindex="-1"></a>n.iter <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
-<span id="cb84-3"><a href="sampling.html#cb84-3" tabindex="-1"></a>b.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
-<span id="cb84-4"><a href="sampling.html#cb84-4" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb84-5"><a href="sampling.html#cb84-5" tabindex="-1"></a></span>
-<span id="cb84-6"><a href="sampling.html#cb84-6" tabindex="-1"></a><span class="co">#Run ABC</span></span>
-<span id="cb84-7"><a href="sampling.html#cb84-7" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
-<span id="cb84-8"><a href="sampling.html#cb84-8" tabindex="-1"></a>  </span>
-<span id="cb84-9"><a href="sampling.html#cb84-9" tabindex="-1"></a>  <span class="co">#Propose new beta</span></span>
-<span id="cb84-10"><a href="sampling.html#cb84-10" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
-<span id="cb84-11"><a href="sampling.html#cb84-11" tabindex="-1"></a>  </span>
-<span id="cb84-12"><a href="sampling.html#cb84-12" tabindex="-1"></a>  <span class="co">#Simualate data</span></span>
-<span id="cb84-13"><a href="sampling.html#cb84-13" tabindex="-1"></a>  y.star <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, b)</span>
-<span id="cb84-14"><a href="sampling.html#cb84-14" tabindex="-1"></a>  </span>
-<span id="cb84-15"><a href="sampling.html#cb84-15" tabindex="-1"></a>  <span class="co">#Compute statistic</span></span>
-<span id="cb84-16"><a href="sampling.html#cb84-16" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>((y<span class="sc">-</span>y.star)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb84-17"><a href="sampling.html#cb84-17" tabindex="-1"></a>  </span>
-<span id="cb84-18"><a href="sampling.html#cb84-18" tabindex="-1"></a>  <span class="co">#Accept/Reject</span></span>
-<span id="cb84-19"><a href="sampling.html#cb84-19" tabindex="-1"></a>  <span class="cf">if</span>(d <span class="sc">&lt;</span> epsilon){</span>
-<span id="cb84-20"><a href="sampling.html#cb84-20" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> b</span>
-<span id="cb84-21"><a href="sampling.html#cb84-21" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
-<span id="cb84-22"><a href="sampling.html#cb84-22" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb84-23"><a href="sampling.html#cb84-23" tabindex="-1"></a>  }</span>
-<span id="cb84-24"><a href="sampling.html#cb84-24" tabindex="-1"></a>  </span>
-<span id="cb84-25"><a href="sampling.html#cb84-25" tabindex="-1"></a>}</span>
-<span id="cb84-26"><a href="sampling.html#cb84-26" tabindex="-1"></a></span>
-<span id="cb84-27"><a href="sampling.html#cb84-27" tabindex="-1"></a><span class="co">#Get number of reject samples</span></span>
-<span id="cb84-28"><a href="sampling.html#cb84-28" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(b.store))</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Set Up ABC</span></span>
+<span><span class="va">n.iter</span> <span class="op">&lt;-</span> <span class="fl">50000</span></span>
+<span><span class="va">b.store</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="va">n.iter</span><span class="op">)</span></span>
+<span><span class="va">epsilon</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span></span>
+<span><span class="co">#Run ABC</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n.iter</span><span class="op">)</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co">#Propose new beta</span></span>
+<span>  <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#Simualate data</span></span>
+<span>  <span class="va">y.star</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">rbeta</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">3</span>, <span class="va">b</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#Compute statistic</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">y</span><span class="op">-</span><span class="va">y.star</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">#Accept/Reject</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="va">d</span> <span class="op">&lt;</span> <span class="va">epsilon</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">b.store</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">b</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span><span class="op">{</span></span>
+<span>    <span class="va">b.store</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#Get number of reject samples</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">b.store</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 471</code></pre>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="sampling.html#cb86-1" tabindex="-1"></a><span class="co">#Plot Approximate Posterior</span></span>
-<span id="cb86-2"><a href="sampling.html#cb86-2" tabindex="-1"></a><span class="fu">hist</span>(b.store, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb86-3"><a href="sampling.html#cb86-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="sampling.html#cb87-1" tabindex="-1"></a><span class="fu">mean</span>(b.store, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Plot Approximate Posterior</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">b.store</span>, freq <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-33-1.png" width="672"></div>
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">b.store</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2.488073</code></pre>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="sampling.html#cb89-1" tabindex="-1"></a><span class="fu">quantile</span>(b.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">b.store</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##      2.5%     97.5% 
 ## 0.1281937 4.8666030</code></pre>
 <p>When <span class="math inline">\(\varepsilon = 0.12\)</span>, almost all the proposals are rejected. Although the approximate posterior mean is close to the true value, given we only have 7 samples we cannot say much about the posterior distribution. When <span class="math inline">\(\varepsilon = 2\)</span>, almost all the proposals are accepted. This histogram shows that we are really just sampling from the prior distribution, i.e. <span class="math inline">\(\pi_2(\beta \mid y) \approx \pi(\beta)\)</span>.</p>
@@ -842,8 +711,10 @@ quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
 :::
 -->
 </div>
-<div id="summary-abc-with-rejection" class="section level3 hasAnchor" number="4.5.2">
-<h3><span class="header-section-number">4.5.2</span> Summary ABC with Rejection<a href="sampling.html#summary-abc-with-rejection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="summary-abc-with-rejection" class="section level3" number="4.5.2">
+<h3>
+<span class="header-section-number">4.5.2</span> Summary ABC with Rejection<a class="anchor" aria-label="anchor" href="#summary-abc-with-rejection"><i class="fas fa-link"></i></a>
+</h3>
 <p>ABC with rejection suffers from the curse of dimensionality (see Chapter 5). As the number of data points increases, the probability we get a ‘close’ match decreases. This means we have to increase <span class="math inline">\(\varepsilon\)</span> and degrade the quality of our approximation.</p>
 <div class="example">
 <p><span id="exm:unlabeled-div-67" class="example"><strong>Example 4.10  </strong></span>Let’s repeat the Beta example with <span class="math inline">\(n = 200\)</span> observed data points. We need <span class="math inline">\(\varepsilon &gt; 15\)</span> for any proposals to be accepted.</p>
@@ -854,7 +725,8 @@ quantile(b.store, c(0.025, 0.975), na.rm = TRUE)
 <ol style="list-style-type: decimal">
 <li>Sample a value for the parameter <span class="math inline">\(\theta^*\)</span> from the prior distribution <span class="math inline">\(\pi(\theta)\)</span>.</li>
 <li>Generate some data <span class="math inline">\(y*\)</span> from the data generating process using the parameter value <span class="math inline">\(\theta^*\)</span>.</li>
-<li>Accept <span class="math inline">\(\theta^*\)</span> as a value from the posterior distribution if <span class="math inline">\(||S(y) - S(y^*)|| &lt; \varepsilon\)</span> for some <span class="math inline">\(\varepsilon &gt; 0\)</span> and summary summary statistic <span class="math inline">\(S\)</span>. Otherwise reject <span class="math inline">\(\theta^*\)</span></li>
+<li>Accept <span class="math inline">\(\theta^*\)</span> as a value from the posterior distribution if <span class="math inline">\(||S(y) - S(y^*)|| &lt; \varepsilon\)</span> for some <span class="math inline">\(\varepsilon &gt; 0\)</span> and summary summary statistic <span class="math inline">\(S\)</span>. Otherwise reject <span class="math inline">\(\theta^*\)</span>
+</li>
 <li>Repeat steps 1 - 3.</li>
 </ol>
 </div>
@@ -879,47 +751,53 @@ where <span class="math inline">\({A_\varepsilon(y^*)} = \{y^* \mid ||S(y^*) - S
 <p>The difficulty with sufficient statistics is that they only exist for ‘nice’ distributions, like the Gamma, Beta and Poisson distributions. In these cases, we can work with the posterior distribution directly or use MCMC algorithms.</p>
 <div class="example">
 <p><span id="exm:unlabeled-div-72" class="example"><strong>Example 4.11  </strong></span>Let’s repeat the beta distribution example using the mean as the summary (but not sufficient) statistic. We can set <span class="math inline">\(\varepsilon = 0.001\)</span>.</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="sampling.html#cb91-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb91-2"><a href="sampling.html#cb91-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
-<span id="cb91-3"><a href="sampling.html#cb91-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, <span class="dv">2</span>)</span>
-<span id="cb91-4"><a href="sampling.html#cb91-4" tabindex="-1"></a></span>
-<span id="cb91-5"><a href="sampling.html#cb91-5" tabindex="-1"></a></span>
-<span id="cb91-6"><a href="sampling.html#cb91-6" tabindex="-1"></a>n.iter <span class="ot">&lt;-</span> <span class="dv">50000</span></span>
-<span id="cb91-7"><a href="sampling.html#cb91-7" tabindex="-1"></a>b.store <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n.iter)</span>
-<span id="cb91-8"><a href="sampling.html#cb91-8" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.001</span></span>
-<span id="cb91-9"><a href="sampling.html#cb91-9" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.iter){</span>
-<span id="cb91-10"><a href="sampling.html#cb91-10" tabindex="-1"></a>  </span>
-<span id="cb91-11"><a href="sampling.html#cb91-11" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
-<span id="cb91-12"><a href="sampling.html#cb91-12" tabindex="-1"></a>  </span>
-<span id="cb91-13"><a href="sampling.html#cb91-13" tabindex="-1"></a>  y.star <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(n, <span class="dv">3</span>, b)</span>
-<span id="cb91-14"><a href="sampling.html#cb91-14" tabindex="-1"></a>  </span>
-<span id="cb91-15"><a href="sampling.html#cb91-15" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">sum</span>((<span class="fu">mean</span>(y)<span class="sc">-</span><span class="fu">mean</span>(y.star))<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb91-16"><a href="sampling.html#cb91-16" tabindex="-1"></a>  </span>
-<span id="cb91-17"><a href="sampling.html#cb91-17" tabindex="-1"></a>  <span class="cf">if</span>(d <span class="sc">&lt;</span> epsilon){</span>
-<span id="cb91-18"><a href="sampling.html#cb91-18" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> b</span>
-<span id="cb91-19"><a href="sampling.html#cb91-19" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
-<span id="cb91-20"><a href="sampling.html#cb91-20" tabindex="-1"></a>    b.store[i] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb91-21"><a href="sampling.html#cb91-21" tabindex="-1"></a>  }</span>
-<span id="cb91-22"><a href="sampling.html#cb91-22" tabindex="-1"></a>  </span>
-<span id="cb91-23"><a href="sampling.html#cb91-23" tabindex="-1"></a>}</span>
-<span id="cb91-24"><a href="sampling.html#cb91-24" tabindex="-1"></a></span>
-<span id="cb91-25"><a href="sampling.html#cb91-25" tabindex="-1"></a><span class="co">#Get number of reject samples</span></span>
-<span id="cb91-26"><a href="sampling.html#cb91-26" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(b.store))</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">200</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">rbeta</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">n.iter</span> <span class="op">&lt;-</span> <span class="fl">50000</span></span>
+<span><span class="va">b.store</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="va">n.iter</span><span class="op">)</span></span>
+<span><span class="va">epsilon</span> <span class="op">&lt;-</span> <span class="fl">0.001</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n.iter</span><span class="op">)</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">y.star</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">rbeta</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">3</span>, <span class="va">b</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y.star</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="va">d</span> <span class="op">&lt;</span> <span class="va">epsilon</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">b.store</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">b</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span><span class="op">{</span></span>
+<span>    <span class="va">b.store</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#Get number of reject samples</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">b.store</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 45028</code></pre>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="sampling.html#cb93-1" tabindex="-1"></a><span class="co">#Plot Approximate Posterior</span></span>
-<span id="cb93-2"><a href="sampling.html#cb93-2" tabindex="-1"></a><span class="fu">hist</span>(b.store, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="fu">expression</span>(beta), <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb93-3"><a href="sampling.html#cb93-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="sampling.html#cb94-1" tabindex="-1"></a><span class="fu">mean</span>(b.store, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Plot Approximate Posterior</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">b.store</span>, freq <span class="op">=</span> <span class="cn">FALSE</span>, xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-35-1.png" width="672"></div>
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">b.store</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 1.930908</code></pre>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="sampling.html#cb96-1" tabindex="-1"></a><span class="fu">quantile</span>(b.store, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">b.store</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##     2.5%    97.5% 
 ## 1.593348 2.302256</code></pre>
 </div>
 </div>
 </div>
-<div id="lab-1" class="section level2 hasAnchor" number="4.6">
-<h2><span class="header-section-number">4.6</span> Lab<a href="sampling.html#lab-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="lab-1" class="section level2" number="4.6">
+<h2>
+<span class="header-section-number">4.6</span> Lab<a class="anchor" aria-label="anchor" href="#lab-1"><i class="fas fa-link"></i></a>
+</h2>
 <p>The aim of this lab is to code up some sampling methods. You have already done some similar work in lab 1 (e.g. estimating <span class="math inline">\(\pi\)</span>).</p>
 <div class="exercise">
 <p><span id="exr:unlabeled-div-73" class="exercise"><strong>Exercise 4.1  </strong></span>Visit random.org to generate some truly random numbers. How does this site generate numbers that are truly random?</p>
@@ -958,68 +836,51 @@ for <span class="math inline">\(x \geq 0\)</span> and 0 otherwise.</p>
 
 </div>
 </div>
-            </section>
+  <div class="chapter-nav">
+<div class="prev"><a href="bayesian-inference.html"><span class="header-section-number">3</span> Bayesian Inference</a></div>
+<div class="next"><a href="markov-chain-monte-carlo.html"><span class="header-section-number">5</span> Markov Chain Monte Carlo</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#sampling"><span class="header-section-number">4</span> Sampling</a></li>
+<li><a class="nav-link" href="#uniform-random-numbers"><span class="header-section-number">4.1</span> Uniform Random Numbers</a></li>
+<li><a class="nav-link" href="#inverse-transform-sampling"><span class="header-section-number">4.2</span> Inverse Transform Sampling</a></li>
+<li>
+<a class="nav-link" href="#rejection-sampling"><span class="header-section-number">4.3</span> Rejection Sampling</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#rejection-sampling-efficiency"><span class="header-section-number">4.3.1</span> Rejection Sampling Efficiency</a></li></ul>
+</li>
+<li><a class="nav-link" href="#ziggurat-sampling"><span class="header-section-number">4.4</span> Ziggurat Sampling</a></li>
+<li>
+<a class="nav-link" href="#approximate-bayesian-computation"><span class="header-section-number">4.5</span> Approximate Bayesian Computation</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#abc-with-rejection"><span class="header-section-number">4.5.1</span> ABC with Rejection</a></li>
+<li><a class="nav-link" href="#summary-abc-with-rejection"><span class="header-section-number">4.5.2</span> Summary ABC with Rejection</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#lab-1"><span class="header-section-number">4.6</span> Lab</a></li>
+</ul>
 
-          </div>
-        </div>
-      </div>
-<a href="bayesian-inference.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="markov-chain-monte-carlo.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Bayesian Inference and Computation</strong>" was written by Dr Junqi Tang (based on lecture notes by Dr Rowland Seymour). It was last built on Semester 2, 2026.</p>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
-});
-});
-</script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -1031,7 +892,22 @@ gitbook.start({
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
 </body>
-
 </html>
