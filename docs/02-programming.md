@@ -264,8 +264,8 @@ u
 ```
 
 ```
-##  [1] -0.43402476  0.70827992 -0.88023772  0.26042185  0.18782676  0.64376905
-##  [7] -0.01132868 -0.16698816 -0.02281205  0.84730167
+##  [1]  0.8351929 -0.7595744 -0.7888502  0.8297334 -0.2003332 -0.7325613
+##  [7] -0.2301406  0.2437163  0.2212244 -0.4271185
 ```
 The functions has three **arguments**: _n_ the number of samples to be generated, _min_ the lower limit of the interval, _max_ the upper limit of the interval. In the code chunk above 10 random numbers were generated from the interval [-1, 1]. In R, you don't need to label the arguments, so the following will sample the same number of samples from the same interval:
 ```

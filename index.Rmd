@@ -143,6 +143,6 @@ $$ where $\lambda > 0$.
 
 **Binomial distribution** $\text{Bin}(N,p)$
 \[
-\pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{1, \ldots, N\}
+\pi(x = k \mid N, p) = \begin{pmatrix} N \\ k\end{pmatrix} p^k (1-p)^{N-k} \qquad k \in \{0, \ldots, N\}
 \]
 where $p \in [0, 1]$.
